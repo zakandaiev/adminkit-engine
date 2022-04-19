@@ -1,0 +1,62 @@
+.ss-main .ss-single-selected,
+.ss-main .ss-multi-selected {
+	width: 100%;
+	height: auto;
+	min-height: 32.59px;
+	background-color: #fff;
+	border: 1px solid #ced4da;
+	border-radius: 0.2rem;
+	padding: 0.3rem 0.85rem;
+	transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+}
+
+.ss-main .ss-single-selected .placeholder, .ss-main .ss-single-selected .placeholder *,
+.ss-main .ss-multi-selected .ss-values .ss-disabled {
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #495057;
+}
+
+.ss-main .ss-single-selected .ss-deselect {
+	margin: 0;
+}
+
+.ss-main .ss-single-selected .ss-arrow {
+	margin: 0 0 0 6px;
+}
+
+.ss-option:empty {
+	@extend .hidden;
+}
+
+.ss-main .ss-multi-selected .ss-add {
+	flex-shrink: 0;
+	flex-basis: 10px;
+	justify-content: flex-end;
+	align-items: center;
+	margin: 0 3px 0 0;
+}
+
+.ss-main .ss-multi-selected .ss-values .ss-disabled {
+	margin: 0;
+	padding: 0;
+}
+
+.ss-main .ss-multi-selected .ss-values {
+	gap: 3px;
+	.ss-value {
+		margin: 0;
+		padding: 0.32em 0.45em;
+		border-radius: 0.2rem;
+		font-size: 80%;
+		font-weight: 600;
+		line-height: 1;
+		overflow: hidden;
+	}
+	.ss-value-text {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+}

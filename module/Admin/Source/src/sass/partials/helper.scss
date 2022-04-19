@@ -1,0 +1,33 @@
+/* ==========  Tables  ========== */
+.table-fixed {
+	table-layout: fixed;
+}
+
+/* ==========  Visibility  ========== */
+.hidden {
+	display: none;
+	visibility: hidden;
+}
+
+/* ==========  Cursors  ========== */
+.cursor-pointer {
+	cursor: pointer;
+}
+.cursor-default {
+	cursor: default;
+}
+
+/* ==========  Position  ========== */
+.position-static {
+	position: static;
+}
+.position-relative {
+	position: relative;
+}
+.position-sticky {
+	position: sticky;
+	top: 0;
+	height: auto;
+	max-height: 100vh;
+	overflow-y: auto;
+}

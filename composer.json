@@ -1,0 +1,19 @@
+{
+	"name": "zakandaiev/cms",
+	"authors": [
+		{
+			"name": "Oleksadr Zakandaiev",
+			"email": "zakandaiev@gmail.com"
+		}
+	],
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Engine\\": "engine",
+			"Module\\": "module"
+		},
+		"files": [
+			"engine/functions.php"
+		]
+	}
+}

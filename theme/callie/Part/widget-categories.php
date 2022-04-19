@@ -1,0 +1,17 @@
+<?php
+	$w_categories = $model->getCategories(['limit' => 5]);
+?>
+<?php if(!empty($w_categories)): ?>
+	<div class="aside-widget">
+		<div class="section-title">
+			<h2 class="title">Categories</h2>
+		</div>
+		<div class="category-widget">
+			<ul>
+				<?php foreach($w_categories as $category): ?>
+					<li><a href="/<?= $category->url ?>"><?= $category->title ?> <span><?= $category->count_pages ?></span></a></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+	</div>
+<?php endif; ?>

@@ -1,0 +1,495 @@
+<?php
+
+namespace Engine;
+
+use Engine\Database\Statement;
+use Engine\Theme\Asset;
+
+class Form {
+	const TOKEN_LIFE_TIME = '12 HOUR';
+	const TOKEN_DEL_INTERVAL = '1 DAY';
+
+	private static $form = [];
+	private static $token;
+
+	public static function add($form_name) {
+		echo self::generateToken(__FUNCTION__, $form_name);
+		return true;
+	}
+
+	public static function edit($form_name, $item_id) {
+		echo self::generateToken(__FUNCTION__, $form_name, $item_id);
+		return true;
+	}
+
+	public static function delete($form_name, $item_id) {
+		echo self::generateToken(__FUNCTION__, $form_name, $item_id);
+		return true;
+	}
+
+	private static function generateToken($action, $form_name, $item_id = null) {
+		$form = self::load($form_name);
+
+		if(!empty($form)) {
+			if(self::tokenExistsAndActive($action, $form_name, $item_id)) {
+				return Request::$base . '/' . self::$token;
+			}
+
+			$token = Hash::token();
+
+			$query_params = ['token' => $token, 'action' => $action, 'form_name' => $form_name];
+
+			if($action !== 'add') {
+				$query_append_field = ', item_id';
+				$query_append_binding = ', :item_id';
+				$query_params['item_id'] = $item_id;
+			}
+
+			$sql = '
+				INSERT INTO {form}
+					(token, action, form_name' . $query_append_field . ')
+				VALUES
+					(:token, :action, :form_name' . $query_append_binding . ')
+			';
+
+			$statement = new Statement($sql);
+			$statement->prepare()->bind($query_params)->execute();
+
+			return Request::$base . '/' . $token;
+		}
+
+		return null;
+	}
+
+	public static function execute($action, $form_name, $item_id = '') {
+		self::clearExpired();
+
+		self::check($form_name);
+
+		$form = self::load($form_name);
+		$table = $form['table'];
+
+		if($action !== 'delete') {
+			$sql_fields = self::processFields($form_name);
+		}
+
+		if($action !== 'add') {
+			$statement = new Statement('SHOW KEYS FROM {' . $table . '} WHERE Key_name=\'PRIMARY\'');
+			$pk_name = $statement->prepare()->execute()->fetch()->Column_name;
+			$sql_fields[$pk_name] = $item_id;
+		}
+
+		$sql_fields_foreign = [];
+		$sql_fields_foreign_value = [];
+		if($action !== 'delete') {
+			foreach($form['field'] as $field => $values_array) {
+				if(isset($values_array['foreign']) && !empty($values_array['foreign'])) {
+
+					if(is_callable($values_array['foreign'])) {
+						$sql_fields_foreign[$field] = $values_array['foreign'];
+					} else {
+						$foreign_t = explode('@', $values_array['foreign'], 2);
+						$foreign_k = explode('/', $foreign_t[1], 2);
+
+						$foreign_table = $foreign_t[0];
+						$foreign_key_1 = $foreign_k[0];
+						$foreign_key_2 = $foreign_k[1];
+
+						$sql_fields_foreign[$field]['table'] = $foreign_table;
+						$sql_fields_foreign[$field]['key_1'] = $foreign_key_1;
+						$sql_fields_foreign[$field]['key_2'] = $foreign_key_2;
+					}
+
+					if(is_array($sql_fields[$field])) {
+						$sql_fields_foreign_value[$field] = $sql_fields[$field];
+					} else if(@json_decode($sql_fields[$field]) || $sql_fields[$field] === '[]') {
+						$sql_fields_foreign_value[$field] = json_decode($sql_fields[$field]) ?? [];
+					} else if(!empty($sql_fields[$field])) {
+						$sql_fields_foreign_value[$field] = array($sql_fields[$field]);
+					} else {
+						$sql_fields_foreign_value[$field] = [];
+					}
+
+					unset($sql_fields[$field]);
+				}
+			}
+		}
+
+		switch($action) {
+			case 'add': {
+				$columns = implode(', ', array_keys($sql_fields));
+				$bindings = ':' . implode(', :', array_keys($sql_fields));
+				$sql = 'INSERT INTO {' . $table . '} (' . $columns . ') VALUES (' . $bindings . ')';
+				break;
+			}
+			case 'edit': {
+				$bindings = array_reduce(array_keys($sql_fields),function($carry,$v){return ($carry?"$carry, ":'')."$v=:$v";});
+				$sql = 'UPDATE {' . $table . '} SET ' . $bindings . ' WHERE ' . $pk_name . '=:' . $pk_name;
+				break;
+			}
+			case 'delete': {
+				$sql = 'DELETE FROM {' . $table . '} WHERE ' . $pk_name . '=:' . $pk_name;
+				break;
+			}
+			default: {
+				return false;
+			}
+		}
+
+		$statement = new Statement($sql);
+		$statement->prepare()->bind($sql_fields)->execute();
+
+		if($action === 'add') {
+			$item_id = $statement->insertId();
+		}
+
+		foreach($sql_fields_foreign as $field_name => $field) {
+			if(is_callable($field)) {
+				$field($sql_fields_foreign_value[$field_name], ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id]);
+			}
+			else if(is_array($field)) {
+				$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
+
+				$statement = new Statement($sql);
+				$statement->prepare()->bind([$field['key_1'] => $item_id])->execute();
+
+				if(empty($sql_fields_foreign_value[$field_name])) {
+					continue;
+				}
+
+				foreach($sql_fields_foreign_value[$field_name] as $value) {
+					$sql = '
+						INSERT INTO {' . $field['table'] . '}
+							(' . $field['key_1'] . ', ' . $field['key_2'] . ')
+						VALUES
+							(:' . $field['key_1'] . ', :' . $field['key_2'] . ')
+					';
+
+					$statement = new Statement($sql);
+					$statement->prepare()->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
+				}
+			}
+		}
+
+		$success_message = null;
+		
+		$language = Language::load($form['language']);
+		if(isset($language->submit)) {
+			$success_message = $language->submit;
+		}
+
+		Server::answer(null, 'success', $success_message);
+	}
+
+	private static function tokenExistsAndActive($action, $form_name = '', $item_id = '') {
+		$query_defining = 'action=:action AND form_name=:form_name AND item_id=:item_id';
+		$query_params = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
+
+		if($action === 'add') {
+			$query_defining = 'action=:action AND form_name=:form_name';
+			$query_params = ['action' => $action, 'form_name' => $form_name];
+		}
+
+		$sql = '
+			SELECT token FROM {form}
+			WHERE
+				' . $query_defining . '
+				AND date_created > DATE_SUB(NOW(), INTERVAL ' . self::TOKEN_LIFE_TIME . ')
+				ORDER BY date_created DESC LIMIT 1
+		';
+
+		$statement = new Statement($sql);
+
+		$token_query = $statement->prepare()->bind($query_params)->execute()->fetch();
+
+		if(!empty($token_query)) {
+			self::$token = $token_query->token;
+			return true;
+		}
+
+		return false;
+	}
+
+	private static function clearExpired() {
+		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . self::TOKEN_DEL_INTERVAL . ')');
+		$statement->prepare()->execute();
+
+		return false;
+	}
+
+	private static function load($form_name) {
+		if(isset(self::$form[$form_name])) {
+			return self::$form[$form_name];
+		}
+
+		$form = Path::file('form') . '/' . $form_name . '.php';
+		$form_data = [];
+
+		if(file_exists($form)) {
+			$form_data = include $form;
+		}
+
+		self::$form[$form_name] = $form_data;
+
+		return $form_data;
+	}
+
+	public static function check($form_name) {
+		$form = self::load($form_name);
+
+		if(empty($form)) {
+			return false;
+		}
+
+		$post = Request::$post;
+		$language = Language::load($form['language']);
+
+		foreach($form['field'] as $field => $values_array) {
+			if(array_key_exists($field, $post)) {
+				foreach($values_array as $key => $value) {
+					if(isset($values_array['required']) && !$values_array['required'] && empty($post[$field])) {
+						$check = true;
+					} else {
+						$check = self::isFieldValid($post[$field], $key, $value);
+					}
+
+					if($check !== true) {
+						$error_message = ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
+
+						if(isset($language->{$field}->{$key})) {
+							$error_message = $language->{$field}->{$key};
+						}
+
+						Server::answer(null, 'error', $error_message, 409);
+					}
+				}
+			}
+		}
+	}
+
+	private static function isFieldValid($value, $operand, $operand_value) {
+		switch($operand) {
+			case 'boolean': {
+				if($operand_value && $value === 'on') {
+					return true;
+				}
+				return false;
+			}
+			case 'required': {
+				if($operand_value && !empty($value)) {
+					return true;
+				} else if(!$operand_value) {
+					return true;
+				}
+				return false;
+			}
+			case 'int': {
+				if($operand_value && filter_var($value, FILTER_VALIDATE_INT)) {
+					return true;
+				}
+				return false;
+			}
+			case 'float': {
+				if($operand_value && filter_var($value, FILTER_VALIDATE_FLOAT)) {
+					return true;
+				}
+				return false;
+			}
+			case 'email': {
+				if($operand_value && filter_var($value, FILTER_VALIDATE_EMAIL)) {
+					return true;
+				}
+				return false;
+			}
+			case 'ip': {
+				if($operand_value && filter_var($value, FILTER_VALIDATE_IP)) {
+					return true;
+				}
+				return false;
+			}
+			case 'mac': {
+				if($operand_value && filter_var($value, FILTER_VALIDATE_MAC)) {
+					return true;
+				}
+				return false;
+			}
+			case 'url': {
+				if($operand_value && filter_var($value, FILTER_VALIDATE_URL)) {
+					return true;
+				}
+				return false;
+			}
+			case 'min': {
+				$value = intval($value);
+				$operand_value = intval($operand_value);
+				return $value >= $operand_value ? true : false;
+			}
+			case 'max': {
+				$value = intval($value);
+				$operand_value = intval($operand_value);
+				return $value <= $operand_value ? true : false;
+			}
+			case 'minlength': {
+				$value = intval(mb_strlen($value));
+				$operand_value = intval($operand_value);
+				return $value >= $operand_value ? true : false;
+			}
+			case 'maxlength': {
+				$value = intval(mb_strlen($value));
+				$operand_value = intval($operand_value);
+				return $value <= $operand_value ? true : false;
+			}
+			case 'regexp': {
+				return preg_match($operand_value, $value) ? true : false;
+			}
+			case 'regexp2': {
+				return preg_match($operand_value, $value) ? true : false;
+			}
+			case 'regexp3': {
+				return preg_match($operand_value, $value) ? true : false;
+			}
+		}
+
+		return true;
+	}
+
+	public static function processFields($form_name) {
+		$form = self::load($form_name);
+
+		if(empty($form)) {
+			return [];
+		}
+
+		$post = Request::$post;
+		$files = Request::$files;
+		$fields = [];
+
+		foreach($form['field'] as $field => $values_array) {
+			if(!isset($post[$field]) || empty($post[$field])) {
+				$field_value = null;
+
+				if(isset($values_array['date']) && $values_array['date']) {
+					continue;
+				}
+				else if(isset($values_array['unset_null']) && $values_array['unset_null']) {
+					continue;
+				}
+				else if(isset($values_array['boolean']) && $values_array['boolean']) {
+					$field_value = false;
+				}
+
+				$fields[$field] = $field_value;
+			} else {
+				if(isset($values_array['boolean']) && $values_array['boolean']) {
+					$field_value = true;
+				}
+				else if(isset($values_array['html']) && $values_array['html']) {
+					$field_value = trim($post[$field]);
+				}
+				else if(isset($values_array['json']) && $values_array['json']) {
+					$field_value = trim($post[$field]);
+				}
+				else if(isset($values_array['foreign'])) {
+					$field_value = $post[$field];
+				}
+				else if(isset($values_array['process']) && is_callable($values_array['process'])) {
+					$field_value = $values_array['process']($post[$field]);
+				}
+				else if(is_array($post[$field])) {
+					$field_value = filter_var_array($post[$field], FILTER_SANITIZE_STRING);
+					$field_value = json_encode($field_value);
+				} else {
+					$field_value = filter_var(trim($post[$field]), FILTER_SANITIZE_STRING);
+				}
+
+				$fields[$field] = $field_value;
+			}
+		}
+
+		foreach($form['field'] as $field => $values_array) {
+			if(isset($values_array['file']) && $values_array['file']) {
+
+				if(!isset($files[$field]) || empty($files[$field]['tmp_name'])) {
+					continue;
+				}
+
+				$files_array = [];
+				$is_multiple = false;
+
+				if(is_array($files[$field]['tmp_name'])) {
+					$is_multiple = true;
+					foreach($files[$field] as $key => $file) {
+						foreach($file as $num => $val) {
+							$files_array[$num][$key] = $val;
+						}
+					}
+				} else {
+					$files_array[] = $files[$field];
+				}
+
+				foreach($files_array as $file) {
+					if(empty($file['tmp_name'])) {
+						continue;
+					}
+
+					$upload = FileUploader::upload($file, $values_array['folder'] ?? null, $values_array['extensions'] ?? null);
+
+					if($upload->status === true) {
+						if(!$is_multiple) {
+							$fields[$field] = $upload->message;
+							continue;
+						}
+
+						if(isset($fields[$field]) && !empty($fields[$field])) {
+							$fields[$field] = json_decode($fields[$field]);
+
+							if(!empty($fields[$field])) {
+								$fields[$field][] = $upload->message;
+							} else {
+								$fields[$field] = array($upload->message);
+							}
+						} else {
+							$fields[$field] = array($upload->message);
+						}
+
+						$fields[$field] = json_encode($fields[$field]);
+					} else {
+						Server::answer(null, 'error', $upload->message, 415);
+					}
+				}
+			}
+		}
+
+		return $fields;
+	}
+
+	public static function populateFiles($files = null, $asset = false) {
+		$output_array = [];
+
+		if(empty($files)) {
+			echo json_encode($output_array);
+			return true;
+		}
+
+		if(!is_array($files) && $files[0] === "[") {
+			$files_array = json_decode($files);
+		} else {
+			$files_array = array($files);
+		}
+
+		foreach($files_array as $file) {
+			$poster = Request::$base . '/' . $file;
+			if($asset == true) {
+				$poster = Asset::url() . '/' . $file;
+			}
+
+			$output_array[] = [
+				'value' => $file,
+				'poster' => $poster
+			];
+		}
+
+		echo json_encode($output_array);
+		return true;
+	}
+}
