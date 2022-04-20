@@ -47,7 +47,7 @@ const slimselect_data = {
 	}
 };
 
-SELECTS.forEach(select => {
+document.querySelectorAll('select').forEach(select => {
 	if(select.hasAttribute('data-native')) {
 		return;
 	}

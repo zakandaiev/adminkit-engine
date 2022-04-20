@@ -8,7 +8,15 @@
 
 		<main class="content">
 			<div class="container-fluid p-0">
-				<h1 class="h3 mb-3">Profile <i data-feather="arrow-right"></i> Edit</h1>
+				<div class="row mb-3">
+					<div class="col-auto">
+						<h1 class="h3 d-inline align-middle">Profile <i data-feather="arrow-right"></i> Edit</h1>
+					</div>
+
+					<div class="col-auto ms-auto text-end mt-n1">
+						<a href="/admin/profile" class="btn btn-primary">Back to profile</a>
+					</div>
+				</div>
 
 				<div class="row">
 					<div class="col-md-3">

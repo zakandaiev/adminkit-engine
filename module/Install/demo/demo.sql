@@ -24,8 +24,7 @@ WHERE `section`='theme' AND `name`='theme';
 
 UPDATE `%prefix%_user` SET
 `avatar`='upload/demo/avatar-2.jpg',
-`name`='John',
-`surname`='Doe',
+`name`='John Doe',
 `about`='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 `socials`='[{"type":"telegram","link":"#"},{"type":"facebook","link":"#"},{"type":"instagram","link":"#"}]'
 WHERE `id`=1;

@@ -48,11 +48,9 @@ const pond_input_data = {
 	}
 };
 
-FORMS.forEach(form => {
-	const file_inputs = form.querySelectorAll('input[type="file"]');
-	if(!file_inputs) {
-		return;
-	}
+const file_inputs = document.querySelectorAll('input[type="file"]');
+
+if(file_inputs) {
 	file_inputs.forEach(input => {
 		const pond = FilePond.create(
 			input, {
@@ -80,4 +78,4 @@ FORMS.forEach(form => {
 			});
 		}
 	});
-});
+}

@@ -8,8 +8,15 @@
 
 		<main class="content">
 			<div class="container-fluid p-0">
+				<div class="row mb-3">
+					<div class="col-auto">
+						<h1 class="h3 d-inline align-middle">Profile</h1>
+					</div>
 
-				<h1 class="h3 mb-3">Profile</h1>
+					<div class="col-auto ms-auto text-end mt-n1">
+						<a href="/admin/profile/edit" class="btn btn-primary">Edit profile</a>
+					</div>
+				</div>
 
 				<div class="row">
 					<div class="col-md-4 col-xl-3">

@@ -226,8 +226,6 @@ class ForeignForm {
 	}
 }
 
-FORMS.forEach(form => {
-	form.querySelectorAll('[class*="foreign-form"]').forEach(element => {
-		new ForeignForm(element);
-	});
+document.querySelectorAll('[class*="foreign-form"]').forEach(element => {
+	new ForeignForm(element);
 });

@@ -1,5 +1,5 @@
-FORMS.forEach(form => {
-	form.insertAdjacentHTML('beforeend', LOADER);
+document.querySelectorAll('form').forEach(form => {
+	form.insertAdjacentHTML('beforeend', ELEM.loader);
 
 	formBehavior(form);
 
