@@ -130,7 +130,7 @@ CREATE TABLE `%prefix%_custom_field` (
 
 CREATE TABLE IF NOT EXISTS `%prefix%_form` (
 	`token` VARCHAR(200) NOT NULL,
-	`action` enum('add','edit','delete') NOT NULL,
+	`action` enum('add','edit','delete','custom') NOT NULL,
 	`form_name` varchar(200) NOT NULL,
 	`item_id` INT DEFAULT NULL,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
