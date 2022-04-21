@@ -57,5 +57,9 @@ return [
 		'enabled' => [
 			'boolean' => true
 		]
-	]
+	],
+	'execute' => function($fields) {
+		debug($fields);
+		exit;
+	}
 ];

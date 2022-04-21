@@ -7,6 +7,10 @@ class Hash {
 		return md5($string . sha1(uniqid($string)));
 	}
 
+	public static function csrf() {
+		return bin2hex(random_bytes(32));;
+	}
+
 	public static function password($password) {
 		return password_hash($password, PASSWORD_DEFAULT);
 	}

@@ -6,10 +6,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title><?php Theme::title(); ?></title>
+	<title><?php Theme::title($page->title); ?></title>
 
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CMuli:400,700" rel="stylesheet">
 
+	<?php Theme::meta(); ?>
 	<?php Asset::render('css'); ?>
 
 </head>

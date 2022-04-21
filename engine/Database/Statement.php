@@ -58,10 +58,18 @@ class Statement {
 		try {
 			$this->statement->execute();
 		} catch(PDOException $error) {
-			$error_message = $error->getMessage();
+			$language_key = '';
 
 			if(preg_match("/Duplicate entry .+ for key '(.+)'/", $error->getMessage(), $matches)) {
-				$error_message = ucfirst($matches[1]) . ' already exist';
+				$language_key = str_replace(Config::get('database')['prefix'] . '_', '', $matches[1]);
+				$language_key = str_replace('.', '_', $language_key);
+				$language_key = 'duplicate/' . $language_key;
+			}
+
+			$error_message = __('form', $language_key);
+
+			if(!$error_message) {
+				$error_message = $error->getMessage();
 			}
 
 			$debug_sql = Define::SHOW_ERRORS ? ['query' => $this->sql] : null;

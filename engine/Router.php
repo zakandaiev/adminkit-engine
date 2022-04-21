@@ -112,14 +112,13 @@ class Router {
 				if(intval($diff_hours) < 12) {
 					Form::execute($form->action, $form->form_name, $form->item_id);
 				} else {
-					$language = Language::load('form');
-					
-					$error_message = 'Current form is already inactive. Reload the page and try again';
-					if(isset($language->inactive)) {
-						$error_message = $language->inactive;
+					$error_message = __('form', 'inactive');
+
+					if(!$error_message) {
+						$error_message = 'Current form is already inactive. Reload the page and try again';
 					}
-					
-					Server::answer(null, 'error', $error_message, '409');
+
+					Server::answer(null, 'error', $error_message, 409);
 				}
 				exit;
 			}

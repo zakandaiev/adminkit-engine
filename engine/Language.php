@@ -5,8 +5,8 @@ namespace Engine;
 class Language {
 	private static $language;
 
-	public static function get($section) {
-		return self::$language->{$section} ?? null;
+	public static function get($file_name) {
+		return self::$language->{$file_name} ?? null;
 	}
 
 	public static function getAll() {
@@ -30,21 +30,21 @@ class Language {
 			return $lang;
 		}
 
-		foreach(scandir($path_lang_dir) as $section) {
-			if(in_array($section, ['.', '..'], true)) continue;
+		foreach(scandir($path_lang_dir) as $file_name) {
+			if(in_array($file_name, ['.', '..'], true)) continue;
 
-			if(file_extension($section) !== 'ini') continue;
+			if(file_extension($file_name) !== 'ini') continue;
 
-			$file_section = $path_lang_dir . '/' . $section;
+			$file = $path_lang_dir . '/' . $file_name;
 
-			$content_lang = parse_ini_file($file_section, true);
+			$content_lang = parse_ini_file($file, true);
 
 			if(!$content_lang) {
-				$lang->{substr($section, 0, -4)} = null;
+				$lang->{substr($file_name, 0, -4)} = null;
 				continue;
 			}
 
-			$lang->{substr($section, 0, -4)} = $content_lang;
+			$lang->{substr($file_name, 0, -4)} = $content_lang;
 		}
 
 		self::$language = json_decode(json_encode($lang));

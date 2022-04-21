@@ -10,6 +10,8 @@ class Define {
 	const NAME = 'CMS';
 	const VERSION = '1.0.0';
 
+	const CSRF_KEY = 'csrf_token';
+
 	// move to DB setting
 	const AUTH_DAYS = 7;
 	const UPLOAD_FOLDER = 'upload';

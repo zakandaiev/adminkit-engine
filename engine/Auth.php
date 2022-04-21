@@ -17,9 +17,13 @@ class Auth {
 		if(Session::hasCookie(self::AUTH_KEY)) {
 			$auth_key = Session::getCookie(self::AUTH_KEY);
 
-			$user = new Statement('SELECT * FROM {user} WHERE ' . self::AUTH_KEY . '=:' . self::AUTH_KEY . ' AND enabled IS true ORDER BY date_created DESC LIMIT 1');
+			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND last_ip=:last_ip AND enabled IS true ORDER BY date_created DESC LIMIT 1');
+			$user_binding = [
+				'auth_token' => $auth_key,
+				'last_ip' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
+			];
 
-			$user = $user->prepare()->bind([self::AUTH_KEY => $auth_key])->execute()->fetch();
+			$user = $user->prepare()->bind($user_binding)->execute()->fetch();
 
 			if(!empty($user)) {
 				self::$user = $user;

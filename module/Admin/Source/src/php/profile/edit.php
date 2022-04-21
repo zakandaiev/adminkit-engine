@@ -146,18 +146,18 @@
 										<h5 class="card-title mb-0">Password</h5>
 									</div>
 									<div class="card-body">
-										<form action="<?php Form::edit('Profile/Password', $user->id); ?>" method="POST">
+										<form action="<?php Form::edit('Profile/Password', $user->id); ?>" method="POST" data-reset>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'password_current/label') ?></label>
-												<input type="password" name="password_current" placeholder="<?= __('form_user', 'password_current/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('form_password', 'password_current/label') ?></label>
+												<input type="password" name="password_current" placeholder="<?= __('form_password', 'password_current/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'password_new/label') ?></label>
-												<input type="password" name="password_new" placeholder="<?= __('form_user', 'password_new/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('form_password', 'password_new/label') ?></label>
+												<input type="password" name="password_new" placeholder="<?= __('form_password', 'password_new/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'password_confirm/label') ?></label>
-												<input type="password" name="password_confirm" placeholder="<?= __('form_user', 'password_confirm/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('form_password', 'password_confirm/label') ?></label>
+												<input type="password" name="password_confirm" placeholder="<?= __('form_password', 'password_confirm/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
 											<button type="submit" class="btn btn-primary">Save changes</button>
 										</form>

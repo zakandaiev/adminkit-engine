@@ -10,6 +10,8 @@ document.querySelectorAll('form').forEach(form => {
 
 		let formData = new FormData(form);
 
+		formData.set(SETTING.csrf.key, SETTING.csrf.token);
+
 		fetch(form.action, {method: 'POST', body: formData})
 		.then(response => response.json())
 		.then(data => {
@@ -156,7 +158,11 @@ delete_buttons.forEach(button => {
 			return;
 		}
 
-		fetch(button.getAttribute('data-delete'), {method: 'POST'})
+		let formData = new FormData();
+
+		formData.set(SETTING.csrf.key, SETTING.csrf.token);
+
+		fetch(button.getAttribute('data-delete'), {method: 'POST', body: formData})
 		.then(response => response.json())
 		.then(data => {
 			if(data.status === 'success') {

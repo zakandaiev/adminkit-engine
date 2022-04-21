@@ -45,4 +45,3 @@ Module::route('get', '/admin/user/edit/$id', 'User@getEdit');
 Module::route('get', '/admin/group', 'Group@getAll');
 Module::route('get', '/admin/group/add', 'Group@getAdd');
 Module::route('get', '/admin/group/edit/$id', 'Group@getEdit');
-

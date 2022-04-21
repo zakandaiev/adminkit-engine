@@ -5,6 +5,8 @@ namespace Engine\Theme;
 use Engine\Define;
 use Engine\Path;
 use Engine\View;
+use Engine\Request;
+use Engine\Setting;
 
 class Theme {
 	const PART_DIR = 'Part';
@@ -73,10 +75,35 @@ class Theme {
 
 	public static function title($title = '') {
 		if(empty($title)) {
-			$title = 'Take from page';
+			$title = 'Admin';
 		}
 		
-		echo $title . ' | ' . Define::NAME;
+		echo $title . ' | ' . Setting::get('site')->name ?? Define::NAME;
+	}
+
+	public static function meta() {
+		$meta = [];
+
+		$meta_noindex = '<meta name="robots" content="noindex, nofollow">';
+
+		$js_setting = '
+			<script>
+				let SETTING = {
+					language: "' . Setting::get('main')->language . '",
+					csrf: {
+						key: "' . Define::CSRF_KEY . '",
+						token: "' . Request::$csrf . '"
+					}
+				};
+			</script>
+		';
+
+		$meta[] = $meta_noindex;
+		$meta[] = $js_setting;
+
+		foreach($meta as $item) {
+			echo $item;
+		}
 	}
 
 	public static function path() {

@@ -78,107 +78,104 @@ class Form {
 			$pk_name = $statement->prepare()->execute()->fetch()->Column_name;
 			$sql_fields[$pk_name] = $item_id;
 		}
+		
+		if(isset($form['execute']) && is_callable($form['execute'])) {
+			$form['execute']($sql_fields);
+		} else {
+			$sql_fields_foreign = [];
+			$sql_fields_foreign_value = [];
+			if($action !== 'delete') {
+				foreach($form['field'] as $field => $values_array) {
+					if(isset($values_array['foreign']) && !empty($values_array['foreign'])) {
 
-		$sql_fields_foreign = [];
-		$sql_fields_foreign_value = [];
-		if($action !== 'delete') {
-			foreach($form['field'] as $field => $values_array) {
-				if(isset($values_array['foreign']) && !empty($values_array['foreign'])) {
+						if(is_callable($values_array['foreign'])) {
+							$sql_fields_foreign[$field] = $values_array['foreign'];
+						} else {
+							$foreign_t = explode('@', $values_array['foreign'], 2);
+							$foreign_k = explode('/', $foreign_t[1], 2);
 
-					if(is_callable($values_array['foreign'])) {
-						$sql_fields_foreign[$field] = $values_array['foreign'];
-					} else {
-						$foreign_t = explode('@', $values_array['foreign'], 2);
-						$foreign_k = explode('/', $foreign_t[1], 2);
+							$foreign_table = $foreign_t[0];
+							$foreign_key_1 = $foreign_k[0];
+							$foreign_key_2 = $foreign_k[1];
 
-						$foreign_table = $foreign_t[0];
-						$foreign_key_1 = $foreign_k[0];
-						$foreign_key_2 = $foreign_k[1];
+							$sql_fields_foreign[$field]['table'] = $foreign_table;
+							$sql_fields_foreign[$field]['key_1'] = $foreign_key_1;
+							$sql_fields_foreign[$field]['key_2'] = $foreign_key_2;
+						}
 
-						$sql_fields_foreign[$field]['table'] = $foreign_table;
-						$sql_fields_foreign[$field]['key_1'] = $foreign_key_1;
-						$sql_fields_foreign[$field]['key_2'] = $foreign_key_2;
+						if(is_array($sql_fields[$field])) {
+							$sql_fields_foreign_value[$field] = $sql_fields[$field];
+						} else if(@json_decode($sql_fields[$field]) || $sql_fields[$field] === '[]') {
+							$sql_fields_foreign_value[$field] = json_decode($sql_fields[$field]) ?? [];
+						} else if(!empty($sql_fields[$field])) {
+							$sql_fields_foreign_value[$field] = array($sql_fields[$field]);
+						} else {
+							$sql_fields_foreign_value[$field] = [];
+						}
+
+						unset($sql_fields[$field]);
 					}
-
-					if(is_array($sql_fields[$field])) {
-						$sql_fields_foreign_value[$field] = $sql_fields[$field];
-					} else if(@json_decode($sql_fields[$field]) || $sql_fields[$field] === '[]') {
-						$sql_fields_foreign_value[$field] = json_decode($sql_fields[$field]) ?? [];
-					} else if(!empty($sql_fields[$field])) {
-						$sql_fields_foreign_value[$field] = array($sql_fields[$field]);
-					} else {
-						$sql_fields_foreign_value[$field] = [];
-					}
-
-					unset($sql_fields[$field]);
 				}
 			}
-		}
 
-		switch($action) {
-			case 'add': {
-				$columns = implode(', ', array_keys($sql_fields));
-				$bindings = ':' . implode(', :', array_keys($sql_fields));
-				$sql = 'INSERT INTO {' . $table . '} (' . $columns . ') VALUES (' . $bindings . ')';
-				break;
-			}
-			case 'edit': {
-				$bindings = array_reduce(array_keys($sql_fields),function($carry,$v){return ($carry?"$carry, ":'')."$v=:$v";});
-				$sql = 'UPDATE {' . $table . '} SET ' . $bindings . ' WHERE ' . $pk_name . '=:' . $pk_name;
-				break;
-			}
-			case 'delete': {
-				$sql = 'DELETE FROM {' . $table . '} WHERE ' . $pk_name . '=:' . $pk_name;
-				break;
-			}
-			default: {
-				return false;
-			}
-		}
-
-		$statement = new Statement($sql);
-		$statement->prepare()->bind($sql_fields)->execute();
-
-		if($action === 'add') {
-			$item_id = $statement->insertId();
-		}
-
-		foreach($sql_fields_foreign as $field_name => $field) {
-			if(is_callable($field)) {
-				$field($sql_fields_foreign_value[$field_name], ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id]);
-			}
-			else if(is_array($field)) {
-				$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
-
-				$statement = new Statement($sql);
-				$statement->prepare()->bind([$field['key_1'] => $item_id])->execute();
-
-				if(empty($sql_fields_foreign_value[$field_name])) {
-					continue;
+			switch($action) {
+				case 'add': {
+					$columns = implode(', ', array_keys($sql_fields));
+					$bindings = ':' . implode(', :', array_keys($sql_fields));
+					$sql = 'INSERT INTO {' . $table . '} (' . $columns . ') VALUES (' . $bindings . ')';
+					break;
 				}
+				case 'edit': {
+					$bindings = array_reduce(array_keys($sql_fields),function($carry,$v){return ($carry?"$carry, ":'')."$v=:$v";});
+					$sql = 'UPDATE {' . $table . '} SET ' . $bindings . ' WHERE ' . $pk_name . '=:' . $pk_name;
+					break;
+				}
+				case 'delete': {
+					$sql = 'DELETE FROM {' . $table . '} WHERE ' . $pk_name . '=:' . $pk_name;
+					break;
+				}
+				default: {
+					return false;
+				}
+			}
 
-				foreach($sql_fields_foreign_value[$field_name] as $value) {
-					$sql = '
-						INSERT INTO {' . $field['table'] . '}
-							(' . $field['key_1'] . ', ' . $field['key_2'] . ')
-						VALUES
-							(:' . $field['key_1'] . ', :' . $field['key_2'] . ')
-					';
+			$statement = new Statement($sql);
+			$statement->prepare()->bind($sql_fields)->execute();
+
+			if($action === 'add') {
+				$item_id = $statement->insertId();
+			}
+
+			foreach($sql_fields_foreign as $field_name => $field) {
+				if(is_callable($field)) {
+					$field($sql_fields_foreign_value[$field_name], ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id]);
+				}
+				else if(is_array($field)) {
+					$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
 
 					$statement = new Statement($sql);
-					$statement->prepare()->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
+					$statement->prepare()->bind([$field['key_1'] => $item_id])->execute();
+
+					if(empty($sql_fields_foreign_value[$field_name])) {
+						continue;
+					}
+
+					foreach($sql_fields_foreign_value[$field_name] as $value) {
+						$sql = '
+							INSERT INTO {' . $field['table'] . '}
+								(' . $field['key_1'] . ', ' . $field['key_2'] . ')
+							VALUES
+								(:' . $field['key_1'] . ', :' . $field['key_2'] . ')
+						';
+
+						$statement = new Statement($sql);
+						$statement->prepare()->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
+					}
 				}
 			}
 		}
-
-		$success_message = null;
 		
-		$language = Language::load($form['language']);
-		if(isset($language->submit)) {
-			$success_message = $language->submit;
-		}
-
-		Server::answer(null, 'success', $success_message);
+		Server::answer(null, 'success', __($form['language'], 'submit'));
 	}
 
 	private static function tokenExistsAndActive($action, $form_name = '', $item_id = '') {
@@ -242,7 +239,6 @@ class Form {
 		}
 
 		$post = Request::$post;
-		$language = Language::load($form['language']);
 
 		foreach($form['field'] as $field => $values_array) {
 			if(array_key_exists($field, $post)) {
@@ -254,10 +250,10 @@ class Form {
 					}
 
 					if($check !== true) {
-						$error_message = ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
+						$error_message = __($form['language'], $field . '/' . $key);
 
-						if(isset($language->{$field}->{$key})) {
-							$error_message = $language->{$field}->{$key};
+						if(!$error_message) {
+							$error_message = ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
 						}
 
 						Server::answer(null, 'error', $error_message, 409);

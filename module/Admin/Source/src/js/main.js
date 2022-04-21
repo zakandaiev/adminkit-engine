@@ -22,16 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
 			anchor.setAttribute('rel', 'noopener noreferrer nofollow');
 		}
 
-		anchor.addEventListener('click', event => {
-			const anchor_href = event.currentTarget.getAttribute('href');
-			if(anchor_href.charAt(0) === '#' || (anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#')) {
-				const scroll_to_node = document.querySelector(event.currentTarget.hash);
-				if(scroll_to_node) {
-					event.preventDefault();
-					SmoothScrollTo(scroll_to_node);
+		if(!anchor.hasAttribute('data-bs-toggle')) {
+			anchor.addEventListener('click', event => {
+				const anchor_href = event.currentTarget.getAttribute('href');
+				if(anchor_href.charAt(0) === '#' || (anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#')) {
+					const scroll_to_node = document.querySelector(event.currentTarget.hash);
+					if(scroll_to_node) {
+						event.preventDefault();
+						SmoothScrollTo(scroll_to_node);
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 
 	// RESPONSIVE TABLES

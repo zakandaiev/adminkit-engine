@@ -18,6 +18,8 @@ class Request {
 	public static $files = [];
 	public static $server = [];
 
+	public static $csrf;
+
 	public static function initialize() {
 		self::$method 	= strtolower($_SERVER['REQUEST_METHOD'] ?? 'get');
 		self::$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
@@ -34,6 +36,12 @@ class Request {
 		self::$files		= $_FILES;
 		self::$server		= $_SERVER;
 
+		self::$csrf = self::setCSRF();
+
+		if(self::$method !== 'get' && !self::verifyCSRF()) {
+			Server::answer(null, 'error', 'Bad Request', 400);
+		}
+
 		return true;
 	}
 
@@ -43,5 +51,29 @@ class Request {
 
 	public static function get($key) {
 		return self::$get[$key] ?? null;
+	}
+
+	public static function setCSRF() {
+		$token_key = Define::CSRF_KEY;
+		$token = Session::get($token_key) ?? '';
+
+		if(empty($token)) {
+			$token = Hash::csrf();
+			Session::set($token_key, $token);
+		}
+
+		return $token;
+	}
+
+	public static function verifyCSRF() {
+		$token_key = Define::CSRF_KEY;
+		$token_post = self::$post[$token_key] ?? '';
+		$token_session = Session::get($token_key) ?? '';
+
+		if(hash_equals($token_post, $token_session)) {
+			return true;
+		}
+
+		return false;
 	}
 }

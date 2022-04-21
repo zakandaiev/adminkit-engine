@@ -37,12 +37,12 @@ class Engine {
 		class_alias('\\Engine\\Mail', 'Mail');
 		class_alias('\\Engine\\FileUploader', 'FileUploader');
 
+		Session::initialize();
 		Request::initialize();
 		Config::initialize();
 		Database::initialize();
 		Setting::initialize();
 		@date_default_timezone_set(Setting::get('main')->time_zone);
-		Session::initialize();
 		Auth::initialize();
 		Module::initialize();
 		Router::initialize();

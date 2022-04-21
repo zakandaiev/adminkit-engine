@@ -201,23 +201,24 @@ function word($text) {
 
 ############################# LANGUAGE #############################
 function __($section, $key) {
+	$language = Language::get($section) ?? Language::load($section);
+
 	if(str_contains($key, '/')) {
 		list($parent, $child) = explode('/', $key, 2);
 
-		return Language::get($section)->{$parent}->{$child} ?? $key;
+		return $language->{$parent}->{$child} ?? null;
 	}
 
-	if(isset(Language::get($section)->{$key})) {
-		if(is_string(Language::get($section)->{$key})) {
-			return Language::get($section)->{$key};
+	if(isset($language->{$key})) {
+		if(is_string($language->{$key})) {
+			return $language->{$key};
 		}
-		else if(is_array(Language::get($section)->{$key})) {
-			return json_encode(Language::get($section)->{$key});
+		else if(is_array($language->{$key})) {
+			return json_encode($language->{$key});
 		}
 
-		return $key;
+		return null;
 	}
 
-	return $key;
+	return null;
 }
-
