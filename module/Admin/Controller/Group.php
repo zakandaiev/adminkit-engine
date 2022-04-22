@@ -4,7 +4,7 @@ namespace Module\Admin\Controller;
 
 use Engine\Theme\Pagination;
 
-class Group extends Controller {
+class Group extends AdminController {
 	public function getAll() {
 		$pagination = new Pagination($this->model->countGroups());
 		$groups = $this->model->getGroups($pagination);

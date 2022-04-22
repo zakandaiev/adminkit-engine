@@ -1838,3 +1838,12 @@ body[data-sidebar-layout=compact][data-sidebar-position=right] .sidebar.collapse
 .modal-colored .modal-header {
 	border-color: hsla(0, 0%, 100%, .33)
 }
+
+.activity {
+	display: flex;
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid rgba(#495057, 0.25);
+	}
+}

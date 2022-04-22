@@ -9,7 +9,7 @@
 		<main class="content">
 			<div class="container-fluid p-0">
 
-				<h1 class="h3 mb-3"><?= Language::get('sidebar')->settings ?> <i data-feather="arrow-right"></i> Contacts</h1>
+				<h1 class="h3 mb-3"><?= __('sidebar', 'settings') ?> <i data-feather="arrow-right"></i> Contacts</h1>
 
 				<div class="row">
 					<div class="col-12">

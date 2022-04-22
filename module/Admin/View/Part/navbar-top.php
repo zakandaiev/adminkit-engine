@@ -1,3 +1,8 @@
+<?php
+	$notifications = Auth::$user->notifications;
+	$notifications_count = Auth::$user->notifications_count;
+?>
+
 <nav class="navbar navbar-expand navbar-light navbar-bg">
 	<a class="sidebar-toggle js-sidebar-toggle">
 		<i class="hamburger align-self-center"></i>
@@ -6,67 +11,41 @@
 	<div class="navbar-collapse collapse">
 		<ul class="navbar-nav navbar-align">
 			<li class="nav-item dropdown">
-				<a class="nav-icon dropdown-toggle" href="/admin" id="alertsDropdown" data-bs-toggle="dropdown">
+				<a class="nav-icon dropdown-toggle" href="/admin" id="notifications" data-bs-toggle="dropdown">
 					<div class="position-relative">
 						<i class="align-middle" data-feather="bell"></i>
-						<span class="indicator">4</span>
+						<?php if($notifications_count > 0): ?>
+							<span class="indicator"><?= $notifications_count ?></span>
+						<?php endif; ?>
 					</div>
 				</a>
-				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="notifications">
 					<div class="dropdown-menu-header">
-						4 <?= Language::get('navbar')->top->new_notif ?>
+						<?= __('navbar', 'top/new_notif') ?>
 					</div>
 					<div class="list-group">
-						<a href="/admin" class="list-group-item">
-							<div class="row g-0 align-items-center">
-								<div class="col-2">
-									<i class="text-danger" data-feather="alert-circle"></i>
-								</div>
-								<div class="col-10">
-									<div class="text-dark">Update completed</div>
-									<div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
-									<div class="text-muted small mt-1">30m ago</div>
-								</div>
-							</div>
-						</a>
-						<a href="/admin" class="list-group-item">
-							<div class="row g-0 align-items-center">
-								<div class="col-2">
-									<i class="text-warning" data-feather="bell"></i>
-								</div>
-								<div class="col-10">
-									<div class="text-dark">Lorem ipsum</div>
-									<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
-									<div class="text-muted small mt-1">2h ago</div>
-								</div>
-							</div>
-						</a>
-						<a href="/admin" class="list-group-item">
-							<div class="row g-0 align-items-center">
-								<div class="col-2">
-									<i class="text-primary" data-feather="home"></i>
-								</div>
-								<div class="col-10">
-									<div class="text-dark">Login from 192.186.1.8</div>
-									<div class="text-muted small mt-1">5h ago</div>
-								</div>
-							</div>
-						</a>
-						<a href="/admin" class="list-group-item">
-							<div class="row g-0 align-items-center">
-								<div class="col-2">
-									<i class="text-success" data-feather="user-plus"></i>
-								</div>
-								<div class="col-10">
-									<div class="text-dark">New connection</div>
-									<div class="text-muted small mt-1">Christina accepted your request.</div>
-									<div class="text-muted small mt-1">14h ago</div>
-								</div>
-							</div>
-						</a>
+						<?php if($notifications_count > 0): ?>
+							<?php foreach($notifications as $notification): ?>
+								<a href="/admin/profile" class="list-group-item">
+									<div class="row g-0 align-items-center">
+										<div class="col-2">
+											<?= getNotificationIcon($notification->kind) ?>
+										</div>
+										<div class="col-10">
+											<div class="text-dark"><?= ___('notification', $notification->kind) ?></div>
+											<div class="text-muted small mt-1"><?= date_when($notification->date_created) ?></div>
+										</div>
+									</div>
+								</a>
+							<?php endforeach; ?>
+						<?php else: ?>
+							<a href="/admin/profile" class="list-group-item">
+								<div class="text-dark"><?= ___('notification', 'no_new_notifications') ?></div>
+							</a>
+						<?php endif; ?>
 					</div>
 					<div class="dropdown-menu-footer">
-						<a href="/admin" class="text-muted">Show all notifications</a>
+						<a href="/admin/profile" class="text-muted">Show all</a>
 					</div>
 				</div>
 			</li>

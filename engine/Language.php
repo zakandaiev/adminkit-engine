@@ -53,6 +53,12 @@ class Language {
 	}
 
 	public static function load($file_name) {
+		$lang = self::get($file_name);
+
+		if($lang) {
+			return $lang;
+		}
+
 		$lang = new \stdClass();
 
 		$path_lang = Path::file('language') . '/' . $file_name . '.ini';
@@ -68,6 +74,11 @@ class Language {
 		}
 
 		$lang = json_decode(json_encode($content_lang));
+
+		if(!self::$language) {
+			self::$language = new \stdClass();
+		}
+		self::$language->{$file_name} = $lang;
 
 		return $lang;
 	}

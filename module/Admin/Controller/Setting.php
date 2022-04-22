@@ -5,7 +5,7 @@ namespace Module\Admin\Controller;
 use Engine\Form;
 use Engine\Server;
 
-class Setting extends Controller {
+class Setting extends AdminController {
 	public function getSection() {
 		$section = $this->route['parameters']['section'];
 

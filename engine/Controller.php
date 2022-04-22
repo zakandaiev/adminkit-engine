@@ -10,11 +10,10 @@ abstract class Controller {
 	protected $model;
 
 	protected $setting;
-	protected $language;
 
 	protected $user;
 
-	public function __construct() {		
+	public function __construct() {
 		$this->module = Module::getAll()[Module::$name];
 		$this->route = Router::$route;
 
@@ -23,13 +22,13 @@ abstract class Controller {
 
 		$this->setting = Setting::getAll();
 
-		Language::initialize();
-		$this->language = Language::getAll();
-
 		$this->user = Auth::$user;
+		if(isset($this->user->socials)) {
+			$this->user->socials = json_decode($this->user->socials) ?? [];
+		}
 	}
 
-	private function loadModel($model_name) {
+	protected function loadModel($model_name) {
 		$model_class = Path::class('model') . '\\' . ucfirst($model_name);
 
 		if(class_exists($model_class)) {

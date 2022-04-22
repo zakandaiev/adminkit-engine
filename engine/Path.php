@@ -62,6 +62,8 @@ class Path {
 				return ROOT_DIR . '/module/' . $module . '/Form';
 			case 'language':
 				return ROOT_DIR . '/module/' . $module . '/Language/' . Setting::get('main')->language;
+			case 'mail':
+				return ROOT_DIR . '/module/' . $module . '/Mail';
 			case 'view_public':
 				return ROOT_DIR . '/theme/' . Setting::get('theme')->theme;
 			default:

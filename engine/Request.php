@@ -58,7 +58,7 @@ class Request {
 		$token = Session::get($token_key) ?? '';
 
 		if(empty($token)) {
-			$token = Hash::csrf();
+			$token = Hash::token();
 			Session::set($token_key, $token);
 		}
 

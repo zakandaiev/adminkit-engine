@@ -5,8 +5,6 @@ namespace Module\Admin\Controller;
 use Engine\Auth;
 use Engine\Database\Statement;
 use Engine\Form;
-use Engine\Hash;
-use Engine\Request;
 use Engine\Server;
 
 class Authorization extends \Engine\Controller {
@@ -42,7 +40,7 @@ class Authorization extends \Engine\Controller {
 			Server::answer(null, 'error', 'Your account has been disabled');
 		}
 
-		$this->authorize($user);
+		Auth::authorize($user);
 
 		Server::answer(null, 'success');
 	}
@@ -77,44 +75,10 @@ class Authorization extends \Engine\Controller {
 			Server::answer(null, 'error', 'Form is invalid');
 		}
 
-		$sql_fields['password'] = Hash::password(Request::$post['password']);
-
-		$sql = '
-			INSERT INTO {user}
-				(name, login, email, password)
-			VALUES 
-				(:name, :login, :email, :password);
-		';
-
-		$statement = new Statement($sql);
+		$sql_fields = json_decode(json_encode($sql_fields));
 		
-		$sql_fields['id'] = $statement->prepare()->bind($sql_fields)->execute()->insertId();
-
-		$this->authorize(json_decode(json_encode($sql_fields)));
-
-		// Mail::send('registration completed');
+		Auth::register($sql_fields);
 
 		Server::answer(null, 'success');
-	}
-
-	private function authorize($user) {
-		$user_ip = filter_var($_SERVER["REMOTE_ADDR"], FILTER_VALIDATE_IP);
-		$auth_token = Hash::token($user->id.$user->login);
-
-		$sql = '
-			UPDATE {user} SET 
-				auth_token=:auth_token,
-				last_ip=:last_ip,
-				last_auth=CURRENT_TIMESTAMP
-			WHERE id=:id;
-		';
-
-		$statement = new Statement($sql);
-		
-		$statement->prepare()->bind(['id' => $user->id, 'last_ip' => $user_ip, 'auth_token' => $auth_token])->execute();
-
-		Auth::authorize($user, $auth_token);
-
-		return true;
 	}
 }

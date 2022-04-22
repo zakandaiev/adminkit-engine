@@ -139,16 +139,23 @@ class Form {
 				}
 			}
 
+			$form_data = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
+
+			if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
+				$form['execute_pre']($sql_fields, $form_data);
+			}
+
 			$statement = new Statement($sql);
 			$statement->prepare()->bind($sql_fields)->execute();
 
 			if($action === 'add') {
 				$item_id = $statement->insertId();
+				$form_data['item_id'] = $item_id;
 			}
 
 			foreach($sql_fields_foreign as $field_name => $field) {
 				if(is_callable($field)) {
-					$field($sql_fields_foreign_value[$field_name], ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id]);
+					$field($sql_fields_foreign_value[$field_name], $form_data);
 				}
 				else if(is_array($field)) {
 					$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
@@ -172,6 +179,10 @@ class Form {
 						$statement->prepare()->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
 					}
 				}
+			}
+
+			if(isset($form['execute_post']) && is_callable($form['execute_post'])) {
+				$form['execute_post']($sql_fields, $form_data);
 			}
 		}
 		

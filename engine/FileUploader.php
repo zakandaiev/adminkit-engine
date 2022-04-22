@@ -4,12 +4,12 @@ namespace Engine;
 
 class FileUploader {
 	public static function upload($file, $custom_folder = '', $extensions = []) {
-		$name = Hash::token($file['name']);
+		$name = Hash::token(8);
 		$name_original = $file['name'];
 
 		$name_prepend = time();
-		if(Auth::authorized()) {
-			$name_prepend .= '_' . Auth::user()->id .'_';
+		if(Auth::$user->authorized) {
+			$name_prepend .= '_' . Auth::$user->id .'_';
 		} else {
 			$name_prepend .= '_uu_';
 		}

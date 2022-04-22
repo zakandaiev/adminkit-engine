@@ -52,6 +52,22 @@ function images(array $json, $attributes = '') {
 	return $output;
 }
 
+function placeholder_image($path) {
+	if(is_file(ROOT_DIR . '/' . $path)) {
+		return $path;
+	}
+
+	return Setting::get('site')->{__FUNCTION__};
+}
+
+function placeholder_avatar($path) {
+	if(is_file(ROOT_DIR . '/' . $path)) {
+		return $path;
+	}
+
+	return Setting::get('site')->{__FUNCTION__};
+}
+
 ############################# FORMAT #############################
 function format_date($date = null, $format = null) {
 	$fmt = $format ?? 'd.m.Y H:i';
@@ -221,4 +237,8 @@ function __($section, $key) {
 	}
 
 	return null;
+}
+
+function ___($section, $key) {
+	return __($section, $key) ?? $key;
 }

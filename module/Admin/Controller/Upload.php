@@ -6,7 +6,7 @@ use Engine\Request;
 use Engine\Server;
 // use Engine\FileUploader;
 
-class Upload extends Controller {
+class Upload extends AdminController {
 	public function get() {
 		if(!isset(Request::$get['load'])) {
 			Server::redirect('/404');

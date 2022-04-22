@@ -3,12 +3,8 @@
 namespace Engine;
 
 class Hash {
-	public static function token($string = '') {
-		return md5($string . sha1(uniqid($string)));
-	}
-
-	public static function csrf() {
-		return bin2hex(random_bytes(32));;
+	public static function token($length = 32) {
+		return bin2hex(random_bytes($length));;
 	}
 
 	public static function password($password) {

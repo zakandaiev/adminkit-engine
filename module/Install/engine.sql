@@ -152,6 +152,16 @@ CREATE TABLE `%prefix%_menu_item` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE IF NOT EXISTS `%prefix%_notification` ( 
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT NOT NULL,
+	`kind` VARCHAR(100) NOT NULL,
+	`info` TEXT DEFAULT NULL,
+	`is_read` BOOLEAN NOT NULL DEFAULT FALSE,
+	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('main', 'time_zone', 'Europe/Kiev'),
 ('main', 'language', 'en'),

@@ -9,7 +9,7 @@
 			<div class="col-6 text-end">
 				<ul class="list-inline">
 					<li class="list-inline-item">
-						<a class="text-muted" href="/" target="_blank"><?= Language::get('navbar')->bottom->open_site ?></a>
+						<a class="text-muted" href="/" target="_blank"><?= __('navbar', 'bottom/open_site') ?></a>
 					</li>
 				</ul>
 			</div>

@@ -61,5 +61,15 @@ return [
 	'execute' => function($fields) {
 		debug($fields);
 		exit;
+	},
+	'execute_pre' => function($fields, $form_data) {
+		debug($fields);
+		debug($form_data);
+		exit;
+	},
+	'execute_post' => function($fields, $form_data) {
+		debug($fields);
+		debug($form_data);
+		exit;
 	}
 ];

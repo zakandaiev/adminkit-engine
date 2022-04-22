@@ -2,15 +2,20 @@
 
 namespace Module\Admin\Controller;
 
-class Profile extends Controller {
+class Profile extends AdminController {
 	public function getProfile() {
-		$data['user'] = $this->user;
+		$data['user'] = clone $this->user;
 		
 		if(isset($this->route['parameters']['id'])) {
 			$data['user'] = $this->model->getUserById($this->route['parameters']['id']);
 		}
 
 		if(!empty($data['user'])) {
+			$data['user']->notifications_count = $this->model->getUserNotificationsCount($data['user']->id);
+			$data['user']->notifications = $this->model->getUserNotifications($data['user']->id);
+
+			$this->model->readNotifications($data['user']->id);
+			
 			$this->view->setData($data);
 			$this->view->render('profile/profile');
 		} else {
