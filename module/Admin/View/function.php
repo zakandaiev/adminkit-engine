@@ -57,8 +57,12 @@ function getNotificationIcon($notification_kind) {
 			$color = 'danger';
 			break;
 		}
-		case 'page': {
+		case 'page_add': {
 			$icon = 'file-text';
+			break;
+		}
+		case 'category_add': {
+			$icon = 'folder';
 			break;
 		}
 		case 'comment': {
@@ -86,51 +90,55 @@ function getNotificationHTML($notification, $user) {
 	switch($notification->kind) {
 		case 'register': {
 			$action_name = 'created account';
-			$action_name .= ' from <a href="https://check-host.net/ip-info?host=' . $data->ip . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$action_name .= ' from <a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			break;
 		}
 		case 'authorize': {
-			$action_name = 'logged in from';
-			$action_name .= ' <a href="https://check-host.net/ip-info?host=' . $data->ip . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$action_name = 'logged in';
+			$action_name .= ' from <a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			break;
 		}
 		case 'restore': {
-			$action_name = 'restored your password';
+			$action_name = 'restored password';
 			break;
 		}
 		case 'change_login': {
-			$action_name = 'changed your login';
+			$action_name = 'changed login';
 			$action_name .= ' from <strong>' . $data->login_old . '</strong>';
 			$action_name .= ' to <strong>' . $data->login_new . '</strong>';
 			break;
 		}
 		case 'change_name': {
-			$action_name = 'changed your name';
+			$action_name = 'changed name';
 			$action_name .= ' from <strong>' . $data->name_old . '</strong>';
 			$action_name .= ' to <strong>' . $data->name_new . '</strong>';
 			break;
 		}
 		case 'change_password': {
-			$action_name = 'changed your password';
+			$action_name = 'changed password';
 			break;
 		}
 		case 'change_email': {
-			$action_name = 'changed your email';
+			$action_name = 'changed email';
 			$action_name .= ' from <strong>' . $data->email_old . '</strong>';
 			$action_name .= ' to <strong>' . $data->email_new . '</strong>';
 			break;
 		}
-		case 'page': {
+		case 'page_add': {
 			$action_name = 'created';
-			$action_name .= ' <a href="/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
-			if(is_file(ROOT_DIR . '/' . $data->image)) {
-				$preview = '
-					<div class="col-6 col-md-4 col-lg-4 col-xl-3">
-						<img src="/' . $data->image . '" class="img-fluid pe-2" alt="' . $data->title . '" data-fancybox>
-					</div>
-				';
-				$action_body = '<div class="row g-0 mt-1">' . $preview . '</div>';
+
+			$page = 'SELECT * FROM {page} WHERE id=:id ORDER BY date_created DESC LIMIT 1';
+			$page = new Statement($page);
+			$page = $page->prepare()->bind(['id' => $data->page_id])->execute()->fetch();
+
+			$action_name .= ' <a href="/' . $page->url . '" target="_blank"><strong>' . $page->title . '</strong></a>';
+			
+			$action_body = '<div class="mt-1"><img src="/' . placeholder_image($page->image) . '" class="w-25" alt="' . $page->title . '" data-fancybox></div>';
+
+			if($page->is_category) {
+				$icon = getNotificationIcon('category_add');
 			}
+			
 			break;
 		}
 		case 'comment': {
@@ -139,7 +147,7 @@ function getNotificationHTML($notification, $user) {
 			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . $data->comment . '</div>';
 			break;
 		}
-		case 'comment-reply': {
+		case 'comment_reply': {
 			$action_name = 'replied to your comment on';
 			$action_name .= ' <a href="/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . $data->reply . '</div>';

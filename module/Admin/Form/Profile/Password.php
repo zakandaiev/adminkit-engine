@@ -33,5 +33,19 @@ return [
 		$sql = 'UPDATE {user} SET password=:password WHERE id=:id';
 		$statement = new Statement($sql);
 		$statement->prepare()->bind(['password' => Hash::password($password_new), 'id' => $user_id])->execute();
+	},
+	'execute_post' => function($fields, $form_data) {
+		$data = new \stdClass();
+		$data->user_id = $form_data['item_id'];
+
+		$user_email = 'SELECT email FROM {user} WHERE id=:id ORDER BY date_created DESC LIMIT 1';
+		$user_email = new Statement($user_email);
+		$data->user_email = $user_email->prepare()->bind(['id' => $data->user_id])->execute()->fetchColumn();
+
+		$data->password_old = $fields['password_current'];
+		$data->password_new = $fields['password_new'];
+
+		Mail::send('ChangePassword', $data);
+		Notification::create('change_password', $data->user_id, $data);
 	}
 ];

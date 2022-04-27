@@ -78,6 +78,12 @@ class Form {
 			$pk_name = $statement->prepare()->execute()->fetch()->Column_name;
 			$sql_fields[$pk_name] = $item_id;
 		}
+
+		$form_data = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
+
+		if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
+			$form['execute_pre']($sql_fields, $form_data);
+		}
 		
 		if(isset($form['execute']) && is_callable($form['execute'])) {
 			$form['execute']($sql_fields);
@@ -139,12 +145,6 @@ class Form {
 				}
 			}
 
-			$form_data = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
-
-			if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
-				$form['execute_pre']($sql_fields, $form_data);
-			}
-
 			$statement = new Statement($sql);
 			$statement->prepare()->bind($sql_fields)->execute();
 
@@ -180,10 +180,10 @@ class Form {
 					}
 				}
 			}
+		}
 
-			if(isset($form['execute_post']) && is_callable($form['execute_post'])) {
-				$form['execute_post']($sql_fields, $form_data);
-			}
+		if(isset($form['execute_post']) && is_callable($form['execute_post'])) {
+			$form['execute_post']($sql_fields, $form_data);
 		}
 		
 		Server::answer(null, 'success', __($form['language'], 'submit'));

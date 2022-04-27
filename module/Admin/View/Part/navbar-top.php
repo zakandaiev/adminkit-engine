@@ -40,7 +40,7 @@
 							<?php endforeach; ?>
 						<?php else: ?>
 							<a href="/admin/profile" class="list-group-item">
-								<div class="text-dark"><?= ___('notification', 'no_new_notifications') ?></div>
+								<div class="text-muted small"><?= ___('notification', 'no_new_notifications') ?></div>
 							</a>
 						<?php endif; ?>
 					</div>

@@ -17,8 +17,12 @@ class Define {
 	const UPLOAD_FOLDER = 'upload';
 	const UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'];
 
-	const VIEW_PATH_MASK = [
+	const VIEW_PATH_MASK = [ // TODO
 		'module' => '%s/View/%s',
 		'theme' => '%s/theme/%s'
+	];
+
+	const SERVICE = [
+		'ip_checker' => 'https://check-host.net/ip-info?host=%s'
 	];
 }

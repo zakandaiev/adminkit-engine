@@ -14,7 +14,7 @@ class Profile {
 		$user = $user->prepare()->bind(['id' => $id])->execute()->fetch();
 
 		if(!empty($user->socials)) {
-			self::$user->socials = json_decode($user->socials);
+			$user->socials = json_decode($user->socials);
 		}
 
 		return $user;

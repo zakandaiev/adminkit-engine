@@ -48,7 +48,7 @@
 											<td title="<?= format_date($user->date_created) ?>"><?= date_when($user->date_created) ?></td>
 											<td>
 												<?php if($user->last_auth): ?>
-													<a href="https://check-host.net/ip-info?host=<?= $user->last_ip ?>" target="_blank"><?= date_when($user->last_auth, 'd.m.Y H:i') ?></a>
+													<a href="<?= sprintf(DEFINE::SERVICE['ip_checker'], $user->last_ip) ?>" target="_blank"><?= date_when($user->last_auth, 'd.m.Y H:i') ?></a>
 												<?php else: ?>
 													<i class="align-middle" data-feather="minus"></i>
 												<?php endif; ?>
