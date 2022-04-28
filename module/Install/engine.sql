@@ -165,7 +165,6 @@ CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
 INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('main', 'time_zone', 'Europe/Kiev'),
 ('main', 'language', 'en'),
-('main', 'languages_allowed', null),
 ('main', 'socials_allowed', '["Telegram","Facebook","VK","Instagram"]'),
 ('main', 'enable_registration', 'true'),
 ('main', 'moderate_comments', 'true'),

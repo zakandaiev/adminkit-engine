@@ -75,15 +75,19 @@ class Module {
 		foreach(scandir($path) as $language) {
 			if(in_array($language, ['.', '..'], true)) continue;
 
-			if(file_extension($language) !== 'php') continue;
+			if(file_extension($language) !== 'ini') continue;
 
-			$config = require $path . '/' . $language;
+			$language = file_name($language);
 
-			if(!$config['enabled']) {
-				continue;
-			}
+			list($language_key, $language_region, $language_name) = explode('@', $language, 3);
 
-			$languages[$config['key']] = $config;
+			$lang['key'] = $language_key ?? null;
+			$lang['region'] = $language_region ?? null;
+			$lang['name'] = $language_name ?? null;
+
+			if(!$lang['key']) continue;
+
+			$languages[$lang['key']] = $lang;
 		}
 
 		return $languages;

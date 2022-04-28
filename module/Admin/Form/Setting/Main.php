@@ -13,7 +13,6 @@ return [
 	'field' => [
 		'time_zone' => $time_zone,
 		'language' => $language,
-		'languages_allowed' => [],
 		'socials_allowed' => [],
 		'enable_registration' => [
 			'boolean' => true

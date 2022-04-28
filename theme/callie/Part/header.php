@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= site('langc') ?>">
+<html lang="<?= site('lang_current') ?>">
 
 <head>
 	<meta charset="<?= site('charset') ?>">

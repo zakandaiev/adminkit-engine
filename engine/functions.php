@@ -23,11 +23,11 @@ function debug($obj) {
 
 ############################# FILE #############################
 function file_name($path) {
-	return strtolower(pathinfo($path, PATHINFO_FILENAME));
+	return pathinfo($path, PATHINFO_FILENAME);
 }
 
 function file_extension($path) {
-	return strtolower(pathinfo($path, PATHINFO_EXTENSION));
+	return pathinfo($path, PATHINFO_EXTENSION);
 }
 
 ############################# IMAGE #############################
@@ -88,10 +88,10 @@ function date_when($date, $format = null) {
 	$yesterday = date('d.m.Y', mktime(0, 0, 0, date('m'), date('d') - 1, date('Y')));
 
 	if($getdata === date('d.m.Y')) {
-		$date = date('Сегодня в H:i', $timestamp);
+		$date = __('Today at') . ' ' . date('H:i', $timestamp);
 	} else {
 		if($yesterday === $getdata) {
-			$date = date('Вчера в H:i', $timestamp);
+			$date = __('Yesterday at') . ' ' . date('H:i', $timestamp);
 		} else {
 			$date = date($fmt, $timestamp);
 		}
@@ -216,31 +216,8 @@ function word($text) {
 }
 
 ############################# LANGUAGE #############################
-function __($section, $key) {
-	$language = Language::get($section) ?? Language::load($section);
-
-	if(str_contains($key, '/')) {
-		list($parent, $child) = explode('/', $key, 2);
-
-		return $language->{$parent}->{$child} ?? null;
-	}
-
-	if(isset($language->{$key})) {
-		if(is_string($language->{$key})) {
-			return $language->{$key};
-		}
-		else if(is_array($language->{$key})) {
-			return json_encode($language->{$key});
-		}
-
-		return null;
-	}
-
-	return null;
-}
-
-function ___($section, $key) {
-	return __($section, $key) ?? $key;
+function __($key) {
+	return Language::translate($key) ?? $key;
 }
 
 ############################# SITE #############################
@@ -256,7 +233,7 @@ function site($key) {
 			$value = Setting::get('main')->language;
 			break;
 		}
-		case 'langc': {
+		case 'lang_current': {
 			$value = Setting::get('main')->language;
 
 			if(Session::hasCookie(Define::COOKIE_KEY['language']) && !empty(Session::getCookie(Define::COOKIE_KEY['language']))) {
@@ -269,11 +246,24 @@ function site($key) {
 			$value = Request::$base;
 			break;
 		}
-		case 'urll': {
+		case 'url_lang': {
 			$value = Request::$base;
 
-			if(site('lang') !== site('langc')) {
+			if(site('lang') !== site('lang_current')) {
 				$value .= '/' . Session::getCookie(Define::COOKIE_KEY['language']);
+			}
+
+			break;
+		}
+		case 'uri': {
+			$value = Request::$uri;
+			break;
+		}
+		case 'uri_lang': {
+			$value = Request::$uri;
+
+			if(site('lang') !== site('lang_current')) {
+				$value = Session::getCookie(Define::COOKIE_KEY['language']) . '/' . $value;
 			}
 
 			break;

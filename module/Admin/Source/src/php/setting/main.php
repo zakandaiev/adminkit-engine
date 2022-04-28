@@ -16,10 +16,6 @@
 						<div class="card">
 							<div class="card-body">
 								<form method="POST">
-									<?php
-										$settings->languages_allowed = json_decode($settings->languages_allowed) ?? [];
-										$settings->socials_allowed = json_decode($settings->socials_allowed) ?? [];
-									?>
 									<div class="mb-3">
 										<label class="form-label">Time zone</label>
 										<select name="time_zone">
@@ -30,37 +26,23 @@
 										<label class="form-label">Language</label>
 										<select name="language">
 											<?php foreach(Module::get('languages') as $language): ?>
-												<?php if(!$language['enabled']) continue; ?>
 												<?php
 													$selected_language = '';
 
-													if($language['key'] === $settings->language) {
+													if($language === $settings->language) {
 														$selected_language = 'selected';
 													}
 												?>
-												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['title'] ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="mb-3">
-										<label class="form-label">Languages allowed</label>
-										<select name="languages_allowed[]" multiple>
-											<?php foreach(Module::get('languages') as $language): ?>
-												<?php if($language['key'] === $settings->language) continue; ?>
-												<?php
-													$selected_language = '';
-
-													if(in_array($language['key'], $settings->languages_allowed)) {
-														$selected_language = 'selected';
-													}
-												?>
-												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['title'] ?></option>
+												<option value="<?= $language ?>" <?= $selected_language ?>><?= $language ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
 									<div class="mb-3">
 										<label class="form-label">Socials allowed</label>
 										<select name="socials_allowed[]" multiple data-addable="tag">
+											<?php
+												$settings->socials_allowed = json_decode($settings->socials_allowed) ?? [];
+											?>
 											<?php foreach($settings->socials_allowed as $social): ?>
 												<?php
 													$selected_social = '';

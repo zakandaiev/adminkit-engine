@@ -43,7 +43,6 @@ class Engine {
 		Config::initialize();
 		Database::initialize();
 		Setting::initialize();
-		Language::initialize();
 		Auth::initialize();
 		Module::initialize();
 		Router::initialize();

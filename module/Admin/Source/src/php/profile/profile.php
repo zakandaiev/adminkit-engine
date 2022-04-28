@@ -23,7 +23,6 @@
 						<div class="card mb-3">
 							<div class="card-header">
 								<h5 class="card-title mb-0">Details</h5>
-								<?= gettext('XDDDD') ?>
 							</div>
 							<div class="card-body text-center">
 								<img src="/<?= placeholder_avatar($user->avatar) ?>" alt="<?= $user->name ?>" class="img-fluid rounded-circle mb-2" width="128" height="128" data-fancybox>
