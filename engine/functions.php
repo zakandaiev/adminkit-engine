@@ -152,7 +152,7 @@ function hc($text){
 	return htmlspecialchars($text);
 }
 
-function urlencode_spaces($url) {
+function us($url) {
 	return str_replace(' ', '%20', $url);
 }
 
@@ -241,4 +241,44 @@ function __($section, $key) {
 
 function ___($section, $key) {
 	return __($section, $key) ?? $key;
+}
+
+############################# SITE #############################
+function site($key) {
+	$value = null;
+
+	switch(strval($key)) {
+		case 'charset': {
+			$value = Config::get('database')['charset'];
+			break;
+		}
+		case 'lang': {
+			$value = Setting::get('main')->language;
+			break;
+		}
+		case 'langc': {
+			$value = Setting::get('main')->language;
+
+			if(Session::hasCookie(Define::COOKIE_KEY['language']) && !empty(Session::getCookie(Define::COOKIE_KEY['language']))) {
+				$value = Session::getCookie(Define::COOKIE_KEY['language']);
+			}
+
+			break;
+		}
+		case 'url': {
+			$value = Request::$base;
+			break;
+		}
+		case 'urll': {
+			$value = Request::$base;
+
+			if(site('lang') !== site('langc')) {
+				$value .= '/' . Session::getCookie(Define::COOKIE_KEY['language']);
+			}
+
+			break;
+		}
+	}
+
+	return $value;
 }

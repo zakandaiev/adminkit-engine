@@ -125,7 +125,7 @@ function getNotificationHTML($notification, $user) {
 			break;
 		}
 		case 'page_add': {
-			$action_name = 'created';
+			$action_name = 'posted';
 
 			$page = 'SELECT * FROM {page} WHERE id=:id ORDER BY date_created DESC LIMIT 1';
 			$page = new Statement($page);

@@ -91,7 +91,7 @@ class Theme {
 				let SETTING = {
 					language: "' . Setting::get('main')->language . '",
 					csrf: {
-						key: "' . Define::CSRF_KEY . '",
+						key: "' . Define::COOKIE_KEY['csrf'] . '",
 						token: "' . Request::$csrf . '"
 					}
 				};

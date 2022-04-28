@@ -3,10 +3,11 @@
 namespace Engine;
 
 class Server {
-	public static function answer($answer = null, $status = '', $message = '', $code = 200) {
+	public static function answer($answer = null, $status = '', $message = '', $code = 200, $content_type = 'text/plain') {
 		if(empty($answer)) {
 			$answer = array('status' => $status, 'message' => $message);
 			$answer = json_encode($answer);
+			$content_type = 'application/json';
 		} else if(is_array($answer)) {
 			if(!isset($answer['status'])) {
 				$answer['status'] = $status;
@@ -16,10 +17,11 @@ class Server {
 			}
 			
 			$answer = json_encode($answer);
+			$content_type = 'application/json';
 		}
 
 		http_response_code($code);
-		header('Content-Type: text/plain');
+		header('Content-Type: ' . $content_type);
 
 		exit(strval($answer));
 	}

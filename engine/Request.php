@@ -54,7 +54,7 @@ class Request {
 	}
 
 	public static function setCSRF() {
-		$token_key = Define::CSRF_KEY;
+		$token_key = Define::COOKIE_KEY['csrf'];
 		$token = Session::get($token_key) ?? '';
 
 		if(empty($token)) {
@@ -66,7 +66,7 @@ class Request {
 	}
 
 	public static function verifyCSRF() {
-		$token_key = Define::CSRF_KEY;
+		$token_key = Define::COOKIE_KEY['csrf'];
 		$token_post = self::$post[$token_key] ?? '';
 		$token_session = Session::get($token_key) ?? '';
 

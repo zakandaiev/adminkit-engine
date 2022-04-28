@@ -43,7 +43,7 @@ class Engine {
 		Config::initialize();
 		Database::initialize();
 		Setting::initialize();
-		@date_default_timezone_set(Setting::get('main')->time_zone);
+		Language::initialize();
 		Auth::initialize();
 		Module::initialize();
 		Router::initialize();

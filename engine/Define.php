@@ -10,7 +10,11 @@ class Define {
 	const NAME = 'CMS';
 	const VERSION = '1.0.0';
 
-	const CSRF_KEY = 'csrf_token';
+	const COOKIE_KEY = [
+		'auth' => 'auth_token',
+		'csrf' => 'csrf_token',
+		'language' => 'language'
+	];
 
 	// move to DB setting
 	const AUTH_DAYS = 7;

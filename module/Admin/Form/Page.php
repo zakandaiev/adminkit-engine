@@ -170,6 +170,7 @@ return [
 		$data = new \stdClass();
 		$data->user_id = Auth::$user->id;
 		$data->page_id = $form_data['item_id'];
+		
 		Notification::create('page_add', $data->user_id, $data);
 	}
 ];

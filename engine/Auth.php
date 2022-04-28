@@ -5,8 +5,6 @@ namespace Engine;
 use Engine\Database\Statement;
 
 class Auth {
-	const AUTH_KEY = 'auth_token';
-
 	public static $user;
 
 	public static function initialize() {
@@ -14,8 +12,8 @@ class Auth {
 		self::$user->authorized = false;
 		self::$user->groups = [];
 
-		if(Session::hasCookie(self::AUTH_KEY)) {
-			$auth_key = Session::getCookie(self::AUTH_KEY);
+		if(Session::hasCookie(Define::COOKIE_KEY['auth'])) {
+			$auth_key = Session::getCookie(Define::COOKIE_KEY['auth']);
 
 			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND last_ip=:last_ip AND enabled IS true ORDER BY date_created DESC LIMIT 1');
 
@@ -52,7 +50,7 @@ class Auth {
 		
 		$authorize->prepare()->bind(['user_id' => $user->id, 'last_ip' => $user->ip, 'auth_token' => $auth_token])->execute();
 
-		Session::setCookie(self::AUTH_KEY, $auth_token, !empty($days) ? $days : Define::AUTH_DAYS);
+		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, !empty($days) ? $days : Define::AUTH_DAYS);
 
 		self::$user = $user;
 		self::$user->authorized = true;
@@ -63,7 +61,7 @@ class Auth {
 	}
 
 	public static function unauthorize() {
-		Session::unsetCookie(self::AUTH_KEY);
+		Session::unsetCookie(Define::COOKIE_KEY['auth']);
 
 		self::$user = new \stdClass();
 		self::$user->authorized = false;

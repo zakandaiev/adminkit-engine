@@ -8,15 +8,9 @@ class Setting {
 	private static $setting;
 
 	public static function initialize() {
-		$statement = new Statement('SELECT * FROM {setting}');
-
-		$settings = $statement->prepare()->execute()->fetchAll();
-
-		foreach($settings as $row) {
-			self::$setting[$row->section][$row->name] = $row->value;
-		}
-
-		self::$setting = json_decode(json_encode(self::$setting));
+		self::$setting = self::load();
+		
+		date_default_timezone_set(self::$setting->main->time_zone);
 
 		return true;
 	}
@@ -41,5 +35,18 @@ class Setting {
 		$statement->prepare()->bind($params)->execute();
 
 		return true;
+	}
+
+	public static function load() {
+		$setting = [];
+
+		$settings = new Statement('SELECT * FROM {setting}');
+		$settings = $settings->prepare()->execute()->fetchAll();
+
+		foreach($settings as $row) {
+			$setting[$row->section][$row->name] = $row->value;
+		}
+
+		return json_decode(json_encode($setting));
 	}
 }
