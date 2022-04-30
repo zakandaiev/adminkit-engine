@@ -9,6 +9,9 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 	wysiwyg_node.appendChild(quill_node);
 	textarea.after(wysiwyg_node);
 
+	let quill_icons = Quill.import('ui/icons');
+	quill_icons['expand'] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="maximize feather feather-maximize align-middle"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="minimize feather feather-minimize align-middle"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg>';
+
 	const quill = new Quill(quill_node, {
 		modules: {
 			toolbar: {
@@ -27,6 +30,17 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 							uploadImage();
 						},
 						'expand': event => {
+							const expand = wysiwyg_node.querySelector('.ql-expand');
+							
+							function maximize() {
+								wysiwyg_node.classList.add('fullscreen');
+								if(expand) expand.classList.add('active');
+							}
+							function minimize() {
+								wysiwyg_node.classList.remove('fullscreen');
+								if(expand) expand.classList.remove('active');
+							}
+
 							wysiwyg_node.classList.contains('fullscreen') ?  minimize() : maximize();
 						}
 					}
@@ -45,17 +59,6 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 		// textarea.value = JSON.stringify(quill.getContents());
 		textarea.value = quill.root.innerHTML;
 	});
-
-	// EXPAND BUTTON
-	const expand = wysiwyg_node.querySelector('.ql-expand');
-	function maximize() {
-		wysiwyg_node.classList.add('fullscreen');
-		if(expand) expand.classList.add('active');
-	}
-	function minimize() {
-		wysiwyg_node.classList.remove('fullscreen');
-		if(expand) expand.classList.remove('active');
-	}
 
 	// IMAGE UPLOAD
 	const Image = Quill.import('formats/image');

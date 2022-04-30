@@ -4,9 +4,9 @@
 			<div class="col-md-3">
 				<div class="footer-widget">
 					<div class="footer-logo">
-						<a href="/" class="logo"><img src="/<?= Setting::get('site')->logo_public_alt ?>" alt=""></a>
+						<a href="/" class="logo"><img src="/<?= site('logo_alt') ?>" alt=""></a>
 					</div>
-					<p><?= Setting::get('site')->description ?></p>
+					<p><?= site('description') ?></p>
 					<?php
 						$menu_socials = get_menu('socials');
 					?>

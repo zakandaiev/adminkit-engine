@@ -19,7 +19,7 @@ class Auth {
 
 			$user_binding = [
 				'auth_token' => $auth_key,
-				'last_ip' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
+				'last_ip' => filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP)
 			];
 
 			$user = $user->prepare()->bind($user_binding)->execute()->fetch();
@@ -36,7 +36,7 @@ class Auth {
 	public static function authorize($user, $days = null) {
 		$auth_token = Hash::token();
 
-		$user->ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+		$user->ip = filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
 		$authorize = '
 			UPDATE {user} SET 

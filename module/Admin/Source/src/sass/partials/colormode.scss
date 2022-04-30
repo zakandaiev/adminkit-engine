@@ -1,0 +1,16 @@
+.colormode {
+	&__sun {
+		display: none;
+	}
+	&__moon {
+		display: initial;
+	}
+}
+[data-colormode="dark"] .colormode {
+	&__sun {
+		display: initial;
+	}
+	&__moon {
+		display: none;
+	}
+}

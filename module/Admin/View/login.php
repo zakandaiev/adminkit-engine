@@ -7,10 +7,10 @@
 				<div class="d-table-cell align-middle">
 
 					<div class="text-center mt-4">
-						<?php if(!empty(Setting::get('site')->logo)): ?>
-							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= Setting::get('site')->logo ?>" alt="<?= __('auth', 'placeholder/logo') ?>">
+						<?php if(!empty(site('logo'))): ?>
+							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= site('logo') ?>" alt="<?= __('auth', 'placeholder/logo') ?>">
 						<?php endif; ?>
-						<h1 class="h2"><?= Setting::get('site')->name ?></h1>
+						<h1 class="h2"><?= site('name') ?></h1>
 						<p class="lead"><?= __('auth', 'title/login') ?></p>
 					</div>
 
@@ -26,7 +26,7 @@
 										<label class="form-label"><?= __('auth', 'field/password') ?></label>
 										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('auth', 'placeholder/password') ?>" required minlength="8" maxlength="200">
 										<small>
-											<?php if(Setting::get('main')->enable_registration == 'true'): ?>
+											<?php if(site('enable_registration') == 'true'): ?>
 												<a href="/admin/register"><?= __('auth', 'button/register') ?></a> •
 											<?php endif; ?>
 											<a href="/admin/reset-password"><?= __('auth', 'button/forgot') ?></a>

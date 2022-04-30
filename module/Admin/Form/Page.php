@@ -168,9 +168,15 @@ return [
 		}
 
 		$data = new \stdClass();
-		$data->user_id = Auth::$user->id;
-		$data->page_id = $form_data['item_id'];
+		$data->user_id = $fields['author'];
+		$data->author = $fields['author'];
+		$data->title = $fields['title'];
+		$data->url = $fields['url'];
+		$data->image = $fields['image'];
+		$data->excerpt = $fields['excerpt'];
+
+		$notification_kind = $fields['is_category'] ? 'category_add' : 'page_add';
 		
-		Notification::create('page_add', $data->user_id, $data);
+		Notification::create($notification_kind, $data->user_id, $data);
 	}
 ];

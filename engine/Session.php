@@ -41,15 +41,16 @@ class Session {
 
 	public static function setCookie($key, $value, $days = null) {
 		if(empty($days)) $days = Define::AUTH_DAYS;
-		setcookie($key, $value, time() + 3600 * 24 * intval($days), '/', httponly:true) ;
+		setcookie($key, $value, time() + 3600 * 24 * intval($days), '/', httponly:true);
+		Request::$cookie[$key] = $value;
 	}
 
 	public static function getCookie($key) {
-		return $_COOKIE[$key] ?? null;
+		return Request::$cookie[$key] ?? null;
 	}
 
 	public static function hasCookie($key) {
-		return isset($_COOKIE[$key]);
+		return isset(Request::$cookie[$key]);
 	}
 
 	public static function unsetCookie($key) {

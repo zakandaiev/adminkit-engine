@@ -25,8 +25,8 @@
 					<ul class="contact">
 						<?php
 							$phones = get_menu('phones');
-							$email = Setting::get('contact')->email;
-							$address = Setting::get('contact')->address;
+							$email = site('pagination_limit');
+							$address = site('address');
 						?>
 						<?php foreach($phones as $phone): ?>
 							<li><i class="fa fa-phone"></i> <a href="tel:<?= $phone['url'] ?>"><?= $phone['name'] ?></a></li>

@@ -2,8 +2,15 @@
 	left: 0 !important;
 }
 
+.ql-toolbar {
+	border-top-left-radius: 0.2rem;
+	border-top-right-radius: 0.2rem;
+}
+
 .ql-container {
 	font: inherit;
+	border-bottom-left-radius: 0.2rem;
+	border-bottom-right-radius: 0.2rem;
 }
 
 .ql-editor.ql-blank::before {
@@ -13,7 +20,8 @@
 .wysiwyg {
 	display: block;
 	width: 100%;
-	background-color: #fff;
+	background-color: var(--white-bg);
+	border-radius: 0.2rem;
 	&.fullscreen {
 		position: fixed;
 		z-index: 100;
@@ -29,13 +37,41 @@
 	}
 }
 
-.ql-expand::after {
-	content: url('../img/icons/maximize.svg');
-}
-.ql-expand.active::after {
-	content: url('../img/icons/minimize.svg');
+.ql-expand {
+	.maximize {
+		display: initial;
+	}
+	.minimize {
+		display: none;
+	}
+	&.active {
+		.maximize {
+			display: none;
+		}
+		.minimize {
+			display: initial;
+		}
+	}
 }
 
 .ql-snow .ql-color-picker .ql-picker-label svg, .ql-snow .ql-icon-picker .ql-picker-label svg {
 	vertical-align: baseline;
+}
+
+.ql-toolbar.ql-snow, .ql-container.ql-snow {
+	border-color: #ced4da;
+}
+
+.ql-toolbar.ql-snow * {
+	color: var(--bs-body-color);
+}
+.ql-toolbar.ql-snow .ql-fill {
+	fill: var(--bs-body-color);
+}
+.ql-toolbar.ql-snow .ql-stroke {
+	stroke: var(--bs-body-color);
+}
+
+.ql-editor.ql-blank::before {
+	color: inherit;
 }

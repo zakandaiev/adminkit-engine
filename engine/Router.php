@@ -74,6 +74,23 @@ class Router {
 		$route_parts = explode('/', $route);
 		$uri_parts = explode('/', $uri);
 
+		$languages = [];
+		foreach(Module::getAll() as $module) {
+			foreach($module['languages'] as $language) {
+				$languages[] = $language['key'];
+			}
+		}
+
+		if(in_array($uri_parts[0], $languages)) {
+			Language::setCookie($uri_parts[0]);
+
+			if($route === '/') {
+				return true;
+			}
+
+			array_shift($uri_parts);
+		}
+
 		if(count($route_parts) !== count($uri_parts)) {
 			return false;
 		}

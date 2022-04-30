@@ -15,7 +15,7 @@ class Module {
 	}
 
 	public static function get($key) {
-		return self::$module[self::$name][$key] ?? [];
+		return self::$module[self::$name][$key] ?? null;
 	}
 
 	public static function getAll() {
@@ -84,6 +84,7 @@ class Module {
 			$lang['key'] = $language_key ?? null;
 			$lang['region'] = $language_region ?? null;
 			$lang['name'] = $language_name ?? null;
+			$lang['filename'] = $language;
 
 			if(!$lang['key']) continue;
 

@@ -78,7 +78,7 @@ class Theme {
 			$title = 'Admin';
 		}
 		
-		echo $title . ' | ' . Setting::get('site')->name ?? Define::NAME;
+		echo $title . ' | ' . site('name') ?? Define::NAME;
 	}
 
 	public static function meta() {
@@ -89,7 +89,7 @@ class Theme {
 		$js_setting = '
 			<script>
 				let SETTING = {
-					language: "' . Setting::get('main')->language . '",
+					language: "' . site('language') . '",
 					csrf: {
 						key: "' . Define::COOKIE_KEY['csrf'] . '",
 						token: "' . Request::$csrf . '"

@@ -12,7 +12,7 @@ WHERE `section`='site' AND `name`='logo_public';
 
 UPDATE `%prefix%_setting` SET
 `value`='upload/demo/logo-alt.png'
-WHERE `section`='site' AND `name`='logo_public_alt';
+WHERE `section`='site' AND `name`='logo_alt';
 
 UPDATE `%prefix%_setting` SET
 `value`='123 6th St.Melbourne, FL 32904'
@@ -144,4 +144,3 @@ INSERT INTO `%prefix%_menu_item` (`parent`, `menu_id`, `name`, `url`) VALUES
 (NULL, 4, 'facebook', '#'),
 (NULL, 4, 'twitter', '#'),
 (NULL, 4, 'instagram', '#');
-

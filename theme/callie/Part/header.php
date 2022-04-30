@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= site('lang_current') ?>">
+<html lang="<?= site('language_current') ?>">
 
 <head>
 	<meta charset="<?= site('charset') ?>">
@@ -29,7 +29,7 @@
 						</ul>
 					<?php endif; ?>
 					<div class="nav-logo">
-						<a href="/" class="logo"><img src="/<?= Setting::get('site')->logo_public ?>" alt=""></a>
+						<a href="/" class="logo"><img src="/<?= site('logo_public') ?>" alt=""></a>
 					</div>
 					<div class="nav-btns">
 						<button class="aside-btn"><i class="fa fa-bars"></i></button>

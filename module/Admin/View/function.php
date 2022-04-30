@@ -16,72 +16,94 @@ Asset::js('js/slimselect');
 Asset::js('js/sortable');
 Asset::js('js/main');
 
-############################# NOTIFICATION #############################
-function getNotificationIcon($notification_kind) {
-	$color = 'primary';
-	$icon = 'alert-circle';
+############################# NOTIFICATIONS #############################
+function getNotifications() {
+	$notifications = [];
 
-	switch($notification_kind) {
-		case 'register': {
-			$icon = 'user-plus';
-			$color = 'success';
-			break;
-		}
-		case 'authorize': {
-			$icon = 'log-in';
-			$color = 'warning';
-			break;
-		}
-		case 'restore': {
-			$icon = 'unlock';
-			$color = 'danger';
-			break;
-		}
-		case 'change_login': {
-			$icon = 'at-sign';
-			$color = 'danger';
-			break;
-		}
-		case 'change_name': {
-			$icon = 'edit';
-			$color = 'warning';
-			break;
-		}
-		case 'change_password': {
-			$icon = 'lock';
-			$color = 'danger';
-			break;
-		}
-		case 'change_email': {
-			$icon = 'at-sign';
-			$color = 'danger';
-			break;
-		}
-		case 'page_add': {
-			$icon = 'file-text';
-			break;
-		}
-		case 'category_add': {
-			$icon = 'folder';
-			break;
-		}
-		case 'comment': {
-			$icon = 'message-square';
-			break;
-		}
-		case 'comment_reply': {
-			$icon = 'corner-down-right';
-			break;
-		}
+	$notifications['register'] = [
+		'name' => __('Registration'),
+		'icon' => 'user-plus',
+		'color' => 'success'
+	];
+	$notifications['authorize'] = [
+		'name' => __('Authorization'),
+		'icon' => 'log-in',
+		'color' => 'warning'
+	];
+	$notifications['restore'] = [
+		'name' => __('Password restore'),
+		'icon' => 'unlock',
+		'color' => 'danger'
+	];
+	$notifications['change_login'] = [
+		'name' => __('Login change'),
+		'icon' => 'at-sign',
+		'color' => 'danger'
+	];
+	$notifications['change_name'] = [
+		'name' => __('Name change'),
+		'icon' => 'edit',
+		'color' => 'warning'
+	];
+	$notifications['change_password'] = [
+		'name' => __('Password change'),
+		'icon' => 'lock',
+		'color' => 'danger'
+	];
+	$notifications['change_email'] = [
+		'name' => __('Email change'),
+		'icon' => 'mail',
+		'color' => 'danger'
+	];
+	$notifications['page_add'] = [
+		'name' => __('Page creation'),
+		'icon' => 'file-text',
+		'color' => 'primary'
+	];
+	$notifications['category_add'] = [
+		'name' => __('Category creation'),
+		'icon' => 'folder',
+		'color' => 'primary'
+	];
+	$notifications['comment'] = [
+		'name' => __('Comment'),
+		'icon' => 'message-square',
+		'color' => 'primary'
+	];
+	$notifications['comment_reply'] = [
+		'name' => __('Comment reply'),
+		'icon' => 'corner-down-right',
+		'color' => 'primary'
+	];
+
+	return $notifications;
+}
+
+function notification($kind, $key = null) {
+	$notifications = getNotifications();
+
+	if(!isset($notifications[strval($kind)])) {
+		return null;
 	}
+
+	if(isset($key)) {
+		return $notifications[strval($kind)][strval($key)];
+	}
+
+	return $notifications[strval($kind)];
+}
+
+function notification_icon($kind) {
+	$icon = notification($kind, 'icon');
+	$color = notification($kind, 'color');
 
 	return '<i class="text-' . $color . ' align-middle" data-feather="' . $icon . '"></i>';
 }
 
 function getNotificationHTML($notification, $user) {
-	$icon = getNotificationIcon($notification->kind);
+	$icon = notification_icon($notification->kind);
 	$when = date_when($notification->date_created);
-	$user_name = 'You';
+	$user_name = (Auth::$user->id == $notification->user_id) ? __('You') : $user->name . ' (@' . $user->login . ')';
 	$user_avatar = placeholder_avatar($user->avatar);
 	$action_name = '';
 	$action_body = '';
@@ -89,13 +111,13 @@ function getNotificationHTML($notification, $user) {
 
 	switch($notification->kind) {
 		case 'register': {
-			$action_name = 'created account';
-			$action_name .= ' from <a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$action_name = sprintf(__('created account from %s'), $from);
 			break;
 		}
 		case 'authorize': {
-			$action_name = 'logged in';
-			$action_name .= ' from <a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$action_name = sprintf(__('authorized from %s'), $from);
 			break;
 		}
 		case 'restore': {
@@ -103,53 +125,68 @@ function getNotificationHTML($notification, $user) {
 			break;
 		}
 		case 'change_login': {
-			$action_name = 'changed login';
-			$action_name .= ' from <strong>' . $data->login_old . '</strong>';
-			$action_name .= ' to <strong>' . $data->login_new . '</strong>';
+			$from = '<strong>' . $data->login_old . '</strong>';
+			$to = '<strong>' . $data->login_new . '</strong>';
+			$action_name = sprintf(__('changed login from %s to %s'), $from, $to);
 			break;
 		}
 		case 'change_name': {
-			$action_name = 'changed name';
-			$action_name .= ' from <strong>' . $data->name_old . '</strong>';
-			$action_name .= ' to <strong>' . $data->name_new . '</strong>';
+			$from = '<strong>' . $data->name_old . '</strong>';
+			$to = '<strong>' . $data->name_new . '</strong>';
+			$action_name = sprintf(__('changed name from %s to %s'), $from, $to);
 			break;
 		}
 		case 'change_password': {
-			$action_name = 'changed password';
+			$action_name = __('changed password');
 			break;
 		}
 		case 'change_email': {
-			$action_name = 'changed email';
-			$action_name .= ' from <strong>' . $data->email_old . '</strong>';
-			$action_name .= ' to <strong>' . $data->email_new . '</strong>';
+			$from = '<strong>' . $data->email_old . '</strong>';
+			$to = '<strong>' . $data->email_new . '</strong>';
+			$action_name = sprintf(__('changed email from %s to %s'), $from, $to);
 			break;
 		}
 		case 'page_add': {
-			$action_name = 'posted';
+			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
-			$page = 'SELECT * FROM {page} WHERE id=:id ORDER BY date_created DESC LIMIT 1';
-			$page = new Statement($page);
-			$page = $page->prepare()->bind(['id' => $data->page_id])->execute()->fetch();
-
-			$action_name .= ' <a href="/' . $page->url . '" target="_blank"><strong>' . $page->title . '</strong></a>';
+			$action_name = sprintf(__('posted %s'), $page_title);
 			
-			$action_body = '<div class="mt-1"><img src="/' . placeholder_image($page->image) . '" class="w-25" alt="' . $page->title . '" data-fancybox></div>';
+			$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
 
-			if($page->is_category) {
-				$icon = getNotificationIcon('category_add');
+			if(!empty($data->excerpt)) {
+				$action_body .= '<div class="text-sm text-muted mt-1">' . $data->excerpt . '</div>';
+			}
+			
+			break;
+		}
+		case 'category_add': {
+			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
+
+			$action_name = sprintf(__('posted %s'), $page_title);
+			
+			$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
+
+			if(!empty($data->excerpt)) {
+				$action_body .= '<div class="text-sm text-muted mt-1">' . $data->excerpt . '</div>';
 			}
 			
 			break;
 		}
 		case 'comment': {
-			$action_name = 'leaved comment on';
-			$action_name .= ' <a href="/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
+			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
+
+			$action_name = sprintf(__('leaved comment on %s'), $page_title);
+
 			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . $data->comment . '</div>';
 			break;
 		}
 		case 'comment_reply': {
-			$action_name = 'replied to your comment on';
-			$action_name .= ' <a href="/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
+			$user_name = $data->author;
+
+			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
+
+			$action_name = sprintf(__('replied to your comment on %s'), $page_title);
+
 			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . $data->reply . '</div>';
 			break;
 		}

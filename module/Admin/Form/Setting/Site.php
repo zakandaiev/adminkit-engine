@@ -28,7 +28,7 @@ return [
 	'field' => [
 		'logo_admin' => $image,
 		'logo_public' => $image,
-		'logo_public_alt' => $image,
+		'logo_alt' => $image,
 		'placeholder_avatar' => $image,
 		'placeholder_image' => $image,
 		'name' => $name,

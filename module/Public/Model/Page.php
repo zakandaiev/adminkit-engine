@@ -161,7 +161,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? $options['order'] : 'date_publish DESC',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -189,7 +189,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? $options['order'] : 't_page.date_publish DESC',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -269,7 +269,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? $options['order'] : 'date_publish DESC',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -298,7 +298,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? $options['order'] : 'date_publish DESC',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -326,7 +326,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? ', ' . $options['order'] : '',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -354,7 +354,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? ', ' . $options['order'] : '',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -383,7 +383,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? $options['order'] : 'count_pages DESC',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -412,7 +412,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? ', ' . $options['order'] : '',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 
@@ -455,7 +455,7 @@ class Page {
 			'fields' => $options['fields'] ?? '*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
 			'order' => isset($options['order']) ? $options['order'] : 't_page.date_publish DESC',
-			'limit' => $options['limit'] ?? Setting::get('site')->pagination_limit,
+			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
 

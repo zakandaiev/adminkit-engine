@@ -71,11 +71,11 @@ $sidebar = [
 
 <nav id="sidebar" class="sidebar js-sidebar">
 	<div class="sidebar-content js-simplebar">
-		<a class="sidebar-brand" href="/admin">
-			<?php if(!empty(Setting::get('site')->logo_admin)): ?>
-				<img src="<?= Request::$base ?>/<?= Setting::get('site')->logo_admin ?>" alt="Logo" class="d-block m-auto img-fluid">
-			<?php elseif(!empty(Setting::get('site')->name)): ?>
-				<span class="align-middle"><?= Setting::get('site')->name ?></span>
+		<a class="sidebar-brand" href="<?= site('url_language') ?>/admin">
+			<?php if(!empty(site('logo_admin'))): ?>
+				<img src="<?= Request::$base ?>/<?= site('logo_admin') ?>" alt="Logo" class="d-block m-auto img-fluid">
+			<?php elseif(!empty(site('name'))): ?>
+				<span class="align-middle"><?= site('name') ?></span>
 			<?php else: ?>
 				<span class="align-middle"><?= Define::NAME ?></span>
 			<?php endif; ?>
@@ -93,13 +93,13 @@ $sidebar = [
 						</a>
 						<ul id="<?= strtolower($item['name']) ?>" class="sidebar-dropdown list-unstyled collapse <?php if(in_array(Request::$uri, $item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
 							<?php foreach($item['route'] as $key => $value): ?>
-								<li class="sidebar-item <?php if($value === Request::$uri): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= $value ?>"><?= $key ?></a></li>
+								<li class="sidebar-item <?php if($value === Request::$uri): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= site('url_language') ?><?= $value ?>"><?= $key ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					</li>
 				<?php else: ?>
 					<li class="sidebar-item <?php if($item['route'] === Request::$uri): ?>active<?php endif; ?>">
-						<a class="sidebar-link" href="<?= $item['route'] ?>">
+						<a class="sidebar-link" href="<?= site('url_language') ?><?= $item['route'] ?>">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i> <span class="align-middle"><?= $item['name'] ?></span>
 						</a>
 					</li>

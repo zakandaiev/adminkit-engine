@@ -17,7 +17,7 @@ class Pagination {
 	public function __construct($total_rows, $uri_key = 'page') {
 		$this->uri_key = strval($uri_key);
 		$this->uri = $this->handleUri();
-		$this->per_page = intval(Setting::get('site')->pagination_limit);
+		$this->per_page = intval(site('pagination_limit'));
 		$this->total_rows = intval($total_rows);
 		$this->total_pages = $this->countPages();
 		$this->current_page = $this->currentPage();

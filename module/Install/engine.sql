@@ -172,7 +172,7 @@ INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('site', 'description', null),
 ('site', 'logo_admin', null),
 ('site', 'logo_public', null),
-('site', 'logo_public_alt', null),
+('site', 'logo_alt', null),
 ('site', 'analytics_gtag', null),
 ('site', 'pagination_limit', '10'),
 ('site', 'placeholder_avatar', null),

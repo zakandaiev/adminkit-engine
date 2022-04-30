@@ -64,11 +64,7 @@
 													<div class="mb-3">
 														<label class="form-label">Social</label>
 														<select name="type" data-placeholder="Social">
-															<?php
-																$socials = Setting::get('main')->socials_allowed;
-																$socials = json_decode($socials) ?? [];
-															?>
-															<?php foreach($socials as $social): ?>
+															<?php foreach(site('socials_allowed') as $social): ?>
 																<option value="<?= strtolower($social) ?>"><?= ucfirst($social) ?></option>
 															<?php endforeach; ?>
 														</select>

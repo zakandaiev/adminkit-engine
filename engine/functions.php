@@ -57,7 +57,7 @@ function placeholder_image($path) {
 		return $path;
 	}
 
-	return Setting::get('site')->{__FUNCTION__};
+	return site(__FUNCTION__);
 }
 
 function placeholder_avatar($path) {
@@ -65,7 +65,7 @@ function placeholder_avatar($path) {
 		return $path;
 	}
 
-	return Setting::get('site')->{__FUNCTION__};
+	return site(__FUNCTION__);
 }
 
 ############################# FORMAT #############################
@@ -220,50 +220,63 @@ function __($key) {
 	return Language::translate($key) ?? $key;
 }
 
+function lang($lang, $key) {
+	$value = null;
+
+	switch(strval($key)) {
+		case 'region': {
+			$value = Module::get('languages')[$lang]['region'] ?? null;
+			break;
+		}
+		case 'name': {
+			$value = Module::get('languages')[$lang]['name'] ?? null;
+			break;
+		}
+	}
+
+	return $value;
+}
+
 ############################# SITE #############################
 function site($key) {
 	$value = null;
+
+	foreach(Setting::getAll() as $setting) {
+		if(isset($setting->{$key})) {
+			$value = $setting->{$key};
+
+			if($value == 'true') {
+				$value = true;
+			}
+			if($value == 'false') {
+				$value = false;
+			}
+			if(is_string($value) && $value[0] === "[") {
+				$value = json_decode($value) ?? [];
+			}
+
+			return $value;
+		}
+	}
 
 	switch(strval($key)) {
 		case 'charset': {
 			$value = Config::get('database')['charset'];
 			break;
 		}
-		case 'lang': {
-			$value = Setting::get('main')->language;
-			break;
-		}
-		case 'lang_current': {
-			$value = Setting::get('main')->language;
-
-			if(Session::hasCookie(Define::COOKIE_KEY['language']) && !empty(Session::getCookie(Define::COOKIE_KEY['language']))) {
-				$value = Session::getCookie(Define::COOKIE_KEY['language']);
-			}
-
+		case 'language_current': {
+			$value = Language::current();
 			break;
 		}
 		case 'url': {
 			$value = Request::$base;
 			break;
 		}
-		case 'url_lang': {
+		case 'url_language': {
 			$value = Request::$base;
 
-			if(site('lang') !== site('lang_current')) {
-				$value .= '/' . Session::getCookie(Define::COOKIE_KEY['language']);
-			}
-
-			break;
-		}
-		case 'uri': {
-			$value = Request::$uri;
-			break;
-		}
-		case 'uri_lang': {
-			$value = Request::$uri;
-
-			if(site('lang') !== site('lang_current')) {
-				$value = Session::getCookie(Define::COOKIE_KEY['language']) . '/' . $value;
+			if(site('language') !== site('language_current')) {
+				$value .= '/' . site('language_current');
 			}
 
 			break;

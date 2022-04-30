@@ -30,7 +30,7 @@ class Mail {
 		$to = trim($recepient);
 		$subj = trim($subject);
 		$msg = trim($message);
-		$frm = Setting::get('contact')->email;
+		$frm = site('email');
 
 		if(!empty($from)) {
 			$frm = trim($from);
@@ -40,7 +40,7 @@ class Mail {
 			'Content-type' => 'text/html',
 			'charset' => 'utf-8',
 			'MIME-Version' => '1.0',
-			'From' => Setting::get('site')->name . '<'.$frm.'>',
+			'From' => site('name') . '<'.$frm.'>',
 			'Reply-To' => $frm
 		];
 

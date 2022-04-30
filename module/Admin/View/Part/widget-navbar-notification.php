@@ -22,10 +22,10 @@
 					<a href="/admin/profile" class="list-group-item">
 						<div class="row g-0 align-items-center">
 							<div class="col-2">
-								<?= getNotificationIcon($notification->kind) ?>
+								<?= notification_icon($notification->kind) ?>
 							</div>
 							<div class="col-10">
-								<div class="text-dark"><?= __($notification->kind) ?></div>
+								<div class="text-dark"><?= notification($notification->kind, 'name') ?></div>
 								<div class="text-muted small mt-1"><?= date_when($notification->date_created) ?></div>
 							</div>
 						</div>
@@ -37,8 +37,10 @@
 				</a>
 			<?php endif; ?>
 		</div>
-		<div class="dropdown-menu-footer">
-			<a href="/admin/profile" class="text-muted"><?= __('Show all') ?></a>
-		</div>
+		<?php if($notifications_count > 5): ?>
+			<div class="dropdown-menu-footer">
+				<a href="/admin/profile" class="text-muted"><?= __('Show all') ?></a>
+			</div>
+		<?php endif; ?>
 	</div>
 </li>

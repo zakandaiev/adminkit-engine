@@ -179,7 +179,7 @@
 									</div>
 								</div>
 							</div>
-							<input type="hidden" name="language" value="<?= Setting::get('main')->language ?>">
+							<input type="hidden" name="language" value="<?= site('language') ?>">
 							<button type="submit" class="btn btn-primary w-100 p-3">Add page</button>
 						</div>
 					</div>

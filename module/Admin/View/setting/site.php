@@ -32,7 +32,7 @@
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label">Public logo alternative</label>
-												<input type="file" accept="image/*" name="logo_public_alt" data-value='<?php Form::populateFiles($settings->logo_public_alt) ?>'>
+												<input type="file" accept="image/*" name="logo_alt" data-value='<?php Form::populateFiles($settings->logo_alt) ?>'>
 											</div>
 										</div>
 										<div class="col-md-4">
