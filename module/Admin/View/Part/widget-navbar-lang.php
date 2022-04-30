@@ -6,8 +6,10 @@ $uri_parts = explode('/', $uri);
 
 if(array_key_exists($uri_parts[0], Module::get('languages'))) {
 	array_shift($uri_parts);
-	$uri = '/' . implode('/', $uri_parts);
+	$uri = implode('/', $uri_parts);
 }
+
+$uri = '/' . $uri;
 
 ?>
 
