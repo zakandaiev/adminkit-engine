@@ -3,26 +3,40 @@
 $language = [
 	'required' => true,
 	'minlength' => 1,
-	'maxlength' => 8
+	'maxlength' => 8,
+	'required_message' => 'Language is required',
+	'minlength_message' => 'Language is too short',
+	'maxlength_message' => 'Language is too long'
 ];
 $title = [
 	'required' => true,
 	'minlength' => 1,
-	'maxlength' => 300
+	'maxlength' => 300,
+	'required_message' => 'Title is required',
+	'minlength_message' => 'Title is too short',
+	'maxlength_message' => 'Title is too long'
 ];
 $url = [
 	'required' => true,
 	'minlength' => 1,
 	'maxlength' => 200,
-	'regexp' => '/^[a-z0-9_\-]+$/'
+	'regexp' => '/^[a-z0-9_\-]+$/',
+	'required_message' => 'URL Slug is required',
+	'minlength_message' => 'URL Slug is too short',
+	'maxlength_message' => 'URL Slug is too long',
+	'regexp_message' => 'URL Slug should consist only small latin letters, numbers or dashes'
 ];
 $author = [
 	'required' => true,
-	'int' => true
+	'int' => true,
+	'required_message' => 'Author is required',
+	'int_message' => 'Author format is invalid'
 ];
 $template = [
 	'maxlength' => 200,
-	'regexp' => '/^[a-z0-9_\-]*$/'
+	'regexp' => '/^[a-z0-9_\-]*$/',
+	'maxlength_message' => 'Template is too long',
+	'regexp_message' => 'Template should consist only small latin letters, numbers or dashes'
 ];
 $image = [
 	'file' => true
@@ -129,7 +143,6 @@ $custom_fields = [
 
 return [
 	'table' => 'page',
-	'language' => 'form_page',
 	'field' => [
 		'language' => $language,
 		'title' => $title,

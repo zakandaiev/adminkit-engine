@@ -6,7 +6,6 @@ $boolean = [
 
 return [
 	'table' => 'setting',
-	'language' => 'form_setting',
 	'field' => [
 		'group_css' => $boolean,
 		'group_js' => $boolean,

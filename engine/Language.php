@@ -11,7 +11,7 @@ class Language {
 			self::load();
 		}
 
-		return self::$language[$key] ?? null;
+		return self::$language[$key] ?? $key;
 	}
 
 	public static function load() {
@@ -35,8 +35,9 @@ class Language {
 
 	public static function current() {
 		$language = Setting::get('main')->language;
+		$module_languages = Module::get('languages') ?? [];
 
-		if(Session::hasCookie(Define::COOKIE_KEY['language']) && !empty(Session::getCookie(Define::COOKIE_KEY['language'])) && array_key_exists(Session::getCookie(Define::COOKIE_KEY['language']), Module::get('languages'))) {
+		if(Session::hasCookie(Define::COOKIE_KEY['language']) && !empty(Session::getCookie(Define::COOKIE_KEY['language'])) && array_key_exists(Session::getCookie(Define::COOKIE_KEY['language']), $module_languages)) {
 			$language = Session::getCookie(Define::COOKIE_KEY['language']);
 		}
 		

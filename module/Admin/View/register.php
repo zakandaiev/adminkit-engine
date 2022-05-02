@@ -8,10 +8,10 @@
 
 					<div class="text-center mt-4">
 						<?php if(!empty(site('logo'))): ?>
-							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= site('logo') ?>" alt="<?= __('auth', 'placeholder/logo') ?>">
+							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= site('logo') ?>" alt="Logo">
 						<?php endif; ?>
 						<h1 class="h2"><?= site('name') ?></h1>
-						<p class="lead"><?= __('auth', 'title/register') ?></p>
+						<p class="lead"><?= __('Get started') ?></p>
 					</div>
 
 					<div class="card">
@@ -19,27 +19,27 @@
 							<div class="m-sm-4">
 								<form method="POST" data-redirect="/admin/profile">
 									<div class="mb-3">
-										<label class="form-label"><?= __('auth', 'field/name') ?></label>
-										<input class="form-control form-control-lg" type="text" name="name" placeholder="<?= __('auth', 'placeholder/name') ?>" required minlength="1" maxlength="200">
+										<label class="form-label"><?= __('Name') ?></label>
+										<input class="form-control form-control-lg" type="text" name="name" placeholder="<?= __('Enter your name') ?>" required minlength="1" maxlength="200">
 									</div>
 									<div class="mb-3">
-										<label class="form-label"><?= __('auth', 'field/login') ?></label>
-										<input class="form-control form-control-lg" type="text" name="login" placeholder="<?= __('auth', 'placeholder/login') ?>" required minlength="2" maxlength="200">
+										<label class="form-label"><?= __('Login') ?></label>
+										<input class="form-control form-control-lg" type="text" name="login" placeholder="<?= __('Enter your login') ?>" required minlength="2" maxlength="200">
 									</div>
 									<div class="mb-3">
-										<label class="form-label"><?= __('auth', 'field/email') ?></label>
-										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('auth', 'placeholder/email') ?>" required minlength="6" maxlength="200">
+										<label class="form-label"><?= __('Email') ?></label>
+										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('Enter your email') ?>" required minlength="6" maxlength="200">
 									</div>
 									<div class="mb-3">
-										<label class="form-label"><?= __('auth', 'field/password') ?></label>
-										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('auth', 'placeholder/password') ?>" required minlength="8" maxlength="200">
+										<label class="form-label"><?= __('Password') ?></label>
+										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('Create your password') ?>" required minlength="8" maxlength="200">
 										<small>
-											<a href="/admin/login"><?= __('auth', 'button/login') ?></a> •
-											<a href="/admin/reset-password"><?= __('auth', 'button/forgot') ?></a>
+											<a href="/admin/login"><?= __('Login') ?></a> •
+											<a href="/admin/reset-password"><?= __('Forgot password') ?></a>
 										</small>
 									</div>
 									<div class="text-center mt-3">
-										<button type="submit" class="btn btn-lg btn-primary"><?= __('auth', 'button/register') ?></button>
+										<button type="submit" class="btn btn-lg btn-primary"><?= __('Register') ?></button>
 									</div>
 								</form>
 							</div>

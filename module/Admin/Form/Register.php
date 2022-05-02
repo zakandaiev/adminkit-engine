@@ -12,7 +12,6 @@ $password = [
 
 return [
 	'table' => 'user',
-	'language' => 'form_user',
 	'field' => [
 		'name' => $name,
 		'login' => $login,

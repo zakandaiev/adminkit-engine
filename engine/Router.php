@@ -35,7 +35,7 @@ class Router {
 
 			// Check Form tokens
 			if(self::checkForm($method, $uri)) {
-				return true;
+				exit;
 			}
 			
 		}
@@ -112,6 +112,10 @@ class Router {
 	}
 
 	private static function checkForm($method, $uri) {
+		if($method !== 'post') {
+			return false;
+		}
+
 		$statement = new Statement('SELECT * FROM {form}');
 
 		$forms = $statement->prepare()->execute()->fetchAll();
@@ -121,23 +125,23 @@ class Router {
 		}
 
 		$now_timestamp = time();
+
 		foreach($forms as $form) {
 			$cdate_timestamp = strtotime($form->date_created);
 			$diff_hours = ($now_timestamp - $cdate_timestamp) / 3600;
 
-			if($method === 'post' && $uri === $form->token) {
+			if($uri === $form->token) {
+				Module::setName($form->module);
+
 				if(intval($diff_hours) < 12) {
 					Form::execute($form->action, $form->form_name, $form->item_id);
 				} else {
-					$error_message = __('form', 'inactive');
-
-					if(!$error_message) {
-						$error_message = 'Current form is already inactive. Reload the page and try again';
-					}
+					$error_message = __('Current form is already inactive. Reload the page and try again');
 
 					Server::answer(null, 'error', $error_message, 409);
 				}
-				exit;
+
+				return true;
 			}
 		}
 

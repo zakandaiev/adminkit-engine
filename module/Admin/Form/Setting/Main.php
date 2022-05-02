@@ -9,7 +9,6 @@ $language = [
 
 return [
 	'table' => 'setting',
-	'language' => 'form_setting',
 	'field' => [
 		'time_zone' => $time_zone,
 		'language' => $language,

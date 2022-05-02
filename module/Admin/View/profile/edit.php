@@ -58,80 +58,80 @@
 											<div class="row">
 												<div class="col-md-8">
 													<div class="mb-3">
-														<label class="form-label"><?= __('form_user', 'login/label') ?></label>
+														<label class="form-label"><?= __('Login') ?></label>
 														<div class="input-group mb-3">
 															<div class="input-group-text">@</div>
-															<input type="text" name="login" placeholder="<?= __('form_user', 'login/placeholder') ?>" value="<?= $user->login ?>" class="form-control" minlength="2" maxlength="200" required>
+															<input type="text" name="login" placeholder="<?= __('login') ?>" value="<?= $user->login ?>" class="form-control" minlength="2" maxlength="200" required>
 														</div>
 													</div>
 													<div class="mb-3">
-														<label class="form-label"><?= __('form_user', 'email/label') ?></label>
-														<input type="text" name="email" placeholder="<?= __('form_user', 'email/placeholder') ?>" value="<?= $user->email ?>" class="form-control" minlength="6" maxlength="200" required>
+														<label class="form-label"><?= __('Email') ?></label>
+														<input type="text" name="email" placeholder="<?= __('Email') ?>" value="<?= $user->email ?>" class="form-control" minlength="6" maxlength="200" required>
 													</div>
 													<div class="mb-3">
-														<label class="form-label"><?= __('form_user', 'name/label') ?></label>
-														<input type="text" name="name" placeholder="<?= __('form_user', 'name/placeholder') ?>" value="<?= $user->name ?>" class="form-control" minlength="1" maxlength="200" required>
+														<label class="form-label"><?= __('Name') ?></label>
+														<input type="text" name="name" placeholder="<?= __('Name') ?>" value="<?= $user->name ?>" class="form-control" minlength="1" maxlength="200" required>
 													</div>
 												</div>
 												<div class="col-md-4 filepond--no-grid">
-													<label class="form-label"><?= __('form_user', 'avatar/label') ?></label>
+													<label class="form-label"><?= __('Avatar') ?></label>
 													<input type="file" accept="image/*" name="avatar" data-value='<?php Form::populateFiles($user->avatar) ?>'>
 												</div>
 											</div>
-											<button type="submit" class="btn btn-primary">Save changes</button>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
 										</form>
 									</div>
 								</div>
 								<div class="card">
 									<div class="card-header">
-										<h5 class="card-title mb-0">Contacts</h5>
+										<h5 class="card-title mb-0"><?= __('Contacts') ?></h5>
 									</div>
 									<div class="card-body">
 										<form action="<?php Form::edit('Profile/Account_Contacts', $user->id); ?>" method="POST">
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'socials/label') ?></label>
+												<label class="form-label"><?= __('Socials') ?></label>
 												<div class="modal fade foreign-form" data-name="socials" data-value='<?= json_encode($user->socials) ?>'>
 													<div class="modal-dialog modal-dialog-centered">
 														<div class="modal-content">
 															<div class="modal-header">
-																<h5 class="modal-title"><?= __('form_user', 'socials/modal') ?></h5>
+																<h5 class="modal-title"><?= __('Add social') ?></h5>
 																<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 															</div>
 															<div class="modal-body">
 																<div class="mb-3">
-																	<label class="form-label"><?= __('form_user', 'socials/social') ?></label>
-																	<select name="type" data-placeholder="<?= __('form_user', 'socials/social') ?>">
+																	<label class="form-label"><?= __('Social') ?></label>
+																	<select name="type" data-placeholder="<?= __('Social') ?>">
 																		<?php foreach(site('socials_allowed') as $social): ?>
 																			<option value="<?= strtolower($social) ?>"><?= ucfirst($social) ?></option>
 																		<?php endforeach; ?>
 																	</select>
 																</div>
 																<div class="mb-3">
-																	<label class="form-label"><?= __('form_user', 'socials/link') ?></label>
-																	<input type="url" name="link" placeholder="<?= __('form_user', 'socials/link') ?>" class="form-control" minlength="1" maxlength="200">
+																	<label class="form-label"><?= __('Link') ?></label>
+																	<input type="url" name="link" placeholder="<?= __('Link') ?>" class="form-control" minlength="1" maxlength="200">
 																</div>
 															</div>
 															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= __('form_user', 'socials/cancel') ?></button>
-																<button type="submit" class="btn btn-primary" data-bs-dismiss="modal"><?= __('form_user', 'socials/add') ?></button>
+																<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= __('Cancel') ?></button>
+																<button type="submit" class="btn btn-primary" data-bs-dismiss="modal"><?= __('Add') ?></button>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'phone/label') ?></label>
-												<input type="text" name="phone" placeholder="<?= __('form_user', 'phone/placeholder') ?>" value="<?= $user->phone ?>" class="form-control" minlength="8" maxlength="100">
+												<label class="form-label"><?= __('Phone') ?></label>
+												<input type="text" name="phone" placeholder="<?= __('Phone') ?>" value="<?= $user->phone ?>" class="form-control" minlength="8" maxlength="100">
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'address/label') ?></label>
-												<input type="text" name="address" placeholder="<?= __('form_user', 'address/placeholder') ?>" value="<?= $user->address ?>" class="form-control" minlength="2" maxlength="200">
+												<label class="form-label"><?= __('Address') ?></label>
+												<input type="text" name="address" placeholder="<?= __('Address') ?>" value="<?= $user->address ?>" class="form-control" minlength="2" maxlength="200">
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_user', 'about/label') ?></label>
-												<textarea name="about" placeholder="<?= __('form_user', 'about/placeholder') ?>" class="form-control"><?= $user->about ?></textarea>
+												<label class="form-label"><?= __('About') ?></label>
+												<textarea name="about" placeholder="<?= __('About') ?>" class="form-control"><?= $user->about ?></textarea>
 											</div>
-											<button type="submit" class="btn btn-primary">Save changes</button>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
 										</form>
 									</div>
 								</div>
@@ -139,23 +139,23 @@
 							<div class="tab-pane fade" id="password" role="tabpanel">
 								<div class="card">
 									<div class="card-header">
-										<h5 class="card-title mb-0">Password</h5>
+										<h5 class="card-title mb-0"><?= __('Password') ?></h5>
 									</div>
 									<div class="card-body">
 										<form action="<?php Form::edit('Profile/Password', $user->id); ?>" method="POST" data-reset>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_password', 'password_current/label') ?></label>
-												<input type="password" name="password_current" placeholder="<?= __('form_password', 'password_current/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('Current password') ?></label>
+												<input type="password" name="password_current" placeholder="<?= __('Current password') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_password', 'password_new/label') ?></label>
-												<input type="password" name="password_new" placeholder="<?= __('form_password', 'password_new/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('New password') ?></label>
+												<input type="password" name="password_new" placeholder="<?= __('New password') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
 											<div class="mb-3">
-												<label class="form-label"><?= __('form_password', 'password_confirm/label') ?></label>
-												<input type="password" name="password_confirm" placeholder="<?= __('form_password', 'password_confirm/placeholder') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('Confirm password') ?></label>
+												<input type="password" name="password_confirm" placeholder="<?= __('Confirm password') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
-											<button type="submit" class="btn btn-primary">Save changes</button>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
 										</form>
 									</div>
 								</div>

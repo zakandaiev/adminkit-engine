@@ -66,7 +66,7 @@ class Statement {
 				$language_key = 'duplicate/' . $language_key;
 			}
 
-			$error_message = __('form', $language_key);
+			$error_message = __($language_key);
 
 			if(!$error_message) {
 				$error_message = $error->getMessage();

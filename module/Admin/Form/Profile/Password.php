@@ -8,7 +8,6 @@ $password = [
 
 return [
 	'table' => 'user',
-	'language' => 'form_password',
 	'field' => [
 		'password_current' => $password,
 		'password_new' => $password,
@@ -21,13 +20,13 @@ return [
 		$password_confirm = $fields['password_confirm'];
 
 		if($password_current === $password_new) {
-			Server::answer(null, 'error', __('form_password', 'new_must_be_different'));
+			Server::answer(null, 'error', __('New password must be different'));
 		}
 		if($password_new !== $password_confirm) {
-			Server::answer(null, 'error', __('form_password', 'confirm_is_incorrect'));
+			Server::answer(null, 'error', __('Confirmation password is incorrect'));
 		}
 		if(!password_verify($password_current, Auth::$user->password)) {
-			Server::answer(null, 'error', __('form_password', 'current_is_incorrect'));
+			Server::answer(null, 'error', __('Current password is incorrect'));
 		}
 
 		$sql = 'UPDATE {user} SET password=:password WHERE id=:id';

@@ -1,6 +1,9 @@
 <?php
 
 $all_checks = [
+	// 'TYPECHECK_message' => 'Error! This field is TYPECHECK',
+	'required_message' => 'This field is required',
+
 	'required' => true,
 	'unset_null' => true,
 
@@ -46,8 +49,8 @@ $title = [
 ];
 
 return [
+	'submit' => 'Saved',
 	'table' => 'page',
-	'language' => 'form_page',
 	'field' => [
 		'title' => $title,
 		'content' => [],

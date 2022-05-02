@@ -1,16 +1,22 @@
+const COLORMODE = {
+	storage_key: 'colormode_admin',
+	attribute_key: 'data-colormode',
+	value: 'dark'
+};
+
 function setColorMode(dark) {
 	if(dark) {
-		document.body.setAttribute('data-colormode', 'dark');
-		localStorage.setItem('colormode', 'dark');
+		document.body.setAttribute(COLORMODE.attribute_key, COLORMODE.value);
+		localStorage.setItem(COLORMODE.storage_key, COLORMODE.value);
 	} else {
-		document.body.removeAttribute('data-colormode');
-		localStorage.removeItem('colormode');
+		document.body.removeAttribute(COLORMODE.attribute_key);
+		localStorage.removeItem(COLORMODE.storage_key);
 	}
 
 	return true;
 }
 
-if(window.matchMedia && localStorage.getItem('colormode') === null) {
+if(window.matchMedia && localStorage.getItem(COLORMODE.storage_key) === null) {
 	const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? true : false;
 	setColorMode(isDarkMode);
 
@@ -19,7 +25,7 @@ if(window.matchMedia && localStorage.getItem('colormode') === null) {
 		setColorMode(isDarkMode);
 	});
 } else {
-	const isDarkMode = (localStorage.getItem('colormode') === 'dark') ? true : false;
+	const isDarkMode = (localStorage.getItem(COLORMODE.storage_key) === COLORMODE.value) ? true : false;
 	setColorMode(isDarkMode);
 }
 
@@ -30,6 +36,6 @@ document.addEventListener('click', event => {
 
 	event.preventDefault();
 
-	const isDarkMode = (localStorage.getItem('colormode') === 'dark') ? true : false;
+	const isDarkMode = (localStorage.getItem(COLORMODE.storage_key) === COLORMODE.value) ? true : false;
 	setColorMode(!isDarkMode);
 });

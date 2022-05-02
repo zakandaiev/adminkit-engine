@@ -52,7 +52,6 @@ $socials = [
 
 return [
 	'table' => 'user',
-	'language' => 'form_user',
 	'field' => [
 		'group' => $group,
 		'login' => $login,

@@ -37,7 +37,7 @@ class Form {
 
 			$token = Hash::token();
 
-			$query_params = ['token' => $token, 'action' => $action, 'form_name' => $form_name];
+			$query_params = ['module' => Module::get('name'), 'token' => $token, 'action' => $action, 'form_name' => $form_name];
 
 			if($action !== 'add') {
 				$query_append_field = ', item_id';
@@ -47,9 +47,9 @@ class Form {
 
 			$sql = '
 				INSERT INTO {form}
-					(token, action, form_name' . $query_append_field . ')
+					(token, module, action, form_name' . $query_append_field . ')
 				VALUES
-					(:token, :action, :form_name' . $query_append_binding . ')
+					(:token, :module, :action, :form_name' . $query_append_binding . ')
 			';
 
 			$statement = new Statement($sql);
@@ -185,8 +185,10 @@ class Form {
 		if(isset($form['execute_post']) && is_callable($form['execute_post'])) {
 			$form['execute_post']($sql_fields, $form_data);
 		}
-		
-		Server::answer(null, 'success', __($form['language'], 'submit'));
+
+		$submit_message = isset($form['submit']) ? __($form['submit']) : null;
+ 		
+		Server::answer(null, 'success', $submit_message);
 	}
 
 	private static function tokenExistsAndActive($action, $form_name = '', $item_id = '') {
@@ -261,11 +263,9 @@ class Form {
 					}
 
 					if($check !== true) {
-						$error_message = __($form['language'], $field . '/' . $key);
-
-						if(!$error_message) {
-							$error_message = ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
-						}
+						$error_message_auto = ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
+						$error_message = $values_array[$key . '_message'] ?? $error_message_auto;
+						$error_message = __($error_message);
 
 						Server::answer(null, 'error', $error_message, 409);
 					}

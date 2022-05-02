@@ -106,7 +106,7 @@ function get_time_zones() {
 		'Africa' => DateTimeZone::AFRICA,
 		'America' => DateTimeZone::AMERICA,
 		'Antarctica' => DateTimeZone::ANTARCTICA,
-		'Aisa' => DateTimeZone::ASIA,
+		'Asia' => DateTimeZone::ASIA,
 		'Atlantic' => DateTimeZone::ATLANTIC,
 		'Europe' => DateTimeZone::EUROPE,
 		'Indian' => DateTimeZone::INDIAN,
@@ -260,6 +260,10 @@ function site($key) {
 	}
 
 	switch(strval($key)) {
+		case 'name': {
+			$value = $value ?? Define::NAME;
+			break;
+		}
 		case 'charset': {
 			$value = Config::get('database')['charset'];
 			break;

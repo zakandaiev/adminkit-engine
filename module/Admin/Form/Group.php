@@ -18,7 +18,6 @@ $bool = [
 
 return [
 	'table' => 'group',
-	'language' => 'form_group',
 	'field' => [
 		'name' => $name,
 		'routes' => $routes,

@@ -9,7 +9,7 @@
 		<main class="content">
 			<div class="container-fluid p-0">
 
-				<h1 class="h3 mb-3"><?= __('sidebar', 'settings') ?> <i data-feather="arrow-right"></i> <?= __('setting', 'section_' . $section) ?></h1>
+				<h1 class="h3 mb-3"><?= __('Settings') ?> <i data-feather="arrow-right"></i> <?= __('Main') ?></h1>
 
 				<div class="row">
 					<div class="col-12">
@@ -17,13 +17,13 @@
 							<div class="card-body">
 								<form method="POST">
 									<div class="mb-3">
-										<label class="form-label">Time zone</label>
+										<label class="form-label"><?= __('Time zone') ?></label>
 										<select name="time_zone">
 											<?php print_time_zones($settings->time_zone); ?>
 										</select>
 									</div>
 									<div class="mb-3">
-										<label class="form-label">Language</label>
+										<label class="form-label"><?= __('Language') ?></label>
 										<select name="language">
 											<?php foreach(Module::get('languages') as $language): ?>
 												<?php
@@ -33,7 +33,7 @@
 														$selected_language = 'selected';
 													}
 												?>
-												<option value="<?= $language ?>" <?= $selected_language ?>><?= $language ?></option>
+												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['name'] ?> - <?= $language['region'] ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>

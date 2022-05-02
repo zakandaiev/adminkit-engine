@@ -18,7 +18,6 @@ $email = [
 
 return [
 	'table' => 'setting',
-	'language' => 'form_setting',
 	'field' => [
 		'address' => $address,
 		'coordinate_x' => $coordinates,

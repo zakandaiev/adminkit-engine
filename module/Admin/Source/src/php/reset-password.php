@@ -8,10 +8,10 @@
 
 					<div class="text-center mt-4">
 						<?php if(!empty(site('logo'))): ?>
-							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= site('logo') ?>" alt="<?= __('auth', 'placeholder/logo') ?>">
+							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= site('logo') ?>" alt="Logo">
 						<?php endif; ?>
 						<h1 class="h2"><?= site('name') ?></h1>
-						<p class="lead"><?= __('auth', 'title/restore') ?></p>
+						<p class="lead"><?= __('Reset your password') ?></p>
 					</div>
 
 					<div class="card">
@@ -19,17 +19,17 @@
 							<div class="m-sm-4">
 								<form method="POST">
 									<div class="mb-3">
-										<label class="form-label"><?= __('auth', 'field/email') ?></label>
-										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('auth', 'placeholder/email') ?>">
+										<label class="form-label"><?= __('Email') ?></label>
+										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('Enter your email') ?>">
 										<small>
-											<a href="/admin/login"><?= __('auth', 'button/login') ?></a>
+											<a href="/admin/login"><?= __('Login') ?></a>
 											<?php if(site('enable_registration') == 'true'): ?>
-												• <a href="/admin/register"><?= __('auth', 'button/register') ?></a>
+												• <a href="/admin/register"><?= __('Register') ?></a>
 											<?php endif; ?>
 										</small>
 									</div>
 									<div class="text-center mt-3">
-										<button type="submit" class="btn btn-lg btn-primary"><?= __('auth', 'button/restore') ?></button>
+										<button type="submit" class="btn btn-lg btn-primary"><?= __('Reset password') ?></button>
 									</div>
 								</form>
 							</div>
