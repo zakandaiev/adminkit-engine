@@ -19,15 +19,15 @@ class Router {
 		$method = Request::$method;
 		$uri = (Request::$uri === '/') ? Request::$uri : strtok(trim(Request::$uri, '/'), '?');
 
-		foreach(Module::getAll() as $module => $value) {
-			if(!$value['enabled']) {
+		foreach(Module::getAll() as $module) {
+			if(!$module['enabled']) {
 				continue;
 			}
 
 			// Get routes and check them
-			if(isset($value['routes']) && !empty($value['routes'])) {
-				foreach($value['routes'] as $route) {
-					if(self::checkRoute($method, $uri, $module, $route)) {
+			if(isset($module['routes']) && !empty($module['routes'])) {
+				foreach($module['routes'] as $route) {
+					if(self::checkRoute($method, $uri, $module['name'], $route)) {
 						return true;
 					}
 				}
@@ -76,6 +76,10 @@ class Router {
 
 		$languages = [];
 		foreach(Module::getAll() as $module) {
+			if(!$module['enabled']) {
+				continue;
+			}
+
 			foreach($module['languages'] as $language) {
 				$languages[] = $language['key'];
 			}

@@ -85,7 +85,7 @@
 	</div>
 </footer>
 
-<?php Asset::render('js'); ?>
+<?= Asset::render('js'); ?>
 
 </body>
 

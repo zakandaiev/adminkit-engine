@@ -78,7 +78,7 @@ class Theme {
 			$title = 'Admin';
 		}
 		
-		echo $title . ' | ' . site('name') ?? Define::NAME;
+		return $title . ' | ' . site('name');
 	}
 
 	public static function meta() {
@@ -100,10 +100,14 @@ class Theme {
 
 		$meta[] = $meta_noindex;
 		$meta[] = $js_setting;
+		
+		$output = '';
 
 		foreach($meta as $item) {
-			echo $item;
+			$output .= $item;
 		}
+
+		return $output;
 	}
 
 	public static function path() {

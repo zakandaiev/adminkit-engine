@@ -74,10 +74,8 @@ $sidebar = [
 		<a class="sidebar-brand" href="<?= site('url_language') ?>/admin">
 			<?php if(!empty(site('logo_admin'))): ?>
 				<img src="<?= Request::$base ?>/<?= site('logo_admin') ?>" alt="Logo" class="d-block m-auto img-fluid">
-			<?php elseif(!empty(site('name'))): ?>
-				<span class="align-middle"><?= site('name') ?></span>
 			<?php else: ?>
-				<span class="align-middle"><?= Define::NAME ?></span>
+				<span class="align-middle"><?= site('name') ?></span>
 			<?php endif; ?>
 		</a>
 

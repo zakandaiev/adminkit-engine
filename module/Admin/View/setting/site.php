@@ -20,31 +20,31 @@
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label">Admin logo</label>
-												<input type="file" accept="image/*" name="logo_admin" data-value='<?php Form::populateFiles($settings->logo_admin) ?>'>
+												<input type="file" accept="image/*" name="logo_admin" data-value='<?= Form::populateFiles($settings->logo_admin) ?>'>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label">Public logo</label>
-												<input type="file" accept="image/*" name="logo_public" data-value='<?php Form::populateFiles($settings->logo_public) ?>'>
+												<input type="file" accept="image/*" name="logo_public" data-value='<?= Form::populateFiles($settings->logo_public) ?>'>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label">Public logo alternative</label>
-												<input type="file" accept="image/*" name="logo_alt" data-value='<?php Form::populateFiles($settings->logo_alt) ?>'>
+												<input type="file" accept="image/*" name="logo_alt" data-value='<?= Form::populateFiles($settings->logo_alt) ?>'>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label">Placeholder avatar</label>
-												<input type="file" accept="image/*" name="placeholder_avatar" data-value='<?php Form::populateFiles($settings->placeholder_avatar) ?>'>
+												<input type="file" accept="image/*" name="placeholder_avatar" data-value='<?= Form::populateFiles($settings->placeholder_avatar) ?>'>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label">Placeholder image</label>
-												<input type="file" accept="image/*" name="placeholder_image" data-value='<?php Form::populateFiles($settings->placeholder_image) ?>'>
+												<input type="file" accept="image/*" name="placeholder_image" data-value='<?= Form::populateFiles($settings->placeholder_image) ?>'>
 											</div>
 										</div>
 									</div>

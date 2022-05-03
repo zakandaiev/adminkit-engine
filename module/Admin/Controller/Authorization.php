@@ -58,7 +58,7 @@ class Authorization extends \Engine\Controller {
 	}
 
 	public function postRestore() {
-		echo "Authorization@postRestore";
+		// restore
 	}
 
 	public function getRegister() {

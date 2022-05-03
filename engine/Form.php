@@ -13,18 +13,15 @@ class Form {
 	private static $token;
 
 	public static function add($form_name) {
-		echo self::generateToken(__FUNCTION__, $form_name);
-		return true;
+		return self::generateToken(__FUNCTION__, $form_name);
 	}
 
 	public static function edit($form_name, $item_id) {
-		echo self::generateToken(__FUNCTION__, $form_name, $item_id);
-		return true;
+		return self::generateToken(__FUNCTION__, $form_name, $item_id);
 	}
 
 	public static function delete($form_name, $item_id) {
-		echo self::generateToken(__FUNCTION__, $form_name, $item_id);
-		return true;
+		return self::generateToken(__FUNCTION__, $form_name, $item_id);
 	}
 
 	private static function generateToken($action, $form_name, $item_id = null) {
@@ -474,8 +471,7 @@ class Form {
 		$output_array = [];
 
 		if(empty($files)) {
-			echo json_encode($output_array);
-			return true;
+			return json_encode($output_array);
 		}
 
 		if(!is_array($files) && $files[0] === "[") {
@@ -496,7 +492,6 @@ class Form {
 			];
 		}
 
-		echo json_encode($output_array);
-		return true;
+		return json_encode($output_array);
 	}
 }

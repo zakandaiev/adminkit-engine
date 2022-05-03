@@ -54,7 +54,7 @@
 										<h5 class="card-title mb-0">Main</h5>
 									</div>
 									<div class="card-body">
-										<form action="<?php Form::edit('Profile/Account_Main', $user->id); ?>" method="POST">
+										<form action="<?= Form::edit('Profile/Account_Main', $user->id); ?>" method="POST">
 											<div class="row">
 												<div class="col-md-8">
 													<div class="mb-3">
@@ -75,7 +75,7 @@
 												</div>
 												<div class="col-md-4 filepond--no-grid">
 													<label class="form-label"><?= __('Avatar') ?></label>
-													<input type="file" accept="image/*" name="avatar" data-value='<?php Form::populateFiles($user->avatar) ?>'>
+													<input type="file" accept="image/*" name="avatar" data-value='<?= Form::populateFiles($user->avatar) ?>'>
 												</div>
 											</div>
 											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
@@ -87,7 +87,7 @@
 										<h5 class="card-title mb-0"><?= __('Contacts') ?></h5>
 									</div>
 									<div class="card-body">
-										<form action="<?php Form::edit('Profile/Account_Contacts', $user->id); ?>" method="POST">
+										<form action="<?= Form::edit('Profile/Account_Contacts', $user->id); ?>" method="POST">
 											<div class="mb-3">
 												<label class="form-label"><?= __('Socials') ?></label>
 												<div class="modal fade foreign-form" data-name="socials" data-value='<?= json_encode($user->socials) ?>'>
@@ -142,7 +142,7 @@
 										<h5 class="card-title mb-0"><?= __('Password') ?></h5>
 									</div>
 									<div class="card-body">
-										<form action="<?php Form::edit('Profile/Password', $user->id); ?>" method="POST" data-reset>
+										<form action="<?= Form::edit('Profile/Password', $user->id); ?>" method="POST" data-reset>
 											<div class="mb-3">
 												<label class="form-label"><?= __('Current password') ?></label>
 												<input type="password" name="password_current" placeholder="<?= __('Current password') ?>" class="form-control" minlength="8" maxlength="200" required>

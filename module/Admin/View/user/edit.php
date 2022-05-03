@@ -13,7 +13,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?php Form::edit('User', $user->id); ?>" method="POST" data-redirect="/admin/user">
+						<form action="<?= Form::edit('User', $user->id); ?>" method="POST" data-redirect="/admin/user">
 							<div class="mb-3">
 								<label class="form-label">Groups</label>
 								<select name="group[]" multiple data-placeholder="Groups">
@@ -84,7 +84,7 @@
 								</div>
 								<div class="col-md-6 mb-3 filepond--no-grid">
 									<label class="form-label">Avatar</label>
-									<input type="file" accept="image/*" name="avatar" data-value='<?php Form::populateFiles($user->avatar) ?>'>
+									<input type="file" accept="image/*" name="avatar" data-value='<?= Form::populateFiles($user->avatar) ?>'>
 								</div>
 							</div>
 							<div class="mb-3">

@@ -2,7 +2,7 @@
 <html lang="<?= site('language_current') ?>">
 
 <head>
-	<title><?php Theme::title(); ?></title>
+	<title><?= Theme::title(); ?></title>
 
 	<meta charset="<?= site('charset') ?>">
 	<meta name="author" content="github.com/zakandaiev">
@@ -15,7 +15,7 @@
 	<meta property="og:type" content="website">
 	<meta property="og:locale" content="<?= lang(site('language_current'), 'region') ?>">
 	<meta property="og:url" content="<?= site('url_language') ?>">
-	<meta property="og:title" content="<?php Theme::title(); ?>">
+	<meta property="og:title" content="<?= Theme::title() ?>">
 	<meta property="og:description" content="">
 	<meta property="og:keywords" content="">
 	<meta property="og:image" content="">
@@ -27,8 +27,8 @@
 	<link rel="apple-touch-icon" href="<?= site('url') ?>/apple-touch-icon.png">
 	<link rel="image_src" href="">
 
-	<?php Theme::meta(); ?>
-	<?php Asset::render('css'); ?>
+	<?= Theme::meta() ?>
+	<?= Asset::render('css') ?>
 </head>
 
 <body>

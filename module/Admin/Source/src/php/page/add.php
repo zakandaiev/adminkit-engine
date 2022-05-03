@@ -11,7 +11,7 @@
 
 				<h1 class="h3 mb-3">Add page</h1>
 
-				<form action="<?php Form::add('Page'); ?>" method="POST" data-redirect="/admin/page">
+				<form action="<?= Form::add('Page'); ?>" method="POST" data-redirect="/admin/page">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="tab">

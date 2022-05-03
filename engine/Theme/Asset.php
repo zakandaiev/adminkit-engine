@@ -40,28 +40,37 @@ class Asset {
 
 		if(!empty($assets)) {
 			$renderMethod = 'render' . ucfirst($extension);
-			self::$renderMethod($assets);
+			
+			return self::$renderMethod($assets);
 		}
 	}
 
 	private static function renderJs($list) {
+		$output = '';
+
 		foreach($list as $item) {
-			echo sprintf(
+			$output .= sprintf(
 				self::JS_SCRIPT_MASK,
 				$item['async'],
 				$item['file']
 			);
 		}
+
+		return $output;
 	}
 
 	private static function renderCss($list) {
+		$output = '';
+
 		foreach($list as $item) {
-			echo sprintf(
+			$output .= sprintf(
 				self::CSS_LINK_MASK,
 				$item['async'],
 				$item['file']
 			);
 		}
+
+		return $output;
 	}
 
 	public static function path() {

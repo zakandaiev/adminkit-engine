@@ -62,7 +62,7 @@
 											</td>
 											<td class="table-action">
 												<a href="/admin/user/edit/<?= $user->id ?>"><i data-feather="edit"></i></a>
-												<a data-delete="<?php Form::delete('user', $user->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
+												<a data-delete="<?= Form::delete('user', $user->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
 											</td>
 										</tr>
 									<?php endforeach; ?>

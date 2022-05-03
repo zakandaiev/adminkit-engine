@@ -13,7 +13,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?php Form::edit('Group', $group->id); ?>" method="POST" data-redirect="/admin/group">
+						<form action="<?= Form::edit('Group', $group->id); ?>" method="POST" data-redirect="/admin/group">
 							<div class="mb-3">
 								<label class="form-label">Name</label>
 								<input type="text" name="name" value="<?= $group->name ?>" placeholder="Name" class="form-control" minlength="2" maxlength="200" required>

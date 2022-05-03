@@ -13,7 +13,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?php Form::add('User'); ?>" method="POST" data-redirect="/admin/user">
+						<form action="<?= Form::add('User'); ?>" method="POST" data-redirect="/admin/user">
 							<div class="mb-3">
 								<label class="form-label">Groups</label>
 								<select name="group[]" multiple data-placeholder="Groups">

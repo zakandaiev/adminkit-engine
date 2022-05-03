@@ -11,7 +11,7 @@
 
 				<h1 class="h3 mb-3">Edit page</h1>
 
-				<form action="<?php Form::edit('Page', $page->id); ?>" method="POST" data-redirect="/admin/page">
+				<form action="<?= Form::edit('Page', $page->id); ?>" method="POST" data-redirect="/admin/page">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="tab">
@@ -55,7 +55,7 @@
 									<div id="page-gallery" class="tab-pane" role="tabpanel">
 										<div class="form-group">
 											<label class="form-label">Gallery</label>
-											<input type="file" accept="image/*" name="gallery[]" multiple data-value='<?php Form::populateFiles($page->gallery) ?>'>
+											<input type="file" accept="image/*" name="gallery[]" multiple data-value='<?= Form::populateFiles($page->gallery) ?>'>
 										</div>
 									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">
@@ -73,7 +73,7 @@
 										</div>
 										<div class="form-group">
 											<label class="form-label">SEO Image</label>
-											<input type="file" accept="image/*" name="seo_image" data-value='<?php Form::populateFiles($page->seo_image) ?>'>
+											<input type="file" accept="image/*" name="seo_image" data-value='<?= Form::populateFiles($page->seo_image) ?>'>
 										</div>
 									</div>
 									<div id="page-custom-fields" class="tab-pane" role="tabpanel">
@@ -114,7 +114,7 @@
 									<h5 class="card-title mb-0">Featured image</h5>
 								</div>
 								<div class="card-body filepond--no-grid">
-									<input type="file" accept="image/*" name="image" data-value='<?php Form::populateFiles($page->image) ?>'>
+									<input type="file" accept="image/*" name="image" data-value='<?= Form::populateFiles($page->image) ?>'>
 								</div>
 							</div>
 							<div class="card">
