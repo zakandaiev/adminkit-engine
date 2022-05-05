@@ -24,7 +24,7 @@ $no_index_no_follow = [
 
 return [
 	'table' => 'setting',
-	'field' => [
+	'fields' => [
 		'logo_admin' => $image,
 		'logo_public' => $image,
 		'logo_alt' => $image,

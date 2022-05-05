@@ -18,7 +18,7 @@ $bool = [
 
 return [
 	'table' => 'group',
-	'field' => [
+	'fields' => [
 		'name' => $name,
 		'routes' => $routes,
 		'users' => $users,

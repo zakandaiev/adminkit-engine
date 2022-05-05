@@ -186,8 +186,7 @@ INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('contact', 'email', '%contact_email%'),
 ('optimization', 'group_css', null),
 ('optimization', 'group_js', null),
-('optimization', 'cache_db', null),
-('theme', 'theme', 'default');
+('optimization', 'cache_db', null);
 
 INSERT INTO `%prefix%_user` (`login`, `password`, `email`, `auth_token`) VALUES
 ('%admin_login%', '%admin_password%', '%admin_email%', '%auth_token%');
@@ -199,8 +198,20 @@ INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
 (1, 1);
 
-INSERT INTO `%prefix%_page` (`language`, `is_static`, `title`, `url`, `author`, `template`) VALUES
-('en', true, '%site_name%', 'home', 1, 'home');
+INSERT INTO `%prefix%_page` (`language`, `title`, `url`, `author`) VALUES
+('en', '%site_name%', 'home', 1);
+
+CREATE TRIGGER
+	`set_page_static`
+BEFORE UPDATE ON
+	`%prefix%_page`
+FOR EACH ROW
+	SET NEW.is_static =
+		CASE WHEN (SELECT count(*) FROM `%prefix%_page_category` WHERE page_id=NEW.id) > 0 THEN
+			false
+		ELSE
+			true
+		END;
 
 CREATE TRIGGER
 	`clear_page_category`
@@ -221,32 +232,32 @@ CREATE TRIGGER
 AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW
-    DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.page_id=OLD.id;
+  DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.page_id=OLD.id;
 	
 CREATE TRIGGER
 	`clear_page_tag_by_tag_delete`
 AFTER DELETE ON
 	`%prefix%_tag`
 FOR EACH ROW
-    DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.tag_id=OLD.id;
+  DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.tag_id=OLD.id;
 	
 CREATE TRIGGER
 	`clear_group_route_by_group_delete`
 AFTER DELETE ON
 	`%prefix%_group`
 FOR EACH ROW
-    DELETE FROM `%prefix%_group_route` t_gr WHERE t_gr.group_id=OLD.id;
+  DELETE FROM `%prefix%_group_route` t_gr WHERE t_gr.group_id=OLD.id;
 	
 CREATE TRIGGER
 	`clear_user_group_by_group_delete`
 AFTER DELETE ON
 	`%prefix%_group`
 FOR EACH ROW
-    DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.group_id=OLD.id;
+  DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.group_id=OLD.id;
 	
 CREATE TRIGGER
 	`clear_user_group_by_user_delete`
 AFTER DELETE ON
 	`%prefix%_user`
 FOR EACH ROW
-    DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.user_id=OLD.id;
+  DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.user_id=OLD.id;

@@ -4,7 +4,7 @@ require __DIR__ . '/../User.php';
 
 return [
 	'table' => 'user',
-	'field' => [
+	'fields' => [
 		'login' => $login,
 		'email' => $email,
 		'name' => $name,

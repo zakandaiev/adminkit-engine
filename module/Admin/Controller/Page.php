@@ -2,6 +2,8 @@
 
 namespace Module\Admin\Controller;
 
+use Engine\Request;
+use Engine\Server;
 use Engine\Theme\Pagination;
 
 class Page extends AdminController {
@@ -23,6 +25,30 @@ class Page extends AdminController {
 
 		$this->view->setData($data);
 		$this->view->render('page/add');
+	}
+
+	public function getAddTranslation() {
+		$page_id = $this->route['parameters']['id'];
+		$page_language = Request::get('language');
+
+		if(!array_key_exists($page_language, $this->module['languages'])) {
+			Server::redirect(Request::$base . '/admin/page');
+		}
+
+		$page = $this->model->getPageById($page_id);
+
+		if(empty($page)) {
+			Server::redirect(Request::$base . '/admin/page');
+		}
+
+		$page = (array) $page;
+
+		unset($page['id']);
+		$page['language'] = $page_language;
+
+		$translation_id = $this->model->createPage($page);
+
+		Server::redirect(Request::$base . '/admin/page/edit/' . $translation_id . '?translation=' . $page_id . '&title=' . $page['title']);
 	}
 
 	public function getEdit() {

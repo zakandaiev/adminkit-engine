@@ -12,7 +12,7 @@ $password = [
 
 return [
 	'table' => 'user',
-	'field' => [
+	'fields' => [
 		'name' => $name,
 		'login' => $login,
 		'email' => $email,

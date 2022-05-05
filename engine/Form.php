@@ -78,6 +78,10 @@ class Form {
 
 		$form_data = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
 
+		if(isset($form['fields_modify']) && is_callable($form['fields_modify'])) {
+			$sql_fields = $form['fields_modify']($sql_fields, $form_data);
+		}
+
 		if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
 			$form['execute_pre']($sql_fields, $form_data);
 		}
@@ -88,7 +92,7 @@ class Form {
 			$sql_fields_foreign = [];
 			$sql_fields_foreign_value = [];
 			if($action !== 'delete') {
-				foreach($form['field'] as $field => $values_array) {
+				foreach($form['fields'] as $field => $values_array) {
 					if(isset($values_array['foreign']) && !empty($values_array['foreign'])) {
 
 						if(is_callable($values_array['foreign'])) {
@@ -250,7 +254,7 @@ class Form {
 
 		$post = Request::$post;
 
-		foreach($form['field'] as $field => $values_array) {
+		foreach($form['fields'] as $field => $values_array) {
 			if(array_key_exists($field, $post)) {
 				foreach($values_array as $key => $value) {
 					if(isset($values_array['required']) && !$values_array['required'] && empty($post[$field])) {
@@ -368,7 +372,7 @@ class Form {
 		$files = Request::$files;
 		$fields = [];
 
-		foreach($form['field'] as $field => $values_array) {
+		foreach($form['fields'] as $field => $values_array) {
 			if(!isset($post[$field]) || empty($post[$field])) {
 				$field_value = null;
 
@@ -396,8 +400,8 @@ class Form {
 				else if(isset($values_array['foreign'])) {
 					$field_value = $post[$field];
 				}
-				else if(isset($values_array['process']) && is_callable($values_array['process'])) {
-					$field_value = $values_array['process']($post[$field]);
+				else if(isset($values_array['modify']) && is_callable($values_array['modify'])) {
+					$field_value = $values_array['modify']($post[$field]);
 				}
 				else if(is_array($post[$field])) {
 					$field_value = filter_var_array($post[$field], FILTER_SANITIZE_STRING);
@@ -410,7 +414,7 @@ class Form {
 			}
 		}
 
-		foreach($form['field'] as $field => $values_array) {
+		foreach($form['fields'] as $field => $values_array) {
 			if(isset($values_array['file']) && $values_array['file']) {
 
 				if(!isset($files[$field]) || empty($files[$field]['tmp_name'])) {

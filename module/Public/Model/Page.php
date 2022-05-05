@@ -15,12 +15,12 @@ class Page {
 		return self::$instance;
 	}
 
-	public function updateViewCounter($page_id) {
-		$sql = 'UPDATE {page} SET views = views + 1 WHERE id=:page_id';
+	public function updateViewCounter($page_url) {
+		$sql = 'UPDATE {page} SET views = views + 1 WHERE url=:page_url';
 
 		$statement = new Statement($sql);
 
-		$statement->prepare()->bind(['page_id' => $page_id])->execute();	
+		$statement->prepare()->bind(['page_url' => $page_url])->execute();	
 
 		return true;
 	}
@@ -250,8 +250,8 @@ class Page {
 
 		$prev_next = new \stdClass();
 
-		$prev_next->prev = json_decode($pages->page_prev);
-		$prev_next->next = json_decode($pages->page_next);
+		$prev_next->prev = @json_decode($pages->page_prev);
+		$prev_next->next = @json_decode($pages->page_next);
 
 		return $prev_next;
 	}

@@ -1,7 +1,7 @@
 <?php
 
 ############################# UPLOAD #############################
-Module::route('get', '/upload', 'Upload@get');
+// Module::route('get', '/upload', 'Upload@get');
 Module::route('post', '/upload', 'Upload@post');
 Module::route('delete', '/upload', 'Upload@delete');
 
@@ -34,6 +34,7 @@ Module::route('post', '/admin/setting/$section', 'Setting@postSection');
 Module::route('get', '/admin/page', 'Page@getAll');
 Module::route('get', '/admin/page/category/$id', 'Page@getCategory');
 Module::route('get', '/admin/page/add', 'Page@getAdd');
+Module::route('get', '/admin/page/add/translation/$id', 'Page@getAddTranslation');
 Module::route('get', '/admin/page/edit/$id', 'Page@getEdit');
 
 ############################# USER #############################

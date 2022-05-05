@@ -9,7 +9,7 @@ $language = [
 
 return [
 	'table' => 'setting',
-	'field' => [
+	'fields' => [
 		'time_zone' => $time_zone,
 		'language' => $language,
 		'socials_allowed' => [],

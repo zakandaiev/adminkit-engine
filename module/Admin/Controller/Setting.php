@@ -11,7 +11,10 @@ class Setting extends AdminController {
 
 		$data['section'] = $section;
 		$data['settings'] = $this->model->getSettings($section);
-		$data['themes'] = $this->model->getThemes();
+
+		if(empty($data['settings'])) {
+			$this->view->error('404');
+		}
 
 		$this->view->setData($data);
 		$this->view->render('setting/' . $section);

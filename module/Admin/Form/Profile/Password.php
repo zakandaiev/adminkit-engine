@@ -8,7 +8,7 @@ $password = [
 
 return [
 	'table' => 'user',
-	'field' => [
+	'fields' => [
 		'password_current' => $password,
 		'password_new' => $password,
 		'password_confirm' => $password

@@ -54,7 +54,7 @@ if(file_inputs) {
 	file_inputs.forEach(input => {
 		const pond = FilePond.create(
 			input, {
-				server: {load: '/upload?load='},
+				server: {load: '/'},
 				storeAsFile: true,
 				instantUpload: false,
 				allowProcess: false,

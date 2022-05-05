@@ -47,14 +47,14 @@ class Path {
 			case 'view': {
 				$path = ROOT_DIR . '/module/' . $module . '/View';
 				if(Module::$name === 'Public') {
-					$path = ROOT_DIR . '/theme/' . Setting::get('theme')->theme;
+					$path = ROOT_DIR . '/theme';
 				}
 				return $path;
 			}
 			case 'asset': {
 				$path = ROOT_DIR . '/module/' . $module . '/View/Asset';
 				if(Module::$name === 'Public') {
-					$path = ROOT_DIR . '/theme/' . Setting::get('theme')->theme . '/Asset';
+					$path = ROOT_DIR . '/theme/Asset';
 				}
 				return $path;
 			}
@@ -64,8 +64,6 @@ class Path {
 				return ROOT_DIR . '/module/' . $module . '/Language';
 			case 'mail':
 				return ROOT_DIR . '/module/' . $module . '/Mail';
-			case 'view_public':
-				return ROOT_DIR . '/theme/' . Setting::get('theme')->theme;
 			default:
 				return ROOT_DIR;
 		}
@@ -88,7 +86,7 @@ class Path {
 			case 'asset': {
 				$path = $url_base . '/module/' . $module . '/View/Asset';
 				if(Module::$name === 'Public') {
-					$path = $url_base . '/theme/' . Setting::get('theme')->theme . '/Asset';
+					$path = $url_base . '/theme/Asset';
 				}
 				return $path;
 			}

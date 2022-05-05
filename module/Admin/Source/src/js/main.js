@@ -22,7 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		if(!anchor.hasAttribute('data-bs-toggle')) {
 			anchor.addEventListener('click', event => {
+				if(!event.currentTarget.hasAttribute('href')) {
+					return;
+				}
+
 				const anchor_href = event.currentTarget.getAttribute('href');
+
 				if(anchor_href.charAt(0) === '#' || (anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#')) {
 					if(!event.currentTarget.hash) {
 						return;

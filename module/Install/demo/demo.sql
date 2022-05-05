@@ -18,10 +18,6 @@ UPDATE `%prefix%_setting` SET
 `value`='123 6th St.Melbourne, FL 32904'
 WHERE `section`='contact' AND `name`='address';
 
-UPDATE `%prefix%_setting` SET
-`value`='callie'
-WHERE `section`='theme' AND `name`='theme';
-
 UPDATE `%prefix%_user` SET
 `avatar`='upload/demo/avatar-2.jpg',
 `name`='John Doe',
@@ -29,27 +25,27 @@ UPDATE `%prefix%_user` SET
 `socials`='[{"type":"telegram","link":"#"},{"type":"facebook","link":"#"},{"type":"instagram","link":"#"}]'
 WHERE `id`=1;
 
-INSERT INTO `%prefix%_page` (`language`, `is_category`, `author`, `title`, `url`, `image`, `template`, `is_static`) VALUES
-('en', 0, 1, 'About', 'about', NULL, 'about', 1),
-('en', 0, 1, 'Contact', 'contact', NULL, 'contact', 1),
-('en', 1, 1, 'Lifestyle', 'lifestyle', 'upload/demo/header-2.jpg', 'category', 0),
-('en', 1, 1, 'Fashion', 'fashion', 'upload/demo/header-1.jpg', 'category', 0),
-('en', 1, 1, 'Technology', 'technology', NULL, 'category', 0),
-('en', 1, 1, 'Travel', 'travel', NULL, 'category', 0),
-('en', 1, 1, 'Health', 'health', 'upload/demo/header-2.jpg', 'category', 0),
-('en', 0, 1, 'Lorem post #1', 'lorem-post-1', 'upload/demo/post-1.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #2', 'lorem-post-2', 'upload/demo/post-2.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #3', 'lorem-post-3', 'upload/demo/post-3.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #4', 'lorem-post-4', 'upload/demo/post-4.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #5', 'lorem-post-5', 'upload/demo/post-5.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #6', 'lorem-post-6', 'upload/demo/post-6.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #7', 'lorem-post-7', 'upload/demo/post-7.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #8', 'lorem-post-8', 'upload/demo/post-8.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #9', 'lorem-post-9', 'upload/demo/post-9.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #10', 'lorem-post-10', 'upload/demo/post-10.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #11', 'lorem-post-11', 'upload/demo/post-11.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #12', 'lorem-post-12', 'upload/demo/post-12.jpg', 'post', 0),
-('en', 0, 1, 'Lorem post #13', 'lorem-post-13', 'upload/demo/post-13.jpg', 'post', 0);
+INSERT INTO `%prefix%_page` (`language`, `is_category`, `author`, `title`, `url`, `image`, `template`) VALUES
+('en', 0, 1, 'About', 'about', NULL, 'about'),
+('en', 0, 1, 'Contact', 'contact', NULL, 'contact'),
+('en', 1, 1, 'Lifestyle', 'lifestyle', 'upload/demo/header-2.jpg', NULL),
+('en', 1, 1, 'Fashion', 'fashion', 'upload/demo/header-1.jpg', NULL),
+('en', 1, 1, 'Technology', 'technology', NULL, NULL),
+('en', 1, 1, 'Travel', 'travel', NULL, NULL),
+('en', 1, 1, 'Health', 'health', 'upload/demo/header-2.jpg', NULL),
+('en', 0, 1, 'Lorem post #1', 'lorem-post-1', 'upload/demo/post-1.jpg', NULL),
+('en', 0, 1, 'Lorem post #2', 'lorem-post-2', 'upload/demo/post-2.jpg', NULL),
+('en', 0, 1, 'Lorem post #3', 'lorem-post-3', 'upload/demo/post-3.jpg', NULL),
+('en', 0, 1, 'Lorem post #4', 'lorem-post-4', 'upload/demo/post-4.jpg', NULL),
+('en', 0, 1, 'Lorem post #5', 'lorem-post-5', 'upload/demo/post-5.jpg', NULL),
+('en', 0, 1, 'Lorem post #6', 'lorem-post-6', 'upload/demo/post-6.jpg', NULL),
+('en', 0, 1, 'Lorem post #7', 'lorem-post-7', 'upload/demo/post-7.jpg', NULL),
+('en', 0, 1, 'Lorem post #8', 'lorem-post-8', 'upload/demo/post-8.jpg', NULL),
+('en', 0, 1, 'Lorem post #9', 'lorem-post-9', 'upload/demo/post-9.jpg', NULL),
+('en', 0, 1, 'Lorem post #10', 'lorem-post-10', 'upload/demo/post-10.jpg', NULL),
+('en', 0, 1, 'Lorem post #11', 'lorem-post-11', 'upload/demo/post-11.jpg', NULL),
+('en', 0, 1, 'Lorem post #12', 'lorem-post-12', 'upload/demo/post-12.jpg', NULL),
+('en', 0, 1, 'Lorem post #13', 'lorem-post-13', 'upload/demo/post-13.jpg', NULL);
 
 UPDATE `%prefix%_page` SET `views`=(SELECT FLOOR(RAND() * (1000-10) + 10));
 

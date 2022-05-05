@@ -4,7 +4,7 @@
 ?>
 
 <li class="nav-item dropdown">
-	<a class="nav-icon dropdown-toggle" href="/admin" id="notifications" data-bs-toggle="dropdown">
+	<a class="nav-icon dropdown-toggle" href="<?= site('url_language') ?>/admin" id="notifications" data-bs-toggle="dropdown">
 		<div class="position-relative">
 			<i class="align-middle" data-feather="bell"></i>
 			<?php if($notifications_count > 0): ?>
@@ -19,7 +19,7 @@
 		<div class="list-group">
 			<?php if($notifications_count > 0): ?>
 				<?php foreach($notifications as $notification): ?>
-					<a href="/admin/profile" class="list-group-item">
+					<a href="<?= site('url_language') ?>/admin/profile" class="list-group-item">
 						<div class="row g-0 align-items-center">
 							<div class="col-2">
 								<?= notification_icon($notification->kind) ?>
@@ -32,14 +32,14 @@
 					</a>
 				<?php endforeach; ?>
 			<?php else: ?>
-				<a href="/admin/profile" class="list-group-item">
+				<a href="<?= site('url_language') ?>/admin/profile" class="list-group-item">
 					<div class="text-muted small"><?= __('No new notifications') ?></div>
 				</a>
 			<?php endif; ?>
 		</div>
 		<?php if($notifications_count > 5): ?>
 			<div class="dropdown-menu-footer">
-				<a href="/admin/profile" class="text-muted"><?= __('Show all') ?></a>
+				<a href="<?= site('url_language') ?>/admin/profile" class="text-muted"><?= __('Show all') ?></a>
 			</div>
 		<?php endif; ?>
 	</div>

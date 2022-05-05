@@ -70,10 +70,9 @@ function placeholder_avatar($path) {
 
 ############################# FORMAT #############################
 function format_date($date = null, $format = null) {
-	$fmt = $format ?? 'd.m.Y H:i';
 	$timestamp = $date ?? time();
 	$timestamp = is_numeric($timestamp) ? $timestamp : strtotime($timestamp);
-	return date($fmt, $timestamp);
+	return isset($format) ? date($format, $timestamp) : date('d.m.Y', $timestamp) . ' ' . __('at') . ' ' . date('H:i', $timestamp);
 }
 
 function format_date_input($date = null) {
@@ -220,7 +219,7 @@ function __($key) {
 	return Language::translate($key) ?? $key;
 }
 
-function lang($lang, $key) {
+function lang($lang, $key, $mixed = null) {
 	$value = null;
 
 	switch(strval($key)) {
@@ -230,6 +229,10 @@ function lang($lang, $key) {
 		}
 		case 'name': {
 			$value = Module::get('languages')[$lang]['name'] ?? null;
+			break;
+		}
+		case 'icon': {
+			$value = Path::url('asset') . '/img/flags/' . $lang . '.' . ($mixed ?? 'png');
 			break;
 		}
 	}
@@ -283,6 +286,23 @@ function site($key) {
 				$value .= '/' . site('language_current');
 			}
 
+			break;
+		}
+		case 'uri_cut_language': {
+			$uri = trim(Request::$uri, '/');
+			$uri_parts = explode('/', $uri);
+
+			if(array_key_exists($uri_parts[0], Module::get('languages'))) {
+				array_shift($uri_parts);
+				$uri = implode('/', $uri_parts);
+			}
+			
+			$value = '/' . $uri;
+
+			break;
+		}
+		case 'permalink': {
+			$value = trim(Request::$url, '/');
 			break;
 		}
 	}

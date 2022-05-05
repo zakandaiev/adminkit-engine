@@ -5,6 +5,17 @@ namespace Module\Admin\Model;
 use Engine\Database\Statement;
 
 class Page {
+	public function createPage($data) {
+		$columns = implode(', ', array_keys($data));
+		$bindings = ':' . implode(', :', array_keys($data));
+		$sql = 'INSERT INTO {page} (' . $columns . ') VALUES (' . $bindings . ')';
+
+		$statement = new Statement($sql);
+		$statement->prepare()->bind($data)->execute();
+
+		return $statement->insertId();
+	}
+
 	public function countPages() {
 		$sql = '
 			SELECT
@@ -13,11 +24,12 @@ class Page {
 				{page} t_page
 			WHERE
 				(SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
+				AND language=:language
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->prepare()->execute()->fetchColumn();
+		return $statement->prepare()->bind(['language' => site('language')])->execute()->fetchColumn();
 	}
 
 	public function getPages($pagination) {
@@ -25,18 +37,31 @@ class Page {
 			SELECT
 				t_page.*,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_page.author) as author_name,
-				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending
+				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending,
+				(SELECT JSON_ARRAYAGG(JSON_OBJECT(language, id)) FROM {page} WHERE url=t_page.url AND language<>t_page.language) as translations
 			FROM
 				{page} t_page
 			WHERE
 				(SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
+				AND t_page.language=:language
 			ORDER BY
 				t_page.is_category=false, t_page.date_publish DESC
 		';
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->paginate($pagination)->execute()->fetchAll();
+		$pages = $pages->paginate($pagination)->bind(['language' => site('language')])->execute()->fetchAll();
+
+		foreach($pages as $key => $page) {
+			$page->translations = json_decode($page->translations, true) ?? [];
+			
+			foreach($page->translations as $language => $page_id) {
+				$page->translations[key($page_id)] = $page_id[key($page_id)];
+				unset($page->translations[$language]);
+			}
+
+			$pages[$key] = $page;
+		}
 
 		return $pages;
 	}
@@ -52,11 +77,12 @@ class Page {
 				t_page.id = t_page_category.page_id
 			WHERE
 				t_page_category.category_id=:category_id
+				AND t_page.language=:language
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->prepare()->bind(['category_id' => $id])->execute()->fetchColumn();
+		return $statement->prepare()->bind(['category_id' => $id, 'language' => site('language')])->execute()->fetchColumn();
 	}
 
 	public function getPagesByCategory($id, $pagination) {
@@ -64,7 +90,8 @@ class Page {
 			SELECT
 				t_page.*,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_page.author) as author_name,
-				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending
+				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending,
+				(SELECT JSON_ARRAYAGG(JSON_OBJECT(language, id)) FROM {page} WHERE url=t_page.url AND language<>t_page.language) as translations
 			FROM
 				{page} t_page
 			INNER JOIN
@@ -73,13 +100,25 @@ class Page {
 				t_page.id = t_page_category.page_id
 			WHERE
 				t_page_category.category_id=:category_id
+				AND t_page.language=:language
 			ORDER BY
 				t_page.is_category=false, t_page.date_publish DESC
 		';
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->paginate($pagination)->bind(['category_id' => $id])->execute()->fetchAll();
+		$pages = $pages->paginate($pagination)->bind(['category_id' => $id, 'language' => site('language')])->execute()->fetchAll();
+
+		foreach($pages as $key => $page) {
+			$page->translations = json_decode($page->translations, true) ?? [];
+			
+			foreach($page->translations as $language => $page_id) {
+				$page->translations[key($page_id)] = $page_id[key($page_id)];
+				unset($page->translations[$language]);
+			}
+
+			$pages[$key] = $page;
+		}
 
 		return $pages;
 	}
@@ -101,11 +140,21 @@ class Page {
 	}
 
 	public function getCategories($current = 0) {
-		$sql = 'SELECT id, title FROM {page} WHERE is_category IS true AND id<>:id ORDER BY title ASC';
+		$sql = '
+			SELECT
+				id, title
+			FROM
+				{page}
+			WHERE
+				is_category IS true AND id<>:id
+				AND language=:language
+			ORDER BY
+				title ASC
+		';
 
 		$categories = new Statement($sql);
 
-		return $categories->prepare()->bind(['id' => $current])->execute()->fetchAll();
+		return $categories->prepare()->bind(['id' => $current, 'language' => site('language')])->execute()->fetchAll();
 	}
 
 	public function getTags() {

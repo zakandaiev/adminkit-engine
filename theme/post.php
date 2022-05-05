@@ -57,24 +57,26 @@
 				<?php
 					$prev_next = $model->getPagePrevNext($page->id);
 				?>
-				<div class="section-row">
-					<div class="post-nav">
-						<?php if(!empty($prev_next->prev->url)): ?>
-							<div class="prev-post">
-								<a class="post-img" href="/<?= $prev_next->prev->url ?>"><img src="/<?= $prev_next->prev->image ?>" alt=""></a>
-								<h3 class="post-title"><a href="/<?= $prev_next->prev->url ?>"><?= $prev_next->prev->title ?></a></h3>
-								<span>Previous post</span>
-							</div>
-						<?php endif; ?>
-						<?php if(!empty($prev_next->next->url)): ?>
-							<div class="next-post">
-								<a class="post-img" href="/<?= $prev_next->next->url ?>"><img src="/<?= $prev_next->next->image ?>" alt=""></a>
-								<h3 class="post-title"><a href="/<?= $prev_next->next->url ?>"><?= $prev_next->next->title ?></a></h3>
-								<span>Next post</span>
-							</div>
-						<?php endif; ?>
+				<?php if(!empty($prev_next->prev) || !empty($prev_next->next)): ?>
+					<div class="section-row">
+						<div class="post-nav">
+							<?php if(!empty($prev_next->prev->url)): ?>
+								<div class="prev-post">
+									<a class="post-img" href="/<?= $prev_next->prev->url ?>"><img src="/<?= $prev_next->prev->image ?>" alt=""></a>
+									<h3 class="post-title"><a href="/<?= $prev_next->prev->url ?>"><?= $prev_next->prev->title ?></a></h3>
+									<span>Previous post</span>
+								</div>
+							<?php endif; ?>
+							<?php if(!empty($prev_next->next->url)): ?>
+								<div class="next-post">
+									<a class="post-img" href="/<?= $prev_next->next->url ?>"><img src="/<?= $prev_next->next->image ?>" alt=""></a>
+									<h3 class="post-title"><a href="/<?= $prev_next->next->url ?>"><?= $prev_next->next->title ?></a></h3>
+									<span>Next post</span>
+								</div>
+							<?php endif; ?>
+						</div>
 					</div>
-				</div>
+				<?php endif; ?>
 
 				<?php
 					$author = $model->getAuthor($page->author);

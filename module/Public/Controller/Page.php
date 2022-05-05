@@ -8,7 +8,7 @@ class Page extends Controller {
 		$page_template = 'home';
 
 		if(isset($this->route['parameters']['url'])) {
-			if( $this->route['parameters']['url'] === 'home') {
+			if($this->route['parameters']['url'] === 'home') {
 				$this->view->error('404');
 				return true;
 			}
@@ -21,9 +21,14 @@ class Page extends Controller {
 		if(!empty($data['page'])) {
 			if(!empty($data['page']->template)) {
 				$page_template = $data['page']->template;
-			} else if($data['page']->is_category) {
+			}
+			else if($data['page']->is_category) {
 				$page_template = 'category';
-			} else if($page_url !== 'home') {
+			}
+			else if(!$data['page']->is_static) {
+				$page_template = 'post';
+			}
+			else if($page_url !== 'home') {
 				$page_template = 'page';
 			}
 
@@ -33,7 +38,7 @@ class Page extends Controller {
 			$data['page']->tags = $this->model->getPageTags($data['page']->id);
 			$data['page']->custom_fields = $this->model->getPageCustomFields($data['page']->id);
 			
-			$this->model->updateViewCounter($data['page']->id);
+			$this->model->updateViewCounter($data['page']->url);
 			
 			$this->view->setData($data);
 			$this->view->render($page_template);

@@ -40,6 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!anchor.hasAttribute('data-bs-toggle')) {
       anchor.addEventListener('click', function (event) {
+        if (!event.currentTarget.hasAttribute('href')) {
+          return;
+        }
+
         var anchor_href = event.currentTarget.getAttribute('href');
 
         if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
@@ -118,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     file_inputs.forEach(function (input) {
       var pond = FilePond.create(input, {
         server: {
-          load: '/upload?load='
+          load: '/'
         },
         storeAsFile: true,
         instantUpload: false,

@@ -32,6 +32,7 @@
 								<thead>
 									<tr>
 										<th>Title</th>
+										<th>Translations</th>
 										<th>Author</th>
 										<th>Publish date</th>
 										<th>Published</th>
@@ -51,11 +52,37 @@
 												<?php if($page->url === 'home') $page->url = ''; ?>
 												<a href="/<?= $page->url ?>" target="_blank"><i class="align-middle feather-sm" data-feather="external-link"></i></a>
 											</td>
+											<td>
+												<?php
+													$count_translations = count(array_intersect(array_keys($page->translations), array_keys(Module::get('languages')))) + 1;
+													$count_aviable_languages = count(Module::get('languages'));
+												?>
+												<?php foreach($page->translations as $language => $translation): ?>
+													<a href="/admin/page/edit/<?= $translation ?>?translation=<?= $page->id ?>&title=<?= $page->title ?>" title="<?= lang($language, 'name') ?>"><img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($language, 'icon') ?>" alt="<?= $language ?>"></a>
+												<?php endforeach; ?>
+												<?php if($count_translations < $count_aviable_languages): ?>
+													<div class="dropdown d-inline-block dropend">
+														<a href="#" role="button" id="translate-dropdown-<?= $page->id ?>" data-bs-toggle="dropdown" aria-expanded="false" title="<?= __('Add translation') ?>">
+															<i class="align-middle" data-feather="plus"></i>
+														</a>
+														<div class="dropdown-menu dropdown-menu-end" aria-labelledby="translate-dropdown-<?= $page->id ?>">
+															<?php foreach(Module::get('languages') as $language): ?>
+																<?php if($language['key'] === $page->language) continue; ?>
+																<?php if(array_key_exists($language['key'], $page->translations)) continue; ?>
+																<a class="dropdown-item" href="<?= site('url_language') ?>/admin/page/add/translation/<?= $page->id ?>?language=<?= $language['key'] ?>">
+																	<img src="<?= lang($language['key'], 'icon') ?>" alt="<?= $language['key'] ?>" width="20" height="14" class="align-middle me-1">
+																	<span class="align-middle"><?= $language['name'] ?></span>
+																</a>
+															<?php endforeach; ?>
+														</div>
+													</div>
+												<?php endif; ?>
+											</td>
 											<td><a href="/admin/profile/<?= $page->author ?>"><?= $page->author_name ?></a></td>
 											<td title="<?= format_date($page->date_publish) ?>"><?= date_when($page->date_publish) ?></td>
 											<td>
 												<?php if($page->is_pending): ?>
-													<span title="Will be published at <?= format_date($page->date_publish) ?>"><i class="align-middle" data-feather="clock"></i></span>
+													<span title="Will be published <?= format_date($page->date_publish) ?>"><i class="align-middle" data-feather="clock"></i></span>
 												<?php elseif($page->enabled): ?>
 													<i class="align-middle" data-feather="check"></i>
 												<?php else: ?>

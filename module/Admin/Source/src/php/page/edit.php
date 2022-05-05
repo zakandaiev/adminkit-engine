@@ -9,7 +9,15 @@
 		<main class="content">
 			<div class="container-fluid p-0">
 
-				<h1 class="h3 mb-3">Edit page</h1>
+				<h1 class="h3 mb-3">
+					<?= __('Pages') ?> <i data-feather="arrow-right"></i> <?= __('Edit') ?>
+					<?php if(Request::has('translation')): ?>
+						<i data-feather="arrow-right"></i>
+						<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($page->language, 'icon') ?>" alt="<?= $page->language ?>">
+						<?= __('translation of') ?>
+						<a href="<?= site('url_language') ?>/admin/page/edit/<?= hc(Request::get('translation')) ?>"><?= hc(Request::get('title')) ?></a>
+					<?php endif; ?>
+				</h1>
 
 				<form action="<?= Form::edit('Page', $page->id); ?>" method="POST" data-redirect="/admin/page">
 					<div class="row">
@@ -35,22 +43,24 @@
 											<label class="form-label">Content</label>
 											<textarea name="content" class="form-control wysiwyg" placeholder="Compose an epic..."><?= $page->content ?></textarea>
 										</div>
-										<div class="form-group mb-3">
-											<label class="form-label">Tags</label>
-											<select name="tags[]" multiple data-placeholder="Tags" data-addable="tag">
-												<option data-placeholder="true"></option>
-												<?php foreach($tags as $tag): ?>
-													<?php
-														$selected_tag = '';
+										<?php if(!Request::has('translation')): ?>
+											<div class="form-group mb-3">
+												<label class="form-label">Tags</label>
+												<select name="tags[]" multiple data-placeholder="Tags" data-addable="tag">
+													<option data-placeholder="true"></option>
+													<?php foreach($tags as $tag): ?>
+														<?php
+															$selected_tag = '';
 
-														if(in_array($tag->id, $page->tags)) {
-															$selected_tag = 'selected';
-														}
-													?>
-													<option value="<?= $tag->id ?>" <?= $selected_tag ?>><?= $tag->name ?></option>
-												<?php endforeach; ?>
-											</select>
-										</div>
+															if(in_array($tag->id, $page->tags)) {
+																$selected_tag = 'selected';
+															}
+														?>
+														<option value="<?= $tag->id ?>" <?= $selected_tag ?>><?= $tag->name ?></option>
+													<?php endforeach; ?>
+												</select>
+											</div>
+										<?php endif; ?>
 									</div>
 									<div id="page-gallery" class="tab-pane" role="tabpanel">
 										<div class="form-group">
@@ -59,10 +69,12 @@
 										</div>
 									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">
-										<div class="form-check form-switch mb-3">
-											<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($page->no_index_no_follow): ?>checked<?php endif; ?>>
-											<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow</label>
-										</div>
+										<?php if(!Request::has('translation')): ?>
+											<div class="form-check form-switch mb-3">
+												<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($page->no_index_no_follow): ?>checked<?php endif; ?>>
+												<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow</label>
+											</div>
+										<?php endif; ?>
 										<div class="form-group mb-3">
 											<label class="form-label">SEO Description</label>
 											<textarea name="seo_description" rows="1" class="form-control"><?= $page->seo_description ?></textarea>
@@ -117,90 +129,91 @@
 									<input type="file" accept="image/*" name="image" data-value='<?= Form::populateFiles($page->image) ?>'>
 								</div>
 							</div>
-							<div class="card">
-								<div class="card-header">
-									<h5 class="card-title mb-0">Settings</h5>
-								</div>
-								<div class="card-body">
-									<div class="form-group mb-3">
-										<label class="form-label">Author</label>
-										<select name="author">
-											<?php foreach($authors as $author): ?>
-												<?php
-													$selected_author = '';
+							<?php if(!Request::has('translation')): ?>
+								<div class="card">
+									<div class="card-header">
+										<h5 class="card-title mb-0">Settings</h5>
+									</div>
+									<div class="card-body">
+										<div class="form-group mb-3">
+											<label class="form-label">Author</label>
+											<select name="author">
+												<?php foreach($authors as $author): ?>
+													<?php
+														$selected_author = '';
 
-													if($author->id === $page->author) {
-														$selected_author = 'selected';
-													}
-												?>
-												<option value="<?= $author->id ?>" <?= $selected_author ?>><?= $author->name ?> (@<?= $author->login ?>)</option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="form-group mb-3">
-										<label class="form-label">Category</label>
-										<select name="category[]" multiple data-placeholder="Category">
-											<option data-placeholder="true"></option>
-											<?php foreach($categories as $category): ?>
-												<?php
-													$selected_category = '';
+														if($author->id === $page->author) {
+															$selected_author = 'selected';
+														}
+													?>
+													<option value="<?= $author->id ?>" <?= $selected_author ?>><?= $author->name ?> (@<?= $author->login ?>)</option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="form-group mb-3">
+											<label class="form-label">Category</label>
+											<select name="category[]" multiple data-placeholder="Category">
+												<option data-placeholder="true"></option>
+												<?php foreach($categories as $category): ?>
+													<?php
+														$selected_category = '';
 
-													if(in_array($category->id, $page->categories)) {
-														$selected_category = 'selected';
-													}
-												?>
-												<option value="<?= $category->id ?>" <?= $selected_category ?>><?= $category->title ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="form-group mb-3">
-										<label class="form-label">URL Slug</label>
-										<input type="text" name="url" value="<?= $page->url ?>" placeholder="sample-page" class="form-control" required minlength="1" maxlength="200" data-behavior="slug">
-									</div>
-									<div class="form-group mb-3">
-										<label class="form-label">Template</label>
-										<select name="template" data-placeholder="Template">
-											<option data-placeholder="true"></option>
-											<?php foreach(Theme::pageTemplates() as $template): ?>
-												<?php
-													$selected_template = '';
+														if(in_array($category->id, $page->categories)) {
+															$selected_category = 'selected';
+														}
+													?>
+													<option value="<?= $category->id ?>" <?= $selected_category ?>><?= $category->title ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="form-group mb-3">
+											<label class="form-label">URL Slug</label>
+											<input type="text" name="url" value="<?= $page->url ?>" placeholder="sample-page" class="form-control" required minlength="1" maxlength="200" data-behavior="slug">
+										</div>
+										<div class="form-group mb-3">
+											<label class="form-label">Template</label>
+											<select name="template" data-placeholder="Template">
+												<option data-placeholder="true"></option>
+												<?php foreach(Theme::pageTemplates() as $template): ?>
+													<?php
+														$selected_template = '';
 
-													if($template === $page->template) {
-														$selected_template = 'selected';
-													}
-												?>
-												<option value="<?= $template ?>" <?= $selected_template ?>><?= ucfirst($template) ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="form-group mb-3">
-										<label class="form-label">Publish date</label>
-										<input type="datetime-local" name="date_publish" value="<?= format_date_input($page->date_publish) ?>" class="form-control">
-										<small class="form-text text-muted">Schedule publishing by setting future date</small>
-									</div>
-									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if($page->is_category): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="is_category">Is category</label>
-									</div>
-									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="is_static" name="is_static" <?php if($page->is_static): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="is_static">Is static</label>
-									</div>
-									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" <?php if($page->allow_comment): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="allow_comment">Allow comment</label>
-									</div>
-									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="hide_comments" name="hide_comments" <?php if($page->hide_comments): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="hide_comments">Hide comments</label>
-									</div>
-									<div class="form-check form-switch">
-										<input class="form-check-input" type="checkbox" id="enabled" name="enabled" <?php if($page->enabled): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="enabled">Visibility</label>
+														if($template === $page->template) {
+															$selected_template = 'selected';
+														}
+													?>
+													<option value="<?= $template ?>" <?= $selected_template ?>><?= ucfirst($template) ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="form-group mb-3">
+											<label class="form-label">Publish date</label>
+											<input type="datetime-local" name="date_publish" value="<?= format_date_input($page->date_publish) ?>" class="form-control">
+											<small class="form-text text-muted">Schedule publishing by setting future date</small>
+										</div>
+										<div class="form-check form-switch mb-3">
+											<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if($page->is_category): ?>checked<?php endif; ?>>
+											<label class="form-check-label" for="is_category">Is category</label>
+										</div>
+										<div class="form-check form-switch mb-3">
+											<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" <?php if($page->allow_comment): ?>checked<?php endif; ?>>
+											<label class="form-check-label" for="allow_comment">Allow comment</label>
+										</div>
+										<div class="form-check form-switch mb-3">
+											<input class="form-check-input" type="checkbox" id="hide_comments" name="hide_comments" <?php if($page->hide_comments): ?>checked<?php endif; ?>>
+											<label class="form-check-label" for="hide_comments">Hide comments</label>
+										</div>
+										<div class="form-check form-switch">
+											<input class="form-check-input" type="checkbox" id="enabled" name="enabled" <?php if($page->enabled): ?>checked<?php endif; ?>>
+											<label class="form-check-label" for="enabled">Visibility</label>
+										</div>
 									</div>
 								</div>
-							</div>
+							<?php endif; ?>
 							<input type="hidden" name="language" value="<?= $page->language ?>">
+							<?php if(Request::has('translation')): ?>
+								<input type="hidden" name="is_translation" value="true">
+							<?php endif; ?>
 							<button type="submit" class="btn btn-primary w-100 p-3">Edit page</button>
 						</div>
 					</div>

@@ -37,8 +37,9 @@ $all_checks = [
 		exit;
 	},
 
-	'process' => function($pass) {
-		return Hash::password($pass);
+	'modify' => function($field) {
+		// modify $field and return it
+		return $field;
 	},
 ];
 
@@ -51,7 +52,7 @@ $title = [
 return [
 	'submit' => 'Saved',
 	'table' => 'page',
-	'field' => [
+	'fields' => [
 		'title' => $title,
 		'content' => [],
 		'date_created' => [
@@ -61,13 +62,17 @@ return [
 			'boolean' => true
 		]
 	],
-	'execute' => function($fields) {
-		debug($fields);
-		exit;
+	'fields_modify' => function($fields, $form_data) {
+		// modify $fields and return it
+		return $fields;
 	},
 	'execute_pre' => function($fields, $form_data) {
 		debug($fields);
 		debug($form_data);
+		exit;
+	},
+	'execute' => function($fields) {
+		debug($fields);
 		exit;
 	},
 	'execute_post' => function($fields, $form_data) {

@@ -14,7 +14,7 @@ $password = [
 
 return [
 	'table' => 'user',
-	'field' => [
+	'fields' => [
 		'login' => $login,
 		'password' => $password
 	]

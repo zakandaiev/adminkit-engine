@@ -15,7 +15,7 @@ $password = [
 	'required' => false,
 	'minlength' => 8,
 	'maxlength' => 200,
-	'process' => function($pass) {
+	'modify' => function($pass) {
 		return Hash::password($pass);
 	}
 ];
@@ -52,7 +52,7 @@ $socials = [
 
 return [
 	'table' => 'user',
-	'field' => [
+	'fields' => [
 		'group' => $group,
 		'login' => $login,
 		'password' => $password,

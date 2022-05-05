@@ -18,7 +18,7 @@ $email = [
 
 return [
 	'table' => 'setting',
-	'field' => [
+	'fields' => [
 		'address' => $address,
 		'coordinate_x' => $coordinates,
 		'coordinate_y' => $coordinates,
