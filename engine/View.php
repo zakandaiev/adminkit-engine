@@ -15,7 +15,13 @@ class View {
 
 	public function error($code) {
 		http_response_code($code);
+
+		$data = $this->getData();
+		$data['page']->title = __('Page not found');
+		$this->setData($data);
+		
 		$this->render('Error/' . $code);
+
 		exit;
 	}
 
@@ -24,6 +30,6 @@ class View {
 	}
 
 	public static function setData($data) {
-		static::$data += $data;
+		static::$data = $data + static::$data;
 	}
 }

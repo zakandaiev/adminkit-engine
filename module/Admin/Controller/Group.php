@@ -12,6 +12,8 @@ class Group extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['groups'] = $groups;
 
+		$this->page->title = __('Groups');
+
 		$this->view->setData($data);
 		$this->view->render('group/all');
 	}
@@ -19,6 +21,8 @@ class Group extends AdminController {
 	public function getAdd() {
 		$data['routes'] = $this->model->getRoutes();
 		$data['users'] = $this->model->getUsers();
+
+		$this->page->title = __('Add group');
 
 		$this->view->setData($data);
 		$this->view->render('group/add');
@@ -29,30 +33,19 @@ class Group extends AdminController {
 
 		$data['group'] = $this->model->getGroupById($group_id);
 
-		if(!empty($data['group'])) {
-			$data['routes'] = $this->model->getRoutes();
-			$data['users'] = $this->model->getUsers();
-
-			$data['group']->routes = $this->model->getGroupRoutesById($group_id);
-			$data['group']->users = $this->model->getGroupUsersById($group_id);
-
-			$this->view->setData($data);
-			$this->view->render('group/edit');
-		} else {
+		if(empty($data['group'])) {
 			$this->view->error('404');
 		}
-	}
 
-	public function getCategory() {
-		$category_id = $this->route['parameters']['id'];
+		$data['routes'] = $this->model->getRoutes();
+		$data['users'] = $this->model->getUsers();
 
-		$pagination = new Pagination($this->model->countgroupsInCategory($category_id));
-		$groups = $this->model->getgroupsByCategory($category_id, $pagination);
+		$data['group']->routes = $this->model->getGroupRoutesById($group_id);
+		$data['group']->users = $this->model->getGroupUsersById($group_id);
 
-		$data['pagination'] = $pagination;
-		$data['groups'] = $groups;
+		$this->page->title = __('Edit group');
 
 		$this->view->setData($data);
-		$this->view->render('group/all');
+		$this->view->render('group/edit');
 	}
 }

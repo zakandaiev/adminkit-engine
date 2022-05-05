@@ -12,12 +12,16 @@ class User extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['users'] = $users;
 
+		$this->page->title = __('Users');
+
 		$this->view->setData($data);
 		$this->view->render('user/all');
 	}
 
 	public function getAdd() {
 		$data['groups'] = $this->model->getGroups();
+
+		$this->page->title = __('Add user');
 
 		$this->view->setData($data);
 		$this->view->render('user/add');
@@ -28,27 +32,16 @@ class User extends AdminController {
 
 		$data['user'] = $this->model->getUserById($user_id);
 
-		if(!empty($data['user'])) {
-			$data['groups'] = $this->model->getGroups();
-			$data['user']->groups = $this->model->getUserGroupsById($user_id);
-
-			$this->view->setData($data);
-			$this->view->render('user/edit');
-		} else {
+		if(empty($data['user'])) {
 			$this->view->error('404');
 		}
-	}
 
-	public function getCategory() {
-		$category_id = $this->route['parameters']['id'];
+		$data['groups'] = $this->model->getGroups();
+		$data['user']->groups = $this->model->getUserGroupsById($user_id);
 
-		$pagination = new Pagination($this->model->countusersInCategory($category_id));
-		$users = $this->model->getusersByCategory($category_id, $pagination);
-
-		$data['pagination'] = $pagination;
-		$data['users'] = $users;
+		$this->page->title = __('Edit user');
 
 		$this->view->setData($data);
-		$this->view->render('user/all');
+		$this->view->render('user/edit');
 	}
 }

@@ -10,21 +10,25 @@ class Profile extends AdminController {
 			$data['user'] = $this->model->getUserById($this->route['parameters']['id']);
 		}
 
-		if(!empty($data['user'])) {
-			$data['user']->notifications_count = $this->model->getUserNotificationsCount($data['user']->id);
-			$data['user']->notifications = $this->model->getUserNotifications($data['user']->id);
-
-			$this->model->readNotifications($data['user']->id);
-			
-			$this->view->setData($data);
-			$this->view->render('profile/profile');
-		} else {
+		if(empty($data['user'])) {
 			$this->view->error('404');
 		}
+
+		$data['user']->notifications_count = $this->model->getUserNotificationsCount($data['user']->id);
+		$data['user']->notifications = $this->model->getUserNotifications($data['user']->id);
+
+		$this->model->readNotifications($data['user']->id);
+
+		$this->page->title = __('Profile');
+		
+		$this->view->setData($data);
+		$this->view->render('profile/profile');
 	}
 
 	public function getEdit() {
 		$data['user'] = $this->user;
+
+		$this->page->title = __('Edit profile');
 
 		$this->view->setData($data);
 		$this->view->render('profile/edit');

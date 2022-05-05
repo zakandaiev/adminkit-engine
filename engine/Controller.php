@@ -13,6 +13,8 @@ abstract class Controller {
 
 	protected $user;
 
+	protected $page;
+
 	public function __construct() {
 		$this->module = Module::getAll()[Module::$name];
 		$this->route = Router::$route;
@@ -26,6 +28,15 @@ abstract class Controller {
 		if(isset($this->user->socials)) {
 			$this->user->socials = json_decode($this->user->socials) ?? [];
 		}
+
+		$this->page = new \stdClass();
+		$this->page->no_index_no_follow = true;
+		$this->page->title = __('Admin');
+		$this->page->seo_description = '';
+		$this->page->seo_keywords = '';
+		$this->page->seo_image = $this->setting->site->logo_public;
+
+		$this->view->setData(['page' => $this->page]);
 	}
 
 	protected function loadModel($model_name) {

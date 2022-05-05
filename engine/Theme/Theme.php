@@ -81,12 +81,48 @@ class Theme {
 		return $title . ' | ' . site('name');
 	}
 
-	public static function meta() {
-		$meta = [];
+	public static function header_meta($page) {
+		$meta = '';
 
-		$meta_noindex = '<meta name="robots" content="noindex, nofollow">';
+		if(site('no_index_no_follow') || $page->no_index_no_follow) {
+			$meta = '<meta name="robots" content="noindex, nofollow">' . PHP_EOL;
+		}
 
-		$js_setting = '
+		$page->title = $page->title . ' | ' . site('name');
+
+		$meta .= '
+			<title>' . $page->title . '</title>
+
+			<meta charset="' . site('charset') . '">
+			<meta name="author" content="' . Define::AUTHOR . '">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+
+			<link rel="canonical" href="' . site('permalink') . '">
+
+			<link rel="image_src" href="' . site('url') . '/' . $page->seo_image . '">
+
+			<meta name="description" content="' . $page->seo_description . '">
+			<meta name="keywords" content="' . $page->seo_keywords . '">
+
+			<meta property="og:type" content="website">
+			<meta property="og:locale" content="' . lang(site('language_current'), 'region') . '">
+			<meta property="og:url" content="' . site('permalink') . '">
+			<meta property="og:title" content="' . $page->title . '">
+			<meta property="og:description" content="' . $page->seo_description . '">
+			<meta property="og:keywords" content="' . $page->seo_keywords . '">
+			<meta property="og:image" content="' . site('url') . '/' . $page->seo_image . '">
+
+			<meta property="twitter:card" content="summary">
+			<meta property="twitter:url" content="' . site('permalink') . '">
+			<meta property="twitter:title" content="' . $page->title . '">
+			<meta property="twitter:description" content="' . $page->seo_description . '">
+			<meta property="twitter:image" content="' . site('url') . '/' . $page->seo_image . '">
+
+			<link rel="icon" href="' . Asset::url() . '/favicon.ico" sizes="any">
+			<link rel="icon" href="' . Asset::url() . '/favicon.svg" type="image/svg+xml">
+			<link rel="apple-touch-icon" href="' . Asset::url() . '/apple-touch-icon.png">
+
 			<script>
 				let SETTING = {
 					language: "' . site('language') . '",
@@ -97,17 +133,8 @@ class Theme {
 				};
 			</script>
 		';
-
-		$meta[] = $meta_noindex;
-		$meta[] = $js_setting;
 		
-		$output = '';
-
-		foreach($meta as $item) {
-			$output .= $item;
-		}
-
-		return $output;
+		return $meta;
 	}
 
 	public static function path() {
@@ -119,7 +146,7 @@ class Theme {
 			return self::$theme_page_templates;
 		}
 
-		$path = Path::file('view_public');
+		$path = Path::file('theme');
 		
 		foreach(glob($path . '/*.php') as $template) {
 			$template_name = file_name($template);

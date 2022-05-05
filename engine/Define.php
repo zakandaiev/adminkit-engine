@@ -9,6 +9,7 @@ class Define {
 
 	const NAME = 'CMS';
 	const VERSION = '1.0.0';
+	const AUTHOR = 'github.com/zakandaiev';
 
 	const COOKIE_KEY = [
 		'auth' => 'auth_token',
@@ -16,10 +17,9 @@ class Define {
 		'language' => 'language'
 	];
 
-	// move to DB setting
 	const AUTH_DAYS = 7;
 	const UPLOAD_FOLDER = 'upload';
-	const UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'];
+	const UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf', 'txt', 'zip', 'rar'];
 
 	const VIEW_PATH_MASK = [ // TODO
 		'module' => '%s/View/%s',

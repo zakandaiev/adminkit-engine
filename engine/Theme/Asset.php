@@ -12,13 +12,13 @@ class Asset {
 	private static $asset_path;
 	private static $asset_url;
 
-	private static function add($extension, $filename, $async = '') {
+	private static function add($extension, $filename, $attributes = '') {
 		$file_path = self::path() . '/' . $filename . '.' . $extension;
 
 		if(is_file($file_path)) {
 			self::$container[$extension][] = [
 				'file' => self::url() . '/' . $filename . '.' . $extension,
-				'async' => $async
+				'attributes' => $attributes
 			];
 
 			return true;
@@ -27,12 +27,12 @@ class Asset {
 		return false;
 	}
 
-	public static function css($asset, $async = '') {
-		return self::add(__FUNCTION__, $asset, $async);
+	public static function css($asset, $attributes = '') {
+		return self::add(__FUNCTION__, $asset, $attributes);
 	}
 
-	public static function js($asset, $async = '') {
-		return self::add(__FUNCTION__, $asset, $async);
+	public static function js($asset, $attributes = '') {
+		return self::add(__FUNCTION__, $asset, $attributes);
 	}
 
 	public static function render($extension) {
@@ -51,9 +51,9 @@ class Asset {
 		foreach($list as $item) {
 			$output .= sprintf(
 				self::JS_SCRIPT_MASK,
-				$item['async'],
+				$item['attributes'],
 				$item['file']
-			);
+			) . PHP_EOL;
 		}
 
 		return $output;
@@ -65,9 +65,9 @@ class Asset {
 		foreach($list as $item) {
 			$output .= sprintf(
 				self::CSS_LINK_MASK,
-				$item['async'],
+				$item['attributes'],
 				$item['file']
-			);
+			) . PHP_EOL;
 		}
 
 		return $output;

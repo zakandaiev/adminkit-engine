@@ -11,7 +11,7 @@
 
 				<div class="row mb-3">
 					<div class="col-auto">
-						<h1 class="h3 d-inline align-middle">Groups</h1>
+						<h1 class="h3 d-inline align-middle"><?= __('Groups') ?></h1>
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">

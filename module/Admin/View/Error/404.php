@@ -8,9 +8,9 @@
 
 					<div class="text-center">
 						<h1 class="display-1 font-weight-bold">404</h1>
-						<p class="h1">Page not found.</p>
-						<p class="h2 font-weight-normal mt-3 mb-4">The page you are looking for might have been removed.</p>
-						<a href="/admin" class="btn btn-primary btn-lg">Return to dashboard</a>
+						<p class="h1"><?= __('Page not found') ?></p>
+						<p class="h2 font-weight-normal mt-3 mb-4"><?= __('The page you are looking for might have been removed') ?></p>
+						<a href="/admin" class="btn btn-primary btn-lg"><?= __('Return to dashboard') ?></a>
 					</div>
 
 				</div>

@@ -16,6 +16,8 @@ class Setting extends AdminController {
 			$this->view->error('404');
 		}
 
+		$this->page->title = __(ucfirst($section) . ' settings');
+
 		$this->view->setData($data);
 		$this->view->render('setting/' . $section);
 	}

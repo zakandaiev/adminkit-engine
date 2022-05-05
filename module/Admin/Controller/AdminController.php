@@ -37,7 +37,6 @@ class AdminController extends \Engine\Controller {
 
 		if(!$is_user_enabled) {
 			$this->view->error('404');
-			exit;
 		}
 
 		// GET USER NOTIFICATIONS

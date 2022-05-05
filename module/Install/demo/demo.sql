@@ -25,6 +25,26 @@ UPDATE `%prefix%_user` SET
 `socials`='[{"type":"telegram","link":"#"},{"type":"facebook","link":"#"},{"type":"instagram","link":"#"}]'
 WHERE `id`=1;
 
+INSERT INTO `%prefix%_page_category` (`category_id`, `page_id`) VALUES
+(4, 9),
+(4, 10),
+(4, 11),
+(4, 12),
+(4, 13),
+(4, 14),
+(4, 15),
+(4, 16),
+(5, 17),
+(5, 18),
+(6, 19),
+(6, 20),
+(7, 21),
+(7, 9),
+(7, 10),
+(8, 11),
+(8, 12),
+(8, 13);
+
 INSERT INTO `%prefix%_page` (`language`, `is_category`, `author`, `title`, `url`, `image`, `template`) VALUES
 ('en', 0, 1, 'About', 'about', NULL, 'about'),
 ('en', 0, 1, 'Contact', 'contact', NULL, 'contact'),
@@ -48,26 +68,6 @@ INSERT INTO `%prefix%_page` (`language`, `is_category`, `author`, `title`, `url`
 ('en', 0, 1, 'Lorem post #13', 'lorem-post-13', 'upload/demo/post-13.jpg', NULL);
 
 UPDATE `%prefix%_page` SET `views`=(SELECT FLOOR(RAND() * (1000-10) + 10));
-
-INSERT INTO `%prefix%_page_category` (`category_id`, `page_id`) VALUES
-(4, 9),
-(4, 10),
-(4, 11),
-(4, 12),
-(4, 13),
-(4, 14),
-(4, 15),
-(4, 16),
-(5, 17),
-(5, 18),
-(6, 19),
-(6, 20),
-(7, 21),
-(7, 9),
-(7, 10),
-(8, 11),
-(8, 12),
-(8, 13);
 
 INSERT INTO `%prefix%_tag` (`name`, `url`) VALUES
 ('Social', 'social'),

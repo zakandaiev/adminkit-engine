@@ -14,6 +14,23 @@ class Page extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['pages'] = $pages;
 
+		$this->page->title = __('Pages');
+
+		$this->view->setData($data);
+		$this->view->render('page/all');
+	}
+
+	public function getCategory() {
+		$category_id = $this->route['parameters']['id'];
+
+		$pagination = new Pagination($this->model->countPagesInCategory($category_id));
+		$pages = $this->model->getPagesByCategory($category_id, $pagination);
+
+		$data['pagination'] = $pagination;
+		$data['pages'] = $pages;
+
+		$this->page->title = __('Pages');
+
 		$this->view->setData($data);
 		$this->view->render('page/all');
 	}
@@ -23,8 +40,33 @@ class Page extends AdminController {
 		$data['categories'] = $this->model->getCategories();
 		$data['tags'] = $this->model->getTags();
 
+		$this->page->title = __('Add page');
+
 		$this->view->setData($data);
 		$this->view->render('page/add');
+	}
+
+	public function getEdit() {
+		$page_id = $this->route['parameters']['id'];
+
+		$data['page_edit'] = $this->model->getPageById($page_id);
+
+		if(empty($data['page_edit'])) {
+			$this->view->error('404');
+		}
+
+		$data['page_edit']->categories = $this->model->getPageCategories($page_id);
+		$data['page_edit']->tags = $this->model->getPageTags($page_id);
+		$data['page_edit']->custom_fields = $this->model->getPageCustomFields($page_id);
+
+		$data['authors'] = $this->model->getAuthors();
+		$data['categories'] = $this->model->getCategories($page_id);
+		$data['tags'] = $this->model->getTags();
+
+		$this->page->title = __('Edit page');
+		
+		$this->view->setData($data);
+		$this->view->render('page/edit');
 	}
 
 	public function getAddTranslation() {
@@ -49,39 +91,5 @@ class Page extends AdminController {
 		$translation_id = $this->model->createPage($page);
 
 		Server::redirect(Request::$base . '/admin/page/edit/' . $translation_id . '?translation=' . $page_id . '&title=' . $page['title']);
-	}
-
-	public function getEdit() {
-		$page_id = $this->route['parameters']['id'];
-
-		$data['page'] = $this->model->getPageById($page_id);
-
-		if(!empty($data['page'])) {
-			$data['page']->categories = $this->model->getPageCategories($page_id);
-			$data['page']->tags = $this->model->getPageTags($page_id);
-			$data['page']->custom_fields = $this->model->getPageCustomFields($page_id);
-
-			$data['authors'] = $this->model->getAuthors();
-			$data['categories'] = $this->model->getCategories($page_id);
-			$data['tags'] = $this->model->getTags();
-			
-			$this->view->setData($data);
-			$this->view->render('page/edit');
-		} else {
-			$this->view->error('404');
-		}
-	}
-
-	public function getCategory() {
-		$category_id = $this->route['parameters']['id'];
-
-		$pagination = new Pagination($this->model->countPagesInCategory($category_id));
-		$pages = $this->model->getPagesByCategory($category_id, $pagination);
-
-		$data['pagination'] = $pagination;
-		$data['pages'] = $pages;
-
-		$this->view->setData($data);
-		$this->view->render('page/all');
 	}
 }

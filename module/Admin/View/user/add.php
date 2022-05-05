@@ -9,7 +9,11 @@
 		<main class="content">
 			<div class="container-fluid p-0">
 
-				<h1 class="h3 mb-3">Add user</h1>
+			<h1 class="h3 mb-3">
+					<?= __('Users') ?>
+					<i data-feather="arrow-right"></i>
+					<?= __('Add') ?>
+				</h1>
 
 				<div class="card">
 					<div class="card-body">

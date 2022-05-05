@@ -65,6 +65,7 @@ function install() {
 	// ROBOTS
 	$robots_txt = 'User-agent: *' . PHP_EOL;
 	$robots_txt .= 'Disallow: /404' . PHP_EOL;
+	$robots_txt .= 'Disallow: /admin' . PHP_EOL;
 	$robots_txt .= 'Disallow: /admin/' . PHP_EOL . PHP_EOL;
 	$robots_txt .= 'Sitemap: ' . $site_url . '/sitemap.xml';
 	file_put_contents(ROOT_DIR . '/robots.txt', $robots_txt, LOCK_EX);
@@ -158,8 +159,12 @@ function generateAuthToken($data) {
 	<title>Install</title>
 
 	<link rel="stylesheet" href="/module/Admin/View/Asset/css/adminkit.css">
-	<link rel="stylesheet" href="/module/Admin/View/Asset/css/main.css">	
-	
+	<link rel="stylesheet" href="/module/Admin/View/Asset/css/main.css">
+
+	<link rel="icon" href="/module/Admin/View/Asset/favicon.ico" sizes="any">
+	<link rel="icon" href="/module/Admin/View/Asset/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/module/Admin/View/Asset/apple-touch-icon.png">
+
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 

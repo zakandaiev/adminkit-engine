@@ -170,26 +170,26 @@ INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('main', 'enable_registration', 'true'),
 ('main', 'moderate_comments', 'true'),
 ('site', 'name', '%site_name%'),
-('site', 'description', null),
-('site', 'logo_admin', null),
-('site', 'logo_public', null),
-('site', 'logo_alt', null),
-('site', 'analytics_gtag', null),
+('site', 'description', NULL),
+('site', 'logo_admin', NULL),
+('site', 'logo_public', NULL),
+('site', 'logo_alt', NULL),
+('site', 'analytics_gtag', NULL),
 ('site', 'pagination_limit', '10'),
-('site', 'placeholder_avatar', null),
-('site', 'placeholder_image', null),
-('site', 'no_index_no_follow', null),
-('contact', 'address', null),
-('contact', 'coordinate_x', null),
-('contact', 'coordinate_y', null),
-('contact', 'hours', null),
+('site', 'placeholder_avatar', NULL),
+('site', 'placeholder_image', NULL),
+('site', 'no_index_no_follow', NULL),
+('contact', 'address', NULL),
+('contact', 'coordinate_x', NULL),
+('contact', 'coordinate_y', NULL),
+('contact', 'hours', NULL),
 ('contact', 'email', '%contact_email%'),
-('optimization', 'group_css', null),
-('optimization', 'group_js', null),
-('optimization', 'cache_db', null);
+('optimization', 'group_css', NULL),
+('optimization', 'group_js', NULL),
+('optimization', 'cache_db', NULL);
 
-INSERT INTO `%prefix%_user` (`login`, `password`, `email`, `auth_token`) VALUES
-('%admin_login%', '%admin_password%', '%admin_email%', '%auth_token%');
+INSERT INTO `%prefix%_user` (`name`, `login`, `password`, `email`, `auth_token`) VALUES
+('Admin', '%admin_login%', '%admin_password%', '%admin_email%', '%auth_token%');
 
 INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 ('Developer', true),

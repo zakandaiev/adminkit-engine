@@ -10,7 +10,11 @@
 			<div class="container-fluid p-0">
 				<div class="row mb-3">
 					<div class="col-auto">
-						<h1 class="h3 d-inline align-middle">Profile <i data-feather="arrow-right"></i> Edit</h1>
+						<h1 class="h3 d-inline align-middle">
+							<?= __('Profile') ?>
+							<i data-feather="arrow-right"></i>
+							<?= __('Edit') ?>
+						</h1>
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">

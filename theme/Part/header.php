@@ -2,17 +2,8 @@
 <html lang="<?= site('language_current') ?>">
 
 <head>
-	<meta charset="<?= site('charset') ?>">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<title><?= Theme::title($page->title); ?></title>
-
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CMuli:400,700" rel="stylesheet">
-
-	<?= Theme::meta() ?>
+	<?= Theme::header_meta($page) ?>
 	<?= Asset::render('css') ?>
-
 </head>
 
 <body>

@@ -13,13 +13,13 @@
 					<?= __('Pages') ?> <i data-feather="arrow-right"></i> <?= __('Edit') ?>
 					<?php if(Request::has('translation')): ?>
 						<i data-feather="arrow-right"></i>
-						<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($page->language, 'icon') ?>" alt="<?= $page->language ?>">
+						<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($page_edit->language, 'icon') ?>" alt="<?= $page_edit->language ?>">
 						<?= __('translation of') ?>
 						<a href="<?= site('url_language') ?>/admin/page/edit/<?= hc(Request::get('translation')) ?>"><?= hc(Request::get('title')) ?></a>
 					<?php endif; ?>
 				</h1>
 
-				<form action="<?= Form::edit('Page', $page->id); ?>" method="POST" data-redirect="/admin/page">
+				<form action="<?= Form::edit('Page', $page_edit->id); ?>" method="POST" data-redirect="/admin/page">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="tab">
@@ -33,15 +33,15 @@
 									<div id="page-content" class="tab-pane active" role="tabpanel">
 										<div class="form-group mb-3">
 											<label class="form-label">Title</label>
-											<input type="text" name="title" placeholder="Title" value="<?= $page->title ?>" class="form-control" required minlength="1" maxlength="300">
+											<input type="text" name="title" placeholder="Title" value="<?= $page_edit->title ?>" class="form-control" required minlength="1" maxlength="300">
 										</div>
 										<div class="form-group mb-3">
 											<label class="form-label">Excerpt</label>
-											<textarea name="excerpt" placeholder="Excerpt" rows="1" class="form-control"><?= $page->excerpt ?></textarea>
+											<textarea name="excerpt" placeholder="Excerpt" rows="1" class="form-control"><?= $page_edit->excerpt ?></textarea>
 										</div>
 										<div class="form-group mb-3">
 											<label class="form-label">Content</label>
-											<textarea name="content" class="form-control wysiwyg" placeholder="Compose an epic..."><?= $page->content ?></textarea>
+											<textarea name="content" class="form-control wysiwyg" placeholder="Compose an epic..."><?= $page_edit->content ?></textarea>
 										</div>
 										<?php if(!Request::has('translation')): ?>
 											<div class="form-group mb-3">
@@ -52,7 +52,7 @@
 														<?php
 															$selected_tag = '';
 
-															if(in_array($tag->id, $page->tags)) {
+															if(in_array($tag->id, $page_edit->tags)) {
 																$selected_tag = 'selected';
 															}
 														?>
@@ -65,33 +65,33 @@
 									<div id="page-gallery" class="tab-pane" role="tabpanel">
 										<div class="form-group">
 											<label class="form-label">Gallery</label>
-											<input type="file" accept="image/*" name="gallery[]" multiple data-value='<?= Form::populateFiles($page->gallery) ?>'>
+											<input type="file" accept="image/*" name="gallery[]" multiple data-value='<?= Form::populateFiles($page_edit->gallery) ?>'>
 										</div>
 									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">
 										<?php if(!Request::has('translation')): ?>
 											<div class="form-check form-switch mb-3">
-												<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($page->no_index_no_follow): ?>checked<?php endif; ?>>
+												<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($page_edit->no_index_no_follow): ?>checked<?php endif; ?>>
 												<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow</label>
 											</div>
 										<?php endif; ?>
 										<div class="form-group mb-3">
 											<label class="form-label">SEO Description</label>
-											<textarea name="seo_description" rows="1" class="form-control"><?= $page->seo_description ?></textarea>
+											<textarea name="seo_description" rows="1" class="form-control"><?= $page_edit->seo_description ?></textarea>
 										</div>
 										<div class="form-group mb-3">
 											<label class="form-label">SEO Keywords</label>
-											<textarea name="seo_keywords" rows="1" class="form-control"><?= $page->seo_keywords ?></textarea>
+											<textarea name="seo_keywords" rows="1" class="form-control"><?= $page_edit->seo_keywords ?></textarea>
 										</div>
 										<div class="form-group">
 											<label class="form-label">SEO Image</label>
-											<input type="file" accept="image/*" name="seo_image" data-value='<?= Form::populateFiles($page->seo_image) ?>'>
+											<input type="file" accept="image/*" name="seo_image" data-value='<?= Form::populateFiles($page_edit->seo_image) ?>'>
 										</div>
 									</div>
 									<div id="page-custom-fields" class="tab-pane" role="tabpanel">
 										<div class="form-group mb-3">
 											<label class="form-label">Field</label>
-											<div class="modal fade foreign-form" data-name="custom_fields" data-value='<?= hc(json_encode($page->custom_fields)) ?>'>
+											<div class="modal fade foreign-form" data-name="custom_fields" data-value='<?= hc(json_encode($page_edit->custom_fields)) ?>'>
 												<div class="modal-dialog modal-dialog-centered">
 													<div class="modal-content">
 														<div class="modal-header">
@@ -126,7 +126,7 @@
 									<h5 class="card-title mb-0">Featured image</h5>
 								</div>
 								<div class="card-body filepond--no-grid">
-									<input type="file" accept="image/*" name="image" data-value='<?= Form::populateFiles($page->image) ?>'>
+									<input type="file" accept="image/*" name="image" data-value='<?= Form::populateFiles($page_edit->image) ?>'>
 								</div>
 							</div>
 							<?php if(!Request::has('translation')): ?>
@@ -142,7 +142,7 @@
 													<?php
 														$selected_author = '';
 
-														if($author->id === $page->author) {
+														if($author->id === $page_edit->author) {
 															$selected_author = 'selected';
 														}
 													?>
@@ -158,7 +158,7 @@
 													<?php
 														$selected_category = '';
 
-														if(in_array($category->id, $page->categories)) {
+														if(in_array($category->id, $page_edit->categories)) {
 															$selected_category = 'selected';
 														}
 													?>
@@ -168,7 +168,7 @@
 										</div>
 										<div class="form-group mb-3">
 											<label class="form-label">URL Slug</label>
-											<input type="text" name="url" value="<?= $page->url ?>" placeholder="sample-page" class="form-control" required minlength="1" maxlength="200" data-behavior="slug">
+											<input type="text" name="url" value="<?= $page_edit->url ?>" placeholder="sample-page" class="form-control" required minlength="1" maxlength="200" data-behavior="slug">
 										</div>
 										<div class="form-group mb-3">
 											<label class="form-label">Template</label>
@@ -178,7 +178,7 @@
 													<?php
 														$selected_template = '';
 
-														if($template === $page->template) {
+														if($template === $page_edit->template) {
 															$selected_template = 'selected';
 														}
 													?>
@@ -188,29 +188,29 @@
 										</div>
 										<div class="form-group mb-3">
 											<label class="form-label">Publish date</label>
-											<input type="datetime-local" name="date_publish" value="<?= format_date_input($page->date_publish) ?>" class="form-control">
+											<input type="datetime-local" name="date_publish" value="<?= format_date_input($page_edit->date_publish) ?>" class="form-control">
 											<small class="form-text text-muted">Schedule publishing by setting future date</small>
 										</div>
 										<div class="form-check form-switch mb-3">
-											<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if($page->is_category): ?>checked<?php endif; ?>>
+											<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if($page_edit->is_category): ?>checked<?php endif; ?>>
 											<label class="form-check-label" for="is_category">Is category</label>
 										</div>
 										<div class="form-check form-switch mb-3">
-											<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" <?php if($page->allow_comment): ?>checked<?php endif; ?>>
+											<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" <?php if($page_edit->allow_comment): ?>checked<?php endif; ?>>
 											<label class="form-check-label" for="allow_comment">Allow comment</label>
 										</div>
 										<div class="form-check form-switch mb-3">
-											<input class="form-check-input" type="checkbox" id="hide_comments" name="hide_comments" <?php if($page->hide_comments): ?>checked<?php endif; ?>>
+											<input class="form-check-input" type="checkbox" id="hide_comments" name="hide_comments" <?php if($page_edit->hide_comments): ?>checked<?php endif; ?>>
 											<label class="form-check-label" for="hide_comments">Hide comments</label>
 										</div>
 										<div class="form-check form-switch">
-											<input class="form-check-input" type="checkbox" id="enabled" name="enabled" <?php if($page->enabled): ?>checked<?php endif; ?>>
+											<input class="form-check-input" type="checkbox" id="enabled" name="enabled" <?php if($page_edit->enabled): ?>checked<?php endif; ?>>
 											<label class="form-check-label" for="enabled">Visibility</label>
 										</div>
 									</div>
 								</div>
 							<?php endif; ?>
-							<input type="hidden" name="language" value="<?= $page->language ?>">
+							<input type="hidden" name="language" value="<?= $page_edit->language ?>">
 							<?php if(Request::has('translation')): ?>
 								<input type="hidden" name="is_translation" value="true">
 							<?php endif; ?>

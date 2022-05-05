@@ -9,7 +9,7 @@ Colors:
 	Dark 		  : #1b1c1e
 	Grey 		  : #e8eaed #97989b #323335
 
-Fonts: Montserrat & Muli
+Fonts: Montserrat & Mulish
 
 Table OF Contents
 ------------------------------------
@@ -31,8 +31,74 @@ RESPONSIVE
 	typography
 \*----------------------------*/
 
+@font-face {
+  font-family: "Mulish";
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Mulish-400.woff2") format("woff2")
+}
+@font-face {
+  font-family: "Mulish";
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Mulish-700.woff2") format("woff2")
+}
+@font-face {
+  font-family: "Mulish";
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Mulish-400-italic.woff2") format("woff2")
+}
+@font-face {
+  font-family: "Mulish";
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Mulish-700-italic.woff2") format("woff2")
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Montserrat-400.woff2") format("woff2")
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Montserrat-700.woff2") format("woff2")
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Montserrat-400-italic.woff2") format("woff2")
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: local(""),url("../fonts/Montserrat-700-italic.woff2") format("woff2")
+}
+
 body {
-  font-family: 'Muli', sans-serif;
+  font-family: 'Mulish', sans-serif;
   font-size: 16px;
   color: #505050;
   font-weight: 400;

@@ -20,6 +20,7 @@ class Authorization extends \Engine\Controller {
 
 	public function getForm() {
 		$this->checkAuth();
+		$this->page->title = __('Login');
 		$this->view->render('login');
 	}
 
@@ -54,6 +55,7 @@ class Authorization extends \Engine\Controller {
 
 	public function getRestore() {
 		$this->checkAuth();
+		$this->page->title = __('Reset password');
 		$this->view->render('reset-password');
 	}
 
@@ -63,6 +65,7 @@ class Authorization extends \Engine\Controller {
 
 	public function getRegister() {
 		$this->checkAuth();
+		$this->page->title = __('Register');
 		$this->view->render('register');
 	}
 
