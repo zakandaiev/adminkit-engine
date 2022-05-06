@@ -251,10 +251,10 @@ function site($key) {
 			if($value == 'true') {
 				$value = true;
 			}
-			if($value == 'false') {
+			else if($value == 'false') {
 				$value = false;
 			}
-			if(is_string($value) && $value[0] === "[") {
+			else if(is_string($value) && $value[0] === "[") {
 				$value = json_decode($value) ?? [];
 			}
 

@@ -1,6 +1,6 @@
 <?php
 
-require 'User.php';
+require __DIR__ . '/../User.php';
 
 $name['required'] = true;
 
@@ -17,5 +17,8 @@ return [
 		'login' => $login,
 		'email' => $email,
 		'password' => $password
-	]
+	],
+	'execute' => function($fields, $form_data) {
+		Auth::register($fields);
+	}
 ];

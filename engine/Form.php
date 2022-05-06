@@ -36,6 +36,8 @@ class Form {
 
 			$query_params = ['module' => Module::get('name'), 'token' => $token, 'action' => $action, 'form_name' => $form_name];
 
+			$query_append_field = '';
+			$query_append_binding = '';
 			if($action !== 'add') {
 				$query_append_field = ', item_id';
 				$query_append_binding = ', :item_id';
@@ -58,7 +60,7 @@ class Form {
 		return null;
 	}
 
-	public static function execute($action, $form_name, $item_id = '') {
+	public static function execute($action, $form_name, $item_id = null) {
 		self::clearExpired();
 
 		self::check($form_name);
@@ -87,7 +89,7 @@ class Form {
 		}
 		
 		if(isset($form['execute']) && is_callable($form['execute'])) {
-			$form['execute']($sql_fields);
+			$form['execute']($sql_fields, $form_data);
 		} else {
 			$sql_fields_foreign = [];
 			$sql_fields_foreign_value = [];
@@ -206,7 +208,6 @@ class Form {
 			WHERE
 				' . $query_defining . '
 				AND date_created > DATE_SUB(NOW(), INTERVAL ' . self::TOKEN_LIFE_TIME . ')
-				ORDER BY date_created DESC LIMIT 1
 		';
 
 		$statement = new Statement($sql);

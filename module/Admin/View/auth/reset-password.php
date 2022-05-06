@@ -17,6 +17,7 @@
 					<div class="card">
 						<div class="card-body">
 							<div class="m-sm-4">
+								<form action="<?= Form::add('Auth/Restore'); ?>" method="POST" data-redirect="<?= site('permalink') ?>?success">
 								<form method="POST">
 									<div class="mb-3">
 										<label class="form-label"><?= __('Email') ?></label>

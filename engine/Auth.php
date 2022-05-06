@@ -55,7 +55,7 @@ class Auth {
 		self::$user = $user;
 		self::$user->authorized = true;
 
-		Notification::create('authorize', $user->id, ['ip' => $user->ip]);
+		Notification::create('login', $user->id, ['ip' => $user->ip]);
 
 		return true;
 	}
@@ -70,6 +70,10 @@ class Auth {
 	}
 
 	public static function register($user) {
+		if(is_array($user)) {
+			$user = json_decode(json_encode($user));
+		}
+		
 		$user_password = $user->password;
 		$user->password = Hash::password($user->password);
 

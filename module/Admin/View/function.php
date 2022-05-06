@@ -25,7 +25,7 @@ function getNotifications() {
 		'icon' => 'user-plus',
 		'color' => 'success'
 	];
-	$notifications['authorize'] = [
+	$notifications['login'] = [
 		'name' => __('Authorization'),
 		'icon' => 'log-in',
 		'color' => 'warning'
@@ -115,7 +115,7 @@ function getNotificationHTML($notification, $user) {
 			$action_name = sprintf(__('created account from %s'), $from);
 			break;
 		}
-		case 'authorize': {
+		case 'login': {
 			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			$action_name = sprintf(__('authorized from %s'), $from);
 			break;

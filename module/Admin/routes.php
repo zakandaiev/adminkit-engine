@@ -6,16 +6,10 @@ Module::route('post', '/upload', 'Upload@post');
 Module::route('delete', '/upload', 'Upload@delete');
 
 ############################# AUTH #############################
-Module::route('get', '/admin/login', 'Authorization@getForm', true);
-Module::route('get', '/admin/logout', 'Authorization@postUnAuth', true);
-Module::route('post', '/admin/login', 'Authorization@postAuth', true);
-Module::route('post', '/admin/logout', 'Authorization@postUnAuth', true);
-
-Module::route('get', '/admin/reset-password', 'Authorization@getRestore', true);
-Module::route('post', '/admin/reset-password', 'Authorization@postRestore', true);
-
-Module::route('get', '/admin/register', 'Authorization@getRegister', true);
-Module::route('post', '/admin/register', 'Authorization@postRegister', true);
+Module::route('get', '/admin/login', 'Auth@getLogin', true);
+Module::route('get', '/admin/logout', 'Auth@getUnAuth', true);
+Module::route('get', '/admin/reset-password', 'Auth@getRestore', true);
+Module::route('get', '/admin/register', 'Auth@getRegister', true);
 
 ############################# DASHBOARD #############################
 Module::route('get', '/admin', 'Dashboard@getDashboard', true);

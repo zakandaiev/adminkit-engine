@@ -17,16 +17,16 @@
 					<div class="card">
 						<div class="card-body">
 							<div class="m-sm-4">
-								<form method="POST" data-redirect="/admin">
+								<form action="<?= Form::add('Auth/Login'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin">
 									<div class="mb-3">
-										<label class="form-label"><?= __('Enter your login or email') ?></label>
+										<label class="form-label"><?= __('Login or email') ?></label>
 										<input class="form-control form-control-lg" type="text" name="login" placeholder="<?= __('Enter your login or email') ?>" required minlength="2" maxlength="100">
 									</div>
 									<div class="mb-3">
-										<label class="form-label"><?= __('Enter your password') ?></label>
+										<label class="form-label"><?= __('Password') ?></label>
 										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('Enter your password') ?>" required minlength="8" maxlength="200">
 										<small>
-											<?php if(site('enable_registration') == 'true'): ?>
+											<?php if(site('enable_registration')): ?>
 												<a href="/admin/register"><?= __('Register') ?></a> •
 											<?php endif; ?>
 											<a href="/admin/reset-password"><?= __('Forgot password') ?></a>

@@ -71,8 +71,9 @@ return [
 		debug($form_data);
 		exit;
 	},
-	'execute' => function($fields) {
+	'execute' => function($fields, $form_data) {
 		debug($fields);
+		debug($form_data);
 		exit;
 	},
 	'execute_post' => function($fields, $form_data) {

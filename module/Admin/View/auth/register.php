@@ -17,7 +17,7 @@
 					<div class="card">
 						<div class="card-body">
 							<div class="m-sm-4">
-								<form method="POST" data-redirect="/admin/profile">
+								<form action="<?= Form::add('Auth/Register'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/profile">
 									<div class="mb-3">
 										<label class="form-label"><?= __('Name') ?></label>
 										<input class="form-control form-control-lg" type="text" name="name" placeholder="<?= __('Enter your name') ?>" required minlength="1" maxlength="200">

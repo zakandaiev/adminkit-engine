@@ -3,6 +3,7 @@
 require __DIR__ . '/../User.php';
 
 return [
+	'submit' => 'Changes saved',
 	'table' => 'user',
 	'fields' => [
 		'login' => $login,

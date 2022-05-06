@@ -187,7 +187,7 @@ function generateAuthToken($data) {
 								<?php if($step == 'site'): ?>
 									Site setting up
 								<?php elseif($step == 'auth'): ?>
-									Administration authorization setting up
+									Administrator authorization setting up
 								<?php elseif($step == 'demo'): ?>
 									Demo data
 								<?php else: ?>

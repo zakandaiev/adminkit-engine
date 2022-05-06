@@ -7,13 +7,14 @@ $password = [
 ];
 
 return [
+	'submit' => 'Password changed',
 	'table' => 'user',
 	'fields' => [
 		'password_current' => $password,
 		'password_new' => $password,
 		'password_confirm' => $password
 	],
-	'execute' => function($fields) {
+	'execute' => function($fields, $form_data) {
 		$user_id = $fields['id'];
 		$password_current = $fields['password_current'];
 		$password_new = $fields['password_new'];

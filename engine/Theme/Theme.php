@@ -73,7 +73,9 @@ class Theme {
 		Template::load($file);
 	}
 
-	public static function header_meta($page) {
+	public static function header_meta($page_obj) {
+		$page = clone $page_obj;
+		
 		$meta = '';
 
 		if(site('no_index_no_follow') || $page->no_index_no_follow) {
@@ -83,7 +85,7 @@ class Theme {
 		$page->title = $page->title . ' | ' . site('name');
 		$page->seo_image = $page->seo_image ?? site('logo_public');
 		$page->seo_description = $page->seo_description ?? site('name') . '. ' . site('description');
-		$page->seo_keywords = $page->seo_keywords ?? preg_replace('/[^\w\d\-]+/', ',', $page->seo_description);
+		$page->seo_keywords = $page->seo_keywords ?? trim(preg_replace('/[\s\.;]+/', ',', $page->seo_description), ',');
 
 		$meta .= '
 			<title>' . $page->title . '</title>

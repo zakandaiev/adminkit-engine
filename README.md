@@ -19,7 +19,7 @@
 * dynamic modals for JS confirmation
 * extend custom fields (image, wysiwyg...)
 * create Filter class in Theme
-* more convenient DB data output, pagination, filtering (maybe move from controller directly to template)
+* more convenient DB data output, pagination, filtering (maybe move from controller directly to template, but ha MVC?)
 * load more by data-attributes
 * cache langs
 * cache queries in Public module
@@ -33,3 +33,4 @@
 * breadcrumbs
 * optimizations functionality in settings
 * htaccess2 -> htaccess
+* create Form models eg. User (name, login, email...)
