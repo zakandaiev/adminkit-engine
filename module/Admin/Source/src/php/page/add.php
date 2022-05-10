@@ -12,7 +12,7 @@
 				<h1 class="h3 mb-3">
 					<?= __('Pages') ?>
 					<i data-feather="arrow-right"></i>
-					<?php if(Request::has('category')): ?>
+					<?php if(Request::has('is_category')): ?>
 						<?= __('Add category') ?>
 					<?php else: ?>
 						<?= __('Add page') ?>
@@ -166,7 +166,7 @@
 										<small class="form-text text-muted">Schedule publishing by setting future date</small>
 									</div>
 									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if(Request::has('category')): ?>checked<?php endif; ?>>
+										<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if(Request::has('is_category')): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="is_category">Is category</label>
 									</div>
 									<div class="form-check form-switch mb-3">

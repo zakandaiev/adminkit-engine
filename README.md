@@ -15,10 +15,12 @@
 5. Enjoy ;)
 
 ## ToDo:
+* create Logger class
+* create Filter class
+* create Sitemap class
 * modal forms compile
 * dynamic modals for JS confirmation
 * extend custom fields (image, wysiwyg...)
-* create Filter class in Theme
 * more convenient DB data output, pagination, filtering (maybe move from controller directly to template, but ha MVC?)
 * load more by data-attributes
 * cache langs
@@ -34,3 +36,5 @@
 * optimizations functionality in settings
 * htaccess2 -> htaccess
 * create Form models eg. User (name, login, email...)
+* getAddTranslation() also copy custom fields, tags
+* check all links for site('url_language')

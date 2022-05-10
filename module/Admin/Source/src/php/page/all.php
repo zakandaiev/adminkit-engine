@@ -15,13 +15,13 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="/admin/page/add?category" class="btn btn-secondary me-2">Add category</a>
+						<a href="/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= hc(Request::$get['back']) ?><?php endif; ?>" class="btn btn-secondary me-2">Add category</a>
 						<a href="/admin/page/add" class="btn btn-primary">Add page</a>
 					</div>
 				</div>
 
 				<div class="card">
-					<?php if(!empty(Request::$get['back'])): ?>
+					<?php if(Request::has('back')): ?>
 						<div class="card-header">
 							<h5 class="card-title mb-0"><a href="<?= hc(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> Back</a></h5>
 						</div>
@@ -45,12 +45,13 @@
 											<td>
 												<?php if($page->is_category): ?>
 													<i class="align-middle" data-feather="folder"></i>
-													<a href="/admin/page/category/<?= $page->id ?>?back=<?= urlencode(Request::$uri) ?>"> <span class="align-middle"><?= $page->title ?></span></a>
+													<a href="<?= site('url_language') ?>/admin/page/category/<?= $page->id ?>?back=<?= urlencode(Request::$uri) ?>"><span class="align-middle"><?= $page->title ?></span></a>
 												<?php else: ?>
-													<i class="align-middle" data-feather="file-text"></i> <span class="align-middle"><?= $page->title ?></span>
+													<i class="align-middle" data-feather="file-text"></i>
+													<span class="align-middle"><?= $page->title ?></span>
 												<?php endif; ?>
 												<?php if($page->url === 'home') $page->url = ''; ?>
-												<a href="/<?= $page->url ?>" target="_blank"><i class="align-middle feather-sm" data-feather="external-link"></i></a>
+												<a href="<?= site('url_language') ?>/<?= $page->url ?>" target="_blank"><i class="align-middle feather-sm" data-feather="external-link"></i></a>
 											</td>
 											<td>
 												<?php
@@ -58,7 +59,7 @@
 													$count_aviable_languages = count(Module::get('languages'));
 												?>
 												<?php foreach($page->translations as $language => $translation): ?>
-													<a href="/admin/page/edit/<?= $translation ?>?translation=<?= $page->id ?>&title=<?= $page->title ?>" title="<?= lang($language, 'name') ?>"><img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($language, 'icon') ?>" alt="<?= $language ?>"></a>
+													<a href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/edit/<?= $translation ?>" title="<?= lang($language, 'name') ?>"><img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($language, 'icon') ?>" alt="<?= $language ?>"></a>
 												<?php endforeach; ?>
 												<?php if($count_translations < $count_aviable_languages): ?>
 													<div class="dropdown d-inline-block dropend">
@@ -69,7 +70,7 @@
 															<?php foreach(Module::get('languages') as $language): ?>
 																<?php if($language['key'] === $page->language) continue; ?>
 																<?php if(array_key_exists($language['key'], $page->translations)) continue; ?>
-																<a class="dropdown-item" href="<?= site('url_language') ?>/admin/page/add/translation/<?= $page->id ?>?language=<?= $language['key'] ?>">
+																<a class="dropdown-item" href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/add/<?= $language['key'] ?>">
 																	<img src="<?= lang($language['key'], 'icon') ?>" alt="<?= $language['key'] ?>" width="20" height="14" class="align-middle me-1">
 																	<span class="align-middle"><?= $language['name'] ?></span>
 																</a>

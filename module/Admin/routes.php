@@ -28,8 +28,9 @@ Module::route('post', '/admin/setting/$section', 'Setting@postSection');
 Module::route('get', '/admin/page', 'Page@getAll');
 Module::route('get', '/admin/page/category/$id', 'Page@getCategory');
 Module::route('get', '/admin/page/add', 'Page@getAdd');
-Module::route('get', '/admin/page/add/translation/$id', 'Page@getAddTranslation');
 Module::route('get', '/admin/page/edit/$id', 'Page@getEdit');
+Module::route('get', '/admin/page/edit/$id/translation/add/$language', 'Page@getAddTranslation');
+Module::route('get', '/admin/page/edit/$id/translation/edit/$translation_id', 'Page@getEdit');
 
 ############################# USER #############################
 Module::route('get', '/admin/user', 'User@getAll');

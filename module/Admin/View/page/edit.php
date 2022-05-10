@@ -11,11 +11,11 @@
 
 				<h1 class="h3 mb-3">
 					<?= __('Pages') ?> <i data-feather="arrow-right"></i> <?= __('Edit') ?>
-					<?php if(Request::has('translation')): ?>
+					<?php if($page_edit->is_translation): ?>
 						<i data-feather="arrow-right"></i>
 						<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($page_edit->language, 'icon') ?>" alt="<?= $page_edit->language ?>">
 						<?= __('translation of') ?>
-						<a href="<?= site('url_language') ?>/admin/page/edit/<?= hc(Request::get('translation')) ?>"><?= hc(Request::get('title')) ?></a>
+						<a href="<?= site('url_language') ?>/admin/page/edit/<?= $page_origin->id ?>"><?= $page_origin->title ?></a>
 					<?php endif; ?>
 				</h1>
 
@@ -43,7 +43,7 @@
 											<label class="form-label">Content</label>
 											<textarea name="content" class="form-control wysiwyg" placeholder="Compose an epic..."><?= $page_edit->content ?></textarea>
 										</div>
-										<?php if(!Request::has('translation')): ?>
+										<?php if(!$page_edit->is_translation): ?>
 											<div class="form-group mb-3">
 												<label class="form-label">Tags</label>
 												<select name="tags[]" multiple data-placeholder="Tags" data-addable="tag">
@@ -69,7 +69,7 @@
 										</div>
 									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">
-										<?php if(!Request::has('translation')): ?>
+										<?php if(!$page_edit->is_translation): ?>
 											<div class="form-check form-switch mb-3">
 												<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($page_edit->no_index_no_follow): ?>checked<?php endif; ?>>
 												<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow</label>
@@ -129,7 +129,7 @@
 									<input type="file" accept="image/*" name="image" data-value='<?= Form::populateFiles($page_edit->image) ?>'>
 								</div>
 							</div>
-							<?php if(!Request::has('translation')): ?>
+							<?php if(!$page_edit->is_translation): ?>
 								<div class="card">
 									<div class="card-header">
 										<h5 class="card-title mb-0">Settings</h5>
@@ -211,7 +211,7 @@
 								</div>
 							<?php endif; ?>
 							<input type="hidden" name="language" value="<?= $page_edit->language ?>">
-							<?php if(Request::has('translation')): ?>
+							<?php if($page_edit->is_translation): ?>
 								<input type="hidden" name="is_translation" value="true">
 							<?php endif; ?>
 							<button type="submit" class="btn btn-primary w-100 p-3">Edit page</button>
