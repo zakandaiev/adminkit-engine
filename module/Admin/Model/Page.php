@@ -54,7 +54,7 @@ class Page {
 
 		foreach($pages as $key => $page) {
 			$page->translations = json_decode($page->translations, true) ?? [];
-			
+
 			foreach($page->translations as $language => $page_id) {
 				$page->translations[key($page_id)] = $page_id[key($page_id)];
 				unset($page->translations[$language]);
@@ -111,7 +111,7 @@ class Page {
 
 		foreach($pages as $key => $page) {
 			$page->translations = json_decode($page->translations, true) ?? [];
-			
+
 			foreach($page->translations as $language => $page_id) {
 				$page->translations[key($page_id)] = $page_id[key($page_id)];
 				unset($page->translations[$language]);
@@ -132,7 +132,7 @@ class Page {
 	}
 
 	public function getAuthors() {
-		$sql = 'SELECT * FROM {user} ORDER BY date_created ASC';
+		$sql = 'SELECT * FROM {user} ORDER BY name ASC, login ASC';
 
 		$authors = new Statement($sql);
 

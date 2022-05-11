@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `%prefix%_setting` ( 
+CREATE TABLE IF NOT EXISTS `%prefix%_setting` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`section` VARCHAR(200) NOT NULL,
 	`name` VARCHAR(200) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_setting` (
 	UNIQUE `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE IF NOT EXISTS `%prefix%_user` ( 
+CREATE TABLE IF NOT EXISTS `%prefix%_user` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`login` VARCHAR(200) NOT NULL,
 	`password` VARCHAR(200) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_user_group` (
 	PRIMARY KEY (`group_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE IF NOT EXISTS `%prefix%_group` ( 
+CREATE TABLE IF NOT EXISTS `%prefix%_group` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(200) NOT NULL,
 	`access_all` BOOLEAN NOT NULL DEFAULT FALSE,
@@ -114,8 +114,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_comment` (
 	`message` TEXT NOT NULL,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`date_edited` DATETIME on update CURRENT_TIMESTAMP DEFAULT NULL,
-	`is_approved` BOOLEAN NOT NULL DEFAULT TRUE,
-	`enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+	`is_approved` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -153,7 +152,7 @@ CREATE TABLE `%prefix%_menu_item` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-CREATE TABLE IF NOT EXISTS `%prefix%_notification` ( 
+CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
 	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`user_id` INT NOT NULL,
 	`kind` VARCHAR(100) NOT NULL,
@@ -166,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
 INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('main', 'time_zone', 'Europe/Kiev'),
 ('main', 'language', 'en'),
-('main', 'socials_allowed', '["Telegram","Facebook","VK","Instagram"]'),
+('main', 'socials_allowed', '["Telegram","Facebook","Instagram"]'),
 ('main', 'enable_registration', 'true'),
 ('main', 'moderate_comments', 'true'),
 ('site', 'name', '%site_name%'),
@@ -233,28 +232,28 @@ AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW
   DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.page_id=OLD.id;
-	
+
 CREATE TRIGGER
 	`clear_page_tag_by_tag_delete`
 AFTER DELETE ON
 	`%prefix%_tag`
 FOR EACH ROW
   DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.tag_id=OLD.id;
-	
+
 CREATE TRIGGER
 	`clear_group_route_by_group_delete`
 AFTER DELETE ON
 	`%prefix%_group`
 FOR EACH ROW
   DELETE FROM `%prefix%_group_route` t_gr WHERE t_gr.group_id=OLD.id;
-	
+
 CREATE TRIGGER
 	`clear_user_group_by_group_delete`
 AFTER DELETE ON
 	`%prefix%_group`
 FOR EACH ROW
   DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.group_id=OLD.id;
-	
+
 CREATE TRIGGER
 	`clear_user_group_by_user_delete`
 AFTER DELETE ON

@@ -53,13 +53,7 @@
 													<i class="align-middle" data-feather="minus"></i>
 												<?php endif; ?>
 											</td>
-											<td>
-												<?php if($user->enabled): ?>
-													<i class="align-middle" data-feather="check"></i>
-												<?php else: ?>
-													<i class="align-middle" data-feather="x"></i>
-												<?php endif; ?>
-											</td>
+											<td><?= icon_boolean($user->enabled) ?></td>
 											<td class="table-action">
 												<a href="/admin/user/edit/<?= $user->id ?>"><i data-feather="edit"></i></a>
 												<a data-delete="<?= Form::delete('user', $user->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>

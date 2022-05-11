@@ -38,3 +38,5 @@
 * create Form models eg. User (name, login, email...)
 * getAddTranslation() also copy custom fields, tags
 * check all links for site('url_language')
+* SQL: enabled -> is_enabled
+* add new settings in Admin

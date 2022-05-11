@@ -53,13 +53,7 @@
 											</td>
 											<td><a href="/admin/user"><?= $group->count_users ?></a></td>
 											<td title="<?= format_date($group->date_created) ?>"><?= date_when($group->date_created) ?></td>
-											<td>
-												<?php if($group->enabled): ?>
-													<i class="align-middle" data-feather="check"></i>
-												<?php else: ?>
-													<i class="align-middle" data-feather="x"></i>
-												<?php endif; ?>
-											</td>
+											<td><?= icon_boolean($group->enabled) ?></td>
 											<td class="table-action">
 												<a href="/admin/group/edit/<?= $group->id ?>"><i data-feather="edit"></i></a>
 												<a data-delete="<?= Form::delete('group', $group->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>

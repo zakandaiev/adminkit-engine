@@ -32,6 +32,10 @@ Module::route('get', '/admin/page/edit/$id', 'Page@getEdit');
 Module::route('get', '/admin/page/edit/$id/translation/add/$language', 'Page@getAddTranslation');
 Module::route('get', '/admin/page/edit/$id/translation/edit/$translation_id', 'Page@getEdit');
 
+############################# COMMENT #############################
+Module::route('get', '/admin/comment', 'Comment@getAll');
+Module::route('get', '/admin/comment/edit/$id', 'Comment@getEdit');
+
 ############################# USER #############################
 Module::route('get', '/admin/user', 'User@getAll');
 Module::route('get', '/admin/user/add', 'User@getAdd');

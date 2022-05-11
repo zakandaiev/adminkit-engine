@@ -3,6 +3,7 @@
 namespace Engine\Theme;
 
 use Engine\Define;
+use Engine\Module;
 use Engine\Path;
 use Engine\View;
 use Engine\Request;
@@ -75,14 +76,19 @@ class Theme {
 
 	public static function header_meta($page_obj) {
 		$page = clone $page_obj;
-		
+
 		$meta = '';
 
 		if(site('no_index_no_follow') || $page->no_index_no_follow) {
 			$meta = '<meta name="robots" content="noindex, nofollow">' . PHP_EOL;
 		}
 
-		$page->title = $page->title . ' | ' . site('name');
+		$page_title = $page->title . ' &#8212; ' . site('name');
+		if(Module::get('name') === 'Admin') {
+			$page_title = $page->title . ' &lsaquo; ' . __('Admin') . ' &#8212; ' . site('name');
+		}
+
+		$page->title = $page_title;
 		$page->seo_image = $page->seo_image ?? site('logo_public');
 		$page->seo_description = $page->seo_description ?? site('name') . '. ' . site('description');
 		$page->seo_keywords = $page->seo_keywords ?? trim(preg_replace('/[\s\.;]+/', ',', $page->seo_description), ',');
@@ -130,7 +136,7 @@ class Theme {
 				};
 			</script>
 		';
-		
+
 		return $meta;
 	}
 
@@ -144,7 +150,7 @@ class Theme {
 		}
 
 		$path = Path::file('theme');
-		
+
 		foreach(glob($path . '/*.php') as $template) {
 			$template_name = file_name($template);
 

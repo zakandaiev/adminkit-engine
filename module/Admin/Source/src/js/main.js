@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					if(!event.currentTarget.hash) {
 						return;
 					}
-					
+
 					const scroll_to_node = document.querySelector(event.currentTarget.hash);
 					if(scroll_to_node) {
 						event.preventDefault();

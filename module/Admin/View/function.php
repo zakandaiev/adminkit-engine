@@ -16,6 +16,17 @@ Asset::js('js/slimselect');
 Asset::js('js/sortable');
 Asset::js('js/main');
 
+############################# HELPERS #############################
+function icon_boolean($value = null) {
+	$icon = 'x';
+
+	if($value) {
+		$icon = 'check';
+	}
+
+	return '<i class="align-middle" data-feather="' . $icon . '"></i>';
+}
+
 ############################# NOTIFICATIONS #############################
 function getNotifications() {
 	$notifications = [];
@@ -150,26 +161,26 @@ function getNotificationHTML($notification, $user) {
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('posted %s'), $page_title);
-			
+
 			$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
 
 			if(!empty($data->excerpt)) {
 				$action_body .= '<div class="text-sm text-muted mt-1">' . $data->excerpt . '</div>';
 			}
-			
+
 			break;
 		}
 		case 'category_add': {
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('posted %s'), $page_title);
-			
+
 			$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
 
 			if(!empty($data->excerpt)) {
 				$action_body .= '<div class="text-sm text-muted mt-1">' . $data->excerpt . '</div>';
 			}
-			
+
 			break;
 		}
 		case 'comment': {

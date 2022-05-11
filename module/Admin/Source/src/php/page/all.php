@@ -84,10 +84,8 @@
 											<td>
 												<?php if($page->is_pending): ?>
 													<span title="Will be published <?= format_date($page->date_publish) ?>"><i class="align-middle" data-feather="clock"></i></span>
-												<?php elseif($page->enabled): ?>
-													<i class="align-middle" data-feather="check"></i>
 												<?php else: ?>
-													<i class="align-middle" data-feather="x"></i>
+													<?= icon_boolean($page->enabled) ?>
 												<?php endif; ?>
 											</td>
 											<td class="table-action">
