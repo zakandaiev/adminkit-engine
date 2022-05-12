@@ -28,13 +28,13 @@ function getPosts($posts, $options) {
 		$count++;
 
 		if(isset($options['offset']) && $count - 1 < $options['offset']) {
-			continue; 
+			continue;
 		}
 
 		if(isset($options['limit']) && isset($options['offset']) && $count > ($options['limit'] + $options['offset'])) {
 			break;
 		}
-		
+
 		if(isset($options['limit']) && !isset($options['offset']) && $count > $options['limit']) {
 			break;
 		}

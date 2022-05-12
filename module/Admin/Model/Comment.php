@@ -5,8 +5,25 @@ namespace Module\Admin\Model;
 use Engine\Database\Statement;
 
 class Comment {
+	private static $instance;
+
+	public static function getInstance() {
+		if(!self::$instance instanceof self) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
 	public function countComments() {
 		$sql = 'SELECT count(*) FROM {comment}';
+
+		$count = new Statement($sql);
+
+		return $count->prepare()->execute()->fetchColumn();
+	}
+
+	public function countUnapprovedComments() {
+		$sql = 'SELECT count(*) FROM {comment} WHERE is_approved IS false';
 
 		$count = new Statement($sql);
 

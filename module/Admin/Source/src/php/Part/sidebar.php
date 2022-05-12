@@ -31,6 +31,10 @@ $sidebar = [
 	],
 	[
 		'icon' => 'message-square',
+		'badge' => function() {
+			$count = \Module\Admin\Model\Comment::getInstance()->countUnapprovedComments();
+			return $count > 0 ? $count : null;
+		},
 		'name' => 'Comments',
 		'route' => '/admin/comment',
 		'access_groups' => [3]
@@ -99,7 +103,17 @@ $sidebar = [
 				<?php else: ?>
 					<li class="sidebar-item <?php if($item['route'] === $uri): ?>active<?php endif; ?>">
 						<a class="sidebar-link" href="<?= site('url_language') . $item['route'] ?>">
-							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i> <span class="align-middle"><?= $item['name'] ?></span>
+							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i>
+							<span class="align-middle"><?= $item['name'] ?></span>
+							<?php if(isset($item['badge'])): ?>
+								<span class="sidebar-badge badge bg-<?php if(isset($item['badge_color'])): ?><?= $item['badge_color'] ?><?php else: ?>primary<?php endif; ?>">
+									<?php if(is_callable($item['badge'])): ?>
+										<?= $item['badge']() ?>
+									<?php else: ?>
+										<?= $item['badge'] ?>
+									<?php endif; ?>
+								</span>
+							<?php endif; ?>
 						</a>
 					</li>
 				<?php endif; ?>

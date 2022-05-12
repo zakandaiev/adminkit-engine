@@ -9,7 +9,7 @@ class View {
 	private static $data = [];
 
 	public function render($template) {
-		Template::load('function', false);
+		Template::load('functions', false);
 		Template::load($template);
 	}
 
@@ -19,7 +19,7 @@ class View {
 		$data = $this->getData();
 		$data['page']->title = __('Page not found');
 		$this->setData($data);
-		
+
 		$this->render('Error/' . $code);
 
 		exit;

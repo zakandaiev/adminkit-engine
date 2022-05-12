@@ -154,7 +154,7 @@ class Theme {
 		foreach(glob($path . '/*.php') as $template) {
 			$template_name = file_name($template);
 
-			if($template_name === 'function' || $template_name === 'home' || $template_name === 'page' || $template_name === 'category') {
+			if($template_name === 'functions' || $template_name === 'home' || $template_name === 'page' || $template_name === 'category') {
 				continue;
 			}
 

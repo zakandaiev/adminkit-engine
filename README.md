@@ -18,6 +18,9 @@
 * create Logger class
 * create Filter class
 * create Sitemap class
+* create Menu class
+* create Breadcrumbs class
+* create Hook class
 * modal forms compile
 * dynamic modals for JS confirmation
 * extend custom fields (image, wysiwyg...)
@@ -30,9 +33,6 @@
 * remove post routes from all modules --> remake to Form class
 * multilang settings - make with json
 * multilang menu - make with json
-* menu
-* comments
-* breadcrumbs
 * optimizations functionality in settings
 * htaccess2 -> htaccess
 * create Form models eg. User (name, login, email...)
@@ -40,3 +40,5 @@
 * check all links for site('url_language')
 * SQL: enabled -> is_enabled
 * add new settings in Admin
+* set min/maxlength for all inputs
+* JS data-delete -> data-action

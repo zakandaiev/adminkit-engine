@@ -35,7 +35,7 @@
 								<tbody>
 									<?php foreach($comments as $comment): ?>
 										<tr>
-											<td><?= $comment->author_name ?></td>
+											<td><a href="/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
 											<td><?= $comment->message ?></td>
 											<td><a href="<?= site('url_language') ?>/<?= $comment->page_url ?>" target="_blank"><?= $comment->page_title ?></a></td>
 											<td title="<?= format_date($comment->date_created) ?>"><?= date_when($comment->date_created) ?></td>

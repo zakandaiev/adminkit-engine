@@ -24,7 +24,7 @@ class Module {
 
 	public static function setName($name) {
 		self::$name = $name;
-		
+
 		return true;
 	}
 
@@ -101,7 +101,7 @@ class Module {
 			throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$module_name));
 			return false;
 		}
-		
+
 		self::$module[self::$module_name]['routes'][] = [
 			'method' => $method,
 			'uri' => $uri,

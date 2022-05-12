@@ -48,7 +48,7 @@ function images(array $json, $attributes = '') {
 	foreach($images as $image) {
 		$output .= '<img src="' . Request::$base . '/' . $image . '" ' . $attributes . '>';
 	}
-	
+
 	return $output;
 }
 
@@ -134,11 +134,11 @@ function print_time_zones($selected = '') {
 
 		foreach($list as $timezone => $name) {
 			$selected_status = '';
-		
+
 			if($timezone === $selected) {
 				$selected_status = 'selected';
 			}
-			
+
 			echo '<option value="' . $timezone . '" ' . $selected_status . '>' . $name . '</option>';
 		}
 
@@ -296,7 +296,7 @@ function site($key) {
 				array_shift($uri_parts);
 				$uri = implode('/', $uri_parts);
 			}
-			
+
 			$value = '/' . $uri;
 
 			break;

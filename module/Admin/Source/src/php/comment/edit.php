@@ -31,7 +31,7 @@
 								<div class="card-body">
 									<div class="form-group mb-3">
 										<label class="form-label">Author</label>
-										<select name="author">
+										<select name="author" required>
 											<?php foreach($authors as $author): ?>
 												<?php
 													$selected_author = '';
@@ -46,7 +46,7 @@
 									</div>
 									<div class="form-group mb-3">
 										<label class="form-label">Message</label>
-										<textarea name="message" placeholder="Message" class="form-control"><?= $comment->message ?></textarea>
+										<textarea name="message" placeholder="Message" class="form-control" required minlength="1" maxlength="1000"><?= $comment->message ?></textarea>
 									</div>
 								</div>
 							</div>

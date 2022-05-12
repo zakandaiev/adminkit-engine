@@ -34,8 +34,14 @@ class Path {
 		switch(strtolower($section)) {
 			case 'config':
 				return ROOT_DIR . '/config';
+			case 'log':
+				return ROOT_DIR . '/log';
 			case 'module':
 				return ROOT_DIR . '/module';
+			case 'temp': {
+				$doc_root = $_SERVER['DOCUMENT_ROOT'];
+				return substr($doc_root, 0, strpos($doc_root, 'data')) . 'data/tmp';
+			}
 			case 'theme':
 				return ROOT_DIR . '/theme';
 			case 'upload':
