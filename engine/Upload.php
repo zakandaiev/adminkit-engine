@@ -2,8 +2,8 @@
 
 namespace Engine;
 
-class FileUploader {
-	public static function upload($file, $custom_folder = '', $extensions = []) {
+class Upload {
+	public static function file($file, $custom_folder = '', $extensions = []) {
 		$name = Hash::token(8);
 		$name_original = $file['name'];
 
@@ -38,7 +38,7 @@ class FileUploader {
 				return self::response(false, "File extension .{$extension} is forbidden");
 			}
 
-			if($size > self::getUploadMaxSize()) {
+			if($size > self::getMaxSize()) {
 				return self::response(false, "Size of {$name_original} is too large");
 			}
 
@@ -50,19 +50,22 @@ class FileUploader {
 		}
 	}
 
-	private static function getUploadMaxSize() {
-		$amount = ini_get("upload_max_filesize");
+	public static function getMaxSize() {
+		$amount = ini_get('upload_max_filesize');
+
 		if(is_int($amount)) {
 			return $amount;
 		}
-		$units = ["", "K", "M", "G"];
-		preg_match("/(\d+)\s?([KMG]?)/", ini_get("upload_max_filesize"), $matches);
+
+		$units = ['', 'K', 'M', 'G'];
+		preg_match('/(\d+)\s?([KMG]?)/', ini_get('upload_max_filesize'), $matches);
 		[$_, $nr, $unit] = $matches;
 		$exp = array_search($unit, $units);
-		return (int)$nr * pow(1024, $exp);
+
+		return (int) $nr * pow(1024, $exp);
 	}
 
-	private static function response($status, $message = '') {
+	private static function response($status, $message = null) {
 		$response = new \stdClass;
 
 		$response->status = $status;

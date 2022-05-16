@@ -15,12 +15,9 @@
 5. Enjoy ;)
 
 ## ToDo:
-* create Logger class
 * create Filter class
-* create Sitemap class
 * create Menu class
 * create Breadcrumbs class
-* create Hook class
 * modal forms compile
 * dynamic modals for JS confirmation
 * extend custom fields (image, wysiwyg...)
@@ -42,3 +39,4 @@
 * add new settings in Admin
 * set min/maxlength for all inputs
 * JS data-delete -> data-action
+* Sitemap class add languages

@@ -35,7 +35,7 @@ class Engine {
 		class_alias('\\Engine\\Server', 'Server');
 		class_alias('\\Engine\\Hash', 'Hash');
 		class_alias('\\Engine\\Mail', 'Mail');
-		class_alias('\\Engine\\FileUploader', 'FileUploader');
+		class_alias('\\Engine\\Upload', 'Upload');
 		class_alias('\\Engine\\Notification', 'Notification');
 
 		Session::initialize();

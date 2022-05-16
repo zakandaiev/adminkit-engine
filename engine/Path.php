@@ -35,7 +35,7 @@ class Path {
 			case 'config':
 				return ROOT_DIR . '/config';
 			case 'log':
-				return ROOT_DIR . '/log';
+				return ROOT_DIR . '/' . trim(Define::LOG_FOLDER, '/');
 			case 'module':
 				return ROOT_DIR . '/module';
 			case 'temp': {
@@ -86,7 +86,7 @@ class Path {
 
 		switch(strtolower($section)) {
 			case 'upload':
-				return $url_base . '/' . trim(Define::UPLOAD_FOLDER, '');
+				return $url_base . '/' . trim(Define::UPLOAD_FOLDER, '/');
 			case 'theme':
 				return $url_base . '/theme';
 			case 'asset': {

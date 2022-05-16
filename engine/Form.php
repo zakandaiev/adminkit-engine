@@ -87,7 +87,7 @@ class Form {
 		if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
 			$form['execute_pre']($sql_fields, $form_data);
 		}
-		
+
 		if(isset($form['execute']) && is_callable($form['execute'])) {
 			$form['execute']($sql_fields, $form_data);
 		} else {
@@ -190,7 +190,7 @@ class Form {
 		}
 
 		$submit_message = isset($form['submit']) ? __($form['submit']) : null;
- 		
+
 		Server::answer(null, 'success', $submit_message);
 	}
 
@@ -441,7 +441,7 @@ class Form {
 						continue;
 					}
 
-					$upload = FileUploader::upload($file, $values_array['folder'] ?? null, $values_array['extensions'] ?? null);
+					$upload = Upload::file($file, $values_array['folder'] ?? null, $values_array['extensions'] ?? null);
 
 					if($upload->status === true) {
 						if(!$is_multiple) {
