@@ -17,7 +17,6 @@
 ## ToDo:
 * create Filter class
 * create Menu class
-* create Breadcrumbs class
 * modal forms compile
 * dynamic modals for JS confirmation
 * extend custom fields (image, wysiwyg...)
@@ -39,4 +38,5 @@
 * add new settings in Admin
 * set min/maxlength for all inputs
 * JS data-delete -> data-action
-* Sitemap class add languages
+* Create Logs page in Admin module
+* DEV@LanguageTemplate dont add same file to comment if there are many matches

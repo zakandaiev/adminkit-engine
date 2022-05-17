@@ -9,7 +9,7 @@ $page2next = null;
 $first = null;
 $last = null;
 
-$url = Request::$base . $pagination->uri;
+$url = site('url') . $pagination->uri;
 
 $current = '
 	<li class="page-item active">
@@ -21,7 +21,7 @@ if($pagination->current_page > 1) {
 	$num = $pagination->current_page - 1;
 	$prev = '
 		<li class="page-item">
-			<a href="' . $url . $num . '" class="page-link">Previous</a>
+			<a href="' . $url . $num . '" class="page-link">' . __('Previous') . '</a>
 		</li>
 	';
 }
@@ -30,7 +30,7 @@ if($pagination->current_page < $pagination->total_pages) {
 	$num = $pagination->current_page + 1;
 	$next = '
 		<li class="page-item">
-			<a href="' . $url . $num . '" class="page-link">Next</a>
+			<a href="' . $url . $num . '" class="page-link">' . __('Next') . '</a>
 		</li>
 	';
 }
@@ -99,7 +99,7 @@ if($pagination->current_page <= $pagination->total_pages - 4) {
 
 <div class="row">
 	<div class="col-sm-12 col-md-5">
-		<span class="align-middle">Total: <span id="pagination-counter"><?= $pagination->total_rows ?></span></span>
+		<output class="align-middle"><?= __('Total') ?>: <span id="pagination-counter"><?= $pagination->total_rows ?></span></output>
 	</div>
 	<?php if($pagination->total_pages > 1): ?>
 		<div class="col-sm-12 col-md-7">

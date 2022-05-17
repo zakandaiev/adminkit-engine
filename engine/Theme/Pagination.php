@@ -17,7 +17,7 @@ class Pagination {
 	public function __construct($total_rows, $uri_key = 'page') {
 		$this->uri_key = strval($uri_key);
 		$this->uri = $this->handleUri();
-		$this->per_page = intval(site('pagination_limit'));
+		$this->per_page = intval(Setting::get('site')->pagination_limit);
 		$this->total_rows = intval($total_rows);
 		$this->total_pages = $this->countPages();
 		$this->current_page = $this->currentPage();
@@ -72,90 +72,48 @@ class Pagination {
 
 		$url = Request::$base . $this->uri;
 
-		$current = '
-			<li class="page-item active">
-				<span class="page-link">' . $this->current_page . '</span>
-			</li>
-		';
+		$current = '<span class="pagination__item pagination__item_active">' . $this->current_page . '</span>';
 
 		if($this->current_page > 1) {
 			$num = $this->current_page - 1;
-			$prev = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">Previous</a>
-				</li>
-			';
+			$prev = '<a href="' . $url . $num . '" class="pagination__item">' . __('Previous') . '</a>';
 		}
 
 		if($this->current_page < $this->total_pages) {
 			$num = $this->current_page + 1;
-			$next = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">Next</a>
-				</li>
-			';
+			$next = '<a href="' . $url . $num . '" class="pagination__item">' . __('Next') . '</a>';
 		}
 
 		if($this->current_page - 1 > 0) {
 			$num = $this->current_page - 1;
-			$page1prev = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">' . $num . '</a>
-				</li>
-			';
+			$page1prev = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
 		if($this->current_page + 1 <= $this->total_pages) {
 			$num = $this->current_page + 1;
-			$page1next = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">' . $num . '</a>
-				</li>
-			';
+			$page1next = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
 		if($this->current_page - 2 > 0) {
 			$num = $this->current_page - 2;
-			$page2prev = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">' . $num . '</a>
-				</li>
-			';
+			$page2prev = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
 		if($this->current_page + 2 <= $this->total_pages) {
 			$num = $this->current_page + 2;
-			$page2next = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">' . $num . '</a>
-				</li>
-			';
+			$page2next = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
 		if($this->current_page > 4) {
 			$num = 1;
-			$first = '
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">' . $num . '</a>
-				</li>
-				<li class="page-item">
-					<span class="page-link">...</span>
-				</li>
-			';
+			$first = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a><span class="pagination__item">...</span>';
 		}
 
 		if($this->current_page <= $this->total_pages - 4) {
 			$num = $this->total_pages;
-			$last = '
-				<li class="page-item">
-					<span class="page-link">...</span>
-				</li>
-				<li class="page-item">
-					<a href="' . $url . $num . '" class="page-link">' . $num . '</a>
-				</li>
-			';
+			$last = '<span class="pagination__item">...</span><a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
-		return '<ul class="pagination">' . $prev.$first.$page2prev.$page1prev.$current.$page1next.$page2next.$last.$next . '</ul>';
+		return '<nav class="pagination">' . $prev.$first.$page2prev.$page1prev.$current.$page1next.$page2next.$last.$next . '</nav>';
 	}
 }

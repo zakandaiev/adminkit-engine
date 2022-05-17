@@ -65,8 +65,17 @@ class Theme {
 		}
 	}
 
+	public static function breadcrumbs() {
+		$data[__FUNCTION__] = Breadcrumb::get();
+
+		$file = self::PART_DIR . '/' . __FUNCTION__;
+
+		View::setData($data);
+		Template::load($file);
+	}
+
 	public static function pagination($pagination = []) {
-		$data['pagination'] = $pagination ?? [];
+		$data[__FUNCTION__] = $pagination ?? [];
 
 		$file = self::PART_DIR . '/' . __FUNCTION__;
 
