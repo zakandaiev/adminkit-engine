@@ -12,16 +12,12 @@ class User extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['users'] = $users;
 
-		$this->page->title = __('Users');
-
 		$this->view->setData($data);
 		$this->view->render('user/all');
 	}
 
 	public function getAdd() {
 		$data['groups'] = $this->model->getGroups();
-
-		$this->page->title = __('Add user');
 
 		$this->view->setData($data);
 		$this->view->render('user/add');
@@ -38,8 +34,6 @@ class User extends AdminController {
 
 		$data['groups'] = $this->model->getGroups();
 		$data['user']->groups = $this->model->getUserGroupsById($user_id);
-
-		$this->page->title = __('Edit user');
 
 		$this->view->setData($data);
 		$this->view->render('user/edit');

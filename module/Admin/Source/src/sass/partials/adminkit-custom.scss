@@ -1929,3 +1929,26 @@ footer.footer {
 .modal-header, .modal-footer {
 	border-color: var(--border-color);
 }
+
+.breadcrumbs {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	font-size: 1.3rem;
+	line-height: 1;
+	color: var(--heading-color);
+	vertical-align: middle;
+	& > *:not(:last-child) {
+		margin-right: 0.5rem;
+	}
+	&__item {
+		color: var(--heading-color);
+		&:hover, &:focus {
+			color: var(--heading-color);
+			text-decoration: none;
+		}
+	}
+	&__separator {
+		color: var(--nav-icon-color);
+	}
+}

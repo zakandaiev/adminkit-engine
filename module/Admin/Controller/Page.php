@@ -3,6 +3,7 @@
 namespace Module\Admin\Controller;
 
 use Engine\Server;
+use Engine\Theme\Breadcrumb;
 use Engine\Theme\Pagination;
 
 class Page extends AdminController {
@@ -12,8 +13,6 @@ class Page extends AdminController {
 
 		$data['pagination'] = $pagination;
 		$data['pages'] = $pages;
-
-		$this->page->title = __('Pages');
 
 		$this->view->setData($data);
 		$this->view->render('page/all');
@@ -28,8 +27,6 @@ class Page extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['pages'] = $pages;
 
-		$this->page->title = __('Pages');
-
 		$this->view->setData($data);
 		$this->view->render('page/all');
 	}
@@ -38,8 +35,6 @@ class Page extends AdminController {
 		$data['authors'] = $this->model->getAuthors();
 		$data['categories'] = $this->model->getCategories();
 		$data['tags'] = $this->model->getTags();
-
-		$this->page->title = __('Add page');
 
 		$this->view->setData($data);
 		$this->view->render('page/add');
@@ -79,8 +74,6 @@ class Page extends AdminController {
 		$data['categories'] = $this->model->getCategories($page_id);
 		$data['tags'] = $this->model->getTags();
 
-		$this->page->title = __('Edit page');
-		
 		$this->view->setData($data);
 		$this->view->render('page/edit');
 	}

@@ -1,5 +1,6 @@
 <?php
 
+############################# ASSETS #############################
 Asset::css('css/adminkit');
 Asset::css('css/fancybox');
 Asset::css('css/filepond');
@@ -15,6 +16,12 @@ Asset::js('js/quill');
 Asset::js('js/slimselect');
 Asset::js('js/sortable');
 Asset::js('js/main');
+
+############################# BREADCRUMBS #############################
+Breadcrumb::setOption('render_homepage', true);
+Breadcrumb::setOption('homepage_name', '<i class="align-middle" data-feather="home"></i>');
+Breadcrumb::setOption('homepage_url', 'admin');
+Breadcrumb::setOption('separator', '<i class="align-middle" data-feather="arrow-right"></i>');
 
 ############################# HELPERS #############################
 function icon_boolean($value = null) {

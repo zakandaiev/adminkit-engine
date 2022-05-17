@@ -9,11 +9,9 @@
 		<main class="content">
 			<div class="container-fluid p-0">
 
-				<h1 class="h3 mb-3">
-					<?= __('Comments') ?>
-					<i data-feather="arrow-right"></i>
-					<?= __('Edit') ?>
-				</h1>
+				<div class="mb-3">
+					<?= Breadcrumb::render() ?>
+				</div>
 
 				<form action="<?= Form::edit('Comment', $comment->id); ?>" method="POST" data-redirect="<?= site('url_lang') ?>/admin/comment">
 					<div class="row">

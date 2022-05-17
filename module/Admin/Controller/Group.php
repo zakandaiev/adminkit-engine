@@ -12,8 +12,6 @@ class Group extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['groups'] = $groups;
 
-		$this->page->title = __('Groups');
-
 		$this->view->setData($data);
 		$this->view->render('group/all');
 	}
@@ -21,8 +19,6 @@ class Group extends AdminController {
 	public function getAdd() {
 		$data['routes'] = $this->model->getRoutes();
 		$data['users'] = $this->model->getUsers();
-
-		$this->page->title = __('Add group');
 
 		$this->view->setData($data);
 		$this->view->render('group/add');
@@ -42,8 +38,6 @@ class Group extends AdminController {
 
 		$data['group']->routes = $this->model->getGroupRoutesById($group_id);
 		$data['group']->users = $this->model->getGroupUsersById($group_id);
-
-		$this->page->title = __('Edit group');
 
 		$this->view->setData($data);
 		$this->view->render('group/edit');

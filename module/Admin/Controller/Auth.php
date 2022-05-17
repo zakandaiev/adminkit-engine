@@ -15,7 +15,6 @@ class Auth extends \Engine\Controller {
 
 	public function getLogin() {
 		$this->checkAuth();
-		$this->page->title = __('Login');
 		$this->view->render('auth/login');
 	}
 
@@ -26,13 +25,11 @@ class Auth extends \Engine\Controller {
 
 	public function getRestore() {
 		$this->checkAuth();
-		$this->page->title = __('Reset password');
 		$this->view->render('auth/reset-password');
 	}
 
 	public function getRegister() {
 		$this->checkAuth();
-		$this->page->title = __('Register');
 		$this->view->render('auth/register');
 	}
 }

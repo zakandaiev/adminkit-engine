@@ -74,27 +74,27 @@
 		border-color: #4e5863;
 		color: #bdc0c5;
 	}
-	
+
 	.table>:not(caption)>*>* {
 		background-color: var(--bs-table-bg);
 		box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
 	}
-	
+
 	.table-striped>tbody>tr:nth-of-type(odd)>* {
 		--bs-table-accent-bg: var(--bs-table-striped-bg);
 		color: var(--bs-table-striped-color)
 	}
-	
+
 	.table-active {
 		--bs-table-accent-bg: var(--bs-table-active-bg);
 		color: var(--bs-table-active-color)
 	}
-	
+
 	.table-hover>tbody>tr:hover>* {
 		--bs-table-accent-bg: var(--bs-table-hover-bg);
 		color: var(--bs-table-hover-color)
 	}
-	
+
 	.table-primary {
 		--bs-table-bg: #d8e5f8;
 		--bs-table-striped-bg: #cfdcef;
@@ -106,7 +106,7 @@
 		border-color: #c6d3e5;
 		color: #222e3c
 	}
-	
+
 	.table-secondary {
 		--bs-table-bg: #e4e6e8;
 		--bs-table-striped-bg: #dadddf;
@@ -118,7 +118,7 @@
 		border-color: #d1d4d7;
 		color: #222e3c
 	}
-	
+
 	.table-success {
 		--bs-table-bg: #d2f1e8;
 		--bs-table-striped-bg: #c9e7df;
@@ -130,7 +130,7 @@
 		border-color: #c0ded7;
 		color: #222e3c
 	}
-	
+
 	.table-info {
 		--bs-table-bg: #d1ecf1;
 		--bs-table-striped-bg: #c8e3e8;
@@ -142,7 +142,7 @@
 		border-color: #c0d9df;
 		color: #222e3c
 	}
-	
+
 	.table-warning {
 		--bs-table-bg: #fef1d5;
 		--bs-table-striped-bg: #f3e7cd;
@@ -154,7 +154,7 @@
 		border-color: #e8dec6;
 		color: #222e3c
 	}
-	
+
 	.table-danger {
 		--bs-table-bg: #f8d7da;
 		--bs-table-striped-bg: #edcfd2;
@@ -166,7 +166,7 @@
 		border-color: #e3c6ca;
 		color: #222e3c
 	}
-	
+
 	.table-light {
 		--bs-table-bg: #2d3846;
 		--bs-table-striped-bg: #38424f;
@@ -178,7 +178,7 @@
 		border-color: #424c59;
 		color: #fff
 	}
-	
+
 	.table-dark {
 		--bs-table-bg: #e9eaec;
 		--bs-table-striped-bg: #dfe1e3;
@@ -197,7 +197,7 @@
 			color: #fff;
 		}
 	}
-	
+
 	.table tbody, .table td, .table tfoot, .table th, .table thead, .table tr, .table>:not(:last-child)>:last-child>* {
 		border-color: #4e5863;
 	}
@@ -205,7 +205,7 @@
 	.tab .nav-tabs .nav-link {
 		color: #d3d5d8;
 	}
-	
+
 	.tab .nav-tabs .nav-link.active {
 		color: #d3d5d8;
 		background-color: var(--white-bg);
@@ -310,5 +310,11 @@
 	[type^="date"]::-webkit-calendar-picker-indicator {
 		filter: invert(1);
 		opacity: 0.7;
+	}
+
+	.page-link {
+		background-color: #222e3c;
+    border-color: #646d77;
+    color: #a7abb1;
 	}
 }

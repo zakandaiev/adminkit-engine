@@ -9,6 +9,10 @@
 		<main class="content">
 			<div class="container-fluid p-0">
 
+				<div class="mb-3">
+					<?= Breadcrumb::render() ?>
+				</div>
+
 				<h1 class="h3 mb-3">
 					<?= __('Pages') ?> <i data-feather="arrow-right"></i> <?= __('Edit') ?>
 					<?php if($page_edit->is_translation): ?>
@@ -218,7 +222,7 @@
 						</div>
 					</div>
 				</form>
-				
+
 			</div>
 		</main>
 

@@ -31,12 +31,15 @@ class Engine {
 		class_alias('\\Engine\\Theme\\Asset', 'Asset');
 		class_alias('\\Engine\\Theme\\Theme', 'Theme');
 		class_alias('\\Engine\\Theme\\Template', 'Template');
+		class_alias('\\Engine\\Theme\\Breadcrumb', 'Breadcrumb');
 		class_alias('\\Engine\\Theme\\Pagination', 'Pagination');
 		class_alias('\\Engine\\Server', 'Server');
 		class_alias('\\Engine\\Hash', 'Hash');
+		class_alias('\\Engine\\Hook', 'Hook');
 		class_alias('\\Engine\\Mail', 'Mail');
 		class_alias('\\Engine\\Upload', 'Upload');
 		class_alias('\\Engine\\Notification', 'Notification');
+		class_alias('\\Engine\\Sitemap', 'Sitemap');
 
 		Session::initialize();
 		Request::initialize();

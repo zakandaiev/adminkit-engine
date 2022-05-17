@@ -14,7 +14,7 @@ class AdminController extends \Engine\Controller {
 		}
 
 		$this->modelAdmin = $this->loadModel('AdminModel');
-		
+
 		// CHECK USER FOR ROUTE ACCESS
 		$is_user_enabled = false;
 

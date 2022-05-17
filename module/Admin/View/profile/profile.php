@@ -10,7 +10,7 @@
 			<div class="container-fluid p-0">
 				<div class="row mb-3">
 					<div class="col-auto">
-						<h1 class="h3 d-inline align-middle"><?= __('Profile') ?></h1>
+						<?= Breadcrumb::render() ?>
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
@@ -75,7 +75,7 @@
 								<?php
 									$notifications = $user->notifications;
 									$notifications_count = $user->notifications_count;
-									
+
 									foreach($notifications as $notification) {
 										echo getNotificationHTML($notification, $user);
 									}

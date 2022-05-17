@@ -94,7 +94,7 @@ class Module {
 		return $languages;
 	}
 
-	public static function addRoute($method, $uri, $controller, $is_public) {
+	public static function addRoute($method, $uri, $controller, $options) {
 		list($route_controller, $route_action) = explode('@', $controller, 2);
 
 		if(empty($route_controller) || empty($route_action)) {
@@ -102,18 +102,28 @@ class Module {
 			return false;
 		}
 
+		$page = $options['page'] ?? new \stdClass();
+		$is_public = $options['is_public'] ?? false;
+		$breadcrumbs = $options['breadcrumbs'] ?? [];
+
+		$page = json_decode(json_encode($page));
+		$is_public = is_bool($is_public) ? $is_public : false;
+		$breadcrumbs = json_decode(json_encode($breadcrumbs));
+
 		self::$module[self::$module_name]['routes'][] = [
 			'method' => $method,
 			'uri' => $uri,
 			'controller' => $route_controller,
 			'action' => $route_action,
-			'is_public' => $is_public
+			'page' => $page,
+			'is_public' => $is_public,
+			'breadcrumbs' => $breadcrumbs
 		];
 
 		return true;
 	}
 
-	public static function route($method, $uri, $controller, $is_public = false) {
-		return self::addRoute($method, $uri, $controller, $is_public);
+	public static function route($method, $uri, $controller, $options = []) {
+		return self::addRoute($method, $uri, $controller, $options);
 	}
 }

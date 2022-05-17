@@ -13,8 +13,6 @@ class Comment extends AdminController {
 		$data['pagination'] = $pagination;
 		$data['comments'] = $comments;
 
-		$this->page->title = __('Comments');
-
 		$this->view->setData($data);
 		$this->view->render('comment/all');
 	}
@@ -29,8 +27,6 @@ class Comment extends AdminController {
 		}
 
 		$data['authors'] = $this->model->getAuthors();
-
-		$this->page->title = __('Edit comment');
 
 		$this->view->setData($data);
 		$this->view->render('comment/edit');

@@ -5,7 +5,7 @@ namespace Module\Admin\Controller;
 class Profile extends AdminController {
 	public function getProfile() {
 		$data['user'] = clone $this->user;
-		
+
 		if(isset($this->route['parameters']['id'])) {
 			$data['user'] = $this->model->getUserById($this->route['parameters']['id']);
 		}
@@ -19,16 +19,12 @@ class Profile extends AdminController {
 
 		$this->model->readNotifications($data['user']->id);
 
-		$this->page->title = __('Profile');
-		
 		$this->view->setData($data);
 		$this->view->render('profile/profile');
 	}
 
 	public function getEdit() {
 		$data['user'] = $this->user;
-
-		$this->page->title = __('Edit profile');
 
 		$this->view->setData($data);
 		$this->view->render('profile/edit');

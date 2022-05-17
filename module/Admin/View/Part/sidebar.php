@@ -10,6 +10,10 @@ $sidebar = [
 	],
 	[
 		'icon' => 'user',
+		'badge' => function() {
+			$notifications_count = Auth::$user->notifications_count;
+			return $notifications_count > 0 ? $notifications_count : null;
+		},
 		'name' => 'Profile',
 		'route' => '/admin/profile'
 	],
@@ -105,7 +109,16 @@ $sidebar = [
 						<a class="sidebar-link" href="<?= site('url_language') . $item['route'] ?>">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i>
 							<span class="align-middle"><?= $item['name'] ?></span>
-							<?php if(isset($item['badge'])): ?>
+							<?php
+								if(
+									isset($item['badge'])
+									&& (
+										(!is_callable($item['badge']) && !empty($item['badge']))
+										||
+										(is_callable($item['badge']) && !empty($item['badge']()))
+									)
+								):
+							?>
 								<span class="sidebar-badge badge bg-<?php if(isset($item['badge_color'])): ?><?= $item['badge_color'] ?><?php else: ?>primary<?php endif; ?>">
 									<?php if(is_callable($item['badge'])): ?>
 										<?= $item['badge']() ?>

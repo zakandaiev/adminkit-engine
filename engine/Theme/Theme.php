@@ -17,6 +17,8 @@ class Theme {
 		'footer'	=> 'footer-%s',
 		'sidebar'	=> 'sidebar-%s',
 		'widget'	=> 'widget-%s',
+		'breadcrumbs'	=> 'breadcrumbs-%s',
+		'pagination'	=> 'pagination-%s',
 	];
 
 	private static $theme_path;
@@ -54,6 +56,27 @@ class Theme {
 		Template::load($file);
 	}
 
+	public static function breadcrumbs($name = '') {
+		$data[__FUNCTION__] = Breadcrumb::get();
+		$data['options'] = Breadcrumb::getOptions();
+
+		$file = self::detectNameFile($name, __FUNCTION__);
+		$file = self::PART_DIR . '/' . $file;
+
+		View::setData($data);
+		Template::load($file);
+	}
+
+	public static function pagination($pagination = [], $name = '') {
+		$data[__FUNCTION__] = $pagination ?? [];
+
+		$file = self::detectNameFile($name, __FUNCTION__);
+		$file = self::PART_DIR . '/' . $file;
+
+		View::setData($data);
+		Template::load($file);
+	}
+
 	public static function block($name = '', $data = []) {
 		$name = (string) $name;
 
@@ -63,24 +86,6 @@ class Theme {
 			View::setData($data);
 			Template::load($file);
 		}
-	}
-
-	public static function breadcrumbs() {
-		$data[__FUNCTION__] = Breadcrumb::get();
-
-		$file = self::PART_DIR . '/' . __FUNCTION__;
-
-		View::setData($data);
-		Template::load($file);
-	}
-
-	public static function pagination($pagination = []) {
-		$data[__FUNCTION__] = $pagination ?? [];
-
-		$file = self::PART_DIR . '/' . __FUNCTION__;
-
-		View::setData($data);
-		Template::load($file);
 	}
 
 	public static function header_meta($page_obj) {
