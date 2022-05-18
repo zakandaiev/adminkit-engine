@@ -90,7 +90,7 @@
 											</td>
 											<td class="table-action">
 												<a href="/admin/page/edit/<?= $page->id ?>"><i data-feather="edit"></i></a>
-												<a data-delete="<?= Form::delete('Page', $page->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
+												<a data-action="<?= Form::delete('Page', $page->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
 											</td>
 										</tr>
 									<?php endforeach; ?>

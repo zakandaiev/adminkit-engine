@@ -61,7 +61,7 @@
 										<input class="form-check-input" type="checkbox" id="enable_registration" name="enable_registration" <?php if($settings->enable_registration == 'true'): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="enable_registration">Enable registration</label>
 									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
+									<button type="submit" class="btn btn-primary">Save</button>
 								</form>
 							</div>
 						</div>

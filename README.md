@@ -26,7 +26,6 @@
 * cache queries in Public module
 * make admin sidebar customizable by another modules
 * translate all texts
-* remove post routes from all modules --> remake to Form class
 * multilang settings
 * multilang menu
 * optimizations functionality in settings
@@ -37,6 +36,7 @@
 * SQL: enabled -> is_enabled
 * add new settings in Admin
 * set min/maxlength for all inputs
-* JS data-delete -> data-action (data-method, data-disable, data-confirm, data-confirm-native)
+* JS data-action handle: data-confirm-native, data-form-reset, data-delete, data-counter, data-redirect, data-message
+* Replace all data-delete to data-action
 * Create Logs page in Admin module
-* DEV@LanguageTemplate dont add same file to comment if there are many matches
+* Find way to use hooks between modules

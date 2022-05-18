@@ -5,7 +5,7 @@ document.querySelectorAll('form').forEach(form => {
 
 	form.addEventListener('submit', event => {
 		event.preventDefault();
-		
+
 		disableForm(form);
 
 		let formData = new FormData(form);
@@ -87,7 +87,7 @@ function formBehavior(form) {
 			});
 		}
 	}
-	
+
 	controls.forEach(control => {
 		// on form init
 		if(control.getAttribute('data-behavior') === 'visibility') {
@@ -136,73 +136,3 @@ function enableForm(form) {
 	form.classList.remove('submit');
 	form.querySelector('[type="submit"]').disabled = false;
 }
-
-// DELETE BUTTONS
-const delete_buttons = document.querySelectorAll('[data-delete]');
-
-delete_buttons.forEach(button => {
-	button.addEventListener('click', event => {
-		event.preventDefault();
-		
-		button.disabled = true;
-
-		if(!button.hasAttribute('data-delete')) {
-			return;
-		}
-
-		let confirmation = true;
-		if(button.hasAttribute('data-confirm')) {
-			confirmation = confirm(button.getAttribute('data-confirm'));
-		}
-		if(!confirmation) {
-			return;
-		}
-
-		let formData = new FormData();
-
-		formData.set(SETTING.csrf.key, SETTING.csrf.token);
-
-		fetch(button.getAttribute('data-delete'), {method: 'POST', body: formData})
-		.then(response => response.json())
-		.then(data => {
-			if(data.status === 'success') {
-				// Redirect
-				if(button.hasAttribute('data-redirect')) {
-					const redirect = button.getAttribute('data-redirect');
-					if(redirect === 'this') {
-						document.location.reload();
-					} else {
-						window.location.href = redirect;
-					}
-				}
-				// Tables
-				if(button.parentElement.classList.contains('table-action')) {
-					// button.parentElement.parentElement.remove();
-					function fadeOut(el) {
-						el.style.opacity = 1;
-						(function fade() {
-							if((el.style.opacity -= .1) < 0) {
-								el.style.display = "none";
-							} else {
-								requestAnimationFrame(fade);
-							}
-						})();
-					};
-					fadeOut(button.parentElement.parentElement);
-				}
-				// Counter
-				if(button.hasAttribute('data-counter')) {
-					const counter = document.querySelector(button.getAttribute('data-counter'));
-					counter.textContent = parseInt(counter.textContent) - 1;
-				}
-			}
-
-			makeAlert(data.status, data.message);
-		})
-		.catch(error => {
-			makeAlert('error', error);
-		});
-
-		button.disabled = false;
-	});
-});

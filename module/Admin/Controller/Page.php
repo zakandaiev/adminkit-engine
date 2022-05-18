@@ -3,7 +3,6 @@
 namespace Module\Admin\Controller;
 
 use Engine\Server;
-use Engine\Theme\Breadcrumb;
 use Engine\Theme\Pagination;
 
 class Page extends AdminController {

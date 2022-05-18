@@ -10,18 +10,20 @@
 			<div class="container-fluid p-0">
 
 				<div class="mb-3">
-					<?= Breadcrumb::render() ?>
-				</div>
+					<?php
+						if($page_edit->is_translation) {
+							$crumb_edit_name = __('Edit');
+							$crumb_edit_url = '/admin/page/edit/' . $page_origin->id;
 
-				<h1 class="h3 mb-3">
-					<?= __('Pages') ?> <i data-feather="arrow-right"></i> <?= __('Edit') ?>
-					<?php if($page_edit->is_translation): ?>
-						<i data-feather="arrow-right"></i>
-						<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($page_edit->language, 'icon') ?>" alt="<?= $page_edit->language ?>">
-						<?= __('translation of') ?>
-						<a href="<?= site('url_language') ?>/admin/page/edit/<?= $page_origin->id ?>"><?= $page_origin->title ?></a>
-					<?php endif; ?>
-				</h1>
+							$crumb_add_name = '<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="' . lang($page_edit->language, 'icon') . '" alt="' . $page_edit->language . '"> ' . $page_origin->title;
+
+							Breadcrumb::edit(1, $crumb_edit_name, $crumb_edit_url);
+							Breadcrumb::add($crumb_add_name);
+						}
+
+						echo Breadcrumb::render();
+					?>
+				</div>
 
 				<form action="<?= Form::edit('Page', $page_edit->id); ?>" method="POST" data-redirect="/admin/page">
 					<div class="row">

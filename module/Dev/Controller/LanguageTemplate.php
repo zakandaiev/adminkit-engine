@@ -2,6 +2,7 @@
 
 namespace Module\Dev\Controller;
 
+use Engine\Module;
 use Engine\Request;
 use Engine\Server;
 
@@ -10,7 +11,7 @@ class LanguageTemplate extends \Engine\Controller {
 	private $module_dir;
 	private $language_dir;
 	private $language_file;
-	
+
 	private $engine_dir;
 	private $theme_dir;
 
@@ -35,12 +36,16 @@ class LanguageTemplate extends \Engine\Controller {
 	public function generate() {
 		if(!$this->module_name) {
 			Server::answer(null, 'error', 'Enter module name');
-		}	
+		}
+
+		if(!array_key_exists($this->module_name, Module::getAll())) {
+			Server::answer(null, 'error', 'There is not ' . $this->module_name . ' module');
+		}
 
 		$this->engine_files = $this->glob_recursive($this->engine_dir . '/*.php');
 		$this->theme_files = $this->glob_recursive($this->theme_dir . '/*.php');
 		$this->module_files = $this->glob_recursive($this->module_dir . '/*.php');
-		
+
 		$this->findMatches();
 		$this->saveTemplateFile();
 
@@ -60,7 +65,13 @@ class LanguageTemplate extends \Engine\Controller {
 			}
 
 			foreach($matches[1] as $match) {
-				$this->translations[str_replace("'", "", $match)][] = $file;
+				$key = str_replace("'", "", $match);
+
+				if(isset($this->translations[$key]) && in_array($file, $this->translations[$key])) {
+					continue;
+				}
+
+				$this->translations[$key][] = $file;
 			}
 		}
 
@@ -75,16 +86,16 @@ class LanguageTemplate extends \Engine\Controller {
 		if(is_file($this->language_file)) {
 			unlink($this->language_file);
 		}
-		
+
 		foreach($this->translations as $key => $files) {
 			$output = '';
-		
+
 			foreach($files as $file) {
 				$output .= '; ' . str_replace(ROOT_DIR, Request::$base, $file) . PHP_EOL;
 			}
-		
+
 			$output .= $key . ' = "' . $key . '"' . PHP_EOL . PHP_EOL;
-		
+
 			file_put_contents($this->language_file, $output, FILE_APPEND);
 		}
 
@@ -93,11 +104,11 @@ class LanguageTemplate extends \Engine\Controller {
 
 	private function glob_recursive($pattern, $flags = 0) {
 		$files = glob($pattern, $flags);
-	
+
 		foreach(glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
 			$files = array_merge($files, $this->glob_recursive($dir . '/' . basename($pattern), $flags));
 		}
-	
+
 		return $files;
 	}
 }

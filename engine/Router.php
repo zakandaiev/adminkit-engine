@@ -37,7 +37,7 @@ class Router {
 			if(self::checkForm($method, $uri)) {
 				exit;
 			}
-			
+
 		}
 
 		return true;
@@ -46,7 +46,7 @@ class Router {
 	private static function checkRoute($method, $uri, $module, $route) {
 		$route_uri = ($route['uri'] === '/') ? $route['uri'] : $route_uri = trim($route['uri'], '/');
 		$route_method = strtolower(trim($route['method']));
-		
+
 		if($route_method === $method && self::isRouteMatched($route_uri, $uri)) {
 			foreach($route as $key => $value) {
 				self::$route[$key] = $value;
@@ -98,7 +98,7 @@ class Router {
 		if(count($route_parts) !== count($uri_parts)) {
 			return false;
 		}
-		
+
 		for($__i__ = 0; $__i__ < count($route_parts); $__i__++) {
 			$route_part = $route_parts[$__i__];
 
@@ -163,6 +163,7 @@ class Router {
 			self::$route['controller'] = 'Error';
 			self::$route['action'] = 'get404';
 			self::$route['is_public'] = true;
+			self::$route['breadcrumbs'] = [];
 		}
 	}
 

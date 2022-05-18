@@ -44,7 +44,7 @@
 										<label class="form-label">Email</label>
 										<input type="text" name="email" placeholder="Email" value="<?= $settings->email ?>" class="form-control" required>
 									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
+									<button type="submit" class="btn btn-primary">Save</button>
 								</form>
 							</div>
 						</div>

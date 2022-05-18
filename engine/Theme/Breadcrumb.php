@@ -22,6 +22,22 @@ class Breadcrumb {
 		return true;
 	}
 
+	public static function edit($key, $name = null, $url = null) {
+		if(!isset(self::$crumbs[$key])) {
+			return false;
+		}
+
+		if(!empty($name)) {
+			self::$crumbs[$key]->name = trim(strval($name));
+		}
+
+		if(!empty($url)) {
+			self::$crumbs[$key]->url = trim(trim(strval($url)), '/');
+		}
+
+		return true;
+	}
+
 	public static function get() {
 		return self::$crumbs;
 	}

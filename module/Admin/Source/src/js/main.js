@@ -8,7 +8,7 @@ SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jp
 function SmoothScrollTo(element) {
 	if(element) {
 		element.scrollIntoView({
-				behavior: 'smooth'
+			behavior: 'smooth'
 		});
 	}
 }
@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// FORMS
 	@@include("partials/form.js")
+	@@include("partials/fake_form.js")
 	@@include("partials/foreign_form.js")
 });
 

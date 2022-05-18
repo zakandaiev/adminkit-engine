@@ -4,6 +4,7 @@ namespace Module\Admin\Controller;
 
 use Engine\Form;
 use Engine\Server;
+use Engine\Theme\Breadcrumb;
 
 class Setting extends AdminController {
 	public function getSection() {
@@ -16,7 +17,10 @@ class Setting extends AdminController {
 			$this->view->error('404');
 		}
 
-		$this->page->title = __(ucfirst($section) . ' settings');
+		$this->page->title = __('Edit') . ' ' . __($section . ' settings');
+
+		Breadcrumb::add(__('Settings'), '/admin/setting/' . $section);
+		Breadcrumb::add(ucfirst($section));
 
 		$this->view->setData($data);
 		$this->view->render('setting/' . $section);
@@ -30,14 +34,10 @@ class Setting extends AdminController {
 
 		$fields = Form::processFields($form_name);
 
-		if(empty($fields)) {
-			Server::answer(null, 'error', 'Form is missed or invalid');
-		}
-
 		foreach($fields as $name => $value) {
 			\Engine\Setting::update($section, $name, $value);
 		}
 
-		Server::answer(null, 'success', 'success');
+		Server::answer(null, 'success', __('Settings saved'));
 	}
 }

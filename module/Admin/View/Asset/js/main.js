@@ -231,12 +231,14 @@ document.addEventListener('DOMContentLoaded', function () {
         var file = input.files[0];
 
         if (file) {
-          var formData = new FormData();
-          formData.append('file', file);
+          var _formData = new FormData();
+
+          _formData.append('file', file);
+
           quill.enable(false);
           fetch('/upload', {
             method: 'POST',
-            body: formData
+            body: _formData
           }).then(function (response) {
             return response.json();
           }).then(function (data) {
@@ -539,41 +541,36 @@ document.addEventListener('DOMContentLoaded', function () {
   function enableForm(form) {
     form.classList.remove('submit');
     form.querySelector('[type="submit"]').disabled = false;
-  } // DELETE BUTTONS
+  }
 
-
-  var delete_buttons = document.querySelectorAll('[data-delete]');
-  delete_buttons.forEach(function (button) {
-    button.addEventListener('click', function (event) {
+  document.querySelectorAll('[data-action]').forEach(function (form) {
+    form.addEventListener('click', function (event) {
       event.preventDefault();
-      button.disabled = true;
 
-      if (!button.hasAttribute('data-delete')) {
+      if (!confirmForm(form)) {
         return;
       }
 
-      var confirmation = true;
+      disableForm(form);
+      return;
 
-      if (button.hasAttribute('data-confirm')) {
-        confirmation = confirm(button.getAttribute('data-confirm'));
+      if (form.hasAttribute('data-form')) {
+        var _formData2 = new FormData(document.querySelector(form.getAttribute('data-form')));
+      } else {
+        var _formData3 = new FormData();
       }
 
-      if (!confirmation) {
-        return;
-      }
-
-      var formData = new FormData();
       formData.set(SETTING.csrf.key, SETTING.csrf.token);
-      fetch(button.getAttribute('data-delete'), {
-        method: 'POST',
+      fetch(form.getAttribute('data-action'), {
+        method: form.hasAttribute('data-method') ? form.getAttribute('data-method') : 'POST',
         body: formData
       }).then(function (response) {
         return response.json();
       }).then(function (data) {
         if (data.status === 'success') {
           // Redirect
-          if (button.hasAttribute('data-redirect')) {
-            var redirect = button.getAttribute('data-redirect');
+          if (form.hasAttribute('data-redirect')) {
+            var redirect = form.getAttribute('data-redirect');
 
             if (redirect === 'this') {
               document.location.reload();
@@ -583,8 +580,8 @@ document.addEventListener('DOMContentLoaded', function () {
           } // Tables
 
 
-          if (button.parentElement.classList.contains('table-action')) {
-            // button.parentElement.parentElement.remove();
+          if (form.parentElement.classList.contains('table-action')) {
+            // form.parentElement.parentElement.remove();
             function fadeOut(el) {
               el.style.opacity = 1;
 
@@ -598,12 +595,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             ;
-            fadeOut(button.parentElement.parentElement);
+            fadeOut(form.parentElement.parentElement);
           } // Counter
 
 
-          if (button.hasAttribute('data-counter')) {
-            var counter = document.querySelector(button.getAttribute('data-counter'));
+          if (form.hasAttribute('data-counter')) {
+            var counter = document.querySelector(form.getAttribute('data-counter'));
             counter.textContent = parseInt(counter.textContent) - 1;
           }
         }
@@ -612,9 +609,45 @@ document.addEventListener('DOMContentLoaded', function () {
       }).catch(function (error) {
         makeAlert('error', error);
       });
-      button.disabled = false;
+      enableForm(form);
     });
   });
+
+  function confirmForm(form) {
+    var confirmation = true;
+
+    if (form.hasAttribute('data-confirm')) {
+      confirmation = confirm(form.getAttribute('data-confirm'));
+    }
+
+    return confirmation;
+  }
+
+  function disableForm(form) {
+    // DISABLE
+    form.setAttribute('disabled', 'disabled'); // ADD CLASS
+
+    if (form.hasAttribute('data-class') && form.hasAttribute('data-class-target')) {
+      document.querySelectorAll(form.getAttribute('data-class-target')).forEach(function (target) {
+        target.classList.add(form.getAttribute('data-class'));
+      });
+    } else if (form.hasAttribute('data-class')) {
+      form.classList.add(form.getAttribute('data-class'));
+    }
+  }
+
+  function enableForm(form) {
+    // ENABLE
+    form.removeAttribute('disabled'); // REMOVE CLASS
+
+    if (form.hasAttribute('data-class') && form.hasAttribute('data-class-target')) {
+      document.querySelectorAll(form.getAttribute('data-class-target')).forEach(function (target) {
+        target.classList.remove(form.getAttribute('data-class'));
+      });
+    } else if (form.hasAttribute('data-class')) {
+      form.classList.remove(form.getAttribute('data-class'));
+    }
+  }
 
   var ForeignForm = /*#__PURE__*/function () {
     function ForeignForm(node) {

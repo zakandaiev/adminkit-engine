@@ -30,7 +30,7 @@
 										<input class="form-check-input" type="checkbox" id="cache_db" name="cache_db" <?php if($settings->cache_db == 'true'): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="cache_db">Cache Database Queries</label>
 									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
+									<button type="submit" class="btn btn-primary">Save</button>
 								</form>
 							</div>
 						</div>

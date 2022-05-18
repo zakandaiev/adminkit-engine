@@ -6,6 +6,9 @@ $time_zone = [
 $language = [
 	'required' => true
 ];
+$boolean = [
+	'boolean' => true
+];
 
 return [
 	'table' => 'setting',
@@ -13,8 +16,6 @@ return [
 		'time_zone' => $time_zone,
 		'language' => $language,
 		'socials_allowed' => [],
-		'enable_registration' => [
-			'boolean' => true
-		]
+		'enable_registration' => $boolean
 	]
 ];
