@@ -95,10 +95,6 @@ class Module {
 	}
 
 	public static function route($method, $uri, $controller, $options = []) {
-		return self::addRoute($method, $uri, $controller, $options);
-	}
-
-	public static function addRoute($method, $uri, $controller, $options) {
 		list($route_controller, $route_action) = explode('@', $controller, 2);
 
 		if(empty($route_controller) || empty($route_action)) {
