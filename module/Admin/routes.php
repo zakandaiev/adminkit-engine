@@ -54,6 +54,9 @@ Module::route('get', '/admin/profile', 'Profile@getProfile', [
 	'page' => [
 		'title' => __('Profile')
 	],
+	'breadcrumbs' => [
+		__('Profile')
+	],
 	'is_public' => true
 ]);
 
@@ -61,12 +64,19 @@ Module::route('get', '/admin/profile/edit', 'Profile@getEdit', [
 	'page' => [
 		'title' => __('Edit profile')
 	],
+	'breadcrumbs' => [
+		__('Profile') . '@/admin/profile',
+		__('Edit')
+	],
 	'is_public' => true
 ]);
 
 Module::route('get', '/admin/profile/$id', 'Profile@getProfile', [
 	'page' => [
 		'title' => __('Profile')
+	],
+	'breadcrumbs' => [
+		__('Profile')
 	]
 ]);
 
@@ -80,19 +90,26 @@ Module::route('get', '/admin/page', 'Page@getAll', [
 		'title' => __('Pages')
 	],
 	'breadcrumbs' => [
-		['name' => __('Pages')]
+		__('Pages')
 	]
 ]);
 
-Module::route('get', '/admin/page/category/$id', 'Page@getCategory');
-
-Module::route('get', '/admin/page/add', 'Page@getAdd', [
+Module::route('get', '/admin/page/category/$id', 'Page@getCategory', [
 	'page' => [
 		'title' => __('Pages')
 	],
 	'breadcrumbs' => [
-		['name' => __('Pages'), 'url' => '/admin/page'],
-		['name' => (Request::has('is_category')) ? __('Add category') : __('Add page')],
+		__('Pages')
+	]
+]);
+
+Module::route('get', '/admin/page/add', 'Page@getAdd', [
+	'page' => [
+		'title' => (Request::has('is_category')) ? __('Add category') : __('Add page')
+	],
+	'breadcrumbs' => [
+		__('Pages') . '@/admin/page',
+		(Request::has('is_category')) ? __('Add category') : __('Add page')
 	]
 ]);
 
@@ -101,12 +118,30 @@ Module::route('get', '/admin/page/edit/$id', 'Page@getEdit', [
 		'title' => __('Edit page')
 	],
 	'breadcrumbs' => [
-		['name' => __('Pages'), 'url' => '/admin/page'],
-		['name' => __('Edit page')],
+		__('Pages') . '@/admin/page',
+		__('Edit')
 	]
 ]);
-Module::route('get', '/admin/page/edit/$id/translation/add/$language', 'Page@getAddTranslation');
-Module::route('get', '/admin/page/edit/$id/translation/edit/$translation_id', 'Page@getEdit');
+
+Module::route('get', '/admin/page/edit/$id/translation/add/$language', 'Page@getAddTranslation', [
+	'page' => [
+		'title' => __('Add page translation')
+	],
+	'breadcrumbs' => [
+		__('Pages') . '@/admin/page',
+		__('Add page translation')
+	]
+]);
+
+Module::route('get', '/admin/page/edit/$id/translation/edit/$translation_id', 'Page@getEdit', [
+	'page' => [
+		'title' => __('Edit translation')
+	],
+	'breadcrumbs' => [
+		__('Pages') . '@/admin/page',
+		__('Edit')
+	]
+]);
 
 ############################# COMMENT #############################
 Module::route('get', '/admin/comment', 'Comment@getAll', [
@@ -114,18 +149,76 @@ Module::route('get', '/admin/comment', 'Comment@getAll', [
 		'title' => __('Comments')
 	],
 	'breadcrumbs' => [
-		['name' => __('Comments')]
+		__('Comments')
 	]
 ]);
 
-Module::route('get', '/admin/comment/edit/$id', 'Comment@getEdit');
+Module::route('get', '/admin/comment/edit/$id', 'Comment@getEdit', [
+	'page' => [
+		'title' => __('Edit comment')
+	],
+	'breadcrumbs' => [
+		__('Comments') . '@/admin/comment',
+		__('Edit')
+	]
+]);
 
 ############################# USER #############################
-Module::route('get', '/admin/user', 'User@getAll');
-Module::route('get', '/admin/user/add', 'User@getAdd');
-Module::route('get', '/admin/user/edit/$id', 'User@getEdit');
+Module::route('get', '/admin/user', 'User@getAll', [
+	'page' => [
+		'title' => __('Users')
+	],
+	'breadcrumbs' => [
+		__('Users')
+	]
+]);
+
+Module::route('get', '/admin/user/add', 'User@getAdd', [
+	'page' => [
+		'title' => __('Add user')
+	],
+	'breadcrumbs' => [
+		__('Users') . '@/admin/user',
+		__('Add')
+	]
+]);
+
+Module::route('get', '/admin/user/edit/$id', 'User@getEdit', [
+	'page' => [
+		'title' => __('Edit user')
+	],
+	'breadcrumbs' => [
+		__('Users') . '@/admin/user',
+		__('Edit')
+	]
+]);
 
 ############################# GROUP #############################
-Module::route('get', '/admin/group', 'Group@getAll');
-Module::route('get', '/admin/group/add', 'Group@getAdd');
-Module::route('get', '/admin/group/edit/$id', 'Group@getEdit');
+Module::route('get', '/admin/group', 'Group@getAll', [
+	'page' => [
+		'title' => __('Groups')
+	],
+	'breadcrumbs' => [
+		__('Groups')
+	]
+]);
+
+Module::route('get', '/admin/group/add', 'Group@getAdd', [
+	'page' => [
+		'title' => __('Add group')
+	],
+	'breadcrumbs' => [
+		__('Groups') . '@/admin/group',
+		__('Add')
+	]
+]);
+
+Module::route('get', '/admin/group/edit/$id', 'Group@getEdit', [
+	'page' => [
+		'title' => __('Edit group')
+	],
+	'breadcrumbs' => [
+		__('Groups') . '@/admin/group',
+		__('Edit')
+	]
+]);

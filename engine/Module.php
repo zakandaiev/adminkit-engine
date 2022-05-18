@@ -94,6 +94,10 @@ class Module {
 		return $languages;
 	}
 
+	public static function route($method, $uri, $controller, $options = []) {
+		return self::addRoute($method, $uri, $controller, $options);
+	}
+
 	public static function addRoute($method, $uri, $controller, $options) {
 		list($route_controller, $route_action) = explode('@', $controller, 2);
 
@@ -102,13 +106,9 @@ class Module {
 			return false;
 		}
 
-		$page = $options['page'] ?? new \stdClass();
-		$is_public = $options['is_public'] ?? false;
-		$breadcrumbs = $options['breadcrumbs'] ?? [];
-
-		$page = json_decode(json_encode($page));
-		$is_public = is_bool($is_public) ? $is_public : false;
-		$breadcrumbs = json_decode(json_encode($breadcrumbs));
+		$page = self::formatRouteData('page', @$options['page']);
+		$is_public = self::formatRouteData('is_public', @$options['is_public']);
+		$breadcrumbs = self::formatRouteData('breadcrumbs', @$options['breadcrumbs']);
 
 		self::$module[self::$module_name]['routes'][] = [
 			'method' => $method,
@@ -123,7 +123,24 @@ class Module {
 		return true;
 	}
 
-	public static function route($method, $uri, $controller, $options = []) {
-		return self::addRoute($method, $uri, $controller, $options);
+	private static function formatRouteData($type, $data = null) {
+		$formatted = $data;
+
+		switch(strtolower($type)) {
+			case 'page': {
+				$formatted = (!empty($data)) ? json_decode(json_encode($data)) : new \stdClass();
+				break;
+			}
+			case 'is_public': {
+				$formatted = is_bool($data) ? $data : false;
+				break;
+			}
+			case 'breadcrumbs': {
+				$formatted = (!empty($data)) ? json_decode(json_encode($data)) : [];
+				break;
+			}
+		}
+
+		return $formatted;
 	}
 }

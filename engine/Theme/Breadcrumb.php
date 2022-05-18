@@ -31,7 +31,18 @@ class Breadcrumb {
 			return false;
 		}
 
-		self::$crumbs = $array;
+		self::$crumbs = [];
+
+		foreach($array as $value) {
+			if(is_object($value)) {
+				self::add($value->name, @$value->url);
+				continue;
+			}
+
+			$values = explode('@', $value, 2);
+
+			self::add($values[0], @$values[1]);
+		}
 
 		return true;
 	}

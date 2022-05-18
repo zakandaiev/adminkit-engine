@@ -1,6 +1,6 @@
 # CMS
 * PHP
-* MVCL
+* MVC + Language + Form
 * OOP
 
 ## Web environment requirements
@@ -15,7 +15,6 @@
 5. Enjoy ;)
 
 ## ToDo:
-* Breadcrumbs...
 * create Filter class
 * create Menu class
 * modal forms compile
@@ -28,8 +27,8 @@
 * make admin sidebar customizable by another modules
 * translate all texts
 * remove post routes from all modules --> remake to Form class
-* multilang settings - make with json
-* multilang menu - make with json
+* multilang settings
+* multilang menu
 * optimizations functionality in settings
 * htaccess2 -> htaccess
 * create Form models eg. User (name, login, email...)
@@ -38,6 +37,6 @@
 * SQL: enabled -> is_enabled
 * add new settings in Admin
 * set min/maxlength for all inputs
-* JS data-delete -> data-action
+* JS data-delete -> data-action (data-method, data-disable, data-confirm, data-confirm-native)
 * Create Logs page in Admin module
 * DEV@LanguageTemplate dont add same file to comment if there are many matches
