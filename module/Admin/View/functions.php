@@ -34,6 +34,34 @@ function icon_boolean($value = null) {
 	return '<i class="align-middle" data-feather="' . $icon . '"></i>';
 }
 
+function table_actions($edit_url = null, $delete_attributes = [], $icons = []) {
+	$edit = '';
+	$delete = '';
+
+	$edit_icon = $icons['edit'] ?? 'edit';
+	$delete_icon = $icons['delete'] ?? 'trash';
+
+	if(!empty($edit_url)) {
+		$edit = '<a href="' . $edit_url .'"><i data-feather="' . $edit_icon . '"></i></a>';
+	}
+
+	if(!empty($delete_attributes)) {
+		$delete = '<a';
+
+		foreach($delete_attributes as $attribute => $value) {
+			if(empty($attribute)) {
+				continue;
+			}
+
+			$delete .= ' ' . $attribute . '="' . hc($value) . '"';
+		}
+
+		$delete .= ' href="#"><i data-feather="' . $delete_icon . '"></i></a>';
+	}
+
+	return $edit . ' ' . $delete;
+}
+
 ############################# NOTIFICATIONS #############################
 function getNotifications() {
 	$notifications = [];

@@ -20,11 +20,6 @@
 				</div>
 
 				<div class="card">
-					<?php if(!empty(Request::$get['back'])): ?>
-						<div class="card-header">
-							<h5 class="card-title mb-0"><a href="<?php out(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> Back</a></h5>
-						</div>
-					<?php endif; ?>
 					<div class="card-body">
 						<?php if(!empty($groups)): ?>
 							<table class="table table table-striped table-sm m-0">
@@ -55,8 +50,16 @@
 											<td title="<?= format_date($group->date_created) ?>"><?= date_when($group->date_created) ?></td>
 											<td><?= icon_boolean($group->enabled) ?></td>
 											<td class="table-action">
-												<a href="/admin/group/edit/<?= $group->id ?>"><i data-feather="edit"></i></a>
-												<a data-delete="<?= Form::delete('group', $group->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
+												<?php
+													$edit_url = site('url_language') . '/admin/group/edit/' . $group->id;
+													$delete = [
+														'data-action' => Form::delete('Group', $group->id),
+														'data-confirm' => __('Delete') . ' ' . $group->name . '?',
+														'data-delete' => 'trow',
+														'data-counter' => '#pagination-counter'
+													];
+													echo table_actions($edit_url, $delete);
+												?>
 											</td>
 										</tr>
 									<?php endforeach; ?>

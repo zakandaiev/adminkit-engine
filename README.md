@@ -18,7 +18,6 @@
 * create Filter class
 * create Menu class
 * modal forms compile
-* dynamic modals for JS confirmation
 * extend custom fields (image, wysiwyg...)
 * more convenient DB data output, pagination, filtering (maybe move from controller directly to template, but ha MVC?)
 * load more by data-attributes
@@ -36,7 +35,7 @@
 * SQL: enabled -> is_enabled
 * add new settings in Admin
 * set min/maxlength for all inputs
-* JS data-action handle: data-confirm-native, data-form-reset, data-delete, data-counter, data-redirect, data-message
-* Replace all data-delete to data-action
 * Create Logs page in Admin module
 * Find way to use hooks between modules
+* JS scripts -> Classes for usability in another modules
+* id VARCHAR(64) NOT NULL DEFAULT MD5(CONCAT(UNIX_TIMESTAMP(), RAND(), UUID()))

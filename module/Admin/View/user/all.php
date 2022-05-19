@@ -20,11 +20,6 @@
 				</div>
 
 				<div class="card">
-					<?php if(!empty(Request::$get['back'])): ?>
-						<div class="card-header">
-							<h5 class="card-title mb-0"><a href="<?php out(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> Back</a></h5>
-						</div>
-					<?php endif; ?>
 					<div class="card-body">
 						<?php if(!empty($users)): ?>
 							<table class="table table table-striped table-sm m-0">
@@ -55,8 +50,16 @@
 											</td>
 											<td><?= icon_boolean($user->enabled) ?></td>
 											<td class="table-action">
-												<a href="/admin/user/edit/<?= $user->id ?>"><i data-feather="edit"></i></a>
-												<a data-delete="<?= Form::delete('user', $user->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
+												<?php
+													$edit_url = site('url_language') . '/admin/user/edit/' . $user->id;
+													$delete = [
+														'data-action' => Form::delete('User', $user->id),
+														'data-confirm' => __('Delete') . ' ' . $user->name . '(@' . $user->login . ')' . '?',
+														'data-delete' => 'trow',
+														'data-counter' => '#pagination-counter'
+													];
+													echo table_actions($edit_url, $delete);
+												?>
 											</td>
 										</tr>
 									<?php endforeach; ?>

@@ -231,14 +231,12 @@ document.addEventListener('DOMContentLoaded', function () {
         var file = input.files[0];
 
         if (file) {
-          var _formData = new FormData();
-
-          _formData.append('file', file);
-
+          var formData = new FormData();
+          formData.append('file', file);
           quill.enable(false);
           fetch('/upload', {
             method: 'POST',
-            body: _formData
+            body: formData
           }).then(function (response) {
             return response.json();
           }).then(function (data) {
@@ -552,12 +550,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       disableForm(form);
-      return;
+      var formData = new FormData();
 
       if (form.hasAttribute('data-form')) {
-        var _formData2 = new FormData(document.querySelector(form.getAttribute('data-form')));
-      } else {
-        var _formData3 = new FormData();
+        formData = new FormData(document.querySelector(form.getAttribute('data-form')));
       }
 
       formData.set(SETTING.csrf.key, SETTING.csrf.token);
@@ -568,44 +564,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.json();
       }).then(function (data) {
         if (data.status === 'success') {
-          // Redirect
-          if (form.hasAttribute('data-redirect')) {
-            var redirect = form.getAttribute('data-redirect');
-
-            if (redirect === 'this') {
-              document.location.reload();
-            } else {
-              window.location.href = redirect;
-            }
-          } // Tables
-
-
-          if (form.parentElement.classList.contains('table-action')) {
-            // form.parentElement.parentElement.remove();
-            function fadeOut(el) {
-              el.style.opacity = 1;
-
-              (function fade() {
-                if ((el.style.opacity -= .1) < 0) {
-                  el.style.display = "none";
-                } else {
-                  requestAnimationFrame(fade);
-                }
-              })();
-            }
-
-            ;
-            fadeOut(form.parentElement.parentElement);
-          } // Counter
-
-
-          if (form.hasAttribute('data-counter')) {
-            var counter = document.querySelector(form.getAttribute('data-counter'));
-            counter.textContent = parseInt(counter.textContent) - 1;
-          }
+          successRedirect(form);
+          successCounter(form);
+          successResetTargetForm(form);
+          successDeleteNodes(form);
         }
 
-        makeAlert(data.status, data.message);
+        makeAlert(data.status, form.hasAttribute('data-message') ? form.getAttribute('data-message') : data.message);
       }).catch(function (error) {
         makeAlert('error', error);
       });
@@ -648,6 +613,86 @@ document.addEventListener('DOMContentLoaded', function () {
       form.classList.remove(form.getAttribute('data-class'));
     }
   }
+
+  function successRedirect(form) {
+    if (form.hasAttribute('data-redirect')) {
+      var redirect = form.getAttribute('data-redirect');
+
+      if (redirect === 'this') {
+        document.location.reload();
+      } else {
+        window.location.href = redirect;
+      }
+    }
+
+    return false;
+  }
+
+  function successCounter(form) {
+    if (form.hasAttribute('data-counter')) {
+      document.querySelectorAll(form.getAttribute('data-counter')).forEach(function (target) {
+        var target_value = parseInt(target.textContent);
+        target.textContent = target_value - 1;
+      });
+      return true;
+    }
+
+    return false;
+  }
+
+  function successResetTargetForm(form) {
+    if (form.hasAttribute('data-form-reset')) {
+      document.querySelectorAll(form.getAttribute('data-form-reset')).forEach(function (target) {
+        target.reset();
+      });
+      return true;
+    }
+
+    return false;
+  }
+
+  function successDeleteNodes(form) {
+    if (form.hasAttribute('data-delete')) {
+      var target_value = form.getAttribute('data-delete');
+
+      if (target_value === 'this') {
+        fadeOut(form);
+        return true;
+      }
+
+      if (target_value === 'trow') {
+        var target = form.closest('tr');
+
+        if (target) {
+          fadeOut(target);
+        }
+
+        return true;
+      }
+
+      document.querySelectorAll(target_value).forEach(function (target) {
+        // target.remove();
+        fadeOut(target);
+      });
+      return true;
+    }
+
+    return false;
+  }
+
+  function fadeOut(el) {
+    el.style.opacity = 1;
+
+    (function fade() {
+      if ((el.style.opacity -= .1) < 0) {
+        el.style.display = "none";
+      } else {
+        requestAnimationFrame(fade);
+      }
+    })();
+  }
+
+  ;
 
   var ForeignForm = /*#__PURE__*/function () {
     function ForeignForm(node) {

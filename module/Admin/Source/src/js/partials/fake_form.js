@@ -8,12 +8,10 @@ document.querySelectorAll('[data-action]').forEach(form => {
 
 		disableForm(form);
 
-		return;
+		let formData = new FormData();
 
 		if(form.hasAttribute('data-form')) {
-			let formData = new FormData(document.querySelector(form.getAttribute('data-form')));
-		} else {
-			let formData = new FormData();
+			formData = new FormData(document.querySelector(form.getAttribute('data-form')));
 		}
 
 		formData.set(SETTING.csrf.key, SETTING.csrf.token);
@@ -25,38 +23,13 @@ document.querySelectorAll('[data-action]').forEach(form => {
 		.then(response => response.json())
 		.then(data => {
 			if(data.status === 'success') {
-				// Redirect
-				if(form.hasAttribute('data-redirect')) {
-					const redirect = form.getAttribute('data-redirect');
-					if(redirect === 'this') {
-						document.location.reload();
-					} else {
-						window.location.href = redirect;
-					}
-				}
-				// Tables
-				if(form.parentElement.classList.contains('table-action')) {
-					// form.parentElement.parentElement.remove();
-					function fadeOut(el) {
-						el.style.opacity = 1;
-						(function fade() {
-							if((el.style.opacity -= .1) < 0) {
-								el.style.display = "none";
-							} else {
-								requestAnimationFrame(fade);
-							}
-						})();
-					};
-					fadeOut(form.parentElement.parentElement);
-				}
-				// Counter
-				if(form.hasAttribute('data-counter')) {
-					const counter = document.querySelector(form.getAttribute('data-counter'));
-					counter.textContent = parseInt(counter.textContent) - 1;
-				}
+				successRedirect(form);
+				successCounter(form);
+				successResetTargetForm(form);
+				successDeleteNodes(form);
 			}
 
-			makeAlert(data.status, data.message);
+			makeAlert(data.status, form.hasAttribute('data-message') ? form.getAttribute('data-message') : data.message);
 		})
 		.catch(error => {
 			makeAlert('error', error);
@@ -105,3 +78,83 @@ function enableForm(form) {
 		form.classList.remove(form.getAttribute('data-class'));
 	}
 }
+
+function successRedirect(form) {
+	if(form.hasAttribute('data-redirect')) {
+		const redirect = form.getAttribute('data-redirect');
+		if(redirect === 'this') {
+			document.location.reload();
+		} else {
+			window.location.href = redirect;
+		}
+	}
+
+	return false;
+}
+
+function successCounter(form) {
+	if(form.hasAttribute('data-counter')) {
+		document.querySelectorAll(form.getAttribute('data-counter')).forEach(target => {
+			const target_value = parseInt(target.textContent);
+			target.textContent = target_value - 1;
+		});
+
+		return true;
+	}
+
+	return false;
+}
+
+function successResetTargetForm(form) {
+	if(form.hasAttribute('data-form-reset')) {
+		document.querySelectorAll(form.getAttribute('data-form-reset')).forEach(target => {
+			target.reset();
+		});
+
+		return true;
+	}
+
+	return false;
+}
+
+function successDeleteNodes(form) {
+	if(form.hasAttribute('data-delete')) {
+		const target_value = form.getAttribute('data-delete');
+
+		if(target_value === 'this') {
+			fadeOut(form);
+
+			return true;
+		}
+
+		if(target_value === 'trow') {
+			const target = form.closest('tr');
+
+			if(target) {
+				fadeOut(target);
+			}
+
+			return true;
+		}
+
+		document.querySelectorAll(target_value).forEach(target => {
+			// target.remove();
+			fadeOut(target);
+		});
+
+		return true;
+	}
+
+	return false;
+}
+
+function fadeOut(el) {
+	el.style.opacity = 1;
+	(function fade() {
+		if((el.style.opacity -= .1) < 0) {
+			el.style.display = "none";
+		} else {
+			requestAnimationFrame(fade);
+		}
+	})();
+};

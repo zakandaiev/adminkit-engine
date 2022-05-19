@@ -14,11 +14,6 @@
 				</div>
 
 				<div class="card">
-					<?php if(!empty(Request::$get['back'])): ?>
-						<div class="card-header">
-							<h5 class="card-title mb-0"><a href="<?php out(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> Back</a></h5>
-						</div>
-					<?php endif; ?>
 					<div class="card-body">
 						<?php if(!empty($comments)): ?>
 							<table class="table table table-striped table-sm m-0">
@@ -45,8 +40,16 @@
 												<td><?= icon_boolean($comment->is_approved) ?></td>
 											<?php endif; ?>
 											<td class="table-action">
-												<a href="/admin/comment/edit/<?= $comment->id ?>"><i data-feather="edit"></i></a>
-												<a data-delete="<?= Form::delete('comment', $comment->id); ?>" data-confirm="Delete?" data-counter="#pagination-counter" href="#"><i data-feather="trash"></i></a>
+												<?php
+													$edit_url = site('url_language') . '/admin/comment/edit/' . $comment->id;
+													$delete = [
+														'data-action' => Form::delete('Comment', $comment->id),
+														'data-confirm' => __('Delete comment by') . ' ' . $comment->author_name . '?',
+														'data-delete' => 'trow',
+														'data-counter' => '#pagination-counter'
+													];
+													echo table_actions($edit_url, $delete);
+												?>
 											</td>
 										</tr>
 									<?php endforeach; ?>
