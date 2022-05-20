@@ -38,5 +38,5 @@
 * Create Logs page in Admin module
 * Find way to use hooks between modules
 * JS scripts -> Classes for usability in another modules
-* JS data-behavior add: lowercase, uppercase, data-behavior-oninput
+* JS add data-behavior (+ lowercase, uppercase), data-behavior-oninput
 * id VARCHAR(64) NOT NULL DEFAULT MD5(CONCAT(UNIX_TIMESTAMP(), RAND(), UUID()))
