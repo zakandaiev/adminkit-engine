@@ -113,7 +113,7 @@ class Page {
 		ON
 			t_user.id=t_comment.author
 		WHERE
-			t_comment.page_id=:page_id AND t_comment.is_enabled IS true
+			t_comment.page_id=:page_id AND t_comment.is_approved IS true
 		';
 
 		$statement = new Statement($sql);
