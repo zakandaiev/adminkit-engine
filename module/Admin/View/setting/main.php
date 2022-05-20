@@ -31,7 +31,7 @@
 												<?php
 													$selected_language = '';
 
-													if($language === $settings->language) {
+													if($language['key'] === $settings->language) {
 														$selected_language = 'selected';
 													}
 												?>

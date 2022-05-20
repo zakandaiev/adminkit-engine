@@ -21,15 +21,742 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // SETTINGS
 var BASE_URL = window.location.protocol + '//' + window.location.host;
 SETTING.loader = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
-SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg'; // FUNCTIONS
+SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg'; // UTILS
 
-function SmoothScrollTo(element) {
+function smoothScroll(element) {
   if (element) {
     element.scrollIntoView({
       behavior: 'smooth'
     });
   }
-}
+} // CLASSES
+
+
+var Form = /*#__PURE__*/function () {
+  function Form(node) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    _classCallCheck(this, Form);
+
+    this.node = node;
+    this.options = options;
+    this.loader = options.loader ? options.loader : null;
+    this.action = this.node.action;
+    this.method = this.node.method ? this.node.method : 'POST';
+    this.data_confirm = this.node.getAttribute('data-confirm');
+    this.data_reset = this.node.hasAttribute('data-reset') ? true : false;
+    this.data_class = this.node.getAttribute('data-class');
+    this.data_redirect = this.node.getAttribute('data-redirect');
+    this.data_message = this.node.getAttribute('data-message');
+
+    if (this.action) {
+      this.initialize();
+    }
+  }
+
+  _createClass(Form, [{
+    key: "initialize",
+    value: function initialize() {
+      var _this = this;
+
+      if (this.loader) {
+        this.node.insertAdjacentHTML('beforeend', this.loader);
+      }
+
+      this.node.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        if (!_this.confirmation()) {
+          return false;
+        }
+
+        _this.disableForm();
+
+        fetch(_this.action, {
+          method: _this.method,
+          body: _this.getFormData()
+        }).then(function (response) {
+          return response.json();
+        }).then(function (data) {
+          if (data.status === 'success') {
+            _this.successRedirect();
+
+            _this.successResetForm();
+          }
+
+          makeAlert(data.status, _this.data_message ? _this.data_message : data.message);
+        }).catch(function (error) {
+          makeAlert('error', error);
+        });
+
+        _this.enableForm();
+      });
+    }
+  }, {
+    key: "confirmation",
+    value: function confirmation() {
+      var confirmation = true;
+
+      if (this.data_confirm) {
+        confirmation = confirm(this.data_confirm);
+      }
+
+      return confirmation;
+    }
+  }, {
+    key: "getFormData",
+    value: function getFormData() {
+      var data = new FormData(this.node);
+
+      if (this.options.data) {
+        this.options.data.forEach(function (field) {
+          if (field.key) {
+            data.set(field.key, field.value ? field.value : null);
+          }
+        });
+      }
+
+      return data;
+    }
+  }, {
+    key: "disableForm",
+    value: function disableForm() {
+      // DISABLE SELF
+      this.node.setAttribute('disabled', 'disabled');
+      this.node.classList.add('submit');
+      this.node.querySelector('[type="submit"]').disabled = true; // ADD CLASS
+
+      if (this.data_class) {
+        this.node.classList.add(this.data_class);
+      }
+
+      return true;
+    }
+  }, {
+    key: "enableForm",
+    value: function enableForm() {
+      // ENABLE SELF
+      this.node.removeAttribute('disabled', 'disabled');
+      this.node.classList.remove('submit');
+      this.node.querySelector('[type="submit"]').disabled = false; // REMOVE CLASS
+
+      if (this.data_class) {
+        this.node.classList.remove(this.data_class);
+      }
+
+      return true;
+    }
+  }, {
+    key: "successRedirect",
+    value: function successRedirect() {
+      if (this.data_redirect) {
+        if (this.data_redirect === 'this') {
+          document.location.reload();
+        } else {
+          window.location.href = this.data_redirect;
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: "successResetForm",
+    value: function successResetForm() {
+      if (this.data_reset) {
+        this.node.reset();
+        return true;
+      }
+
+      return false;
+    }
+  }]);
+
+  return Form;
+}();
+
+var DataAction = /*#__PURE__*/function () {
+  function DataAction(node) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    _classCallCheck(this, DataAction);
+
+    this.node = node;
+    this.options = options;
+    this.data_action = this.node.getAttribute('data-action');
+    this.data_method = this.node.hasAttribute('data-method') ? this.node.getAttribute('data-method') : 'POST';
+    this.data_confirm = this.node.getAttribute('data-confirm');
+    this.data_form = this.node.getAttribute('data-form');
+    this.data_form_reset = this.node.getAttribute('data-form-reset');
+    this.data_class = this.node.getAttribute('data-class');
+    this.data_class_target = this.node.getAttribute('data-class-target');
+    this.data_redirect = this.node.getAttribute('data-redirect');
+    this.data_counter = this.node.getAttribute('data-counter');
+    this.data_delete = this.node.getAttribute('data-delete');
+    this.data_message = this.node.getAttribute('data-message');
+
+    if (this.data_action) {
+      this.initialize();
+    }
+  }
+
+  _createClass(DataAction, [{
+    key: "initialize",
+    value: function initialize() {
+      var _this2 = this;
+
+      this.node.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        if (!_this2.confirmation()) {
+          return false;
+        }
+
+        _this2.disableNodes();
+
+        fetch(_this2.data_action, {
+          method: _this2.data_method,
+          body: _this2.getFormData()
+        }).then(function (response) {
+          return response.json();
+        }).then(function (data) {
+          if (data.status === 'success') {
+            _this2.successRedirect();
+
+            _this2.successCounter();
+
+            _this2.successResetTargetForm();
+
+            _this2.successDeleteNodes();
+          }
+
+          makeAlert(data.status, _this2.data_message ? _this2.data_message : data.message);
+        }).catch(function (error) {
+          makeAlert('error', error);
+        });
+
+        _this2.enableNodes();
+      });
+    }
+  }, {
+    key: "confirmation",
+    value: function confirmation() {
+      var confirmation = true;
+
+      if (this.data_confirm) {
+        confirmation = confirm(this.data_confirm);
+      }
+
+      return confirmation;
+    }
+  }, {
+    key: "getFormData",
+    value: function getFormData() {
+      var data = new FormData();
+
+      if (this.data_form) {
+        data = new FormData(document.querySelector(this.data_form));
+      }
+
+      if (this.options.data) {
+        this.options.data.forEach(function (field) {
+          if (field.key) {
+            data.set(field.key, field.value ? field.value : null);
+          }
+        });
+      }
+
+      return data;
+    }
+  }, {
+    key: "disableNodes",
+    value: function disableNodes() {
+      var _this3 = this;
+
+      // DISABLE SELF
+      this.node.setAttribute('disabled', 'disabled');
+      this.node.classList.add('submit'); // ADD CLASS TO TARGETS
+
+      if (this.data_class && this.data_class_target) {
+        document.querySelectorAll(this.data_class_target).forEach(function (target) {
+          target.classList.add(_this3.data_class);
+        });
+      } else if (this.data_class) {
+        this.node.classList.add(this.data_class);
+      }
+
+      return true;
+    }
+  }, {
+    key: "enableNodes",
+    value: function enableNodes() {
+      var _this4 = this;
+
+      // ENABLE SELF
+      this.node.removeAttribute('disabled', 'disabled');
+      this.node.classList.remove('submit'); // REMOVE CLASS FROM TARGETS
+
+      if (this.data_class && this.data_class_target) {
+        document.querySelectorAll(this.data_class_target).forEach(function (target) {
+          target.classList.remove(_this4.data_class);
+        });
+      } else if (this.data_class) {
+        this.node.classList.remove(this.data_class);
+      }
+
+      return true;
+    }
+  }, {
+    key: "successRedirect",
+    value: function successRedirect() {
+      if (this.data_redirect) {
+        if (this.data_redirect === 'this') {
+          document.location.reload();
+        } else {
+          window.location.href = this.data_redirect;
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: "successCounter",
+    value: function successCounter() {
+      if (this.data_counter) {
+        document.querySelectorAll(this.data_counter).forEach(function (target) {
+          var target_value = parseInt(target.textContent);
+          target.textContent = target_value - 1;
+        });
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "successResetTargetForm",
+    value: function successResetTargetForm() {
+      if (this.data_form_reset) {
+        document.querySelectorAll(this.data_form_reset).forEach(function (target) {
+          target.reset();
+        });
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "successDeleteNodes",
+    value: function successDeleteNodes() {
+      if (this.data_delete) {
+        return false;
+      }
+
+      function fadeOut(el) {
+        el.style.opacity = 1;
+
+        (function fade() {
+          if ((el.style.opacity -= .1) < 0) {
+            el.style.display = "none";
+          } else {
+            requestAnimationFrame(fade);
+          }
+        })();
+      }
+
+      ;
+
+      if (this.data_delete === 'this') {
+        fadeOut(this.node);
+        return true;
+      }
+
+      if (this.data_delete === 'trow') {
+        var trow = this.node.closest('tr');
+
+        if (trow) {
+          fadeOut(trow);
+        }
+
+        return true;
+      }
+
+      document.querySelectorAll(this.data_delete).forEach(function (target) {
+        // target.remove();
+        fadeOut(target);
+      });
+      return true;
+    }
+  }]);
+
+  return DataAction;
+}();
+
+var DataBehabior = /*#__PURE__*/function () {
+  function DataBehabior(node) {
+    _classCallCheck(this, DataBehabior);
+
+    this.node = node;
+    this.data_behavior = this.node.getAttribute('data-behavior');
+    this.data_hide = this.node.getAttribute('data-hide');
+    this.data_show = this.node.getAttribute('data-show');
+    this.data_target = this.node.getAttribute('data-target');
+
+    if (this.data_behavior) {
+      this.initialize();
+    }
+  }
+
+  _createClass(DataBehabior, [{
+    key: "initialize",
+    value: function initialize() {
+      var _this5 = this;
+
+      // on node init
+      if (this.data_behavior === 'visibility') {
+        this.hideItems();
+        this.showItems();
+      } // on node change
+
+
+      this.node.addEventListener('change', function (event) {
+        if (_this5.data_behavior === 'visibility') {
+          _this5.hideItems();
+
+          _this5.showItems();
+        }
+
+        if (_this5.data_behavior === 'cyrToLat') {
+          if (_this5.data_target) {
+            _this5.data_target.split(',').forEach(function (target) {
+              var target_item = document.querySelector('[name=' + target + ']');
+
+              if (target_item) {
+                target_item.value = cyrToLat(_this5.node.value);
+              }
+            });
+          } else {
+            _this5.node.value = cyrToLat(_this5.node.value);
+          }
+        }
+
+        if (_this5.data_behavior === 'slug') {
+          if (_this5.data_target) {
+            _this5.data_target.split(',').forEach(function (target) {
+              var target_item = document.querySelector('[name=' + target + ']');
+
+              if (target_item) {
+                target_item.value = slug(_this5.node.value);
+              }
+            });
+          } else {
+            _this5.node.value = slug(_this5.node.value);
+          }
+        }
+      });
+    }
+  }, {
+    key: "hideItems",
+    value: function hideItems() {
+      var hide = this.data_hide;
+
+      if (this.node.getAttribute('type') === 'checkbox' && !this.node.checked) {
+        if (hide) {
+          hide += ',' + this.data_show;
+        } else {
+          hide = this.data_show;
+        }
+      }
+
+      if (this.node.getAttribute('type') === 'radio' && !this.node.checked) {
+        hide = null;
+      }
+
+      if (hide) {
+        hide.split(',').forEach(function (to_hide) {
+          var item = form.querySelector('[name="' + to_hide + '"]');
+          var parent = item.parentElement;
+
+          if (parent.classList.contains('form-control')) {
+            parent.classList.add('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+      }
+
+      return true;
+    }
+  }, {
+    key: "showItems",
+    value: function showItems() {
+      var show = this.data_show;
+
+      if (this.node.getAttribute('type') === 'checkbox' && !this.node.checked) {
+        show = null;
+      }
+
+      if (this.node.getAttribute('type') === 'radio' && !this.node.checked) {
+        show = null;
+      }
+
+      if (show) {
+        show.split(',').forEach(function (to_show) {
+          var item = form.querySelector('[name="' + to_show + '"]');
+          var parent = item.parentElement;
+
+          if (parent.classList.contains('form-control')) {
+            parent.classList.remove('hidden');
+          } else {
+            item.classList.remove('hidden');
+          }
+        });
+      }
+
+      return true;
+    }
+  }]);
+
+  return DataBehabior;
+}();
+
+var ForeignForm = /*#__PURE__*/function () {
+  function ForeignForm(node) {
+    _classCallCheck(this, ForeignForm);
+
+    this.node = node;
+    this.name = node.getAttribute('data-name');
+    this.value = node.getAttribute('data-value');
+    this.inputs = node.querySelectorAll('[name]');
+    this.button = {
+      submit: node.querySelector('[type="submit"]'),
+      open_modal: document.createElement('span')
+    };
+    this.icon = {
+      add: "<span class=\"badge bg-primary cursor-pointer\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-plus align-middle feather-sm\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line></svg></span>",
+      sort: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-move\"><polyline points=\"5 9 2 12 5 15\"></polyline><polyline points=\"9 5 12 2 15 5\"></polyline><polyline points=\"15 19 12 22 9 19\"></polyline><polyline points=\"19 9 22 12 19 15\"></polyline><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"></line><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"22\"></line></svg>",
+      edit: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-edit\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path><path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg>",
+      delete: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-trash\"><polyline points=\"3 6 5 6 21 6\"></polyline><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>"
+    };
+    this.uid = this.generateUid();
+    this.store = document.createElement('input');
+    this.table = document.createElement('table');
+    this.tbody = document.createElement('tbody');
+    this.is_editing = false;
+    this.editing_row = null;
+    this.initialize();
+  }
+
+  _createClass(ForeignForm, [{
+    key: "initialize",
+    value: function initialize() {
+      var _this6 = this;
+
+      // SET ID TO NODE
+      this.node.setAttribute('id', this.uid); // SET UP MODAL BUTTON
+
+      this.button.open_modal.setAttribute('data-bs-toggle', 'modal');
+      this.button.open_modal.setAttribute('data-bs-target', '#' + this.uid);
+      this.button.open_modal.innerHTML = this.icon.add;
+      this.button.open_modal.addEventListener('click', function (event) {
+        if (!_this6.is_editing) {
+          _this6.resetEditingRow();
+        }
+      }); // SET UP STORE
+
+      this.store.setAttribute('name', this.name);
+      this.store.setAttribute('type', 'hidden');
+      this.store.classList.add('hidden'); // SET UP TABLE
+
+      this.table.classList.add('table');
+      this.table.classList.add('table-sm');
+      this.tbody.classList.add('sortable');
+      new Sortable(this.tbody, {
+        handle: '.sortable__handle',
+        animation: 150,
+        onSort: function onSort() {
+          return _this6.updateStore();
+        }
+      }); // SET UP SUMIT BUTTON
+
+      this.button.submit.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        _this6.clickSubmit();
+
+        _this6.updateStore();
+
+        _this6.resetEditingRow();
+      }); // RENDER
+
+      this.populateTable();
+      this.updateStore();
+      this.render(); // RESET EDITING ROW IF MODAL CANCELED
+
+      this.node.addEventListener('hidden.bs.modal', function () {
+        return _this6.resetEditingRow();
+      });
+    }
+  }, {
+    key: "clickSubmit",
+    value: function clickSubmit() {
+      var _this7 = this;
+
+      // EDIT ROW
+      if (this.is_editing) {
+        this.inputs.forEach(function (input) {
+          _this7.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent = input.value;
+        });
+        this.resetEditingRow();
+        return true;
+      } // ADD ROW
+
+
+      this.tbody.appendChild(this.createRow());
+      return true;
+    }
+  }, {
+    key: "updateStore",
+    value: function updateStore() {
+      var data = [];
+      this.tbody.querySelectorAll('tr').forEach(function (tr) {
+        var obj = {};
+        tr.querySelectorAll('td').forEach(function (td) {
+          if (!td.hasAttribute('data-name')) {
+            return false;
+          }
+
+          obj[td.getAttribute('data-name')] = td.textContent;
+        });
+        data.push(obj);
+      });
+      this.store.value = JSON.stringify(data);
+      return true;
+    }
+  }, {
+    key: "resetEditingRow",
+    value: function resetEditingRow() {
+      this.inputs.forEach(function (input) {
+        if (input.tagName.toLowerCase() == 'select') {
+          input.selectedIndex = 0;
+
+          if (!input.hasAttribute('data-native')) {
+            input.slim.set(input.value);
+          }
+        } else {
+          input.value = '';
+        }
+      });
+      this.is_editing = false;
+      this.editing_row = null;
+      return true;
+    }
+  }, {
+    key: "createRow",
+    value: function createRow() {
+      var _this8 = this;
+
+      var object = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var trow = document.createElement('tr');
+
+      if (object) {
+        for (var _i = 0, _Object$entries = Object.entries(object); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              key = _Object$entries$_i[0],
+              value = _Object$entries$_i[1];
+
+          var tcol = document.createElement('td');
+          tcol.setAttribute('data-name', key);
+          tcol.textContent = value;
+          trow.appendChild(tcol);
+        }
+      } else {
+        this.inputs.forEach(function (input) {
+          var tcol = document.createElement('td');
+          tcol.setAttribute('data-name', input.name);
+          tcol.textContent = input.value;
+          trow.appendChild(tcol);
+        });
+      }
+
+      var tcol_actions = document.createElement('td');
+      tcol_actions.classList.add('table-action');
+      var btn_sort = document.createElement('span');
+      var btn_edit = document.createElement('span');
+      var btn_delete = document.createElement('span');
+      btn_sort.innerHTML = this.icon.sort + ' ';
+      btn_sort.classList.add('sortable__handle');
+      btn_edit.innerHTML = this.icon.edit + ' ';
+      btn_delete.innerHTML = this.icon.delete;
+      btn_edit.addEventListener('click', function () {
+        return _this8.clickEdit(trow);
+      });
+      btn_delete.addEventListener('click', function () {
+        return _this8.clickDelete(trow);
+      });
+      tcol_actions.append(btn_sort);
+      tcol_actions.append(btn_edit);
+      tcol_actions.append(btn_delete);
+      trow.appendChild(tcol_actions);
+      return trow;
+    }
+  }, {
+    key: "clickEdit",
+    value: function clickEdit(trow) {
+      var _this9 = this;
+
+      this.inputs.forEach(function (input) {
+        var value = trow.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent;
+
+        if (input.tagName.toLowerCase() == 'select' && !input.hasAttribute('data-native')) {
+          input.slim.set(value);
+        } else {
+          input.value = value;
+        }
+
+        _this9.is_editing = true;
+        _this9.editing_row = trow;
+
+        _this9.button.open_modal.click();
+      });
+    }
+  }, {
+    key: "clickDelete",
+    value: function clickDelete(trow) {
+      trow.remove();
+      this.updateStore();
+    }
+  }, {
+    key: "populateTable",
+    value: function populateTable() {
+      var _this10 = this;
+
+      if (!this.value) {
+        return true;
+      }
+
+      var values = JSON.parse(this.value);
+      values.forEach(function (value) {
+        _this10.tbody.appendChild(_this10.createRow(value));
+      });
+      return true;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      this.table.appendChild(this.tbody);
+      this.node.before(this.button.open_modal);
+      this.node.before(this.store);
+      this.node.before(this.table);
+      return true;
+    }
+  }, {
+    key: "generateUid",
+    value: function generateUid() {
+      return 'ff-' + Math.random().toString(36).slice(2);
+    }
+  }]);
+
+  return ForeignForm;
+}();
 
 document.addEventListener('DOMContentLoaded', function () {
   // SMOOTH SCROLL
@@ -55,7 +782,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           if (scroll_to_node) {
             event.preventDefault();
-            SmoothScrollTo(scroll_to_node);
+            smoothScroll(scroll_to_node);
           }
         }
       });
@@ -242,7 +969,8 @@ document.addEventListener('DOMContentLoaded', function () {
           }).then(function (data) {
             if (data.status === 'success') {
               var selection = quill.getSelection().index;
-              quill.insertEmbed(selection, 'image', BASE_URL + '/' + data.message);
+              var image_url = window.location.protocol + '//' + window.location.host + '/' + data.message;
+              quill.insertEmbed(selection, 'image', image_url);
               quill.setSelection(selection + 1);
             } else {
               makeAlert(data.status, data.message);
@@ -333,606 +1061,30 @@ document.addEventListener('DOMContentLoaded', function () {
       handle: '.sortable__handle',
       animation: 150
     });
-  }); // TOASTS
+  }); // FORMS
 
-  function makeAlert(type, text) {
-    var time = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
-
-    if (!text || !text.length) {
-      return false;
-    }
-
-    var container = document.querySelector('.toasts');
-
-    if (!container) {
-      container = document.createElement('div');
-      container.classList.add('toasts');
-      document.body.appendChild(container);
-    }
-
-    var toast = document.createElement('div');
-    toast.classList.add('toasts__item');
-
-    if (type) {
-      toast.classList.add(type);
-    }
-
-    var toast_icon = document.createElement('i');
-    toast_icon.classList.add('toasts__icon');
-
-    if (type) {
-      toast_icon.classList.add(type);
-    }
-
-    var toast_text = document.createElement('span');
-    toast_text.classList.add('toasts__text');
-    toast_text.textContent = text;
-    toast.appendChild(toast_icon);
-    toast.appendChild(toast_text);
-    container.appendChild(toast);
-    toast.addEventListener('click', function () {
-      return closeAlert(container, toast);
+  document.querySelectorAll('form').forEach(function (element) {
+    new Form(element, {
+      loader: SETTING.loader,
+      data: [{
+        key: SETTING.csrf.key,
+        value: SETTING.csrf.token
+      }]
     });
-    setTimeout(function () {
-      return closeAlert(container, toast);
-    }, time);
-    return true;
-  }
+  }); // DATA-ACTION
 
-  function closeAlert(container, toast) {
-    toast.classList.add('disappear');
-    setTimeout(function () {
-      toast.remove();
-
-      if (container && container.childElementCount <= 0) {
-        container.remove();
-      }
-    }, 500);
-  } // FORMS
-
-
-  document.querySelectorAll('form').forEach(function (form) {
-    form.insertAdjacentHTML('beforeend', SETTING.loader);
-    formBehavior(form);
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      disableForm(form);
-      var formData = new FormData(form);
-      formData.set(SETTING.csrf.key, SETTING.csrf.token);
-      fetch(form.action, {
-        method: 'POST',
-        body: formData
-      }).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        if (data.status === 'success') {
-          if (form.hasAttribute('data-redirect')) {
-            var redirect = form.getAttribute('data-redirect');
-
-            if (redirect === 'this') {
-              document.location.reload();
-            } else {
-              window.location.href = redirect;
-            }
-          }
-
-          if (form.hasAttribute('data-reset')) {
-            form.reset();
-          }
-        }
-
-        makeAlert(data.status, data.message);
-      }).catch(function (error) {
-        makeAlert('error', error);
-      });
-      enableForm(form);
+  document.querySelectorAll('[data-action]').forEach(function (element) {
+    new DataAction(element, {
+      data: [{
+        key: SETTING.csrf.key,
+        value: SETTING.csrf.token
+      }]
     });
-  });
-
-  function formBehavior(form) {
-    var controls = form.querySelectorAll('[data-behavior]');
-
-    function hideItems(control) {
-      var hide = control.getAttribute('data-hide');
-
-      if (control.getAttribute('type') === 'checkbox' && !control.checked) {
-        if (hide) {
-          hide += ',' + control.getAttribute('data-show');
-        } else {
-          hide = control.getAttribute('data-show');
-        }
-      }
-
-      if (control.getAttribute('type') === 'radio' && !control.checked) {
-        hide = null;
-      }
-
-      if (hide) {
-        hide.split(',').forEach(function (to_hide) {
-          var item = form.querySelector('[name="' + to_hide + '"]');
-          var parent = item.parentElement;
-
-          if (parent.classList.contains('form-control')) {
-            parent.classList.add('hidden');
-          } else {
-            item.classList.add('hidden');
-          }
-        });
-      }
-    }
-
-    function showItems(control) {
-      var show = control.getAttribute('data-show');
-
-      if (control.getAttribute('type') === 'checkbox' && !control.checked) {
-        show = null;
-      }
-
-      if (control.getAttribute('type') === 'radio' && !control.checked) {
-        show = null;
-      }
-
-      if (show) {
-        show.split(',').forEach(function (to_show) {
-          var item = form.querySelector('[name="' + to_show + '"]');
-          var parent = item.parentElement;
-
-          if (parent.classList.contains('form-control')) {
-            parent.classList.remove('hidden');
-          } else {
-            item.classList.remove('hidden');
-          }
-        });
-      }
-    }
-
-    controls.forEach(function (control) {
-      // on form init
-      if (control.getAttribute('data-behavior') === 'visibility') {
-        hideItems(control);
-        showItems(control);
-      } // on form change
-
-
-      control.addEventListener('change', function (event) {
-        if (control.getAttribute('data-behavior') === 'visibility') {
-          hideItems(control);
-          showItems(control);
-        }
-
-        if (control.getAttribute('data-behavior') === 'cyr_to_lat') {
-          if (control.hasAttribute('data-target')) {
-            control.getAttribute('data-target').split(',').forEach(function (target) {
-              var target_item = form.querySelector('[name=' + target + ']');
-
-              if (target_item) {
-                target_item.value = cyr_to_lat(control.value);
-              }
-            });
-          } else {
-            control.value = cyr_to_lat(control.value);
-          }
-        }
-
-        if (control.getAttribute('data-behavior') === 'slug') {
-          if (control.hasAttribute('data-target')) {
-            control.getAttribute('data-target').split(',').forEach(function (target) {
-              var target_item = form.querySelector('[name=' + target + ']');
-
-              if (target_item) {
-                target_item.value = slug(control.value);
-              }
-            });
-          } else {
-            control.value = slug(control.value);
-          }
-        }
-      });
-    });
-  }
-
-  function disableForm(form) {
-    form.classList.add('submit');
-    form.querySelector('[type="submit"]').disabled = true;
-  }
-
-  function enableForm(form) {
-    form.classList.remove('submit');
-    form.querySelector('[type="submit"]').disabled = false;
-  }
-
-  document.querySelectorAll('[data-action]').forEach(function (form) {
-    form.addEventListener('click', function (event) {
-      event.preventDefault();
-
-      if (!confirmForm(form)) {
-        return;
-      }
-
-      disableForm(form);
-      var formData = new FormData();
-
-      if (form.hasAttribute('data-form')) {
-        formData = new FormData(document.querySelector(form.getAttribute('data-form')));
-      }
-
-      formData.set(SETTING.csrf.key, SETTING.csrf.token);
-      fetch(form.getAttribute('data-action'), {
-        method: form.hasAttribute('data-method') ? form.getAttribute('data-method') : 'POST',
-        body: formData
-      }).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        if (data.status === 'success') {
-          successRedirect(form);
-          successCounter(form);
-          successResetTargetForm(form);
-          successDeleteNodes(form);
-        }
-
-        makeAlert(data.status, form.hasAttribute('data-message') ? form.getAttribute('data-message') : data.message);
-      }).catch(function (error) {
-        makeAlert('error', error);
-      });
-      enableForm(form);
-    });
-  });
-
-  function confirmForm(form) {
-    var confirmation = true;
-
-    if (form.hasAttribute('data-confirm')) {
-      confirmation = confirm(form.getAttribute('data-confirm'));
-    }
-
-    return confirmation;
-  }
-
-  function disableForm(form) {
-    // DISABLE
-    form.setAttribute('disabled', 'disabled'); // ADD CLASS
-
-    if (form.hasAttribute('data-class') && form.hasAttribute('data-class-target')) {
-      document.querySelectorAll(form.getAttribute('data-class-target')).forEach(function (target) {
-        target.classList.add(form.getAttribute('data-class'));
-      });
-    } else if (form.hasAttribute('data-class')) {
-      form.classList.add(form.getAttribute('data-class'));
-    }
-  }
-
-  function enableForm(form) {
-    // ENABLE
-    form.removeAttribute('disabled'); // REMOVE CLASS
-
-    if (form.hasAttribute('data-class') && form.hasAttribute('data-class-target')) {
-      document.querySelectorAll(form.getAttribute('data-class-target')).forEach(function (target) {
-        target.classList.remove(form.getAttribute('data-class'));
-      });
-    } else if (form.hasAttribute('data-class')) {
-      form.classList.remove(form.getAttribute('data-class'));
-    }
-  }
-
-  function successRedirect(form) {
-    if (form.hasAttribute('data-redirect')) {
-      var redirect = form.getAttribute('data-redirect');
-
-      if (redirect === 'this') {
-        document.location.reload();
-      } else {
-        window.location.href = redirect;
-      }
-    }
-
-    return false;
-  }
-
-  function successCounter(form) {
-    if (form.hasAttribute('data-counter')) {
-      document.querySelectorAll(form.getAttribute('data-counter')).forEach(function (target) {
-        var target_value = parseInt(target.textContent);
-        target.textContent = target_value - 1;
-      });
-      return true;
-    }
-
-    return false;
-  }
-
-  function successResetTargetForm(form) {
-    if (form.hasAttribute('data-form-reset')) {
-      document.querySelectorAll(form.getAttribute('data-form-reset')).forEach(function (target) {
-        target.reset();
-      });
-      return true;
-    }
-
-    return false;
-  }
-
-  function successDeleteNodes(form) {
-    if (form.hasAttribute('data-delete')) {
-      var target_value = form.getAttribute('data-delete');
-
-      if (target_value === 'this') {
-        fadeOut(form);
-        return true;
-      }
-
-      if (target_value === 'trow') {
-        var target = form.closest('tr');
-
-        if (target) {
-          fadeOut(target);
-        }
-
-        return true;
-      }
-
-      document.querySelectorAll(target_value).forEach(function (target) {
-        // target.remove();
-        fadeOut(target);
-      });
-      return true;
-    }
-
-    return false;
-  }
-
-  function fadeOut(el) {
-    el.style.opacity = 1;
-
-    (function fade() {
-      if ((el.style.opacity -= .1) < 0) {
-        el.style.display = "none";
-      } else {
-        requestAnimationFrame(fade);
-      }
-    })();
-  }
-
-  ;
-
-  var ForeignForm = /*#__PURE__*/function () {
-    function ForeignForm(node) {
-      _classCallCheck(this, ForeignForm);
-
-      this.node = node;
-      this.name = node.getAttribute('data-name');
-      this.value = node.getAttribute('data-value');
-      this.inputs = node.querySelectorAll('[name]');
-      this.button = {
-        submit: node.querySelector('[type="submit"]'),
-        open_modal: document.createElement('span')
-      };
-      this.icon = {
-        add: "<span class=\"badge bg-primary cursor-pointer\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-plus align-middle feather-sm\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line></svg></span>",
-        sort: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-move\"><polyline points=\"5 9 2 12 5 15\"></polyline><polyline points=\"9 5 12 2 15 5\"></polyline><polyline points=\"15 19 12 22 9 19\"></polyline><polyline points=\"19 9 22 12 19 15\"></polyline><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"></line><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"22\"></line></svg>",
-        edit: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-edit\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path><path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg>",
-        delete: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-trash\"><polyline points=\"3 6 5 6 21 6\"></polyline><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>"
-      };
-      this.uid = this.generateUid();
-      this.store = document.createElement('input');
-      this.table = document.createElement('table');
-      this.tbody = document.createElement('tbody');
-      this.is_editing = false;
-      this.editing_row = null;
-      this.initialize();
-    }
-
-    _createClass(ForeignForm, [{
-      key: "initialize",
-      value: function initialize() {
-        var _this = this;
-
-        // SET ID TO NODE
-        this.node.setAttribute('id', this.uid); // SET UP MODAL BUTTON
-
-        this.button.open_modal.setAttribute('data-bs-toggle', 'modal');
-        this.button.open_modal.setAttribute('data-bs-target', '#' + this.uid);
-        this.button.open_modal.innerHTML = this.icon.add;
-        this.button.open_modal.addEventListener('click', function (event) {
-          if (!_this.is_editing) {
-            _this.resetEditingRow();
-          }
-        }); // SET UP STORE
-
-        this.store.setAttribute('name', this.name);
-        this.store.setAttribute('type', 'hidden');
-        this.store.classList.add('hidden'); // SET UP TABLE
-
-        this.table.classList.add('table');
-        this.table.classList.add('table-sm');
-        this.tbody.classList.add('sortable');
-        new Sortable(this.tbody, {
-          handle: '.sortable__handle',
-          animation: 150,
-          onSort: function onSort() {
-            return _this.updateStore();
-          }
-        }); // SET UP SUMIT BUTTON
-
-        this.button.submit.addEventListener('click', function (event) {
-          event.preventDefault();
-
-          _this.clickSubmit();
-
-          _this.updateStore();
-
-          _this.resetEditingRow();
-        }); // RENDER
-
-        this.populateTable();
-        this.updateStore();
-        this.render(); // RESET EDITING ROW IF MODAL CANCELED
-
-        this.node.addEventListener('hidden.bs.modal', function () {
-          return _this.resetEditingRow();
-        });
-      }
-    }, {
-      key: "clickSubmit",
-      value: function clickSubmit() {
-        var _this2 = this;
-
-        // EDIT ROW
-        if (this.is_editing) {
-          this.inputs.forEach(function (input) {
-            _this2.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent = input.value;
-          });
-          this.resetEditingRow();
-          return true;
-        } // ADD ROW
-
-
-        this.tbody.appendChild(this.createRow());
-        return true;
-      }
-    }, {
-      key: "updateStore",
-      value: function updateStore() {
-        var data = [];
-        this.tbody.querySelectorAll('tr').forEach(function (tr) {
-          var obj = {};
-          tr.querySelectorAll('td').forEach(function (td) {
-            if (!td.hasAttribute('data-name')) {
-              return false;
-            }
-
-            obj[td.getAttribute('data-name')] = td.textContent;
-          });
-          data.push(obj);
-        });
-        this.store.value = JSON.stringify(data);
-        return true;
-      }
-    }, {
-      key: "resetEditingRow",
-      value: function resetEditingRow() {
-        this.inputs.forEach(function (input) {
-          if (input.tagName.toLowerCase() == 'select') {
-            input.selectedIndex = 0;
-
-            if (!input.hasAttribute('data-native')) {
-              input.slim.set(input.value);
-            }
-          } else {
-            input.value = '';
-          }
-        });
-        this.is_editing = false;
-        this.editing_row = null;
-        return true;
-      }
-    }, {
-      key: "createRow",
-      value: function createRow() {
-        var _this3 = this;
-
-        var object = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-        var trow = document.createElement('tr');
-
-        if (object) {
-          for (var _i = 0, _Object$entries = Object.entries(object); _i < _Object$entries.length; _i++) {
-            var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-                key = _Object$entries$_i[0],
-                value = _Object$entries$_i[1];
-
-            var tcol = document.createElement('td');
-            tcol.setAttribute('data-name', key);
-            tcol.textContent = value;
-            trow.appendChild(tcol);
-          }
-        } else {
-          this.inputs.forEach(function (input) {
-            var tcol = document.createElement('td');
-            tcol.setAttribute('data-name', input.name);
-            tcol.textContent = input.value;
-            trow.appendChild(tcol);
-          });
-        }
-
-        var tcol_actions = document.createElement('td');
-        tcol_actions.classList.add('table-action');
-        var btn_sort = document.createElement('span');
-        var btn_edit = document.createElement('span');
-        var btn_delete = document.createElement('span');
-        btn_sort.innerHTML = this.icon.sort + ' ';
-        btn_sort.classList.add('sortable__handle');
-        btn_edit.innerHTML = this.icon.edit + ' ';
-        btn_delete.innerHTML = this.icon.delete;
-        btn_edit.addEventListener('click', function () {
-          return _this3.clickEdit(trow);
-        });
-        btn_delete.addEventListener('click', function () {
-          return _this3.clickDelete(trow);
-        });
-        tcol_actions.append(btn_sort);
-        tcol_actions.append(btn_edit);
-        tcol_actions.append(btn_delete);
-        trow.appendChild(tcol_actions);
-        return trow;
-      }
-    }, {
-      key: "clickEdit",
-      value: function clickEdit(trow) {
-        var _this4 = this;
-
-        this.inputs.forEach(function (input) {
-          var value = trow.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent;
-
-          if (input.tagName.toLowerCase() == 'select' && !input.hasAttribute('data-native')) {
-            input.slim.set(value);
-          } else {
-            input.value = value;
-          }
-
-          _this4.is_editing = true;
-          _this4.editing_row = trow;
-
-          _this4.button.open_modal.click();
-        });
-      }
-    }, {
-      key: "clickDelete",
-      value: function clickDelete(trow) {
-        trow.remove();
-        this.updateStore();
-      }
-    }, {
-      key: "populateTable",
-      value: function populateTable() {
-        var _this5 = this;
-
-        if (!this.value) {
-          return true;
-        }
-
-        var values = JSON.parse(this.value);
-        values.forEach(function (value) {
-          _this5.tbody.appendChild(_this5.createRow(value));
-        });
-        return true;
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        this.table.appendChild(this.tbody);
-        this.node.before(this.button.open_modal);
-        this.node.before(this.store);
-        this.node.before(this.table);
-        return true;
-      }
-    }, {
-      key: "generateUid",
-      value: function generateUid() {
-        return 'ff-' + Math.random().toString(36).slice(2);
-      }
-    }]);
-
-    return ForeignForm;
-  }();
+  }); // DATA-BEHAVIOR
+
+  document.querySelectorAll('[data-behavior]').forEach(function (element) {
+    new DataBehabior(element);
+  }); // FOREIGN FORM
 
   document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
     new ForeignForm(element);

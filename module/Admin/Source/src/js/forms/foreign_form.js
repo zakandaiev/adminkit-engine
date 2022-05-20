@@ -165,7 +165,7 @@ class ForeignForm {
 
 		btn_edit.addEventListener('click', () => this.clickEdit(trow));
 		btn_delete.addEventListener('click', () => this.clickDelete(trow));
-		
+
 		tcol_actions.append(btn_sort);
 		tcol_actions.append(btn_edit);
 		tcol_actions.append(btn_delete);
@@ -225,7 +225,3 @@ class ForeignForm {
 		return 'ff-' + Math.random().toString(36).slice(2);
 	}
 }
-
-document.querySelectorAll('[class*="foreign-form"]').forEach(element => {
-	new ForeignForm(element);
-});

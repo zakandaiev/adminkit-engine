@@ -15,7 +15,7 @@ class Auth {
 		if(Session::hasCookie(Define::COOKIE_KEY['auth'])) {
 			$auth_key = Session::getCookie(Define::COOKIE_KEY['auth']);
 
-			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND last_ip=:last_ip AND enabled IS true ORDER BY date_created DESC LIMIT 1');
+			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND last_ip=:last_ip AND is_enabled IS true ORDER BY date_created DESC LIMIT 1');
 
 			$user_binding = [
 				'auth_token' => $auth_key,
@@ -39,7 +39,7 @@ class Auth {
 		$user->ip = filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
 		$authorize = '
-			UPDATE {user} SET 
+			UPDATE {user} SET
 				auth_token=:auth_token,
 				last_ip=:last_ip,
 				last_auth=CURRENT_TIMESTAMP
@@ -47,7 +47,7 @@ class Auth {
 		';
 
 		$authorize = new Statement($authorize);
-		
+
 		$authorize->prepare()->bind(['user_id' => $user->id, 'last_ip' => $user->ip, 'auth_token' => $auth_token])->execute();
 
 		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, !empty($days) ? $days : Define::AUTH_DAYS);
@@ -73,14 +73,14 @@ class Auth {
 		if(is_array($user)) {
 			$user = json_decode(json_encode($user));
 		}
-		
+
 		$user_password = $user->password;
 		$user->password = Hash::password($user->password);
 
 		$register = '
 			INSERT INTO {user}
 				(name, login, email, password)
-			VALUES 
+			VALUES
 				(:name, :login, :email, :password)
 		';
 

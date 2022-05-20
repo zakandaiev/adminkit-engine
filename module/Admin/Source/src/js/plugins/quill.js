@@ -31,7 +31,7 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 						},
 						'expand': event => {
 							const expand = wysiwyg_node.querySelector('.ql-expand');
-							
+
 							function maximize() {
 								wysiwyg_node.classList.add('fullscreen');
 								if(expand) expand.classList.add('active');
@@ -85,7 +85,9 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 				.then(data => {
 					if(data.status === 'success') {
 						const selection = quill.getSelection().index;
-						quill.insertEmbed(selection, 'image', BASE_URL + '/' + data.message);
+						const image_url = window.location.protocol + '//' + window.location.host + '/' + data.message;
+
+						quill.insertEmbed(selection, 'image', image_url);
 						quill.setSelection(selection + 1);
 					} else {
 						makeAlert(data.status, data.message);

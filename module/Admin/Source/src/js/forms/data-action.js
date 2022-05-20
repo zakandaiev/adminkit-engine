@@ -84,7 +84,7 @@ class DataAction {
 	disableNodes() {
 		// DISABLE SELF
 		this.node.setAttribute('disabled', 'disabled');
-		this.node.classList.add('disabled');
+		this.node.classList.add('submit');
 
 		// ADD CLASS TO TARGETS
 		if(this.data_class && this.data_class_target) {
@@ -95,12 +95,14 @@ class DataAction {
 		else if(this.data_class) {
 			this.node.classList.add(this.data_class);
 		}
+
+		return true;
 	}
 
 	enableNodes() {
 		// ENABLE SELF
 		this.node.removeAttribute('disabled', 'disabled');
-		this.node.classList.remove('disabled');
+		this.node.classList.remove('submit');
 
 		// REMOVE CLASS FROM TARGETS
 		if(this.data_class && this.data_class_target) {
@@ -111,6 +113,8 @@ class DataAction {
 		else if(this.data_class) {
 			this.node.classList.remove(this.data_class);
 		}
+
+		return true;
 	}
 
 	successRedirect() {
@@ -190,12 +194,3 @@ class DataAction {
 		return true;
 	}
 }
-
-document.querySelectorAll('[data-action]').forEach(element => {
-	new DataAction.node(element, {
-		data: [
-			// {key: 'key', value: 'value'}
-			{key: SETTING.csrf.key, value: SETTING.csrf.token},
-		]
-	});
-});

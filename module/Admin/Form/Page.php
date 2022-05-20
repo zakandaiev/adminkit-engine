@@ -13,7 +13,7 @@ define(
 			'date_publish',
 			'allow_comment',
 			'hide_comments',
-			'enabled'
+			'is_enabled'
 		]
 	]
 );
@@ -104,7 +104,7 @@ return [
 		'date_publish' => $date,
 		'allow_comment' => $boolean,
 		'hide_comments' => $boolean,
-		'enabled' => $boolean,
+		'is_enabled' => $boolean,
 		'custom_fields' => $custom_fields
 	],
 	'fields_modify' => function($fields, $form_data) {
@@ -170,7 +170,7 @@ function deleteTranslations($fields, $form_data) {
 	$binding = [
 		'id' => $form_data['item_id']
 	];
-	
+
 	$statement = new Statement($sql);
 	$statement->prepare()->bind($binding)->execute();
 
@@ -205,7 +205,7 @@ function updateTranslations($fields, $form_data) {
 			id<>:id AND url=:url
 			AND language<>(SELECT value FROM {setting} WHERE section=\'main\' AND name=\'language\')
 	';
-	
+
 	$statement = new Statement($sql);
 	$statement->prepare()->bind($binding)->execute();
 
@@ -252,7 +252,7 @@ function updateTags($field_value, $form_data) {
 			VALUES
 				(:page_id, :tag_id)
 		';
-		
+
 		$statement = new Statement($sql);
 		$statement->prepare()->bind(['page_id' => $form_data['item_id'], 'tag_id' => $key])->execute();
 	}
@@ -274,7 +274,7 @@ function updateCutomFields($field_value, $form_data) {
 				}
 			}
 		}
-		
+
 		foreach($page_fields as $field) {
 			$binding['name'] = $field->name;
 

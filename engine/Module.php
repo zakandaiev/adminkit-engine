@@ -50,7 +50,7 @@ class Module {
 
 			self::$module[$module] = $config;
 
-			if(!$config['enabled']) {
+			if(!$config['is_enabled']) {
 				continue;
 			}
 

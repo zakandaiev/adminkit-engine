@@ -210,8 +210,8 @@
 											<label class="form-check-label" for="hide_comments">Hide comments</label>
 										</div>
 										<div class="form-check form-switch">
-											<input class="form-check-input" type="checkbox" id="enabled" name="enabled" <?php if($page_edit->enabled): ?>checked<?php endif; ?>>
-											<label class="form-check-label" for="enabled">Visibility</label>
+											<input class="form-check-input" type="checkbox" id="is_enabled" name="is_enabled" <?php if($page_edit->is_enabled): ?>checked<?php endif; ?>>
+											<label class="form-check-label" for="is_enabled">Visibility</label>
 										</div>
 									</div>
 								</div>

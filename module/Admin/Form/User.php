@@ -63,7 +63,7 @@ return [
 		'avatar' => $avatar,
 		'address' => $address,
 		'about' => $about,
-		'enabled' => [
+		'is_enabled' => [
 			'boolean' => true
 		]
 	]

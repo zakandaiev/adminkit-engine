@@ -58,7 +58,7 @@ return [
 		'date_created' => [
 			'date' => true
 		],
-		'enabled' => [
+		'is_enabled' => [
 			'boolean' => true
 		]
 	],

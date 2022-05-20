@@ -62,8 +62,8 @@
 								<label class="form-check-label" for="access_all">Access all</label>
 							</div>
 							<div class="form-check form-switch mb-3">
-								<input class="form-check-input" type="checkbox" id="enabled" name="enabled" <?php if($group->enabled): ?>checked<?php endif; ?>>
-								<label class="form-check-label" for="enabled">Enabled</label>
+								<input class="form-check-input" type="checkbox" id="is_enabled" name="is_enabled" <?php if($group->is_enabled): ?>checked<?php endif; ?>>
+								<label class="form-check-label" for="is_enabled">Is enabled</label>
 							</div>
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>

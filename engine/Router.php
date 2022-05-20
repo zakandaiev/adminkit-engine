@@ -20,7 +20,7 @@ class Router {
 		$uri = (Request::$uri === '/') ? Request::$uri : strtok(trim(Request::$uri, '/'), '?');
 
 		foreach(Module::getAll() as $module) {
-			if(!$module['enabled']) {
+			if(!$module['is_enabled']) {
 				continue;
 			}
 
@@ -76,7 +76,7 @@ class Router {
 
 		$languages = [];
 		foreach(Module::getAll() as $module) {
-			if(!$module['enabled']) {
+			if(!$module['is_enabled']) {
 				continue;
 			}
 

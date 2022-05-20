@@ -27,7 +27,7 @@ return [
 			Server::answer(null, 'error', __('Invalid login or password'));
 		}
 
-		if(!$user->enabled) {
+		if(!$user->is_enabled) {
 			Server::answer(null, 'error', __('Your account has been disabled'));
 		}
 

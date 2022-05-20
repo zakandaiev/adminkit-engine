@@ -16,7 +16,7 @@ class AdminModel {
 			ON
 				t_group.id = t_user_group.group_id
 			WHERE
-				t_user_group.user_id=:user_id AND t_group.enabled IS true AND t_group.access_all IS true
+				t_user_group.user_id=:user_id AND t_group.is_enabled IS true AND t_group.access_all IS true
 			LIMIT 1
 		';
 
@@ -40,7 +40,7 @@ class AdminModel {
 		foreach($groups as $group) {
 			$user_groups[] = $group->group_id;
 		}
-		
+
 		return $user_groups;
 	}
 
@@ -61,7 +61,7 @@ class AdminModel {
 			ON
 				t_group.id = t_user_group.group_id
 			WHERE
-				t_user_group.user_id=:user_id AND t_group.enabled IS true
+				t_user_group.user_id=:user_id AND t_group.is_enabled IS true
 		';
 
 		$routes = new Statement($routes_sql);
@@ -70,7 +70,7 @@ class AdminModel {
 		foreach($routes as $route) {
 			$user_routes[] = $route->route;
 		}
-		
+
 		return $user_routes;
 	}
 

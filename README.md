@@ -32,11 +32,10 @@
 * create Form models eg. User (name, login, email...)
 * getAddTranslation() also copy custom fields, tags
 * check all links for site('url_language')
-* SQL: enabled -> is_enabled
 * add new settings in Admin
 * set min/maxlength for all inputs
 * Create Logs page in Admin module
 * Find way to use hooks between modules
 * JS scripts -> Classes for usability in another modules
-* JS add data-behavior (+ lowercase, uppercase), data-behavior-oninput
+* JS data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
 * id VARCHAR(64) NOT NULL DEFAULT MD5(CONCAT(UNIX_TIMESTAMP(), RAND(), UUID()))

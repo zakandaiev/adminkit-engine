@@ -48,7 +48,7 @@
 													<i class="align-middle" data-feather="minus"></i>
 												<?php endif; ?>
 											</td>
-											<td><?= icon_boolean($user->enabled) ?></td>
+											<td><?= icon_boolean($user->is_enabled) ?></td>
 											<td class="table-action">
 												<?php
 													$edit_url = site('url_language') . '/admin/user/edit/' . $user->id;

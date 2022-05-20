@@ -7,7 +7,7 @@ class Sitemap {
 		$pages = $custom_pages;
 
 		if(empty($custom_pages)) {
-			$sql = 'SELECT * FROM {page} WHERE date_publish <= NOW() AND enabled IS true';
+			$sql = 'SELECT * FROM {page} WHERE date_publish <= NOW() AND is_enabled IS true';
 			$pages = new Statement($sql);
 			$pages = $pages->prepare()->execute()->fetchAll();
 		}

@@ -20,7 +20,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		$statement->prepare()->bind(['page_url' => $page_url])->execute();	
+		$statement->prepare()->bind(['page_url' => $page_url])->execute();
 
 		return true;
 	}
@@ -33,7 +33,7 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				id=:id AND date_publish <= NOW() AND enabled IS true
+				id=:id AND date_publish <= NOW() AND is_enabled IS true
 		';
 
 		$page = new Statement($sql);
@@ -49,7 +49,7 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				url=:url AND date_publish <= NOW() AND enabled IS true
+				url=:url AND date_publish <= NOW() AND is_enabled IS true
 		';
 
 		$page = new Statement($sql);
@@ -68,7 +68,7 @@ class Page {
 			ON
 				t_page.id = t_page_category.category_id
 			WHERE
-				t_page_category.page_id=:page_id AND t_page.date_publish <= NOW() AND t_page.enabled IS true
+				t_page_category.page_id=:page_id AND t_page.date_publish <= NOW() AND t_page.is_enabled IS true
 		';
 
 		$statement = new Statement($sql);
@@ -87,7 +87,7 @@ class Page {
 			ON
 				t_tag.id = t_page_tag.tag_id
 			WHERE
-				t_page_tag.page_id=:page_id AND t_tag.enabled IS true
+				t_page_tag.page_id=:page_id AND t_tag.is_enabled IS true
 		';
 
 		$statement = new Statement($sql);
@@ -113,7 +113,7 @@ class Page {
 		ON
 			t_user.id=t_comment.author
 		WHERE
-			t_comment.page_id=:page_id AND t_comment.enabled IS true
+			t_comment.page_id=:page_id AND t_comment.is_enabled IS true
 		';
 
 		$statement = new Statement($sql);
@@ -172,11 +172,11 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				date_publish <= NOW() AND enabled IS true {$options['where']}
+				date_publish <= NOW() AND is_enabled IS true {$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -204,11 +204,11 @@ class Page {
 			ON
 				t_page.id = t_page_category.page_id
 			WHERE
-				t_page_category.category_id IN ($category_id) AND t_page.date_publish <= NOW() AND t_page.enabled IS true AND t_page.is_category IS false {$options['where']}
+				t_page_category.category_id IN ($category_id) AND t_page.date_publish <= NOW() AND t_page.is_enabled IS true AND t_page.is_category IS false {$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -239,7 +239,7 @@ class Page {
 					LEAD(url) OVER (ORDER BY date_publish) as next_url,
 					LEAD(image) OVER (ORDER BY date_publish) as next_image
 				FROM {page}
-				WHERE date_publish <= NOW() AND enabled IS true AND is_category IS false AND is_static IS false
+				WHERE date_publish <= NOW() AND is_enabled IS true AND is_category IS false AND is_static IS false
 			) t
 			WHERE id=:page_id
 		';
@@ -280,11 +280,11 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				t_page.author=:user_id AND t_page.date_publish <= NOW() AND t_page.enabled IS true AND t_page.is_category IS false AND t_page.is_static IS false {$options['where']}
+				t_page.author=:user_id AND t_page.date_publish <= NOW() AND t_page.is_enabled IS true AND t_page.is_category IS false AND t_page.is_static IS false {$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -309,11 +309,11 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				date_publish <= NOW() AND enabled IS true AND is_category IS false {$options['where']}
+				date_publish <= NOW() AND is_enabled IS true AND is_category IS false {$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -337,11 +337,11 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				date_publish <= NOW() AND enabled IS true AND is_category IS false AND is_static IS false {$options['where']}
+				date_publish <= NOW() AND is_enabled IS true AND is_category IS false AND is_static IS false {$options['where']}
 			ORDER BY
 				views DESC {$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -366,11 +366,11 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				date_publish <= NOW() AND enabled IS true AND is_category IS false AND is_static IS false {$options['where']}
+				date_publish <= NOW() AND is_enabled IS true AND is_category IS false AND is_static IS false {$options['where']}
 			ORDER BY
 				count_comments DESC {$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -395,11 +395,11 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				date_publish <= NOW() AND enabled IS true AND is_category IS true {$options['where']}
+				date_publish <= NOW() AND is_enabled IS true AND is_category IS true {$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -423,11 +423,11 @@ class Page {
 			FROM
 				{tag} t_tag
 			WHERE
-				enabled IS true {$options['where']}
+				is_enabled IS true {$options['where']}
 			ORDER BY
 				count_pages DESC {$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);
@@ -442,7 +442,7 @@ class Page {
 			FROM
 				{tag} t_tag
 			WHERE
-				url=:url AND enabled IS true
+				url=:url AND is_enabled IS true
 		';
 
 		$page = new Statement($sql);
@@ -470,11 +470,11 @@ class Page {
 			ON
 				t_page.id = t_page_tag.page_id
 			WHERE
-				t_page_tag.tag_id IN ($tag_id) AND t_page.date_publish <= NOW() AND t_page.enabled IS true AND t_page.is_category IS false AND is_static IS false {$options['where']}
+				t_page_tag.tag_id IN ($tag_id) AND t_page.date_publish <= NOW() AND t_page.is_enabled IS true AND t_page.is_category IS false AND is_static IS false {$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
-			{$options['offset']} 
+			{$options['offset']}
 		";
 
 		$pages = new Statement($sql);

@@ -48,7 +48,7 @@
 											</td>
 											<td><a href="/admin/user"><?= $group->count_users ?></a></td>
 											<td title="<?= format_date($group->date_created) ?>"><?= date_when($group->date_created) ?></td>
-											<td><?= icon_boolean($group->enabled) ?></td>
+											<td><?= icon_boolean($group->is_enabled) ?></td>
 											<td class="table-action">
 												<?php
 													$edit_url = site('url_language') . '/admin/group/edit/' . $group->id;

@@ -38,7 +38,7 @@ class User {
 	}
 
 	public function getGroups() {
-		$sql = 'SELECT id, name FROM {group} WHERE enabled IS true ORDER BY name ASC';
+		$sql = 'SELECT id, name FROM {group} WHERE is_enabled IS true ORDER BY name ASC';
 
 		$groups = new Statement($sql);
 

@@ -4,14 +4,14 @@ const BASE_URL = window.location.protocol + '//' + window.location.host;
 SETTING.loader = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
 SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg';
 
-// FUNCTIONS
-function SmoothScrollTo(element) {
-	if(element) {
-		element.scrollIntoView({
-			behavior: 'smooth'
-		});
-	}
-}
+// UTILS
+@@include("utils/smoothScroll.js")
+
+// CLASSES
+@@include("forms/form.js")
+@@include("forms/data-action.js")
+@@include("forms/data-behavior.js")
+@@include("forms/foreign_form.js")
 
 document.addEventListener('DOMContentLoaded', () => {
 	// SMOOTH SCROLL
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					const scroll_to_node = document.querySelector(event.currentTarget.hash);
 					if(scroll_to_node) {
 						event.preventDefault();
-						SmoothScrollTo(scroll_to_node);
+						smoothScroll(scroll_to_node);
 					}
 				}
 			});
@@ -51,24 +51,45 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// FILEPOND
-	@@include("partials/filepond.js")
+	@@include("plugins/filepond.js")
 
 	// QUILL
-	@@include("partials/quill.js")
+	@@include("plugins/quill.js")
 
 	// SLIMSELECT
-	@@include("partials/slimselect.js")
+	@@include("plugins/slimselect.js")
 
 	// SORTABLE
-	@@include("partials/sortable.js")
-
-	// TOASTS
-	@@include("partials/toast.js")
+	@@include("plugins/sortable.js")
 
 	// FORMS
-	@@include("partials/form.js")
-	@@include("partials/fake_form.js")
-	@@include("partials/foreign_form.js")
+	document.querySelectorAll('form').forEach(element => {
+		new Form(element, {
+			loader: SETTING.loader,
+			data: [
+				{key: SETTING.csrf.key, value: SETTING.csrf.token}
+			]
+		});
+	});
+
+	// DATA-ACTION
+	document.querySelectorAll('[data-action]').forEach(element => {
+		new DataAction(element, {
+			data: [
+				{key: SETTING.csrf.key, value: SETTING.csrf.token}
+			]
+		});
+	});
+
+	// DATA-BEHAVIOR
+	document.querySelectorAll('[data-behavior]').forEach(element => {
+		new DataBehabior(element);
+	});
+
+	// FOREIGN FORM
+	document.querySelectorAll('[class*="foreign-form"]').forEach(element => {
+		new ForeignForm(element);
+	});
 });
 
 window.onload = () => {

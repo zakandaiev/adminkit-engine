@@ -23,6 +23,6 @@ return [
 		'routes' => $routes,
 		'users' => $users,
 		'access_all' => $bool,
-		'enabled' => $bool
+		'is_enabled' => $bool
 	]
 ];
