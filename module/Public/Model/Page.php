@@ -127,14 +127,14 @@ class Page {
 		}
 
 		foreach($comments_formatted as $k => &$v) {
-			if($v['parent'] != 0) {
+			if(@$v['parent'] != 0) {
 				$comments_formatted[$v['parent']]['children'][] =& $v;
 			}
 		}
 		unset($v);
 
 		foreach($comments_formatted as $k => $v) {
-			if($v['parent'] != 0) {
+			if(@$v['parent'] != 0 || !isset($v['id'])) {
 				unset($comments_formatted[$k]);
 			}
 		}

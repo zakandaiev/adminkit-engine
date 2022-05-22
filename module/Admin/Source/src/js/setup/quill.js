@@ -85,7 +85,7 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 				.then(data => {
 					if(data.status === 'success') {
 						const selection = quill.getSelection().index;
-						const image_url = window.location.protocol + '//' + window.location.host + '/' + data.message;
+						const image_url = BASE_URL + '/' + data.message;
 
 						quill.insertEmbed(selection, 'image', image_url);
 						quill.setSelection(selection + 1);

@@ -74,6 +74,11 @@ $sidebar = [
 		],
 		'access_groups' => [2]
 	],
+	[
+		'icon' => 'activity',
+		'name' => 'Logs',
+		'route' => '/admin/log'
+	]
 ];
 
 ?>

@@ -34,8 +34,6 @@
 * check all links for site('url_language')
 * add new settings in Admin
 * set min/maxlength for all inputs
-* Create Logs page in Admin module
 * Find way to use hooks between modules
-* JS scripts -> Classes for usability in another modules
 * JS data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
 * id VARCHAR(64) NOT NULL DEFAULT MD5(CONCAT(UNIX_TIMESTAMP(), RAND(), UUID()))

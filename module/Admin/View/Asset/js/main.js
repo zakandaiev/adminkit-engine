@@ -18,8 +18,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-// SETTINGS
-var BASE_URL = window.location.protocol + '//' + window.location.host;
+var BASE_URL = window.location.protocol + '//' + window.location.host; // SETTING
+
 SETTING.loader = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
 SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg'; // UTILS
 
@@ -759,42 +759,7 @@ var ForeignForm = /*#__PURE__*/function () {
 }();
 
 document.addEventListener('DOMContentLoaded', function () {
-  // SMOOTH SCROLL
-  document.querySelectorAll('a').forEach(function (anchor) {
-    if (anchor.hasAttribute('target') && anchor.getAttribute('target') === '_blank') {
-      anchor.setAttribute('rel', 'noopener noreferrer nofollow');
-    }
-
-    if (!anchor.hasAttribute('data-bs-toggle')) {
-      anchor.addEventListener('click', function (event) {
-        if (!event.currentTarget.hasAttribute('href')) {
-          return;
-        }
-
-        var anchor_href = event.currentTarget.getAttribute('href');
-
-        if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
-          if (!event.currentTarget.hash) {
-            return;
-          }
-
-          var scroll_to_node = document.querySelector(event.currentTarget.hash);
-
-          if (scroll_to_node) {
-            event.preventDefault();
-            smoothScroll(scroll_to_node);
-          }
-        }
-      });
-    }
-  }); // RESPONSIVE TABLES
-
-  document.querySelectorAll('table').forEach(function (table) {
-    if (!table.parentElement.classList.contains('table-responsive')) {
-      table.outerHTML = '<div class="table-responsive">' + table.outerHTML + '</div>';
-    }
-  }); // FILEPOND
-
+  // FILEPOND
   var pond_input_data = {
     files: function files(input) {
       var files = [];
@@ -969,7 +934,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }).then(function (data) {
             if (data.status === 'success') {
               var selection = quill.getSelection().index;
-              var image_url = window.location.protocol + '//' + window.location.host + '/' + data.message;
+              var image_url = BASE_URL + '/' + data.message;
               quill.insertEmbed(selection, 'image', image_url);
               quill.setSelection(selection + 1);
             } else {
@@ -1062,6 +1027,7 @@ document.addEventListener('DOMContentLoaded', function () {
       animation: 150
     });
   }); // FORMS
+  // FORM
 
   document.querySelectorAll('form').forEach(function (element) {
     new Form(element, {
@@ -1088,11 +1054,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
     new ForeignForm(element);
+  }); // RESPONSIVE TABLES
+
+  document.querySelectorAll('table').forEach(function (table) {
+    if (!table.parentElement.classList.contains('table-responsive')) {
+      table.outerHTML = '<div class="table-responsive">' + table.outerHTML + '</div>';
+    }
+  }); // SMOOTH SCROLL
+
+  document.querySelectorAll('a').forEach(function (anchor) {
+    if (anchor.hasAttribute('target') && anchor.getAttribute('target') === '_blank') {
+      anchor.setAttribute('rel', 'noopener noreferrer nofollow');
+    }
+
+    if (!anchor.hasAttribute('data-bs-toggle')) {
+      anchor.addEventListener('click', function (event) {
+        if (!event.currentTarget.hasAttribute('href')) {
+          return;
+        }
+
+        var anchor_href = event.currentTarget.getAttribute('href');
+
+        if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
+          if (!event.currentTarget.hash) {
+            return;
+          }
+
+          var scroll_to_node = document.querySelector(event.currentTarget.hash);
+
+          if (scroll_to_node) {
+            event.preventDefault();
+            smoothScroll(scroll_to_node);
+          }
+        }
+      });
+    }
   });
-});
+}); // HANDLE BROKEN IMAGES
 
 window.onload = function () {
-  // HANDLE BROKEN IMAGES
   var images = document.querySelectorAll("img");
   images.forEach(function (image) {
     if (image.complete && typeof image.naturalWidth != "undefined" && image.naturalWidth <= 0) {

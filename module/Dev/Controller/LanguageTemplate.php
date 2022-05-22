@@ -42,9 +42,9 @@ class LanguageTemplate extends \Engine\Controller {
 			Server::answer(null, 'error', 'There is not ' . $this->module_name . ' module');
 		}
 
-		$this->engine_files = $this->glob_recursive($this->engine_dir . '/*.php');
-		$this->theme_files = $this->glob_recursive($this->theme_dir . '/*.php');
-		$this->module_files = $this->glob_recursive($this->module_dir . '/*.php');
+		$this->engine_files = glob_recursive($this->engine_dir . '/*.php');
+		$this->theme_files = glob_recursive($this->theme_dir . '/*.php');
+		$this->module_files = glob_recursive($this->module_dir . '/*.php');
 
 		$this->findMatches();
 		$this->saveTemplateFile();
@@ -100,15 +100,5 @@ class LanguageTemplate extends \Engine\Controller {
 		}
 
 		return true;
-	}
-
-	private function glob_recursive($pattern, $flags = 0) {
-		$files = glob($pattern, $flags);
-
-		foreach(glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
-			$files = array_merge($files, $this->glob_recursive($dir . '/' . basename($pattern), $flags));
-		}
-
-		return $files;
 	}
 }

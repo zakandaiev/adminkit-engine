@@ -222,3 +222,22 @@ Module::route('get', '/admin/group/edit/$id', 'Group@getEdit', [
 		__('Edit')
 	]
 ]);
+
+############################# LOG #############################
+Module::route('get', '/admin/log', 'Log@getAll', [
+	'page' => [
+		'title' => __('Logs')
+	],
+	'breadcrumbs' => [
+		__('Logs')
+	]
+]);
+
+Module::route('get', '/admin/log/$id', 'Log@get', [
+	'page' => [
+		'title' => __('Logs')
+	],
+	'breadcrumbs' => [
+		__('Logs') . '@/admin/log'
+	]
+]);

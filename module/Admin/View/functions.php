@@ -259,3 +259,58 @@ function getNotificationHTML($notification, $user) {
 
 	return $output;
 }
+
+############################# LOGS #############################
+function logs($logs, $folder = null, $folder_hash = null) {
+	$output = '';
+
+	$folder_path = $folder;
+
+	$folder_id = '';
+	$folder_class = '';
+
+	if(!empty($folder_hash)) {
+		$folder_id = 'id="' . $folder_hash . '"';
+		$folder_class = 'collapse';
+	}
+
+	$div_open = '<div ' . $folder_id . ' class="log ' . $folder_class . '">';
+	$div_close = '</div>';
+
+	foreach($logs as $log_key => $log_name) {
+		$hash = 'folder-' . Hash::token(8);
+
+		if(is_array($log_name)) {
+			$output .= $div_open;
+			$output .= '
+				<i class="align-middle" data-feather="folder"></i>
+				<a data-bs-toggle="collapse" href="#' . $hash . '" role="button" aria-expanded="false" aria-controls="' .$hash . '">
+					<span class="align-middle">' . $log_key . '</span>
+				</a>
+			';
+			$output .= logs($log_name, $folder . '@' .$log_key, $hash);
+			$output .= $div_close;
+		} else {
+			$output .= $div_open;
+
+			$log_url = site('url_language') . '/admin/log/' . (!empty($folder) ? trim($folder, '@') . '@' : '') . $log_name;
+
+			$output .= '
+				<i class="align-middle" data-feather="file-text"></i>
+				<a href="' . $log_url . '" class="align-middle">' . $log_name . '</a>
+			';
+
+			$output .= $div_close;
+		}
+	}
+
+	return $output;
+}
+
+function format_log($log_body) {
+	$date = '<span class="log__date">$1</span>';
+	$hyphen = '<span class="log__hyphen">$2</span>';
+	$replacement = $date . ' ' . $hyphen;
+
+	return preg_replace('/(\[.*\]) (-)/miu', $replacement, hc(trim($log_body)));
+}
