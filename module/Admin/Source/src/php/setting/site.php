@@ -68,7 +68,7 @@
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($settings->no_index_no_follow == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow to whole site</label>
+										<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow to all pages</label>
 									</div>
 									<button type="submit" class="btn btn-primary">Save</button>
 								</form>

@@ -2,7 +2,7 @@
 <html lang="<?= site('language_current') ?>">
 
 <head>
-	<?= Theme::header_meta($page) ?>
+	<?= Meta::all($page) ?>
 	<?= Asset::render('css') ?>
 </head>
 

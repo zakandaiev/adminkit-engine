@@ -25,7 +25,7 @@
 								<h5 class="card-title mb-0">Details</h5>
 							</div>
 							<div class="card-body text-center">
-								<img src="/<?= placeholder_avatar($user->avatar) ?>" alt="<?= $user->name ?>" class="img-fluid rounded-circle mb-2" width="128" height="128" data-fancybox>
+								<img src="/<?= placeholder_avatar($user->avatar) ?>" alt="<?= $user->name ?>" class="rounded-circle mb-2" width="128" height="128" data-fancybox>
 								<h5 class="card-title mb-0"><?= $user->name ?></h5>
 								<div class="text-muted mb-2">@<?= $user->login ?></div>
 								<?php if(!empty($user->about)): ?>

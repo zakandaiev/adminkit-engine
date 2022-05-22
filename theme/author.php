@@ -10,7 +10,7 @@
 					<?php if(!empty($author->avatar)): ?>
 						<img class="author-img center-block" src="/<?= $author->avatar ?>" alt="">
 					<?php endif; ?>
-					<h1 class="text-uppercase"><?= $author->name ?> <?= $author->surname ?></h1>
+					<h1 class="text-uppercase"><?= $author->name ?></h1>
 					<p class="lead"><?= $author->about ?></p>
 					<ul class="author-social">
 						<?php foreach($author_socials as $social): ?>

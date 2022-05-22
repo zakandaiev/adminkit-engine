@@ -24,8 +24,8 @@
 					<p>Malis debet quo et, eam an lorem quaestio. Mea ex quod facer decore, eu nam mazim postea. Eu deleniti pertinacia ius. Ad elitr latine eam, ius sanctus eleifend no, cu primis graecis comprehensam eum. Ne vim prompta consectetuer, etiam signiferumque ea eum.</p>
 					<ul class="contact">
 						<?php
-							$phones = get_menu('phones');
-							$email = site('pagination_limit');
+							$phones = Menu::get('phones');
+							$email = site('email');
 							$address = site('address');
 						?>
 						<?php foreach($phones as $phone): ?>

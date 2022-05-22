@@ -31,6 +31,8 @@ class Engine {
 		class_alias('\\Engine\\Theme\\Asset', 'Asset');
 		class_alias('\\Engine\\Theme\\Theme', 'Theme');
 		class_alias('\\Engine\\Theme\\Template', 'Template');
+		class_alias('\\Engine\\Theme\\Meta', 'Meta');
+		class_alias('\\Engine\\Theme\\Menu', 'Menu');
 		class_alias('\\Engine\\Theme\\Breadcrumb', 'Breadcrumb');
 		class_alias('\\Engine\\Theme\\Pagination', 'Pagination');
 		class_alias('\\Engine\\Server', 'Server');

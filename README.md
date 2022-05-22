@@ -16,7 +16,6 @@
 
 ## ToDo:
 * create Filter class
-* create Menu class
 * modal forms compile
 * extend custom fields (image, wysiwyg...)
 * more convenient DB data output, pagination, filtering (maybe move from controller directly to template, but ha MVC?)
@@ -36,4 +35,4 @@
 * set min/maxlength for all inputs
 * Find way to use hooks between modules
 * JS data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
-* id VARCHAR(64) NOT NULL DEFAULT MD5(CONCAT(UNIX_TIMESTAMP(), RAND(), UUID()))
+* SQL generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))

@@ -7,14 +7,7 @@
 						<a href="/" class="logo"><img src="/<?= site('logo_alt') ?>" alt=""></a>
 					</div>
 					<p><?= site('description') ?></p>
-					<?php
-						$menu_socials = get_menu('socials');
-					?>
-					<?php if(!empty($menu_socials)): ?>
-						<ul class="contact-social">
-							<?= menu_social_footer($menu_socials); ?>
-						</ul>
-					<?php endif; ?>
+					<?php Theme::menu('socials', ['class' => 'contact-social']); ?>
 				</div>
 			</div>
 			<?php
@@ -67,14 +60,7 @@
 
 		<div class="footer-bottom row">
 			<div class="col-md-6 col-md-push-6">
-				<?php
-					$menu_footer = get_menu('footer');
-				?>
-				<?php if(!empty($menu_footer)): ?>
-					<ul class="footer-nav">
-						<?= menu($menu_footer); ?>
-					</ul>
-				<?php endif; ?>
+				<?php Theme::menu('footer'); ?>
 			</div>
 			<div class="col-md-6 col-md-pull-6">
 				<div class="footer-copyright">

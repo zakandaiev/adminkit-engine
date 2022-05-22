@@ -15,7 +15,7 @@ class Template {
 				return false;
 			}
 		}
-		
+
 		extract(View::getData());
 
 		ob_start();
@@ -29,7 +29,7 @@ class Template {
 		}
 
 		echo ob_get_clean();
-		
+
 		return true;
 	}
 }

@@ -197,8 +197,11 @@ INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
 (1, 1);
 
+INSERT INTO `%prefix%_notification` (`user_id`, `kind`) VALUES
+(1, 'register');
+
 INSERT INTO `%prefix%_page` (`language`, `title`, `url`, `author`) VALUES
-('en', '%site_name%', 'home', 1);
+('en', 'Homepage', 'home', 1);
 
 CREATE TRIGGER
 	`set_page_static`

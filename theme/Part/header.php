@@ -2,7 +2,7 @@
 <html lang="<?= site('language_current') ?>">
 
 <head>
-	<?= Theme::header_meta($page) ?>
+	<?= Meta::all($page) ?>
 	<?= Asset::render('css') ?>
 </head>
 
@@ -11,14 +11,7 @@
 		<div id="nav">
 			<div id="nav-top">
 				<div class="container">
-					<?php
-						$menu_socials = get_menu('socials');
-					?>
-					<?php if(!empty($menu_socials)): ?>
-						<ul class="nav-social">
-							<?= menu_social_header($menu_socials); ?>
-						</ul>
-					<?php endif; ?>
+					<?php Theme::menu('socials'); ?>
 					<div class="nav-logo">
 						<a href="/" class="logo"><img src="/<?= site('logo_public') ?>" alt=""></a>
 					</div>
@@ -36,25 +29,11 @@
 					</div>
 				</div>
 			</div>
-			<?php
-				$menu_header = get_menu('header');
-			?>
-			<?php if(!empty($menu_header)): ?>
-				<div id="nav-bottom">
-					<div class="container">
-						<ul class="nav-menu">
-							<?= menu($menu_header); ?>
-						</ul>
-					</div>
-				</div>
-			<?php endif; ?>
+
+			<?php Theme::menu('header'); ?>
 
 			<div id="nav-aside">
-				<ul class="nav-aside-menu">
-					<?php if(!empty($menu_header)): ?>
-						<?= menu_aside($menu_header); ?>
-					<?php endif; ?>
-				</ul>
+				<?php Theme::menu('header', ['aside' => true]); ?>
 				<button class="nav-close nav-aside-close"><span></span></button>
 			</div>
 		</div>
