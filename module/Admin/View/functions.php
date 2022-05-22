@@ -25,45 +25,6 @@ Breadcrumb::setOption('homepage_name', '<i class="align-middle" data-feather="ho
 Breadcrumb::setOption('homepage_url', 'admin');
 Breadcrumb::setOption('separator', '<i class="align-middle" data-feather="arrow-right"></i>');
 
-############################# HELPERS #############################
-function icon_boolean($value = null) {
-	$icon = 'x';
-
-	if($value) {
-		$icon = 'check';
-	}
-
-	return '<i class="align-middle" data-feather="' . $icon . '"></i>';
-}
-
-function table_actions($edit_url = null, $delete_attributes = [], $icons = []) {
-	$edit = '';
-	$delete = '';
-
-	$edit_icon = $icons['edit'] ?? 'edit';
-	$delete_icon = $icons['delete'] ?? 'trash';
-
-	if(!empty($edit_url)) {
-		$edit = '<a href="' . $edit_url .'"><i data-feather="' . $edit_icon . '"></i></a>';
-	}
-
-	if(!empty($delete_attributes)) {
-		$delete = '<a';
-
-		foreach($delete_attributes as $attribute => $value) {
-			if(empty($attribute)) {
-				continue;
-			}
-
-			$delete .= ' ' . $attribute . '="' . hc($value) . '"';
-		}
-
-		$delete .= ' href="#"><i data-feather="' . $delete_icon . '"></i></a>';
-	}
-
-	return $edit . ' ' . $delete;
-}
-
 ############################# NOTIFICATIONS #############################
 function getNotifications() {
 	$notifications = [];
@@ -260,6 +221,30 @@ function getNotificationHTML($notification, $user) {
 	return $output;
 }
 
+############################# MENU #############################
+function menu_builder($menu) {
+	$output = '<ul class="list-group sortable">';
+
+	foreach($menu as $item) {
+		$output .= '<li class="list-group-item menu-list">';
+		$output .= '<div class="menu-item">';
+		$output .= '<i class="menu-item__icon sortable__handle feather-sm text-muted" data-feather="move"></i>';
+		$output .= '<div class="menu-item__name"><span contenteditable="true">' . $item->name . '</span></div>';
+		$output .= '<i class="menu-item__icon feather-sm text-muted" data-feather="link"></i>';
+		$output .= '<div class="menu-item__url"><span contenteditable="true">' . $item->url . '</span></div>';
+		$output .= '<i class="menu-item__icon feather-sm text-muted" data-feather="trash"></i>';
+		$output .= '</div>';
+
+		$output .= menu_builder($item->children);
+
+		$output .= '</li>';
+	}
+
+	$output .= '</ul>';
+
+	return $output;
+}
+
 ############################# LOGS #############################
 function logs($logs, $folder = null, $folder_hash = null) {
 	$output = '';
@@ -313,4 +298,43 @@ function format_log($log_body) {
 	$replacement = $date . ' ' . $hyphen;
 
 	return preg_replace('/(\[.*\]) (-)/miu', $replacement, hc(trim($log_body)));
+}
+
+############################# HELPERS #############################
+function icon_boolean($value = null) {
+	$icon = 'x';
+
+	if($value) {
+		$icon = 'check';
+	}
+
+	return '<i class="align-middle" data-feather="' . $icon . '"></i>';
+}
+
+function table_actions($edit_url = null, $delete_attributes = [], $icons = []) {
+	$edit = '';
+	$delete = '';
+
+	$edit_icon = $icons['edit'] ?? 'edit';
+	$delete_icon = $icons['delete'] ?? 'trash';
+
+	if(!empty($edit_url)) {
+		$edit = '<a href="' . $edit_url .'"><i data-feather="' . $edit_icon . '"></i></a>';
+	}
+
+	if(!empty($delete_attributes)) {
+		$delete = '<a';
+
+		foreach($delete_attributes as $attribute => $value) {
+			if(empty($attribute)) {
+				continue;
+			}
+
+			$delete .= ' ' . $attribute . '="' . hc($value) . '"';
+		}
+
+		$delete .= ' href="#"><i data-feather="' . $delete_icon . '"></i></a>';
+	}
+
+	return $edit . ' ' . $delete;
 }

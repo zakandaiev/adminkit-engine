@@ -80,10 +80,6 @@ Module::route('get', '/admin/profile/$id', 'Profile@getProfile', [
 	]
 ]);
 
-############################# SETTING #############################
-Module::route('get', '/admin/setting/$section', 'Setting@getSection');
-Module::route('post', '/admin/setting/$section', 'Setting@postSection');
-
 ############################# PAGE #############################
 Module::route('get', '/admin/page', 'Page@getAll', [
 	'page' => [
@@ -139,6 +135,26 @@ Module::route('get', '/admin/page/edit/$id/translation/edit/$translation_id', 'P
 	],
 	'breadcrumbs' => [
 		__('Pages') . '@/admin/page',
+		__('Edit')
+	]
+]);
+
+############################# MENU #############################
+Module::route('get', '/admin/menu', 'Menu@getAll', [
+	'page' => [
+		'title' => __('Menu')
+	],
+	'breadcrumbs' => [
+		__('Menu')
+	]
+]);
+
+Module::route('get', '/admin/menu/$id', 'Menu@getEdit', [
+	'page' => [
+		'title' => __('Menu')
+	],
+	'breadcrumbs' => [
+		__('Menu') . '@/admin/menu',
 		__('Edit')
 	]
 ]);
@@ -222,6 +238,10 @@ Module::route('get', '/admin/group/edit/$id', 'Group@getEdit', [
 		__('Edit')
 	]
 ]);
+
+############################# SETTING #############################
+Module::route('get', '/admin/setting/$section', 'Setting@getSection');
+Module::route('post', '/admin/setting/$section', 'Setting@postSection');
 
 ############################# LOG #############################
 Module::route('get', '/admin/log', 'Log@getAll', [

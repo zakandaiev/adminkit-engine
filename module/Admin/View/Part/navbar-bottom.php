@@ -9,7 +9,7 @@
 			<div class="col-6 text-end">
 				<ul class="list-inline">
 					<li class="list-inline-item">
-						<a class="text-muted" href="https://zakandaiev.pp.ua" target="_blank">made by Zakandaiev</a>
+						<a class="text-muted" href="https://zakandaiev.pp.ua" target="_blank"><?= __('Made by') ?> Zakandaiev</a>
 					</li>
 				</ul>
 			</div>

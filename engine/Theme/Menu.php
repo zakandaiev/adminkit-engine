@@ -60,6 +60,14 @@ class Menu {
 			}
 		}
 
-		return $menu_formatted;
+		return json_decode(json_encode(array_values($menu_formatted)));
+	}
+
+	public static function getAll() {
+		$sql = "SELECT * FROM {menu}";
+
+		$menus = new Statement($sql);
+
+		return $menus->prepare()->execute()->fetchAll();
 	}
 }

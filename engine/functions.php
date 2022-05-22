@@ -315,6 +315,10 @@ function site($key) {
 			$value = trim(Request::$url, '/');
 			break;
 		}
+		case 'version': {
+			$value = Define::VERSION;
+			break;
+		}
 	}
 
 	return $value;

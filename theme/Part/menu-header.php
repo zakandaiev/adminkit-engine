@@ -5,21 +5,21 @@ if(!function_exists('menu')) {
 		$output = '';
 
 		foreach($menu as $item) {
-			$has_url = 'href="/'. $item['url'] . '"';
+			$has_url = 'href="/'. $item->url . '"';
 			$has_dropdown = '';
-			if(!empty($item['children'])) {
+			if(!empty($item->children)) {
 				$has_url = '';
 				$has_dropdown = 'class="has-dropdown"';
 			}
 
-			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item['name'] . '</a>';
+			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item->name . '</a>';
 
-			if(!empty($item['children'])) {
+			if(!empty($item->children)) {
 				$output .= '<div class="dropdown">';
 				$output .= '<div class="dropdown-body">';
 				$output .= '<ul class="dropdown-list">';
 				$output .= '<div class="dropdown">';
-				$output .= menu($item['children']);
+				$output .= menu($item->children);
 				$output .= '</ul>';
 				$output .= '</div>';
 				$output .= '</div>';
@@ -37,18 +37,18 @@ if(!function_exists('aside')) {
 		$output = '';
 
 		foreach($menu as $item) {
-			$has_url = 'href="/'. $item['url'] . '"';
+			$has_url = 'href="/'. $item->url . '"';
 			$has_dropdown = '';
-			if(!empty($item['children'])) {
+			if(!empty($item->children)) {
 				$has_url = '';
 				$has_dropdown = 'class="has-dropdown"';
 			}
 
-			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item['name'] . '</a>';
+			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item->name . '</a>';
 
-			if(!empty($item['children'])) {
+			if(!empty($item->children)) {
 				$output .= '<ul class="dropdown">';
-				$output .= aside($item['children']);
+				$output .= aside($item->children);
 				$output .= '</ul>';
 			}
 

@@ -17,7 +17,7 @@ class Define {
 	// META
 	const NAME = 'CMS';
 	const VERSION = '1.0.0';
-	const AUTHOR = 'github.com/zakandaiev';
+	const AUTHOR = 'https:://zakandaiev.pp.ua';
 
 	// COOKIES
 	const COOKIE_KEY = [
