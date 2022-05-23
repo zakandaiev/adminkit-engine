@@ -9,7 +9,7 @@ class Sitemap {
 		if(empty($custom_pages)) {
 			$sql = 'SELECT * FROM {page} WHERE date_publish <= NOW() AND is_enabled IS true';
 			$pages = new Statement($sql);
-			$pages = $pages->prepare()->execute()->fetchAll();
+			$pages = $pages->execute()->fetchAll();
 		}
 
 		$path = ROOT_DIR . '/sitemap.xml';

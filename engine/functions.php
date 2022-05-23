@@ -242,7 +242,7 @@ function lang($lang, $key, $mixed = null) {
 			break;
 		}
 		case 'icon': {
-			$value = Path::url('asset') . '/img/flags/' . $lang . '.' . ($mixed ?? 'png');
+			$value = Asset::url() . '/img/flags/' . $lang . '.' . ($mixed ?? 'png');
 			break;
 		}
 	}

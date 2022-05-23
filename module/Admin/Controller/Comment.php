@@ -2,15 +2,10 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Theme\Pagination;
-
 class Comment extends AdminController {
 	public function getAll() {
-		$pagination = new Pagination($this->model->countComments());
+		$comments = $this->model->getComments();
 
-		$comments = $this->model->getComments($pagination);
-
-		$data['pagination'] = $pagination;
 		$data['comments'] = $comments;
 
 		$this->view->setData($data);

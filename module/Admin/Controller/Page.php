@@ -3,14 +3,11 @@
 namespace Module\Admin\Controller;
 
 use Engine\Server;
-use Engine\Theme\Pagination;
 
 class Page extends AdminController {
 	public function getAll() {
-		$pagination = new Pagination($this->model->countPages());
-		$pages = $this->model->getPages($pagination);
+		$pages = $this->model->getPages();
 
-		$data['pagination'] = $pagination;
 		$data['pages'] = $pages;
 
 		$this->view->setData($data);
@@ -20,11 +17,13 @@ class Page extends AdminController {
 	public function getCategory() {
 		$category_id = $this->route['parameters']['id'];
 
-		$pagination = new Pagination($this->model->countPagesInCategory($category_id));
-		$pages = $this->model->getPagesByCategory($category_id, $pagination);
+		$pages = $this->model->getPagesByCategory($category_id);
 
-		$data['pagination'] = $pagination;
 		$data['pages'] = $pages;
+
+		if(empty($data['pages'])) {
+			$this->view->error('404');
+		}
 
 		$this->view->setData($data);
 		$this->view->render('page/all');

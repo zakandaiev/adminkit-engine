@@ -23,6 +23,22 @@ var BASE_URL = window.location.protocol + '//' + window.location.host; // SETTIN
 SETTING.loader = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
 SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg'; // UTILS
 
+function fadeOut(element) {
+  if (!element) {
+    return false;
+  }
+
+  element.style.opacity = 1;
+
+  (function fade() {
+    if ((element.style.opacity -= 0.1) < 0) {
+      element.style.display = "none";
+    } else {
+      requestAnimationFrame(fade);
+    }
+  })();
+}
+
 function smoothScroll(element) {
   if (element) {
     element.scrollIntoView({
@@ -350,20 +366,6 @@ var DataAction = /*#__PURE__*/function () {
         return false;
       }
 
-      function fadeOut(el) {
-        el.style.opacity = 1;
-
-        (function fade() {
-          if ((el.style.opacity -= .1) < 0) {
-            el.style.display = "none";
-          } else {
-            requestAnimationFrame(fade);
-          }
-        })();
-      }
-
-      ;
-
       if (this.data_delete === 'this') {
         fadeOut(this.node);
         return true;
@@ -380,7 +382,6 @@ var DataAction = /*#__PURE__*/function () {
       }
 
       document.querySelectorAll(this.data_delete).forEach(function (target) {
-        // target.remove();
         fadeOut(target);
       });
       return true;
@@ -1023,14 +1024,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('[class*="sortable"]').forEach(function (element) {
     new Sortable(element, {
-      multiDrag: true,
-      handle: '.sortable__handle',
-      filter: '.sortable__disabled',
-      ghostClass: 'sortable__ghost',
-      animation: 150,
-      group: 'nested',
+      multiDrag: element.hasAttribute('data-multi') ? true : false,
+      group: element.hasAttribute('data-multi') ? element.getAttribute('data-multi') : false,
+      handle: element.hasAttribute('data-handle') ? element.getAttribute('data-handle') : false,
+      filter: element.hasAttribute('data-disabled') ? element.getAttribute('data-disabled') : '.sortable__disabled',
+      ghostClass: element.hasAttribute('data-ghost') ? element.getAttribute('data-ghost') : 'sortable__ghost',
       fallbackOnBody: false,
-      swapThreshold: 0.5
+      swapThreshold: 0.5,
+      animation: 150
     });
   }); // FORMS
   // FORM
@@ -1094,6 +1095,17 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
       });
+    }
+  }); // TOOLTIP
+
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  }); // TOOLTIP
+
+  document.querySelectorAll('.spinner-action').forEach(function (element) {
+    if (SETTING.loader) {
+      element.insertAdjacentHTML('beforeend', SETTING.loader);
     }
   });
 }); // HANDLE BROKEN IMAGES

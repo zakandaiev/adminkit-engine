@@ -12,6 +12,7 @@ class Page {
 		if(!self::$instance instanceof self) {
 			self::$instance = new self();
 		}
+
 		return self::$instance;
 	}
 
@@ -20,7 +21,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		$statement->prepare()->bind(['page_url' => $page_url])->execute();
+		$statement->bind(['page_url' => $page_url])->execute();
 
 		return true;
 	}
@@ -38,7 +39,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->prepare()->bind(['id' => $id])->execute()->fetch();
+		return $page->bind(['id' => $id])->execute()->fetch();
 	}
 
 	public function getPageByUrl($url) {
@@ -54,7 +55,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->prepare()->bind(['url' => $url])->execute()->fetch();
+		return $page->bind(['url' => $url])->execute()->fetch();
 	}
 
 	public function getPageCategories($page_id) {
@@ -73,7 +74,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		return $statement->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll();
+		return $statement->bind(['page_id' => $page_id])->execute()->fetchAll();
 	}
 
 	public function getPageTags($page_id) {
@@ -92,7 +93,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		return $statement->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll();
+		return $statement->bind(['page_id' => $page_id])->execute()->fetchAll();
 	}
 
 	public function getPageCommentsCount($page_id) {
@@ -100,7 +101,7 @@ class Page {
 
 		$count = new Statement($sql);
 
-		return intval($count->prepare()->bind(['page_id' => $page_id])->execute()->fetchColumn());
+		return intval($count->bind(['page_id' => $page_id])->execute()->fetchColumn());
 	}
 
 	public function getPageComments($page_id) {
@@ -118,7 +119,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		$comments = $statement->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll(\PDO::FETCH_ASSOC);
+		$comments = $statement->bind(['page_id' => $page_id])->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
 		$comments_formatted = [];
 		foreach($comments as $item) {
@@ -149,7 +150,7 @@ class Page {
 
 		$fields = new \stdClass();
 
-		foreach($custom_fields->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll() as $field) {
+		foreach($custom_fields->bind(['page_id' => $page_id])->execute()->fetchAll() as $field) {
 			$fields->{$field->name} = $field->value;
 		}
 
@@ -181,7 +182,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getPagesInCategory($category_id, $options = []) {
@@ -213,7 +214,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getPagePrevNext($page_id, $category_id = null) {
@@ -246,7 +247,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->prepare()->bind(['page_id' => $page_id])->execute()->fetch();
+		$pages = $pages->bind(['page_id' => $page_id])->execute()->fetch();
 
 		$prev_next = new \stdClass();
 
@@ -261,7 +262,7 @@ class Page {
 
 		$author = new Statement($sql);
 
-		return $author->prepare()->bind(['user_id' => $user_id])->execute()->fetch();
+		return $author->bind(['user_id' => $user_id])->execute()->fetch();
 	}
 
 	public function getPagesByAuthor($user_id, $options = []) {
@@ -289,7 +290,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->bind(['user_id' => $user_id])->execute()->fetchAll();
+		return $pages->bind(['user_id' => $user_id])->execute()->fetchAll();
 	}
 
 	public function getRelatedPages($page, $options = []) {
@@ -318,7 +319,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getMVP($options = []) {
@@ -346,7 +347,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getMCP($options = []) {
@@ -375,7 +376,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getCategories($options = []) {
@@ -404,7 +405,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getTags($options = []) {
@@ -432,7 +433,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 
 	public function getTagByUrl($url) {
@@ -447,7 +448,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->prepare()->bind(['url' => $url])->execute()->fetch();
+		return $page->bind(['url' => $url])->execute()->fetch();
 	}
 
 	public function getPagesByTag($tag_id, $options = []) {
@@ -479,6 +480,6 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->prepare()->execute()->fetchAll();
+		return $pages->execute()->fetchAll();
 	}
 }

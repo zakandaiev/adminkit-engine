@@ -22,7 +22,7 @@ class AdminModel {
 
 		$statement = new Statement($sql);
 
-		$result = $statement->prepare()->bind(['user_id' => $id])->execute()->fetch();
+		$result = $statement->bind(['user_id' => $id])->execute()->fetch();
 
 		if(isset($result) && !empty($result) && $result->access_all) {
 			return true;
@@ -35,7 +35,7 @@ class AdminModel {
 		$user_groups = [];
 
 		$groups = new Statement('SELECT * FROM {user_group} WHERE user_id=:user_id');
-		$groups = $groups->prepare()->bind(['user_id' => $id])->execute()->fetchAll();
+		$groups = $groups->bind(['user_id' => $id])->execute()->fetchAll();
 
 		foreach($groups as $group) {
 			$user_groups[] = $group->group_id;
@@ -65,7 +65,7 @@ class AdminModel {
 		';
 
 		$routes = new Statement($routes_sql);
-		$routes = $routes->prepare()->bind(['user_id' => $id])->execute()->fetchAll();
+		$routes = $routes->bind(['user_id' => $id])->execute()->fetchAll();
 
 		foreach($routes as $route) {
 			$user_routes[] = $route->route;
@@ -77,12 +77,12 @@ class AdminModel {
 	public function getUserNotificationsCount($id) {
 		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id=:user_id AND is_read IS false');
 
-		return intval($notifications->prepare()->bind(['user_id' => $id])->execute()->fetchColumn());
+		return intval($notifications->bind(['user_id' => $id])->execute()->fetchColumn());
 	}
 
 	public function getUserNotifications($id) {
 		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id=:user_id AND is_read IS false ORDER BY date_created DESC LIMIT 5');
 
-		return $notifications->prepare()->bind(['user_id' => $id])->execute()->fetchAll();
+		return $notifications->bind(['user_id' => $id])->execute()->fetchAll();
 	}
 }

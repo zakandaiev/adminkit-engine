@@ -172,7 +172,7 @@ function deleteTranslations($fields, $form_data) {
 	];
 
 	$statement = new Statement($sql);
-	$statement->prepare()->bind($binding)->execute();
+	$statement->bind($binding)->execute();
 
 	return true;
 }
@@ -207,7 +207,7 @@ function updateTranslations($fields, $form_data) {
 	';
 
 	$statement = new Statement($sql);
-	$statement->prepare()->bind($binding)->execute();
+	$statement->bind($binding)->execute();
 
 	return true;
 }
@@ -234,7 +234,7 @@ function updateTags($field_value, $form_data) {
 			$sql = 'INSERT INTO {tag} (name, url) VALUES (:name, :url)';
 
 			$statement = new Statement($sql);
-			$statement->prepare()->bind(['name' => $name, 'url' => $url])->execute();
+			$statement->bind(['name' => $name, 'url' => $url])->execute();
 
 			$foreign_keys[] = $statement->insertId();
 		}
@@ -243,7 +243,7 @@ function updateTags($field_value, $form_data) {
 	$sql = 'DELETE FROM {page_tag} WHERE page_id=:page_id';
 
 	$statement = new Statement($sql);
-	$statement->prepare()->bind(['page_id' => $form_data['item_id']])->execute();
+	$statement->bind(['page_id' => $form_data['item_id']])->execute();
 
 	foreach($foreign_keys as $key) {
 		$sql = '
@@ -254,7 +254,7 @@ function updateTags($field_value, $form_data) {
 		';
 
 		$statement = new Statement($sql);
-		$statement->prepare()->bind(['page_id' => $form_data['item_id'], 'tag_id' => $key])->execute();
+		$statement->bind(['page_id' => $form_data['item_id'], 'tag_id' => $key])->execute();
 	}
 
 	return true;
@@ -265,7 +265,7 @@ function updateCutomFields($field_value, $form_data) {
 
 	if($form_data['action'] === 'edit') {
 		$page_fields = new Statement('SELECT * FROM {custom_field} WHERE page_id=:page_id');
-		$page_fields = $page_fields->prepare()->bind(['page_id' => $form_data['item_id']])->execute()->fetchAll();
+		$page_fields = $page_fields->bind(['page_id' => $form_data['item_id']])->execute()->fetchAll();
 
 		foreach($page_fields as $p_key => $p_field) {
 			foreach($field_value as $key => $field) {
@@ -281,7 +281,7 @@ function updateCutomFields($field_value, $form_data) {
 			$sql = 'DELETE FROM {custom_field} WHERE name=:name AND page_id=:page_id';
 
 			$delete = new Statement($sql);
-			$delete->prepare()->bind($binding)->execute();
+			$delete->bind($binding)->execute();
 		}
 	}
 
@@ -289,7 +289,7 @@ function updateCutomFields($field_value, $form_data) {
 		$binding['name'] = keyword($field->name);
 
 		$check_exist = new Statement('SELECT id FROM {custom_field} WHERE name=:name AND page_id=:page_id');
-		$check_exist = $check_exist->prepare()->bind(['name' => $field->name, 'page_id' => $form_data['item_id']])->execute()->fetch();
+		$check_exist = $check_exist->bind(['name' => $field->name, 'page_id' => $form_data['item_id']])->execute()->fetch();
 
 		if($check_exist) {
 			$sql = 'UPDATE {custom_field} SET value=:value WHERE name=:name AND page_id=:page_id';
@@ -300,7 +300,7 @@ function updateCutomFields($field_value, $form_data) {
 		$binding['value'] = $field->value;
 
 		$statement = new Statement($sql);
-		$statement->prepare()->bind($binding)->execute();
+		$statement->bind($binding)->execute();
 	}
 
 	return true;

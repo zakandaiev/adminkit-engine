@@ -122,7 +122,7 @@ class Router {
 
 		$statement = new Statement('SELECT * FROM {form}');
 
-		$forms = $statement->prepare()->execute()->fetchAll();
+		$forms = $statement->execute()->fetchAll();
 
 		if(empty($forms)) {
 			return false;

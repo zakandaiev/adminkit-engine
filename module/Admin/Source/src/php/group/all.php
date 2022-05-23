@@ -66,10 +66,10 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not groups yet.</h5>
+							<h5 class="card-title mb-0">There are not groups yet</h5>
 						<?php endif; ?>
 						<div class="mt-4">
-							<?php Theme::pagination($pagination); ?>
+							<?php Theme::pagination(); ?>
 						</div>
 					</div>
 				</div>

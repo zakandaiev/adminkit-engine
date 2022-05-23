@@ -2,14 +2,10 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Theme\Pagination;
-
 class User extends AdminController {
 	public function getAll() {
-		$pagination = new Pagination($this->model->countUsers());
-		$users = $this->model->getUsers($pagination);
+		$users = $this->model->getUsers();
 
-		$data['pagination'] = $pagination;
 		$data['users'] = $users;
 
 		$this->view->setData($data);

@@ -4,6 +4,7 @@ const BASE_URL = window.location.protocol + '//' + window.location.host;
 @@include("setup/setting.js")
 
 // UTILS
+@@include("util/fadeOut.js")
 @@include("util/smoothScroll.js")
 
 // CLASSES
@@ -33,6 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// SMOOTH SCROLL
 	@@include("setup/anchor-smooth-scroll.js")
+
+	// TOOLTIP
+	@@include("setup/bs-tooltip.js")
+
+	// TOOLTIP
+	@@include("setup/spinner-action.js")
 });
 
 // HANDLE BROKEN IMAGES

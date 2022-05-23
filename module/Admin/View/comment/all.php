@@ -20,7 +20,7 @@
 								<thead>
 									<tr>
 										<th>Author</th>
-										<th class="w-50">Message</th>
+										<th>Message</th>
 										<th>Page</th>
 										<th>Created</th>
 										<?php if(site('moderate_comments')): ?>
@@ -33,7 +33,13 @@
 									<?php foreach($comments as $comment): ?>
 										<tr>
 											<td><a href="/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
-											<td><?= $comment->message ?></td>
+											<td>
+												<?php if(strlen($comment->message) > 50): ?>
+													<span data-bs-toggle="tooltip" data-bs-placement="top" title="<?= $comment->message ?>"><?= substr($comment->message, 0, 50) ?>...</span>
+												<?php else: ?>
+													<?= $comment->message ?>
+												<?php endif; ?>
+											</td>
 											<td><a href="<?= site('url_language') ?>/<?= $comment->page_url ?>" target="_blank"><?= $comment->page_title ?></a></td>
 											<td title="<?= format_date($comment->date_created) ?>"><?= date_when($comment->date_created) ?></td>
 											<?php if(site('moderate_comments')): ?>
@@ -56,10 +62,10 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not comments yet.</h5>
+							<h5 class="card-title mb-0">There are not comments yet</h5>
 						<?php endif; ?>
 						<div class="mt-4">
-							<?php Theme::pagination($pagination); ?>
+							<?php Theme::pagination(); ?>
 						</div>
 					</div>
 				</div>

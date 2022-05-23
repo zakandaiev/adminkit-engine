@@ -19,7 +19,7 @@ class Comment {
 
 		$count = new Statement($sql);
 
-		return $count->prepare()->execute()->fetchColumn();
+		return $count->execute()->fetchColumn();
 	}
 
 	public function countUnapprovedComments() {
@@ -27,10 +27,10 @@ class Comment {
 
 		$count = new Statement($sql);
 
-		return $count->prepare()->execute()->fetchColumn();
+		return $count->execute()->fetchColumn();
 	}
 
-	public function getComments($pagination) {
+	public function getComments() {
 		$sql = '
 			SELECT
 				t_comment.*,
@@ -49,7 +49,7 @@ class Comment {
 
 		$comments = new Statement($sql);
 
-		$comments = $comments->paginate($pagination)->execute()->fetchAll();
+		$comments = $comments->paginate($this->countComments())->execute()->fetchAll();
 
 		return $comments;
 	}
@@ -72,7 +72,7 @@ class Comment {
 
 		$comment = new Statement($sql);
 
-		return $comment->prepare()->bind(['id' => $id])->execute()->fetch();
+		return $comment->bind(['id' => $id])->execute()->fetch();
 	}
 
 	public function getAuthors() {
@@ -80,6 +80,6 @@ class Comment {
 
 		$authors = new Statement($sql);
 
-		return $authors->prepare()->execute()->fetchAll();
+		return $authors->execute()->fetchAll();
 	}
 }

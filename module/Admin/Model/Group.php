@@ -11,10 +11,10 @@ class Group {
 
 		$count = new Statement($sql);
 
-		return $count->prepare()->execute()->fetchColumn();
+		return $count->execute()->fetchColumn();
 	}
 
-	public function getGroups($pagination) {
+	public function getGroups() {
 		$sql = '
 			SELECT
 				*,
@@ -26,7 +26,7 @@ class Group {
 
 		$groups = new Statement($sql);
 
-		$groups = $groups->paginate($pagination)->execute()->fetchAll();
+		$groups = $groups->paginate($this->countGroups())->execute()->fetchAll();
 
 		return $groups;
 	}
@@ -46,7 +46,7 @@ class Group {
 
 		$users = new Statement($sql);
 
-		return $users->prepare()->execute()->fetchAll();
+		return $users->execute()->fetchAll();
 	}
 
 	public function getGroupById($id) {
@@ -54,7 +54,7 @@ class Group {
 
 		$group = new Statement($sql);
 
-		return $group->prepare()->bind(['id' => $id])->execute()->fetch();
+		return $group->bind(['id' => $id])->execute()->fetch();
 	}
 
 	public function getGroupRoutesById($group_id) {
@@ -64,7 +64,7 @@ class Group {
 
 		$statement = new Statement($sql);
 
-		foreach($statement->prepare()->bind(['group_id' => $group_id])->execute()->fetchAll() as $route) {
+		foreach($statement->bind(['group_id' => $group_id])->execute()->fetchAll() as $route) {
 			list($method, $uri) = explode('@', $route->route, 2);
 			$routes->{$method}[] = $uri;
 		}
@@ -79,7 +79,7 @@ class Group {
 
 		$statement = new Statement($sql);
 
-		foreach($statement->prepare()->bind(['group_id' => $group_id])->execute()->fetchAll() as $user) {
+		foreach($statement->bind(['group_id' => $group_id])->execute()->fetchAll() as $user) {
 			$users[] = $user->user_id;
 		}
 

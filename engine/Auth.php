@@ -22,7 +22,7 @@ class Auth {
 				'last_ip' => filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP)
 			];
 
-			$user = $user->prepare()->bind($user_binding)->execute()->fetch();
+			$user = $user->bind($user_binding)->execute()->fetch();
 
 			if(!empty($user)) {
 				self::$user = $user;
@@ -48,7 +48,7 @@ class Auth {
 
 		$authorize = new Statement($authorize);
 
-		$authorize->prepare()->bind(['user_id' => $user->id, 'last_ip' => $user->ip, 'auth_token' => $auth_token])->execute();
+		$authorize->bind(['user_id' => $user->id, 'last_ip' => $user->ip, 'auth_token' => $auth_token])->execute();
 
 		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, $lifetime ?? Define::LIFETIME['auth']);
 
@@ -86,7 +86,7 @@ class Auth {
 
 		$register = new Statement($register);
 
-		$user->id = $register->prepare()->bind(json_decode(json_encode($user), true))->execute()->insertId();
+		$user->id = $register->bind(json_decode(json_encode($user), true))->execute()->insertId();
 
 		self::authorize($user);
 

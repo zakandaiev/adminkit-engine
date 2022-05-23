@@ -35,7 +35,7 @@ class Menu {
 
 		$menu = new Statement($sql);
 
-		$menu = $menu->prepare()->bind($binding)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+		$menu = $menu->bind($binding)->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
 		if(empty($menu)) {
 			return $menu;
@@ -68,6 +68,6 @@ class Menu {
 
 		$menus = new Statement($sql);
 
-		return $menus->prepare()->execute()->fetchAll();
+		return $menus->execute()->fetchAll();
 	}
 }

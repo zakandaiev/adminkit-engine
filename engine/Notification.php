@@ -9,7 +9,7 @@ class Notification {
 		$create = '
 			INSERT INTO {notification}
 				(user_id, kind, info)
-			VALUES 
+			VALUES
 				(:user_id, :kind, :info);
 		';
 
@@ -24,8 +24,8 @@ class Notification {
 			'kind' => $kind,
 			'info' => $info
 		];
-		
-		return $create->prepare()->bind($binding)->execute()->insertId();
+
+		return $create->bind($binding)->execute()->insertId();
 	}
 
 	public static function read($id, $user_id) {
@@ -33,7 +33,7 @@ class Notification {
 
 		$read_one = new Statement($read_one);
 
-		$read_one->prepare()->bind(['id' => $id, 'user_id' => $user_id])->execute();
+		$read_one->bind(['id' => $id, 'user_id' => $user_id])->execute();
 
 		return true;
 	}
@@ -43,7 +43,7 @@ class Notification {
 
 		$read_all = new Statement($read_all);
 
-		$read_all->prepare()->bind(['user_id' => $user_id])->execute();
+		$read_all->bind(['user_id' => $user_id])->execute();
 
 		return true;
 	}

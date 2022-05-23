@@ -32,6 +32,8 @@ class Statement {
 	public function prepare() {
 		$this->statement = Database::$connection->prepare($this->sql);
 
+		$this->is_prepared = true;
+
 		return $this;
 	}
 
@@ -50,7 +52,7 @@ class Statement {
 			if(is_bool($value)) $pdo_param = PDO::PARAM_BOOL;
 			if(is_int($value)) $pdo_param = PDO::PARAM_INT;
 			if(is_string($value)) $pdo_param = PDO::PARAM_STR;
-			
+
 			if(is_array($value)) {
 				$value = json_encode($value);
 			}
@@ -62,13 +64,13 @@ class Statement {
 	}
 
 	public function paginate($total_rows, $parameters = []) {
-		$this->sql = $this->sql . ' OFFSET :offset LIMIT :limit;';
+		$this->sql = $this->sql . ' LIMIT :limit OFFSET :offset';
 
-		Pagination::initialize($total_rows);
+		$pagination = new Pagination($total_rows);
 
 		$binding = [
-			'offset' => $parameters['offset'] ?? Pagination::$offset,
-			'limit' => $parameters['limit'] ?? Pagination::$limit
+			'limit' => $parameters['limit'] ?? $pagination->limit,
+			'offset' => $parameters['offset'] ?? $pagination->offset
 		];
 
 		$this->bind($binding);

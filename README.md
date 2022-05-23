@@ -35,3 +35,4 @@
 * Modules: check all links for site('url_language')
 * Modules: translate all texts
 * Modules: create API module
+* Modules: log all events

@@ -223,15 +223,15 @@ function getNotificationHTML($notification, $user) {
 
 ############################# MENU #############################
 function menu_builder($menu) {
-	$output = '<ul class="list-group sortable">';
+	$output = '<ul class="list-group sortable" data-multi="menu">';
 
 	foreach($menu as $item) {
 		$output .= '<li class="list-group-item menu-list">';
 		$output .= '<div class="menu-item">';
 		$output .= '<i class="menu-item__icon sortable__handle feather-sm text-muted" data-feather="move"></i>';
-		$output .= '<div class="menu-item__name"><span contenteditable="true">' . $item->name . '</span></div>';
+		$output .= '<div class="menu-item__name" contenteditable="true">' . $item->name . '</div>';
 		$output .= '<i class="menu-item__icon feather-sm text-muted" data-feather="link"></i>';
-		$output .= '<div class="menu-item__url"><span contenteditable="true">' . $item->url . '</span></div>';
+		$output .= '<div class="menu-item__url" contenteditable="true">' . $item->url . '</div>';
 		$output .= '<i class="menu-item__icon feather-sm text-muted" data-feather="trash"></i>';
 		$output .= '</div>';
 

@@ -7,22 +7,34 @@ use Engine\Request;
 use Engine\Setting;
 
 class Pagination {
-	public static $uri_key;
-	public static $uri;
-	public static $limit;
-	public static $total_rows;
-	public static $total_pages;
-	public static $current_page;
-	public static $offset;
+	public $uri_key;
+	public $uri;
+	public $limit;
+	public $total_rows;
+	public $total_pages;
+	public $current_page;
+	public $offset;
 
-	public static function initialize($total_rows) {
-		self::$uri_key = strval(Define::PAGINATION_URI_KEY);
-		self::$uri = self::handleUri();
-		self::$limit = intval(Setting::get('site')->pagination_limit);
-		self::$total_rows = intval($total_rows);
-		self::$total_pages = self::countPages();
-		self::$current_page = self::currentPage();
-		self::$offset = (self::$current_page - 1) * self::$limit;
+	private static $instance;
+
+	public static function getInstance() {
+		if(self::$instance instanceof self) {
+			return self::$instance;
+		}
+
+		return null;
+	}
+
+	public function __construct($total_rows, $uri_key = null) {
+		$this->uri_key = $uri_key ?? Define::PAGINATION_URI_KEY;
+		$this->uri = $this->handleUri();
+		$this->limit = intval(Setting::get('site')->pagination_limit);
+		$this->total_rows = intval($total_rows);
+		$this->total_pages = $this->countPages();
+		$this->current_page = $this->currentPage();
+		$this->offset = ($this->current_page - 1) * $this->limit;
+
+		self::$instance = $this;
 	}
 
 	public function handleUri() {
@@ -33,21 +45,21 @@ class Pagination {
 			$params = explode('&', $uri[1]);
 
 			foreach($params as $param) {
-				if(!preg_match('#' . self::$uri_key . '=#', $param)) $uri_handle .= $param.'&';
+				if(!preg_match('#' . $this->uri_key . '=#', $param)) $uri_handle .= $param.'&';
 			}
 		}
 
-		$uri_handle .= self::$uri_key . '=';
+		$uri_handle .= $this->uri_key . '=';
 
 		return hc($uri_handle);
 	}
 
 	public function countPages() {
-		return ceil(self::$total_rows / self::$limit) ?? 1;
+		return ceil($this->total_rows / $this->limit) ?? 1;
 	}
 
 	public function currentPage() {
-		$page = Request::get(self::$uri_key);
+		$page = Request::get($this->uri_key);
 
 		if(isset($page) && !empty($page) && is_numeric($page)) {
 			$page = intval($page);
@@ -56,7 +68,7 @@ class Pagination {
 		}
 
 		if($page < 1) $page = 1;
-		if($page > self::$total_pages && self::$total_pages > 0) $page = self::$total_pages;
+		if($page > $this->total_pages && $this->total_pages > 0) $page = $this->total_pages;
 
 		return $page;
 	}
@@ -71,47 +83,47 @@ class Pagination {
 		$first = null;
 		$last = null;
 
-		$url = Request::$base . self::$uri;
+		$url = Request::$base . $this->uri;
 
-		$current = '<span class="pagination__item pagination__item_active">' . self::$current_page . '</span>';
+		$current = '<span class="pagination__item pagination__item_active">' . $this->current_page . '</span>';
 
-		if(self::$current_page > 1) {
-			$num = self::$current_page - 1;
+		if($this->current_page > 1) {
+			$num = $this->current_page - 1;
 			$prev = '<a href="' . $url . $num . '" class="pagination__item">' . __('Previous') . '</a>';
 		}
 
-		if(self::$current_page < self::$total_pages) {
-			$num = self::$current_page + 1;
+		if($this->current_page < $this->total_pages) {
+			$num = $this->current_page + 1;
 			$next = '<a href="' . $url . $num . '" class="pagination__item">' . __('Next') . '</a>';
 		}
 
-		if(self::$current_page - 1 > 0) {
-			$num = self::$current_page - 1;
+		if($this->current_page - 1 > 0) {
+			$num = $this->current_page - 1;
 			$page1prev = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
-		if(self::$current_page + 1 <= self::$total_pages) {
-			$num = self::$current_page + 1;
+		if($this->current_page + 1 <= $this->total_pages) {
+			$num = $this->current_page + 1;
 			$page1next = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
-		if(self::$current_page - 2 > 0) {
-			$num = self::$current_page - 2;
+		if($this->current_page - 2 > 0) {
+			$num = $this->current_page - 2;
 			$page2prev = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
-		if(self::$current_page + 2 <= self::$total_pages) {
-			$num = self::$current_page + 2;
+		if($this->current_page + 2 <= $this->total_pages) {
+			$num = $this->current_page + 2;
 			$page2next = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 
-		if(self::$current_page > 4) {
+		if($this->current_page > 4) {
 			$num = 1;
 			$first = '<a href="' . $url . $num . '" class="pagination__item">' . $num . '</a><span class="pagination__item">...</span>';
 		}
 
-		if(self::$current_page <= self::$total_pages - 4) {
-			$num = self::$total_pages;
+		if($this->current_page <= $this->total_pages - 4) {
+			$num = $this->total_pages;
 			$last = '<span class="pagination__item">...</span><a href="' . $url . $num . '" class="pagination__item">' . $num . '</a>';
 		}
 

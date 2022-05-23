@@ -159,17 +159,6 @@ class DataAction {
 			return false;
 		}
 
-		function fadeOut(el) {
-			el.style.opacity = 1;
-			(function fade() {
-				if((el.style.opacity -= .1) < 0) {
-					el.style.display = "none";
-				} else {
-					requestAnimationFrame(fade);
-				}
-			})();
-		};
-
 		if(this.data_delete === 'this') {
 			fadeOut(this.node);
 
@@ -187,7 +176,6 @@ class DataAction {
 		}
 
 		document.querySelectorAll(this.data_delete).forEach(target => {
-			// target.remove();
 			fadeOut(target);
 		});
 

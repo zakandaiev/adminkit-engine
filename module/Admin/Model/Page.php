@@ -11,7 +11,7 @@ class Page {
 		$sql = 'INSERT INTO {page} (' . $columns . ') VALUES (' . $bindings . ')';
 
 		$statement = new Statement($sql);
-		$statement->prepare()->bind($data)->execute();
+		$statement->bind($data)->execute();
 
 		return $statement->insertId();
 	}
@@ -29,10 +29,10 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		return $statement->prepare()->bind(['language' => site('language')])->execute()->fetchColumn();
+		return $statement->bind(['language' => site('language')])->execute()->fetchColumn();
 	}
 
-	public function getPages($pagination) {
+	public function getPages() {
 		$sql = '
 			SELECT
 				t_page.*,
@@ -50,7 +50,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->paginate($pagination)->bind(['language' => site('language')])->execute()->fetchAll();
+		$pages = $pages->paginate($this->countPages())->bind(['language' => site('language')])->execute()->fetchAll();
 
 		foreach($pages as $key => $page) {
 			$page->translations = json_decode($page->translations, true) ?? [];
@@ -82,10 +82,10 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		return $statement->prepare()->bind(['category_id' => $id, 'language' => site('language')])->execute()->fetchColumn();
+		return $statement->bind(['category_id' => $id, 'language' => site('language')])->execute()->fetchColumn();
 	}
 
-	public function getPagesByCategory($id, $pagination) {
+	public function getPagesByCategory($id) {
 		$sql = '
 			SELECT
 				t_page.*,
@@ -107,7 +107,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->paginate($pagination)->bind(['category_id' => $id, 'language' => site('language')])->execute()->fetchAll();
+		$pages = $pages->paginate($this->countPagesInCategory($id))->bind(['category_id' => $id, 'language' => site('language')])->execute()->fetchAll();
 
 		foreach($pages as $key => $page) {
 			$page->translations = json_decode($page->translations, true) ?? [];
@@ -128,7 +128,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->prepare()->bind(['id' => $id])->execute()->fetch();
+		return $page->bind(['id' => $id])->execute()->fetch();
 	}
 
 	public function getAuthors() {
@@ -136,7 +136,7 @@ class Page {
 
 		$authors = new Statement($sql);
 
-		return $authors->prepare()->execute()->fetchAll();
+		return $authors->execute()->fetchAll();
 	}
 
 	public function getCategories($current = 0) {
@@ -154,7 +154,7 @@ class Page {
 
 		$categories = new Statement($sql);
 
-		return $categories->prepare()->bind(['id' => $current, 'language' => site('language')])->execute()->fetchAll();
+		return $categories->bind(['id' => $current, 'language' => site('language')])->execute()->fetchAll();
 	}
 
 	public function getTags() {
@@ -162,7 +162,7 @@ class Page {
 
 		$tags = new Statement($sql);
 
-		return $tags->prepare()->execute()->fetchAll();
+		return $tags->execute()->fetchAll();
 	}
 
 	public function getPageCategories($page_id) {
@@ -172,7 +172,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		foreach($statement->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll() as $category) {
+		foreach($statement->bind(['page_id' => $page_id])->execute()->fetchAll() as $category) {
 			$categories[] = $category->category_id;
 		}
 
@@ -186,7 +186,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		foreach($statement->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll() as $tag) {
+		foreach($statement->bind(['page_id' => $page_id])->execute()->fetchAll() as $tag) {
 			$tags[] = $tag->tag_id;
 		}
 
@@ -198,6 +198,6 @@ class Page {
 
 		$custom_fields = new Statement($sql);
 
-		return $custom_fields->prepare()->bind(['page_id' => $page_id])->execute()->fetchAll();
+		return $custom_fields->bind(['page_id' => $page_id])->execute()->fetchAll();
 	}
 }

@@ -78,8 +78,8 @@ class Theme {
 		Template::load($file);
 	}
 
-	public static function pagination($pagination = [], $name = '', $data = []) {
-		$data[__FUNCTION__] = $pagination ?? [];
+	public static function pagination($name = '', $data = []) {
+		$data[__FUNCTION__] = Pagination::getInstance();
 
 		$file = self::detectNameFile($name, __FUNCTION__);
 		$file = self::PART_DIR . '/' . $file;

@@ -365,4 +365,29 @@
 			color: rgb(var(--bs-warning-rgb));
 		}
 	}
+
+	.bs-tooltip-auto[data-popper-placement^=top] .tooltip-arrow:before,
+	.bs-tooltip-top .tooltip-arrow:before {
+		border-top-color: #fff;
+	}
+
+	.bs-tooltip-auto[data-popper-placement^=right] .tooltip-arrow:before,
+	.bs-tooltip-end .tooltip-arrow:before {
+		border-right-color: #fff;
+	}
+
+	.bs-tooltip-auto[data-popper-placement^=bottom] .tooltip-arrow:before,
+	.bs-tooltip-bottom .tooltip-arrow:before {
+		border-bottom-color: #fff;
+	}
+
+	.bs-tooltip-auto[data-popper-placement^=left] .tooltip-arrow:before,
+	.bs-tooltip-start .tooltip-arrow:before {
+		border-left-color: #fff;
+	}
+
+	.tooltip-inner {
+		color: #222e3c;
+		background-color: #fff;
+	}
 }

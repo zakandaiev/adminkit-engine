@@ -48,7 +48,7 @@ class Form {
 			';
 
 			$statement = new Statement($sql);
-			$statement->prepare()->bind($query_params)->execute();
+			$statement->bind($query_params)->execute();
 
 			return Request::$base . '/' . $token;
 		}
@@ -70,7 +70,7 @@ class Form {
 
 		if($action !== 'add') {
 			$statement = new Statement('SHOW KEYS FROM {' . $table . '} WHERE Key_name=\'PRIMARY\'');
-			$pk_name = $statement->prepare()->execute()->fetch()->Column_name;
+			$pk_name = $statement->execute()->fetch()->Column_name;
 			$sql_fields[$pk_name] = $item_id;
 		}
 
@@ -145,7 +145,7 @@ class Form {
 			}
 
 			$statement = new Statement($sql);
-			$statement->prepare()->bind($sql_fields)->execute();
+			$statement->bind($sql_fields)->execute();
 
 			if($action === 'add') {
 				$item_id = $statement->insertId();
@@ -160,7 +160,7 @@ class Form {
 					$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
 
 					$statement = new Statement($sql);
-					$statement->prepare()->bind([$field['key_1'] => $item_id])->execute();
+					$statement->bind([$field['key_1'] => $item_id])->execute();
 
 					if(empty($sql_fields_foreign_value[$field_name])) {
 						continue;
@@ -175,7 +175,7 @@ class Form {
 						';
 
 						$statement = new Statement($sql);
-						$statement->prepare()->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
+						$statement->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
 					}
 				}
 			}
@@ -214,7 +214,7 @@ class Form {
 
 		$statement = new Statement($sql);
 
-		$token_query = $statement->prepare()->bind($query_params)->execute()->fetch();
+		$token_query = $statement->bind($query_params)->execute()->fetch();
 
 		if(!isset($token_query->token)) {
 			return false;
@@ -226,8 +226,8 @@ class Form {
 	}
 
 	private static function clearExpired() {
-		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . intval(Define::LIFETIME['form'] * 2 . ' SECOND)');
-		$statement->prepare()->execute();
+		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . intval(Define::LIFETIME['form']) * 2 . ' SECOND)');
+		$statement->execute();
 
 		return true;
 	}

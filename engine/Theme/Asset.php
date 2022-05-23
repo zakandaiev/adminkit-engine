@@ -12,6 +12,7 @@ class Asset {
 	];
 
 	private static $container = [];
+	private static $asset_url;
 
 	private static function add($extension, $filename, $attributes = '') {
 		$file_path = Path::file('asset') . '/' . $filename . '.' . $extension;
@@ -54,5 +55,9 @@ class Asset {
 		}
 
 		return $output;
+	}
+
+	public static function url() {
+		return !empty(self::$asset_url) ? self::$asset_url : Path::url('asset');
 	}
 }

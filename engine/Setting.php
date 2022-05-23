@@ -9,7 +9,7 @@ class Setting {
 
 	public static function initialize() {
 		self::$setting = self::load();
-		
+
 		date_default_timezone_set(self::$setting->main->time_zone);
 
 		return true;
@@ -18,7 +18,7 @@ class Setting {
 	public static function get($section) {
 		return self::$setting->{$section} ?? null;
 	}
-	
+
 	public static function getAll() {
 		return self::$setting;
 	}
@@ -32,7 +32,7 @@ class Setting {
 
 		$statement = new Statement('UPDATE {setting} SET value=:value WHERE section=:section AND name=:name');
 
-		$statement->prepare()->bind($params)->execute();
+		$statement->bind($params)->execute();
 
 		return true;
 	}
@@ -41,7 +41,7 @@ class Setting {
 		$setting = [];
 
 		$settings = new Statement('SELECT * FROM {setting}');
-		$settings = $settings->prepare()->execute()->fetchAll();
+		$settings = $settings->execute()->fetchAll();
 
 		foreach($settings as $row) {
 			$setting[$row->section][$row->name] = $row->value;

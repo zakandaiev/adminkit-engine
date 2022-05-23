@@ -10,10 +10,10 @@ class User {
 
 		$count = new Statement($sql);
 
-		return $count->prepare()->execute()->fetchColumn();
+		return $count->execute()->fetchColumn();
 	}
 
-	public function getUsers($pagination) {
+	public function getUsers() {
 		$sql = '
 			SELECT
 				*,
@@ -24,7 +24,7 @@ class User {
 
 		$users = new Statement($sql);
 
-		$users = $users->paginate($pagination)->execute()->fetchAll();
+		$users = $users->paginate($this->countUsers())->execute()->fetchAll();
 
 		return $users;
 	}
@@ -34,7 +34,7 @@ class User {
 
 		$user = new Statement($sql);
 
-		return $user->prepare()->bind(['id' => $id])->execute()->fetch();
+		return $user->bind(['id' => $id])->execute()->fetch();
 	}
 
 	public function getGroups() {
@@ -42,7 +42,7 @@ class User {
 
 		$groups = new Statement($sql);
 
-		return $groups->prepare()->execute()->fetchAll();
+		return $groups->execute()->fetchAll();
 	}
 
 	public function getUserGroupsById($user_id) {
@@ -52,7 +52,7 @@ class User {
 
 		$groups = new Statement($sql);
 
-		foreach($groups->prepare()->bind(['user_id' => $user_id])->execute()->fetchAll() as $category) {
+		foreach($groups->bind(['user_id' => $user_id])->execute()->fetchAll() as $category) {
 			$groups_array[] = $category->group_id;
 		}
 

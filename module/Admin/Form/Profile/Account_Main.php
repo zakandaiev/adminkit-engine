@@ -19,7 +19,7 @@ return [
 
 		$user_old = new Statement($user_old);
 
-		$user_old = $user_old->prepare()->bind(['id' => $data->user_id])->execute()->fetch();
+		$user_old = $user_old->bind(['id' => $data->user_id])->execute()->fetch();
 
 		$login_old = $user_old->login;
 		$email_old = $user_old->email;
@@ -42,7 +42,7 @@ return [
 		if($fields['email'] !== $email_old) {
 			$data->email_old = $email_old;
 			$data->email_new = $email_new;
-			
+
 			Mail::send('ChangeEmail', $data);
 			Notification::create('change_email', $data->user_id, $data);
 		}
@@ -51,7 +51,7 @@ return [
 		if($fields['name'] !== $name_old) {
 			$data->name_old = $name_old;
 			$data->name_new = $name_new;
-			
+
 			Notification::create('change_name', $data->user_id, $data);
 		}
 	}

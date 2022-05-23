@@ -2,14 +2,10 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Theme\Pagination;
-
 class Group extends AdminController {
 	public function getAll() {
-		$pagination = new Pagination($this->model->countGroups());
-		$groups = $this->model->getGroups($pagination);
+		$groups = $this->model->getGroups();
 
-		$data['pagination'] = $pagination;
 		$data['groups'] = $groups;
 
 		$this->view->setData($data);
