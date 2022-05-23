@@ -10,7 +10,6 @@ Asset::css('css/main');
 
 Asset::js('js/cyrToLat');
 Asset::js('js/toast');
-
 Asset::js('js/adminkit');
 Asset::js('js/fancybox');
 Asset::js('js/filepond');

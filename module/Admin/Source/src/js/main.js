@@ -14,6 +14,18 @@ const BASE_URL = window.location.protocol + '//' + window.location.host;
 @@include("form/foreign_form.js")
 
 document.addEventListener('DOMContentLoaded', () => {
+	// RESPONSIVE TABLES
+	@@include("setup/responsive-table.js")
+
+	// SMOOTH SCROLL
+	@@include("setup/anchor-smooth-scroll.js")
+
+	// TOOLTIP
+	@@include("setup/bs-tooltip.js")
+
+	// SPINNER ACTION
+	@@include("setup/spinner-action.js")
+
 	// FILEPOND
 	@@include("setup/filepond.js")
 
@@ -28,18 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// FORMS
 	@@include("setup/forms.js")
-
-	// RESPONSIVE TABLES
-	@@include("setup/responsive-table.js")
-
-	// SMOOTH SCROLL
-	@@include("setup/anchor-smooth-scroll.js")
-
-	// TOOLTIP
-	@@include("setup/bs-tooltip.js")
-
-	// TOOLTIP
-	@@include("setup/spinner-action.js")
 });
 
 // HANDLE BROKEN IMAGES

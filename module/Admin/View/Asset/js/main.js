@@ -362,7 +362,7 @@ var DataAction = /*#__PURE__*/function () {
   }, {
     key: "successDeleteNodes",
     value: function successDeleteNodes() {
-      if (this.data_delete) {
+      if (!this.data_delete) {
         return false;
       }
 
@@ -760,7 +760,53 @@ var ForeignForm = /*#__PURE__*/function () {
 }();
 
 document.addEventListener('DOMContentLoaded', function () {
-  // FILEPOND
+  // RESPONSIVE TABLES
+  document.querySelectorAll('table').forEach(function (table) {
+    if (!table.parentElement.classList.contains('table-responsive')) {
+      table.outerHTML = '<div class="table-responsive">' + table.outerHTML + '</div>';
+    }
+  }); // SMOOTH SCROLL
+
+  document.querySelectorAll('a').forEach(function (anchor) {
+    if (anchor.hasAttribute('target') && anchor.getAttribute('target') === '_blank') {
+      anchor.setAttribute('rel', 'noopener noreferrer nofollow');
+    }
+
+    if (!anchor.hasAttribute('data-bs-toggle')) {
+      anchor.addEventListener('click', function (event) {
+        if (!event.currentTarget.hasAttribute('href')) {
+          return;
+        }
+
+        var anchor_href = event.currentTarget.getAttribute('href');
+
+        if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
+          if (!event.currentTarget.hash) {
+            return;
+          }
+
+          var scroll_to_node = document.querySelector(event.currentTarget.hash);
+
+          if (scroll_to_node) {
+            event.preventDefault();
+            smoothScroll(scroll_to_node);
+          }
+        }
+      });
+    }
+  }); // TOOLTIP
+
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  }); // SPINNER ACTION
+
+  document.querySelectorAll('.spinner-action').forEach(function (element) {
+    if (SETTING.loader) {
+      element.insertAdjacentHTML('beforeend', SETTING.loader);
+    }
+  }); // FILEPOND
+
   var pond_input_data = {
     files: function files(input) {
       var files = [];
@@ -1061,52 +1107,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
     new ForeignForm(element);
-  }); // RESPONSIVE TABLES
-
-  document.querySelectorAll('table').forEach(function (table) {
-    if (!table.parentElement.classList.contains('table-responsive')) {
-      table.outerHTML = '<div class="table-responsive">' + table.outerHTML + '</div>';
-    }
-  }); // SMOOTH SCROLL
-
-  document.querySelectorAll('a').forEach(function (anchor) {
-    if (anchor.hasAttribute('target') && anchor.getAttribute('target') === '_blank') {
-      anchor.setAttribute('rel', 'noopener noreferrer nofollow');
-    }
-
-    if (!anchor.hasAttribute('data-bs-toggle')) {
-      anchor.addEventListener('click', function (event) {
-        if (!event.currentTarget.hasAttribute('href')) {
-          return;
-        }
-
-        var anchor_href = event.currentTarget.getAttribute('href');
-
-        if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
-          if (!event.currentTarget.hash) {
-            return;
-          }
-
-          var scroll_to_node = document.querySelector(event.currentTarget.hash);
-
-          if (scroll_to_node) {
-            event.preventDefault();
-            smoothScroll(scroll_to_node);
-          }
-        }
-      });
-    }
-  }); // TOOLTIP
-
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  }); // TOOLTIP
-
-  document.querySelectorAll('.spinner-action').forEach(function (element) {
-    if (SETTING.loader) {
-      element.insertAdjacentHTML('beforeend', SETTING.loader);
-    }
   });
 }); // HANDLE BROKEN IMAGES
 

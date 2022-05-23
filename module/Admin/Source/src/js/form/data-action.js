@@ -155,7 +155,7 @@ class DataAction {
 	}
 
 	successDeleteNodes() {
-		if(this.data_delete) {
+		if(!this.data_delete) {
 			return false;
 		}
 
