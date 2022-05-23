@@ -3,7 +3,6 @@
 /upload/
 /vendor/
 /composer.lock
-/README.java
 /robots.txt
 /sitemap.xml
 node_modules/

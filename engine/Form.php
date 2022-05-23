@@ -3,12 +3,8 @@
 namespace Engine;
 
 use Engine\Database\Statement;
-use Engine\Theme\Asset;
 
 class Form {
-	const TOKEN_LIFE_TIME = '12 HOUR';
-	const TOKEN_DEL_INTERVAL = '1 DAY';
-
 	private static $form = [];
 	private static $token;
 
@@ -189,9 +185,15 @@ class Form {
 			$form['execute_post']($sql_fields, $form_data);
 		}
 
-		$submit_message = isset($form['submit']) ? __($form['submit']) : null;
+		if(isset($form['submit'])) {
+			if(is_callable($form['submit'])) {
+				$submit_message = $form['submit']($sql_fields, $form_data);
+			} else {
+				$submit_message = __(trim($form['submit']));
+			}
+		}
 
-		Server::answer(null, 'success', $submit_message);
+		Server::answer(null, 'success', @$submit_message);
 	}
 
 	private static function tokenExistsAndActive($action, $form_name = '', $item_id = '') {
@@ -207,26 +209,27 @@ class Form {
 			SELECT token FROM {form}
 			WHERE
 				' . $query_defining . '
-				AND date_created > DATE_SUB(NOW(), INTERVAL ' . self::TOKEN_LIFE_TIME . ')
+				AND date_created > DATE_SUB(NOW(), INTERVAL ' . Define::LIFETIME['form'] . ' SECOND)
 		';
 
 		$statement = new Statement($sql);
 
 		$token_query = $statement->prepare()->bind($query_params)->execute()->fetch();
 
-		if(!empty($token_query)) {
-			self::$token = $token_query->token;
-			return true;
+		if(!isset($token_query->token)) {
+			return false;
 		}
 
-		return false;
+		self::$token = $token_query->token;
+
+		return true;
 	}
 
 	private static function clearExpired() {
-		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . self::TOKEN_DEL_INTERVAL . ')');
+		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . intval(Define::LIFETIME['form'] * 2 . ' SECOND)');
 		$statement->prepare()->execute();
 
-		return false;
+		return true;
 	}
 
 	private static function load($form_name) {
@@ -265,15 +268,15 @@ class Form {
 					}
 
 					if($check !== true) {
-						$error_message_auto = ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
-						$error_message = $values_array[$key . '_message'] ?? $error_message_auto;
-						$error_message = __($error_message);
+						$error_message = $values_array[$key . '_message'] ?? ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
 
-						Server::answer(null, 'error', $error_message, 409);
+						Server::answer(null, 'error', __($error_message), 409);
 					}
 				}
 			}
 		}
+
+		return true;
 	}
 
 	private static function isFieldValid($value, $operand, $operand_value) {
@@ -472,7 +475,7 @@ class Form {
 		return $fields;
 	}
 
-	public static function populateFiles($files = null, $asset = false) {
+	public static function populateFiles($files = null) {
 		$output_array = [];
 
 		if(empty($files)) {
@@ -487,9 +490,6 @@ class Form {
 
 		foreach($files_array as $file) {
 			$poster = Request::$base . '/' . $file;
-			if($asset == true) {
-				$poster = Asset::url() . '/' . $file;
-			}
 
 			$output_array[] = [
 				'value' => $file,

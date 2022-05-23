@@ -33,7 +33,7 @@ class Auth {
 		return true;
 	}
 
-	public static function authorize($user, $days = null) {
+	public static function authorize($user, $lifetime = null) {
 		$auth_token = Hash::token();
 
 		$user->ip = filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP);
@@ -50,7 +50,7 @@ class Auth {
 
 		$authorize->prepare()->bind(['user_id' => $user->id, 'last_ip' => $user->ip, 'auth_token' => $auth_token])->execute();
 
-		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, !empty($days) ? $days : Define::AUTH_DAYS);
+		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, $lifetime ?? Define::LIFETIME['auth']);
 
 		self::$user = $user;
 		self::$user->authorized = true;

@@ -4,6 +4,12 @@ define('ROOT_DIR', $_SERVER['DOCUMENT_ROOT']);
 
 require_once ROOT_DIR . '/vendor/autoload.php';
 
+$version_compare = version_compare($version = phpversion(), $required = \Engine\Define::PHP_MIN, '<');
+if($version_compare) {
+	$error_message = '<h1 style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">You are running PHP ' . $version . ', but it needs at least PHP ' . $required . ' to run.</h1>';
+	exit($error_message);
+}
+
 $is_install = str_starts_with($_SERVER['REQUEST_URI'], '/install');
 
 if(!is_file(ROOT_DIR . '/config/database.php') && !$is_install) {
@@ -18,16 +24,10 @@ if($is_install) {
 	exit;
 }
 
-$version_compare = version_compare($version = phpversion(), $required = \Engine\Define::PHP_MIN, '<');
-if($version_compare) {
-	$error_message = '<h1 style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">You are running PHP ' . $version . ', but it needs at least PHP ' . $required . ' to run.</h1>';
-	exit($error_message);
-}
-
 try {
 	\Engine\Engine::start();
-} catch (\ErrorException $e) {
-	echo $e->getMessage();
+} catch (\ErrorException $error) {
+	echo $error->getMessage();
 }
 
 \Engine\Engine::stop();

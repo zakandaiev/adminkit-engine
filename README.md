@@ -15,24 +15,23 @@
 5. Enjoy ;)
 
 ## ToDo:
-* create Filter class
-* modal forms compile
-* extend custom fields (image, wysiwyg...)
-* more convenient DB data output, pagination, filtering (maybe move from controller directly to template, but ha MVC?)
-* load more by data-attributes
-* cache langs
-* cache queries in Public module
-* make admin sidebar customizable by another modules
-* translate all texts
-* multilang settings
-* multilang menu
-* optimizations functionality in settings
-* htaccess2 -> htaccess
-* create Form models eg. User (name, login, email...)
-* getAddTranslation() also copy custom fields, tags
-* check all links for site('url_language')
-* add new settings in Admin
-* set min/maxlength for all inputs
-* Find way to use hooks between modules
-* JS data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
-* SQL generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
+* Engine: create Filter class
+* Engine: modal forms compile
+* Engine: cache langs
+* Engine: cache queries
+* Engine: multilang settings
+* Engine: multilang menu
+* Engine: htaccess2 -> htaccess
+* Engine: Find way to use hooks between moduleselds, tags
+* Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
+* Admin: extend custom fields (image, wysiwyg...)
+* Admin: load more by data-attributes
+* Admin: make admin sidebar customizable by another modules
+* Admin: create Form models eg. User (name, login, email...)
+* Admin: getAddTranslation() also copy custom fi
+* Admin: add new settings
+* Admin: data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
+* Modules: set min/maxlength for all inputs
+* Modules: check all links for site('url_language')
+* Modules: translate all texts
+* Modules: create API module

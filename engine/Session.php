@@ -39,10 +39,12 @@ class Session {
 		return true;
 	}
 
-	public static function setCookie($key, $value, $days = null) {
-		if(empty($days)) $days = Define::AUTH_DAYS;
-		setcookie($key, $value, time() + 3600 * 24 * intval($days), '/', httponly:true);
+	public static function setCookie($key, $value, $lifetime = null) {
+		setcookie($key, $value, time() + intval($lifetime ?? Define::LIFETIME['auth']), '/', httponly:true);
+
 		Request::$cookie[$key] = $value;
+
+		return true;
 	}
 
 	public static function getCookie($key) {

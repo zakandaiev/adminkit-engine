@@ -26,21 +26,27 @@ class Define {
 		'language' => 'language'
 	];
 
-	// AUTH
-	const AUTH_DAYS = 7;
+	// LIFETIME (in seconds)
+	const LIFETIME = [
+		'auth' => 3600 * 24 * 7, // 7 days
+		'form' => 3600 * 24 * 0.5 // 12 hours
+	];
 
 	// UPLOADS
 	const UPLOAD_FOLDER = 'upload';
 	const UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf', 'txt', 'zip', 'rar'];
 
-	// TODO
+	// TODO -> Path
 	const VIEW_PATH_MASK = [
 		'module' => '%s/View/%s',
 		'theme' => '%s/theme/%s'
 	];
 
-	// SERVICES
+	// SERVICE
 	const SERVICE = [
 		'ip_checker' => 'https://check-host.net/ip-info?host=%s'
 	];
+
+	// PAGINATION
+	const PAGINATION_URI_KEY = 'page';
 }

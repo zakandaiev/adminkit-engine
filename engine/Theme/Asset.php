@@ -2,22 +2,23 @@
 
 namespace Engine\Theme;
 
+use Engine\Define;
 use Engine\Path;
 
 class Asset {
-	const JS_SCRIPT_MASK = '<script %s src="%s"></script>';
-	const CSS_LINK_MASK  = '<link %s rel="stylesheet" href="%s">';
+	const EXTENSION_MASK = [
+		'js' => '<script src="%s"%s></script>',
+		'css' => '<link href="%s" rel="stylesheet"%s>'
+	];
 
 	private static $container = [];
-	private static $asset_path;
-	private static $asset_url;
 
 	private static function add($extension, $filename, $attributes = '') {
-		$file_path = self::path() . '/' . $filename . '.' . $extension;
+		$file_path = Path::file('asset') . '/' . $filename . '.' . $extension;
 
 		if(is_file($file_path)) {
 			self::$container[$extension][] = [
-				'file' => self::url() . '/' . $filename . '.' . $extension,
+				'file' => Path::url('asset') . '/' . $filename . '.' . $extension,
 				'attributes' => $attributes
 			];
 
@@ -27,57 +28,31 @@ class Asset {
 		return false;
 	}
 
-	public static function css($asset, $attributes = '') {
+	public static function css($asset, $attributes = null) {
 		return self::add(__FUNCTION__, $asset, $attributes);
 	}
 
-	public static function js($asset, $attributes = '') {
+	public static function js($asset, $attributes = null) {
 		return self::add(__FUNCTION__, $asset, $attributes);
 	}
 
 	public static function render($extension) {
-		$assets = isset(self::$container[$extension]) ? self::$container[$extension] : [];
+		$assets = self::$container[$extension] ?? [];
 
-		if(!empty($assets)) {
-			$renderMethod = 'render' . ucfirst($extension);
-			
-			return self::$renderMethod($assets);
+		if(empty($assets)) {
+			return false;
 		}
-	}
 
-	private static function renderJs($list) {
 		$output = '';
 
-		foreach($list as $item) {
+		foreach($assets as $asset) {
 			$output .= sprintf(
-				self::JS_SCRIPT_MASK,
-				$item['attributes'],
-				$item['file']
+				self::EXTENSION_MASK[$extension],
+				$asset['file'] . '?version=' . Define::VERSION,
+				$asset['attributes']
 			) . PHP_EOL;
 		}
 
 		return $output;
-	}
-
-	private static function renderCss($list) {
-		$output = '';
-
-		foreach($list as $item) {
-			$output .= sprintf(
-				self::CSS_LINK_MASK,
-				$item['attributes'],
-				$item['file']
-			) . PHP_EOL;
-		}
-
-		return $output;
-	}
-
-	public static function path() {
-		return !empty(self::$asset_path) ? self::$asset_path : Path::file('asset');
-	}
-
-	public static function url() {
-		return !empty(self::$asset_url) ? self::$asset_url : Path::url('asset');
 	}
 }

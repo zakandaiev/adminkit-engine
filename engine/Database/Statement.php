@@ -8,26 +8,29 @@ use \PDOException;
 use Engine\Define;
 use Engine\Config;
 use Engine\Server;
+use Engine\Theme\Pagination;
 
 class Statement {
 	private $sql;
+	private $prefix;
 	private $statement;
+	private $is_prepared = false;
 
 	public function __construct(string $sql) {
-		$this->sql = $sql;
+		$this->prefix = Config::get('database')['prefix'];
+
+		$replacement = '$1';
+		if(!empty($this->prefix)) {
+			$replacement = $this->prefix.'_$1';
+		}
+
+		$this->sql = preg_replace('/{([^{}]+)}/miu', $replacement, $sql);
+
+		return $this;
 	}
 
 	public function prepare() {
-		$table_prefix = Config::get('database')['prefix'];
-
-		$replacement = '$1';
-		if(!empty($table_prefix)) {
-			$replacement = $table_prefix.'_$1';
-		}
-
-		$sql = preg_replace('/{([^{}]+)}/miu', $replacement, $this->sql);
-
-		$this->statement = Database::$connection->prepare($sql);
+		$this->statement = Database::$connection->prepare($this->sql);
 
 		return $this;
 	}
@@ -35,6 +38,10 @@ class Statement {
 	public function bind($params) {
 		if(!is_array($params) || empty($params)) {
 			return $this;
+		}
+
+		if(!$this->is_prepared) {
+			$this->prepare();
 		}
 
 		$pdo_param = PDO::PARAM_NULL;
@@ -48,13 +55,32 @@ class Statement {
 				$value = json_encode($value);
 			}
 
-			$this->statement->bindValue(':'.$key, $value, $pdo_param);
+			$this->statement->bindValue(':' . $key, $value, $pdo_param);
 		}
 
 		return $this;
 	}
 
+	public function paginate($total_rows, $parameters = []) {
+		$this->sql = $this->sql . ' OFFSET :offset LIMIT :limit;';
+
+		Pagination::initialize($total_rows);
+
+		$binding = [
+			'offset' => $parameters['offset'] ?? Pagination::$offset,
+			'limit' => $parameters['limit'] ?? Pagination::$limit
+		];
+
+		$this->bind($binding);
+
+		return $this;
+	}
+
 	public function execute() {
+		if(!$this->is_prepared) {
+			$this->prepare();
+		}
+
 		try {
 			$this->statement->execute();
 		} catch(PDOException $error) {
@@ -94,13 +120,5 @@ class Statement {
 
 	public function insertId() {
 		return Database::$connection->lastInsertId();
-	}
-
-	public function paginate($pagination) {
-		$this->sql = $this->sql . ' LIMIT :limit OFFSET :offset;';
-
-		$this->prepare()->bind(['limit' => $pagination->per_page, 'offset' => $pagination->offset]);
-
-		return $this;
 	}
 }
