@@ -34,7 +34,7 @@ class User {
 
 		$user = new Statement($sql);
 
-		return $user->bind(['id' => $id])->execute()->fetch();
+		return $user->execute(['id' => $id])->fetch();
 	}
 
 	public function getGroups() {
@@ -52,7 +52,7 @@ class User {
 
 		$groups = new Statement($sql);
 
-		foreach($groups->bind(['user_id' => $user_id])->execute()->fetchAll() as $category) {
+		foreach($groups->execute(['user_id' => $user_id])->fetchAll() as $category) {
 			$groups_array[] = $category->group_id;
 		}
 

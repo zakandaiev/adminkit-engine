@@ -48,7 +48,7 @@ class Form {
 			';
 
 			$statement = new Statement($sql);
-			$statement->bind($query_params)->execute();
+			$statement->execute($query_params);
 
 			return Request::$base . '/' . $token;
 		}
@@ -145,7 +145,7 @@ class Form {
 			}
 
 			$statement = new Statement($sql);
-			$statement->bind($sql_fields)->execute();
+			$statement->execute($sql_fields);
 
 			if($action === 'add') {
 				$item_id = $statement->insertId();
@@ -160,7 +160,7 @@ class Form {
 					$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
 
 					$statement = new Statement($sql);
-					$statement->bind([$field['key_1'] => $item_id])->execute();
+					$statement->execute([$field['key_1'] => $item_id]);
 
 					if(empty($sql_fields_foreign_value[$field_name])) {
 						continue;
@@ -175,7 +175,7 @@ class Form {
 						';
 
 						$statement = new Statement($sql);
-						$statement->bind([$field['key_1'] => $item_id, $field['key_2'] => $value])->execute();
+						$statement->execute([$field['key_1'] => $item_id, $field['key_2'] => $value]);
 					}
 				}
 			}
@@ -214,7 +214,7 @@ class Form {
 
 		$statement = new Statement($sql);
 
-		$token_query = $statement->bind($query_params)->execute()->fetch();
+		$token_query = $statement->execute($query_params)->fetch();
 
 		if(!isset($token_query->token)) {
 			return false;

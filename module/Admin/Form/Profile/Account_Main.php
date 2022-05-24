@@ -19,7 +19,7 @@ return [
 
 		$user_old = new Statement($user_old);
 
-		$user_old = $user_old->bind(['id' => $data->user_id])->execute()->fetch();
+		$user_old = $user_old->execute(['id' => $data->user_id])->fetch();
 
 		$login_old = $user_old->login;
 		$email_old = $user_old->email;

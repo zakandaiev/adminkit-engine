@@ -32,7 +32,7 @@ class Setting {
 
 		$statement = new Statement('UPDATE {setting} SET value=:value WHERE section=:section AND name=:name');
 
-		$statement->bind($params)->execute();
+		$statement->execute($params);
 
 		return true;
 	}

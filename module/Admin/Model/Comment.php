@@ -72,7 +72,7 @@ class Comment {
 
 		$comment = new Statement($sql);
 
-		return $comment->bind(['id' => $id])->execute()->fetch();
+		return $comment->execute(['id' => $id])->fetch();
 	}
 
 	public function getAuthors() {

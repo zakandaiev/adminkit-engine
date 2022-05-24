@@ -35,7 +35,7 @@ class Menu {
 
 		$menu = new Statement($sql);
 
-		$menu = $menu->bind($binding)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+		$menu = $menu->execute($binding)->fetchAll(\PDO::FETCH_ASSOC);
 
 		if(empty($menu)) {
 			return $menu;

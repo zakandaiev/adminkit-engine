@@ -21,7 +21,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		$statement->bind(['page_url' => $page_url])->execute();
+		$statement->execute(['page_url' => $page_url]);
 
 		return true;
 	}
@@ -39,7 +39,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->bind(['id' => $id])->execute()->fetch();
+		return $page->execute(['id' => $id])->fetch();
 	}
 
 	public function getPageByUrl($url) {
@@ -55,7 +55,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->bind(['url' => $url])->execute()->fetch();
+		return $page->execute(['url' => $url])->fetch();
 	}
 
 	public function getPageCategories($page_id) {
@@ -74,7 +74,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		return $statement->bind(['page_id' => $page_id])->execute()->fetchAll();
+		return $statement->execute(['page_id' => $page_id])->fetchAll();
 	}
 
 	public function getPageTags($page_id) {
@@ -93,7 +93,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		return $statement->bind(['page_id' => $page_id])->execute()->fetchAll();
+		return $statement->execute(['page_id' => $page_id])->fetchAll();
 	}
 
 	public function getPageCommentsCount($page_id) {
@@ -101,7 +101,7 @@ class Page {
 
 		$count = new Statement($sql);
 
-		return intval($count->bind(['page_id' => $page_id])->execute()->fetchColumn());
+		return intval($count->execute(['page_id' => $page_id])->fetchColumn());
 	}
 
 	public function getPageComments($page_id) {
@@ -119,7 +119,7 @@ class Page {
 
 		$statement = new Statement($sql);
 
-		$comments = $statement->bind(['page_id' => $page_id])->execute()->fetchAll(\PDO::FETCH_ASSOC);
+		$comments = $statement->execute(['page_id' => $page_id])->fetchAll(\PDO::FETCH_ASSOC);
 
 		$comments_formatted = [];
 		foreach($comments as $item) {
@@ -150,7 +150,7 @@ class Page {
 
 		$fields = new \stdClass();
 
-		foreach($custom_fields->bind(['page_id' => $page_id])->execute()->fetchAll() as $field) {
+		foreach($custom_fields->execute(['page_id' => $page_id])->fetchAll() as $field) {
 			$fields->{$field->name} = $field->value;
 		}
 
@@ -247,7 +247,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->bind(['page_id' => $page_id])->execute()->fetch();
+		$pages = $pages->execute(['page_id' => $page_id])->fetch();
 
 		$prev_next = new \stdClass();
 
@@ -262,7 +262,7 @@ class Page {
 
 		$author = new Statement($sql);
 
-		return $author->bind(['user_id' => $user_id])->execute()->fetch();
+		return $author->execute(['user_id' => $user_id])->fetch();
 	}
 
 	public function getPagesByAuthor($user_id, $options = []) {
@@ -290,7 +290,7 @@ class Page {
 
 		$pages = new Statement($sql);
 
-		return $pages->bind(['user_id' => $user_id])->execute()->fetchAll();
+		return $pages->execute(['user_id' => $user_id])->fetchAll();
 	}
 
 	public function getRelatedPages($page, $options = []) {
@@ -448,7 +448,7 @@ class Page {
 
 		$page = new Statement($sql);
 
-		return $page->bind(['url' => $url])->execute()->fetch();
+		return $page->execute(['url' => $url])->fetch();
 	}
 
 	public function getPagesByTag($tag_id, $options = []) {

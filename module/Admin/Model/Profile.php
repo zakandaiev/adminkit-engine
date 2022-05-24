@@ -11,7 +11,7 @@ class Profile {
 
 		$user = new Statement($sql);
 
-		$user = $user->bind(['id' => $id])->execute()->fetch();
+		$user = $user->execute(['id' => $id])->fetch();
 
 		if(!empty($user->socials)) {
 			$user->socials = json_decode($user->socials);
@@ -23,13 +23,13 @@ class Profile {
 	public function getUserNotificationsCount($id) {
 		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id=:user_id');
 
-		return intval($notifications->bind(['user_id' => $id])->execute()->fetchColumn());
+		return intval($notifications->execute(['user_id' => $id])->fetchColumn());
 	}
 
 	public function getUserNotifications($id) {
 		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id=:user_id ORDER BY is_read=true, date_created DESC');
 
-		return $notifications->bind(['user_id' => $id])->execute()->fetchAll();
+		return $notifications->execute(['user_id' => $id])->fetchAll();
 	}
 
 	public function readNotifications($user_id) {

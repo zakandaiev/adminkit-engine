@@ -21,7 +21,7 @@ return [
 	'execute' => function($fields, $form_data) {
 		$statement = new Statement('SELECT * FROM {user} WHERE login=:login or email=:login');
 
-		$user = $statement->bind($fields)->execute()->fetch();
+		$user = $statement->execute($fields)->fetch();
 
 		if(empty($user) || !password_verify($fields['password'], $user->password)) {
 			Server::answer(null, 'error', __('Invalid login or password'));
