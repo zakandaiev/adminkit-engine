@@ -1,8 +1,6 @@
 "use strict";
 
-function makeAlert(type, text) {
-  var time = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
-
+function toast(type, text, duration) {
   if (!text || !text.length) {
     return false;
   }
@@ -36,15 +34,15 @@ function makeAlert(type, text) {
   toast.appendChild(toast_text);
   container.appendChild(toast);
   toast.addEventListener('click', function () {
-    return closeAlert(container, toast);
+    return toast_close(container, toast);
   });
   setTimeout(function () {
-    return closeAlert(container, toast);
-  }, time);
+    return toast_close(container, toast);
+  }, duration ? duration : 5000);
   return true;
 }
 
-function closeAlert(container, toast) {
+function toast_close(container, toast) {
   toast.classList.add('disappear');
   setTimeout(function () {
     toast.remove();

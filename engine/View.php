@@ -8,9 +8,9 @@ use Engine\Theme\Template;
 class View {
 	private static $data = [];
 
-	public function render($template) {
+	public function render($template, $is_required = true) {
 		Template::load('functions', false);
-		Template::load($template);
+		Template::load($template, $is_required);
 	}
 
 	public function error($code) {

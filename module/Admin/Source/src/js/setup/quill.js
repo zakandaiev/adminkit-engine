@@ -90,11 +90,11 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 						quill.insertEmbed(selection, 'image', image_url);
 						quill.setSelection(selection + 1);
 					} else {
-						makeAlert(data.status, data.message);
+						SETTING.toast(data.status, data.message);
 					}
 				})
 				.catch(error => {
-					makeAlert('error', error);
+					SETTING.toast('error', error);
 				});
 
 				quill.enable(true);

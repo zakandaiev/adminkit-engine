@@ -21,7 +21,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var BASE_URL = window.location.protocol + '//' + window.location.host; // SETTING
 
 SETTING.loader = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
-SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg'; // UTILS
+SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg';
+
+SETTING.toast = function (status) {
+  var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  toast(status, message, duration);
+}; // UTILS
+
 
 function fadeOut(element) {
   if (!element) {
@@ -100,9 +107,9 @@ var Form = /*#__PURE__*/function () {
             _this.successResetForm();
           }
 
-          makeAlert(data.status, _this.data_message ? _this.data_message : data.message);
+          SETTING.toast(data.status, _this.data_message ? _this.data_message : data.message);
         }).catch(function (error) {
-          makeAlert('error', error);
+          SETTING.toast('error', error);
         });
 
         _this.enableForm();
@@ -245,9 +252,9 @@ var DataAction = /*#__PURE__*/function () {
             _this2.successDeleteNodes();
           }
 
-          makeAlert(data.status, _this2.data_message ? _this2.data_message : data.message);
+          SETTING.toast(data.status, _this2.data_message ? _this2.data_message : data.message);
         }).catch(function (error) {
-          makeAlert('error', error);
+          SETTING.toast('error', error);
         });
 
         _this2.enableNodes();
@@ -985,10 +992,10 @@ document.addEventListener('DOMContentLoaded', function () {
               quill.insertEmbed(selection, 'image', image_url);
               quill.setSelection(selection + 1);
             } else {
-              makeAlert(data.status, data.message);
+              SETTING.toast(data.status, data.message);
             }
           }).catch(function (error) {
-            makeAlert('error', error);
+            SETTING.toast('error', error);
           });
           quill.enable(true);
         }

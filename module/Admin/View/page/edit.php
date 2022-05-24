@@ -95,6 +95,8 @@
 										</div>
 									</div>
 									<div id="page-custom-fields" class="tab-pane" role="tabpanel">
+										<label class="form-label">Field</label>
+										<span data-modal="custom-fields" class="badge bg-primary cursor-pointer"><i data-feather="plus" class="align-middle feather-sm"></i></span>
 										<div class="form-group mb-3">
 											<label class="form-label">Field</label>
 											<div class="modal fade foreign-form" data-name="custom_fields" data-value='<?= hc(json_encode($page_edit->custom_fields)) ?>'>

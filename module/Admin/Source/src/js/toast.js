@@ -1,4 +1,4 @@
-function makeAlert(type, text, time = 5000) {
+function toast(type, text, duration) {
 	if(!text || !text.length) {
 		return false;
 	}
@@ -31,14 +31,14 @@ function makeAlert(type, text, time = 5000) {
 
 	container.appendChild(toast);
 
-	toast.addEventListener('click', () => closeAlert(container, toast));
+	toast.addEventListener('click', () => toast_close(container, toast));
 
-	setTimeout(() => closeAlert(container, toast), time);
+	setTimeout(() => toast_close(container, toast), duration ? duration : 5000);
 
 	return true;
 }
 
-function closeAlert(container, toast) {
+function toast_close(container, toast) {
 	toast.classList.add('disappear');
 	setTimeout(() => {
 		toast.remove();

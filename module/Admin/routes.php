@@ -261,3 +261,6 @@ Module::route('get', '/admin/log/$id', 'Log@get', [
 		__('Logs') . '@/admin/log'
 	]
 ]);
+
+############################# MODAL #############################
+Module::route('post', '/admin/modal/$name', 'Modal@get');

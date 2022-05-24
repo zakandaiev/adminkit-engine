@@ -43,10 +43,10 @@ class DataAction {
 					this.successDeleteNodes();
 				}
 
-				makeAlert(data.status, this.data_message ? this.data_message : data.message);
+				SETTING.toast(data.status, this.data_message ? this.data_message : data.message);
 			})
 			.catch(error => {
-				makeAlert('error', error);
+				SETTING.toast('error', error);
 			});
 
 			this.enableNodes();

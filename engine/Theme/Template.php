@@ -5,11 +5,11 @@ namespace Engine\Theme;
 use Engine\View;
 
 class Template {
-	public static function load($template, $required = true) {
+	public static function load($template, $is_required = true) {
 		$template_path = Theme::path() . '/' . $template . '.php';
 
 		if(!is_file($template_path)) {
-			if($required) {
+			if($is_required) {
 				throw new \Exception(sprintf('Template %s not found in %s.', $template, $template_path));
 			} else {
 				return false;

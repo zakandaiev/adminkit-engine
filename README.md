@@ -22,7 +22,7 @@
 * Engine: multilang settings
 * Engine: multilang menu
 * Engine: htaccess2 -> htaccess
-* Engine: Find way to use hooks between moduleselds, tags
+* Engine: Find way to use hooks between modules
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Admin: extend custom fields (image, wysiwyg...)
 * Admin: load more by data-attributes
