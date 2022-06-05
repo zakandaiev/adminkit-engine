@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS `%prefix%_user` (
 	`avatar` TEXT DEFAULT NULL,
 	`socials` TEXT DEFAULT NULL,
 	`auth_token` VARCHAR(200) DEFAULT NULL,
-	`last_ip` VARCHAR(32) DEFAULT NULL,
-	`last_auth` DATETIME NULL DEFAULT NULL,
+	`auth_ip` VARCHAR(32) DEFAULT NULL,
+	`auth_date` DATETIME NULL DEFAULT NULL,
 	`is_enabled` BOOLEAN NOT NULL DEFAULT TRUE,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`date_edited` DATETIME on update CURRENT_TIMESTAMP DEFAULT NULL,
@@ -64,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `%prefix%_page` (
 	`content` LONGTEXT DEFAULT NULL,
 	`excerpt` TEXT DEFAULT NULL,
 	`image` TEXT DEFAULT NULL,
-	`gallery` TEXT DEFAULT NULL,
 	`seo_description` TEXT DEFAULT NULL,
 	`seo_keywords` TEXT DEFAULT NULL,
 	`seo_image` TEXT DEFAULT NULL,
@@ -140,16 +139,9 @@ CREATE TABLE IF NOT EXISTS `%prefix%_form` (
 CREATE TABLE `%prefix%_menu` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(200) NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-CREATE TABLE `%prefix%_menu_item` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`parent` INT DEFAULT NULL,
-	`menu_id` INT NOT NULL,
-	`name` VARCHAR(200) NOT NULL,
-	`url` VARCHAR(400) DEFAULT NULL,
-	PRIMARY KEY (`id`)
+	`items` LONGTEXT DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
@@ -187,8 +179,8 @@ INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('optimization', 'group_js', NULL),
 ('optimization', 'cache_db', NULL);
 
-INSERT INTO `%prefix%_user` (`name`, `login`, `password`, `email`, `auth_token`) VALUES
-('Admin', '%admin_login%', '%admin_password%', '%admin_email%', '%auth_token%');
+INSERT INTO `%prefix%_user` (`name`, `login`, `password`, `email`, `auth_token`, `auth_ip`) VALUES
+('Admin', '%admin_login%', '%admin_password%', '%admin_email%', '%auth_token%', '%auth_ip%');
 
 INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 ('Developer', true),
@@ -197,8 +189,8 @@ INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
 (1, 1);
 
-INSERT INTO `%prefix%_notification` (`user_id`, `kind`) VALUES
-(1, 'register');
+INSERT INTO `%prefix%_notification` (`user_id`, `kind`, `info`) VALUES
+(1, 'register', '{"ip":"%auth_ip%"}');
 
 INSERT INTO `%prefix%_page` (`language`, `title`, `url`, `author`) VALUES
 ('en', 'Homepage', 'home', 1);
@@ -209,7 +201,7 @@ BEFORE UPDATE ON
 	`%prefix%_page`
 FOR EACH ROW
 	SET NEW.is_static =
-		CASE WHEN (SELECT count(*) FROM `%prefix%_page_category` WHERE page_id=NEW.id) > 0 THEN
+		CASE WHEN (SELECT count(*) FROM `%prefix%_page_category` WHERE page_id IN (SELECT id FROM `%prefix%_page` WHERE url=NEW.url)) > 0 THEN
 			false
 		ELSE
 			true

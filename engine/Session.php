@@ -4,11 +4,11 @@ namespace Engine;
 
 class Session {
 	public static function initialize() {
-		if(!headers_sent()) {
-			session_start();
+		if(headers_sent()) {
+			return false;
 		}
 
-		return true;
+		return session_start();
 	}
 
 	public static function get($key) {
@@ -39,6 +39,10 @@ class Session {
 		return true;
 	}
 
+	public static function getAll() {
+		return $_SESSION;
+	}
+
 	public static function setCookie($key, $value, $lifetime = null) {
 		setcookie($key, $value, time() + intval($lifetime ?? Define::LIFETIME['auth']), '/', httponly:true);
 
@@ -61,5 +65,9 @@ class Session {
 		}
 
 		return true;
+	}
+
+	public static function getCookieAll() {
+		return Request::$cookie;
 	}
 }

@@ -31,7 +31,6 @@
 							<div class="tab">
 								<ul class="nav nav-tabs" role="tablist">
 									<li class="nav-item"><a class="nav-link active" href="#page-content" data-bs-toggle="tab" role="tab">Content</a></li>
-									<li class="nav-item"><a class="nav-link" href="#page-gallery" data-bs-toggle="tab" role="tab">Gallery</a></li>
 									<li class="nav-item"><a class="nav-link" href="#page-seo" data-bs-toggle="tab" role="tab">SEO</a></li>
 									<li class="nav-item"><a class="nav-link" href="#page-custom-fields" data-bs-toggle="tab" role="tab">Custom fields</a></li>
 								</ul>
@@ -68,12 +67,6 @@
 											</div>
 										<?php endif; ?>
 									</div>
-									<div id="page-gallery" class="tab-pane" role="tabpanel">
-										<div class="form-group">
-											<label class="form-label">Gallery</label>
-											<input type="file" accept="image/*" name="gallery[]" multiple data-value='<?= Form::populateFiles($page_edit->gallery) ?>'>
-										</div>
-									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">
 										<?php if(!$page_edit->is_translation): ?>
 											<div class="form-check form-switch mb-3">
@@ -95,8 +88,6 @@
 										</div>
 									</div>
 									<div id="page-custom-fields" class="tab-pane" role="tabpanel">
-										<label class="form-label">Field</label>
-										<span data-modal="custom-fields" class="badge bg-primary cursor-pointer"><i data-feather="plus" class="align-middle feather-sm"></i></span>
 										<div class="form-group mb-3">
 											<label class="form-label">Field</label>
 											<div class="modal fade foreign-form" data-name="custom_fields" data-value='<?= hc(json_encode($page_edit->custom_fields)) ?>'>

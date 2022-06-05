@@ -11,6 +11,7 @@ class Comment {
 		if(!self::$instance instanceof self) {
 			self::$instance = new self();
 		}
+
 		return self::$instance;
 	}
 

@@ -61,16 +61,16 @@ if(!function_exists('aside')) {
 
 ?>
 
-<?php if(!empty($menu)): ?>
+<?php if($menu && !empty($menu->items)): ?>
 	<?php if(@$aside): ?>
 		<ul class="nav-aside-menu">
-			<?= aside($menu); ?>
+			<?= aside($menu->items); ?>
 		</ul>
 	<?php else: ?>
 		<div id="nav-bottom">
 			<div class="container">
 				<ul class="nav-menu">
-					<?= menu($menu); ?>
+					<?= menu($menu->items); ?>
 				</ul>
 			</div>
 		</div>

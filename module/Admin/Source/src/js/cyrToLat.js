@@ -44,6 +44,11 @@ function cyrToLat(text) {
 	}).join('');
 }
 
-function slug(text) {
-	return cyrToLat(text).replaceAll(/[^A-Za-z0-9-]+/g, '-').replaceAll(/[\-]+/g, '-').replace(/^-/, '').replace(/-$/, '').toLowerCase();
+function slug(text, delimiter = '-') {
+	const replace_1 = new RegExp('[^A-Za-z0-9' + delimiter + ']+', 'g');
+	const replace_2 = new RegExp('[' + delimiter + ']+', 'g');
+	const replace_3 = new RegExp('^' + delimiter);
+	const replace_4 = new RegExp(delimiter + '$');
+
+	return cyrToLat(text).replaceAll(replace_1, delimiter).replaceAll(replace_2, delimiter).replace(replace_3, '').replace(replace_4, '').toLowerCase();
 }

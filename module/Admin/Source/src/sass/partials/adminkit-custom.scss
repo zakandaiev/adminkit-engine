@@ -2154,20 +2154,19 @@ footer.footer {
 		flex-shrink: 0;
 		cursor: pointer;
 	}
-	&__name {
-		flex-shrink: 0;
-		flex-basis: 30%;
-		margin: 0 1rem;
-		white-space: nowrap;
-		overflow: hidden;
-		vertical-align: middle;
-	}
-	&__url {
+	&__input {
 		flex-grow: 1;
 		margin: 0 1rem;
-		white-space: nowrap;
-		overflow: hidden;
-		vertical-align: middle;
+		border: none;
+    background: none;
+    box-shadow: none;
+		outline: none;
+		&:focus {
+			border: none;
+			background: none;
+			box-shadow: none;
+			outline: none;
+		}
 	}
 	[contenteditable]:focus {
 		outline: 0;

@@ -10,6 +10,7 @@ class Request {
 	public static $uri;
 	public static $url;
 	public static $referer;
+	public static $ip;
 
 	public static $get = [];
 	public static $post = [];
@@ -25,9 +26,10 @@ class Request {
 		self::$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
 		self::$host 		= $_SERVER['HTTP_HOST'];
 		self::$base 		= self::$protocol . '://' . self::$host;
-		self::$uri 			= $_SERVER['REQUEST_URI'];
+		self::$uri 			= filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 		self::$url 			= self::$base . self::$uri;
 		self::$referer 	= $_SERVER['HTTP_REFERER'] ?? null;
+		self::$ip 			= filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
 		self::$get			= $_GET;
 		self::$post			= $_POST;

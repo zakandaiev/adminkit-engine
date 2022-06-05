@@ -83,5 +83,10 @@ function cyrToLat(text) {
 }
 
 function slug(text) {
-  return cyrToLat(text).replaceAll(/[^A-Za-z0-9-]+/g, '-').replaceAll(/[\-]+/g, '-').replace(/^-/, '').replace(/-$/, '').toLowerCase();
+  var delimiter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '-';
+  var replace_1 = new RegExp('[^A-Za-z0-9' + delimiter + ']+', 'g');
+  var replace_2 = new RegExp('[' + delimiter + ']+', 'g');
+  var replace_3 = new RegExp('^' + delimiter);
+  var replace_4 = new RegExp(delimiter + '$');
+  return cyrToLat(text).replaceAll(replace_1, delimiter).replaceAll(replace_2, delimiter).replace(replace_3, '').replace(replace_4, '').toLowerCase();
 }

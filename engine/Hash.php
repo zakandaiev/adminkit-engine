@@ -4,7 +4,7 @@ namespace Engine;
 
 class Hash {
 	public static function token($length = 32) {
-		return bin2hex(random_bytes($length));;
+		return bin2hex(random_bytes($length));
 	}
 
 	public static function password($password) {
@@ -20,6 +20,6 @@ class Hash {
 			$password .= $chars[rand(0, $chars_size - 1)];
 		}
 
-		return $password; 
+		return $password;
 	}
 }

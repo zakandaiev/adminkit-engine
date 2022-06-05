@@ -17,7 +17,7 @@ class Log {
 		}
 
 		if(!file_exists($path)) {
-			mkdir($path, 0755, true);
+			mkdir($path, 0660, true);
 		}
 
 		$path .= '/' . date(Define::LOG_FILENAME) . '.' . Define::LOG_EXTENSION;

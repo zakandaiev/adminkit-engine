@@ -8,15 +8,15 @@ Asset::css('css/quill');
 Asset::css('css/slimselect');
 Asset::css('css/main');
 
-Asset::js('js/cyrToLat');
-Asset::js('js/toast');
-Asset::js('js/adminkit');
-Asset::js('js/fancybox');
-Asset::js('js/filepond');
-Asset::js('js/quill');
-Asset::js('js/slimselect');
-Asset::js('js/sortable');
-Asset::js('js/main');
+Asset::js('js/cyrToLat', 'defer');
+Asset::js('js/toast', 'defer');
+Asset::js('js/adminkit', 'defer');
+Asset::js('js/fancybox', 'defer');
+Asset::js('js/filepond', 'defer');
+Asset::js('js/quill', 'defer');
+Asset::js('js/slimselect', 'defer');
+Asset::js('js/sortable', 'defer');
+Asset::js('js/main', 'defer');
 
 ############################# BREADCRUMBS #############################
 Breadcrumb::setOption('render_homepage', true);
@@ -222,15 +222,15 @@ function getNotificationHTML($notification, $user) {
 
 ############################# MENU #############################
 function menu_builder($menu) {
-	$output = '<ul class="list-group sortable" data-multi="menu">';
+	$output = '<ul class="list-group sortable" data-multi="menu" data-handle=".sortable__handle" data-callback="editMenuItems">';
 
 	foreach($menu as $item) {
 		$output .= '<li class="list-group-item menu-list">';
 		$output .= '<div class="menu-item">';
 		$output .= '<i class="menu-item__icon sortable__handle feather-sm text-muted" data-feather="move"></i>';
-		$output .= '<div class="menu-item__name" contenteditable="true">' . $item->name . '</div>';
+		$output .= '<input class="menu-item__input" name="name" value="' . $item->name . '" placeholder="' . __('Name') . '">';
 		$output .= '<i class="menu-item__icon feather-sm text-muted" data-feather="link"></i>';
-		$output .= '<div class="menu-item__url" contenteditable="true">' . $item->url . '</div>';
+		$output .= '<input class="menu-item__input" name="url" value="' . $item->url . '" placeholder="' . __('Link') . '">';
 		$output .= '<i class="menu-item__icon feather-sm text-muted" data-feather="trash"></i>';
 		$output .= '</div>';
 

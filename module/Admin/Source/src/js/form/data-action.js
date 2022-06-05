@@ -37,19 +37,21 @@ class DataAction {
 			.then(response => response.json())
 			.then(data => {
 				if(data.status === 'success') {
-					this.successRedirect();
+					this.successRedirect(data);
 					this.successCounter();
 					this.successResetTargetForm();
 					this.successDeleteNodes();
+					SETTING.toast(data.status, this.data_message ?? data.message);
+				} else {
+					SETTING.toast(data.status, this.data_message ? this.data_message : data.message);
 				}
-
-				SETTING.toast(data.status, this.data_message ? this.data_message : data.message);
 			})
 			.catch(error => {
 				SETTING.toast('error', error);
+			})
+			.finally(() => {
+				this.enableNodes();
 			});
-
-			this.enableNodes();
 		});
 	}
 
@@ -117,12 +119,12 @@ class DataAction {
 		return true;
 	}
 
-	successRedirect() {
+	successRedirect(data) {
 		if(this.data_redirect) {
 			if(this.data_redirect === 'this') {
 				document.location.reload();
 			} else {
-				window.location.href = this.data_redirect;
+				window.location.href = decodeURI(this.data_redirect).replaceAll(/({\w+})/g, data?.message);
 			}
 		}
 

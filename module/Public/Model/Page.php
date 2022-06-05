@@ -3,7 +3,6 @@
 namespace Module\Public\Model;
 
 use Engine\Database\Statement;
-use Engine\Setting;
 
 class Page {
 	private static $instance;
@@ -34,7 +33,9 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				id=:id AND date_publish <= NOW() AND is_enabled IS true
+				id=:id
+				AND date_publish <= NOW()
+				AND is_enabled IS true
 		';
 
 		$page = new Statement($sql);
@@ -50,18 +51,22 @@ class Page {
 			FROM
 				{page} t_page
 			WHERE
-				url=:url AND date_publish <= NOW() AND is_enabled IS true
+				url=:url
+				AND date_publish <= NOW()
+				AND is_enabled IS true
+			ORDER BY
+				language<>:language
 		';
 
 		$page = new Statement($sql);
 
-		return $page->execute(['url' => $url])->fetch();
+		return $page->execute(['url' => $url, 'language' => site('language_current')])->fetch();
 	}
 
-	public function getPageCategories($page_id) {
+	public function getPageCategories($page_url) {
 		$sql = '
 			SELECT
-				t_page.title, t_page.url
+				t_page.*
 			FROM
 				{page} t_page
 			INNER JOIN
@@ -69,15 +74,17 @@ class Page {
 			ON
 				t_page.id = t_page_category.category_id
 			WHERE
-				t_page_category.page_id=:page_id AND t_page.date_publish <= NOW() AND t_page.is_enabled IS true
+				t_page_category.page_id IN (SELECT id FROM {page} WHERE url=:page_url)
+				AND t_page.date_publish <= NOW()
+				AND t_page.is_enabled IS true
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->execute(['page_id' => $page_id])->fetchAll();
+		return $statement->execute(['page_url' => $page_url])->fetchAll();
 	}
 
-	public function getPageTags($page_id) {
+	public function getPageTags($page_url) {
 		$sql = '
 			SELECT
 				t_tag.name, t_tag.url
@@ -88,12 +95,13 @@ class Page {
 			ON
 				t_tag.id = t_page_tag.tag_id
 			WHERE
-				t_page_tag.page_id=:page_id AND t_tag.is_enabled IS true
+				t_page_tag.page_id=(SELECT id FROM {page} WHERE url=:page_url)
+				AND t_tag.is_enabled IS true
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->execute(['page_id' => $page_id])->fetchAll();
+		return $statement->execute(['page_url' => $page_url])->fetchAll();
 	}
 
 	public function getPageCommentsCount($page_id) {

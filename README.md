@@ -16,7 +16,6 @@
 
 ## ToDo:
 * Engine: create Filter class
-* Engine: modal forms compile
 * Engine: cache langs
 * Engine: cache queries
 * Engine: multilang settings
@@ -28,7 +27,7 @@
 * Admin: load more by data-attributes
 * Admin: make admin sidebar customizable by another modules
 * Admin: create Form models eg. User (name, login, email...)
-* Admin: getAddTranslation() also copy custom fi
+* Admin: getAddTranslation() also copy custom fields
 * Admin: add new settings
 * Admin: data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
 * Modules: set min/maxlength for all inputs
@@ -36,3 +35,4 @@
 * Modules: translate all texts
 * Modules: create API module
 * Modules: log all events
+* Public: make pages multilang

@@ -47,23 +47,25 @@ const slimselect_data = {
 	}
 };
 
-document.querySelectorAll('select').forEach(select => {
-	if(select.hasAttribute('data-native')) {
-		return;
-	}
-	
-	new SlimSelect({
-		select: select,
-		addable: slimselect_data.addable(select),
-		allowDeselect: slimselect_data.allowDeselect(select),
-		deselectLabel: slimselect_data.deselectLabel(select),
-		// hideSelectedOption: slimselect_data.hideSelectedOption(select), // not work with optgroups
-		closeOnSelect: slimselect_data.closeOnSelect(select),
-		showSearch: slimselect_data.showSearch(select),
-		placeholder: slimselect_data.placeholder(select),
-		placeholderText: slimselect_data.placeholder(select),
-		searchPlaceholder: slimselect_data.searchPlaceholder(select),
-		searchText: slimselect_data.searchText(select),
-		showContent: "down"
+document.addEventListener('DOMContentLoaded', () => {
+	document.querySelectorAll('select').forEach(select => {
+		if(select.hasAttribute('data-native')) {
+			return false;
+		}
+
+		new SlimSelect({
+			select: select,
+			addable: slimselect_data.addable(select),
+			allowDeselect: slimselect_data.allowDeselect(select),
+			deselectLabel: slimselect_data.deselectLabel(select),
+			// hideSelectedOption: slimselect_data.hideSelectedOption(select), // not work with optgroups
+			closeOnSelect: slimselect_data.closeOnSelect(select),
+			showSearch: slimselect_data.showSearch(select),
+			placeholder: slimselect_data.placeholder(select),
+			placeholderText: slimselect_data.placeholder(select),
+			searchPlaceholder: slimselect_data.searchPlaceholder(select),
+			searchText: slimselect_data.searchText(select),
+			showContent: "down"
+		});
 	});
 });

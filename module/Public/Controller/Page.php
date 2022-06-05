@@ -12,7 +12,7 @@ class Page extends Controller {
 				$this->view->error('404');
 				return true;
 			}
-			
+
 			$page_url = $this->route['parameters']['url'];
 		}
 
@@ -35,14 +35,14 @@ class Page extends Controller {
 			$page_template = 'page';
 		}
 
-		$data['page']->categories = $this->model->getPageCategories($data['page']->id);
-		$data['page']->comments = $this->model->getPageComments($data['page']->id);
-		$data['page']->comments_count = $this->model->getPageCommentsCount($data['page']->id);
-		$data['page']->tags = $this->model->getPageTags($data['page']->id);
-		$data['page']->custom_fields = $this->model->getPageCustomFields($data['page']->id);
-		
+		$data['page']->categories = $this->model->getPageCategories($data['page']->url);
+		$data['page']->comments = $this->model->getPageComments($data['page']->url);
+		$data['page']->comments_count = $this->model->getPageCommentsCount($data['page']->url);
+		$data['page']->tags = $this->model->getPageTags($data['page']->url);
+		$data['page']->custom_fields = $this->model->getPageCustomFields($data['page']->url);
+
 		$this->model->updateViewCounter($data['page']->url);
-		
+
 		$this->view->setData($data);
 		$this->view->render($page_template);
 
@@ -54,7 +54,7 @@ class Page extends Controller {
 
 		$data['tag'] = $this->model->getTagByUrl($tag_url);
 
-		if(empty($data['tag'])) {	
+		if(empty($data['tag'])) {
 			$this->view->error('404');
 		}
 
@@ -69,7 +69,7 @@ class Page extends Controller {
 
 		$data['author'] = $this->model->getAuthor($author_id);
 
-		if(empty($data['author'])) {	
+		if(empty($data['author'])) {
 			$this->view->error('404');
 		}
 

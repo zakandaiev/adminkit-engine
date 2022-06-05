@@ -1,8 +1,12 @@
 <?php
 
 use \Engine\Define;
+use \Engine\Hash;
+use \Engine\Log;
+use \Engine\Session;
 
-session_start();
+Session::initialize();
+
 storePostData();
 
 $step = 'db';
@@ -25,7 +29,7 @@ if(isset($_GET['step']) && $_GET['step'] == 'install') {
 }
 
 if($step == 'install' && install()) {
-	session_destroy();
+	Session::flush();
 	header('Location: /admin');
 }
 
@@ -39,7 +43,7 @@ function tableExists($connection, $table) {
 }
 
 function install() {
-	$data = $_SESSION;
+	$data = Session::getAll();
 	$db_config_path = ROOT_DIR . '/config';
 	$site_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];
 
@@ -67,7 +71,8 @@ function install() {
 	$robots_txt = 'User-agent: *' . PHP_EOL;
 	$robots_txt .= 'Disallow: /404' . PHP_EOL;
 	$robots_txt .= 'Disallow: /admin' . PHP_EOL;
-	$robots_txt .= 'Disallow: /admin/' . PHP_EOL . PHP_EOL;
+	$robots_txt .= 'Disallow: /admin/' . PHP_EOL;
+	$robots_txt .= 'Disallow: /log/' . PHP_EOL . PHP_EOL;
 	$robots_txt .= 'Sitemap: ' . $site_url . '/sitemap.xml';
 	file_put_contents(ROOT_DIR . '/robots.txt', $robots_txt, LOCK_EX);
 
@@ -113,6 +118,8 @@ function install() {
 		}
 	}
 
+	Log::write('Engine has been installed successfully');
+
 	return true;
 }
 
@@ -120,12 +127,14 @@ function executeSQL($data, $connection, $sql) {
 	$replace_from = [
 		'%prefix%',
 		'%site_name%', '%contact_email%',
-		'%admin_login%', '%admin_password%', '%admin_email%', '%auth_token%'
+		'%admin_login%', '%admin_password%', '%admin_email%',
+		'%auth_token%', '%auth_ip%'
 	];
 	$replace_to = [
 		$data['db_prefix'],
 		$data['site_name'], $data['contact_email'],
-		$data['admin_login'], password_hash($data['admin_password'], PASSWORD_DEFAULT), $data['admin_email'], generateAuthToken($data)
+		$data['admin_login'], Hash::password($data['admin_password']), $data['admin_email'],
+		generateAuthToken(), filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
 	];
 
 	$sql_formatted = str_replace($replace_from, $replace_to, $sql);
@@ -136,13 +145,15 @@ function executeSQL($data, $connection, $sql) {
 function storePostData() {
 	foreach($_POST as $key => $value) {
 		${$key} = $value;
-		$_SESSION[$key] = $value;
+		Session::set($key, $value);
 	}
 }
 
-function generateAuthToken($data) {
-	$auth_token = md5($data['admin_login'].$data['admin_password'].$data['admin_email'].time());
-	setcookie('auth_token', $auth_token, time() + 3600 * 24 * 7, '/');
+function generateAuthToken() {
+	$auth_key = Define::COOKIE_KEY['auth'];
+	$auth_token = Session::hasCookie($auth_key) ? Session::getCookie($auth_key) : Hash::token();
+
+	Session::setCookie($auth_key, $auth_token);
 
 	return $auth_token;
 }

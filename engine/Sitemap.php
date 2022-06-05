@@ -2,6 +2,8 @@
 
 namespace Engine;
 
+use Engine\Database\Statement;
+
 class Sitemap {
 	public static function update($custom_pages = []) {
 		$pages = $custom_pages;

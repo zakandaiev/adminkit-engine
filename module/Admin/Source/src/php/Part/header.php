@@ -4,6 +4,7 @@
 <head>
 	<?= Meta::all($page) ?>
 	<?= Asset::render('css') ?>
+	<?= Asset::render('js') ?>
 </head>
 
 <body>

@@ -16,7 +16,7 @@ class Menu extends AdminController {
 
 		$data['menu'] = \Engine\Theme\Menu::get($menu_id);
 
-		if(empty($data['menu'])) {
+		if(!$data['menu']) {
 			$this->view->error('404');
 		}
 

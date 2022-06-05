@@ -37,16 +37,16 @@ class DataBehabior {
 					this.node.value = cyrToLat(this.node.value);
 				}
 			}
-			if(this.data_behavior === 'slug') {
+			if(this.data_behavior === 'slug' || this.data_behavior === 'slug_') {
 				if(this.data_target) {
 					this.data_target.split(',').forEach(target => {
 						const target_item = document.querySelector('[name='+target+']');
 						if(target_item) {
-							target_item.value = slug(this.node.value);
+							target_item.value = slug(this.node.value, (this.data_behavior === 'slug_') ? '_' : null);
 						}
 					});
 				} else {
-					this.node.value = slug(this.node.value);
+					this.node.value = slug(this.node.value, (this.data_behavior === 'slug_') ? '_' : null);
 				}
 			}
 		});

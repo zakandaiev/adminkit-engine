@@ -15,11 +15,11 @@ class Auth {
 		if(Session::hasCookie(Define::COOKIE_KEY['auth'])) {
 			$auth_key = Session::getCookie(Define::COOKIE_KEY['auth']);
 
-			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND last_ip=:last_ip AND is_enabled IS true ORDER BY date_created DESC LIMIT 1');
+			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND auth_ip=:auth_ip AND is_enabled IS true ORDER BY date_created DESC LIMIT 1');
 
 			$user_binding = [
 				'auth_token' => $auth_key,
-				'last_ip' => filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP)
+				'auth_ip' => Request::$ip
 			];
 
 			$user = $user->execute($user_binding)->fetch();
@@ -36,19 +36,19 @@ class Auth {
 	public static function authorize($user, $lifetime = null) {
 		$auth_token = Hash::token();
 
-		$user->ip = filter_var(Request::$server['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+		$user->ip = Request::$ip;
 
 		$authorize = '
 			UPDATE {user} SET
 				auth_token=:auth_token,
-				last_ip=:last_ip,
-				last_auth=CURRENT_TIMESTAMP
+				auth_ip=:auth_ip,
+				auth_date=CURRENT_TIMESTAMP
 			WHERE id=:user_id
 		';
 
 		$authorize = new Statement($authorize);
 
-		$authorize->execute(['user_id' => $user->id, 'last_ip' => $user->ip, 'auth_token' => $auth_token]);
+		$authorize->execute(['user_id' => $user->id, 'auth_ip' => $user->ip, 'auth_token' => $auth_token]);
 
 		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, $lifetime ?? Define::LIFETIME['auth']);
 

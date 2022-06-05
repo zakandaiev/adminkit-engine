@@ -117,26 +117,8 @@ INSERT INTO `%prefix%_comment` (`parent`, `page_id`, `author`, `message`) VALUES
 (NULL, 9, 1, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
 (1, 9, 1, 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
 
-INSERT INTO `%prefix%_menu` (`name`) VALUES
-('header'),
-('footer'),
-('phones'),
-('socials');
-
-INSERT INTO `%prefix%_menu_item` (`parent`, `menu_id`, `name`, `url`) VALUES
-(NULL, 1, 'Home', 'home'),
-(NULL, 1, 'Categories', NULL),
-(2, 1, 'Lifestyle', 'lifestyle'),
-(2, 1, 'Fashion', 'fashion'),
-(2, 1, 'Health', 'health'),
-(2, 1, 'Travel', 'travel'),
-(2, 1, 'Technology', 'technology'),
-(NULL, 1, 'Contacts', 'contact'),
-(NULL, 1, 'About Us', 'about'),
-(NULL, 2, 'Home', 'home'),
-(NULL, 2, 'Contacts', 'contact'),
-(NULL, 2, 'About Us', 'about'),
-(NULL, 3, '202-555-0194', 'tel:2025550194'),
-(NULL, 4, 'facebook', '#'),
-(NULL, 4, 'twitter', '#'),
-(NULL, 4, 'instagram', '#');
+INSERT INTO `%prefix%_menu` (`name`, `items`) VALUES
+('header', '[{"name":"Home","url":"home","parent":null,"children":[]},{"name":"Categories","url":"","parent":null,"children":[{"name":"Lifestyle","url":"lifestyle","parent":"Categories","children":[]},{"name":"Fashion","url":"fashion","parent":"Categories","children":[]},{"name":"Health","url":"health","parent":"Categories","children":[]},{"name":"Travel","url":"travel","parent":"Categories","children":[]},{"name":"Technology","url":"technology","parent":"Categories","children":[]}]},{"name":"Contacts","url":"contact","parent":null,"children":[]},{"name":"About Us","url":"about","parent":null,"children":[]}]'),
+('footer', '[{"name":"Home","url":"home","parent":null,"children":[]},{"name":"Contacts","url":"contact","parent":null,"children":[]},{"name":"About Us","url":"about","parent":null,"children":[]}]'),
+('phones', '[{"name":"202-555-0194","url":"tel:2025550194","parent":null,"children":[]}]'),
+('socials', '[{"name":"facebook","url":"#","parent":null,"children":[]},{"name":"twitter","url":"#","parent":null,"children":[]},{"name":"instagram","url":"#","parent":null,"children":[]}]');

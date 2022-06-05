@@ -196,11 +196,11 @@ function cyr_to_lat($text) {
 	return strtr($text, $gost);
 }
 
-function slug($text) {
+function slug($text, $delimiter = '-') {
 	$slug = cyr_to_lat($text);
-	$slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $slug);
-	$slug = preg_replace('/[\-]+/', '-', $slug);
-	$slug = trim($slug, '-');
+	$slug = preg_replace('/[^A-Za-z0-9' . $delimiter . ']+/', $delimiter, $slug);
+	$slug = preg_replace('/[' . $delimiter . ']+/', $delimiter, $slug);
+	$slug = trim($slug, $delimiter);
 	$slug = strtolower($slug);
 
 	return $slug;

@@ -95,7 +95,6 @@ return [
 		'seo_image' => $image,
 		'no_index_no_follow' => $boolean,
 		'image' => $image,
-		'gallery' => $image,
 		'author' => $author,
 		'is_category' => $boolean,
 		'category' => $category,
@@ -116,6 +115,7 @@ return [
 	'execute_post' => function($fields, $form_data) {
 		createNotification($fields, $form_data);
 		updateTranslations($fields, $form_data);
+		Sitemap::update();
 	}
 ];
 

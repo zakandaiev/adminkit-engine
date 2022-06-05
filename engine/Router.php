@@ -5,49 +5,41 @@ namespace Engine;
 use Engine\Database\Statement;
 
 class Router {
-	private static $routes = [];
+	private static $uri;
+	private static $method;
 
 	public static $route = [];
 
 	public static function initialize() {
+		self::$method = Request::$method;
+		self::$uri = strtok(Request::$uri, '?');
+
 		self::checkRoutes();
+		self::checkForm();
 		self::check404();
 		self::setController();
 	}
 
 	private static function checkRoutes() {
-		$method = Request::$method;
-		$uri = (Request::$uri === '/') ? Request::$uri : strtok(trim(Request::$uri, '/'), '?');
-
 		foreach(Module::getAll() as $module) {
 			if(!$module['is_enabled']) {
 				continue;
 			}
 
-			// Get routes and check them
 			if(isset($module['routes']) && !empty($module['routes'])) {
 				foreach($module['routes'] as $route) {
-					if(self::checkRoute($method, $uri, $module['name'], $route)) {
+					if(self::checkRoute($module['name'], $route)) {
 						return true;
 					}
 				}
 			}
-
-			// Check Form tokens
-			if(self::checkForm($method, $uri)) {
-				exit;
-			}
-
 		}
 
-		return true;
+		return false;
 	}
 
-	private static function checkRoute($method, $uri, $module, $route) {
-		$route_uri = ($route['uri'] === '/') ? $route['uri'] : $route_uri = trim($route['uri'], '/');
-		$route_method = strtolower(trim($route['method']));
-
-		if($route_method === $method && self::isRouteMatched($route_uri, $uri)) {
+	private static function checkRoute($module, $route) {
+		if(strtolower(trim($route['method'])) === self::$method && self::isRouteMatched($route['uri'])) {
 			foreach($route as $key => $value) {
 				self::$route[$key] = $value;
 			}
@@ -62,17 +54,22 @@ class Router {
 		return false;
 	}
 
-	private static function isRouteMatched($route, $uri) {
+	private static function isRouteMatched($route) {
 		$parameters = [];
 
 		self::$route['parameters'] = $parameters;
 
-		if($route === '/' && $uri === '/') {
+		if($route === '/' && self::$uri === '/') {
 			return true;
 		}
 
+		$route = ($route === '/') ? $route : rtrim($route, '/');
+		$uri = (self::$uri === '/') ? self::$uri : rtrim(self::$uri, '/');
+
 		$route_parts = explode('/', $route);
 		$uri_parts = explode('/', $uri);
+		array_shift($route_parts);
+		array_shift($uri_parts);
 
 		$languages = [];
 		foreach(Module::getAll() as $module) {
@@ -81,18 +78,20 @@ class Router {
 			}
 
 			foreach($module['languages'] as $language) {
-				$languages[] = $language['key'];
+				if(!in_array($language['key'], $languages)) {
+					$languages[] = $language['key'];
+				}
 			}
 		}
 
 		if(in_array($uri_parts[0], $languages)) {
 			Language::setCookie($uri_parts[0]);
 
-			if($route === '/') {
+			array_shift($uri_parts);
+
+			if($route === '/' && count($uri_parts) === 0) {
 				return true;
 			}
-
-			array_shift($uri_parts);
 		}
 
 		if(count($route_parts) !== count($uri_parts)) {
@@ -115,8 +114,8 @@ class Router {
 		return true;
 	}
 
-	private static function checkForm($method, $uri) {
-		if($method !== 'post') {
+	private static function checkForm() {
+		if(self::$method !== 'post') {
 			return false;
 		}
 
@@ -134,7 +133,7 @@ class Router {
 			$cdate_timestamp = strtotime($form->date_created);
 			$diff_hours = ($now_timestamp - $cdate_timestamp) / 3600;
 
-			if($uri === $form->token) {
+			if(trim(self::$uri, '/') === $form->token) {
 				Module::setName($form->module);
 
 				if(intval($diff_hours) < 12) {
@@ -145,7 +144,7 @@ class Router {
 					Server::answer(null, 'error', $error_message, 409);
 				}
 
-				return true;
+				exit;
 			}
 		}
 

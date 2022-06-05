@@ -19,7 +19,6 @@
 							<div class="tab">
 								<ul class="nav nav-tabs" role="tablist">
 									<li class="nav-item"><a class="nav-link active" href="#page-content" data-bs-toggle="tab" role="tab">Content</a></li>
-									<li class="nav-item"><a class="nav-link" href="#page-gallery" data-bs-toggle="tab" role="tab">Gallery</a></li>
 									<li class="nav-item"><a class="nav-link" href="#page-seo" data-bs-toggle="tab" role="tab">SEO</a></li>
 									<li class="nav-item"><a class="nav-link" href="#page-custom-fields" data-bs-toggle="tab" role="tab">Custom fields</a></li>
 								</ul>
@@ -45,12 +44,6 @@
 													<option value="<?= $tag->id ?>"><?= $tag->name ?></option>
 												<?php endforeach; ?>
 											</select>
-										</div>
-									</div>
-									<div id="page-gallery" class="tab-pane" role="tabpanel">
-										<div class="form-group">
-											<label class="form-label">Gallery</label>
-											<input type="file" accept="image/*" name="gallery[]" multiple>
 										</div>
 									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">

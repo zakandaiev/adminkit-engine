@@ -1,11 +1,16 @@
 const BASE_URL = window.location.protocol + '//' + window.location.host;
 
 // SETTING
-@@include("setup/setting.js")
+@@include("util/setting.js")
 
 // UTILS
-@@include("util/fadeOut.js")
-@@include("util/smoothScroll.js")
+@@include("util/fade-out.js")
+@@include("util/smooth-scroll.js")
+@@include("util/responsive-table.js")
+@@include("util/anchor-smooth-scroll.js")
+@@include("util/bs-tooltip.js")
+@@include("util/spinner-action.js")
+@@include("util/broken-images.js")
 
 // CLASSES
 @@include("form/form.js")
@@ -13,34 +18,9 @@ const BASE_URL = window.location.protocol + '//' + window.location.host;
 @@include("form/data-behavior.js")
 @@include("form/foreign_form.js")
 
-document.addEventListener('DOMContentLoaded', () => {
-	// RESPONSIVE TABLES
-	@@include("setup/responsive-table.js")
-
-	// SMOOTH SCROLL
-	@@include("setup/anchor-smooth-scroll.js")
-
-	// TOOLTIP
-	@@include("setup/bs-tooltip.js")
-
-	// SPINNER ACTION
-	@@include("setup/spinner-action.js")
-
-	// FILEPOND
-	@@include("setup/filepond.js")
-
-	// QUILL
-	@@include("setup/quill.js")
-
-	// SLIMSELECT
-	@@include("setup/slimselect.js")
-
-	// SORTABLE
-	@@include("setup/sortable.js")
-
-	// FORMS
-	@@include("setup/forms.js")
-});
-
-// HANDLE BROKEN IMAGES
-@@include("setup/broken-images.js")
+// PLUGINS
+@@include("plugin/filepond.js")
+@@include("plugin/quill.js")
+@@include("plugin/slimselect.js")
+@@include("plugin/sortable.js")
+@@include("plugin/forms.js")

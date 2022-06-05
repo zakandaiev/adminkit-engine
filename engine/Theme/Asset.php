@@ -2,7 +2,7 @@
 
 namespace Engine\Theme;
 
-use Engine\Define;
+use Engine\Module;
 use Engine\Path;
 
 class Asset {
@@ -49,8 +49,8 @@ class Asset {
 		foreach($assets as $asset) {
 			$output .= sprintf(
 				self::EXTENSION_MASK[$extension],
-				$asset['file'] . '?version=' . Define::VERSION,
-				$asset['attributes']
+				$asset['file'] . '?version=' . Module::get('version'),
+				!empty($asset['attributes']) ? ' ' . $asset['attributes'] : ''
 			) . PHP_EOL;
 		}
 

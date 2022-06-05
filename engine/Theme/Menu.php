@@ -20,54 +20,35 @@ class Menu {
 			$binding = ['name' => $key];
 		}
 
-		$sql = "
-			SELECT
-				t_menu_item.*
-			FROM
-				{menu_item} t_menu_item
-			INNER JOIN
-				{menu} t_menu
-			ON
-				t_menu_item.menu_id = t_menu.id
-			WHERE
-				t_menu.{$binding_key}=:{$binding_key}
-		";
+		$sql = "SELECT * FROM {menu} WHERE {$binding_key}=:{$binding_key}";
 
 		$menu = new Statement($sql);
 
-		$menu = $menu->execute($binding)->fetchAll(\PDO::FETCH_ASSOC);
+		$menu = $menu->execute($binding)->fetch();
 
-		if(empty($menu)) {
+		if(!$menu) {
 			return $menu;
 		}
 
-		$menu_formatted = [];
-		foreach($menu as $item) {
-			$item['children'] = [];
-			$menu_formatted[$item['id']] = $item;
-		}
+		$menu->items = $menu->items ? @json_decode($menu->items) : [];
 
-		foreach($menu_formatted as $k => &$v) {
-			if($v['parent'] != 0) {
-				$menu_formatted[$v['parent']]['children'][] =& $v;
-			}
-		}
-		unset($v);
-
-		foreach($menu_formatted as $k => $v) {
-			if($v['parent'] != 0) {
-				unset($menu_formatted[$k]);
-			}
-		}
-
-		return json_decode(json_encode(array_values($menu_formatted)));
+		return $menu;
 	}
 
 	public static function getAll() {
+		if(!empty(self::$menu)) {
+			return self::$menu;
+		}
+
 		$sql = "SELECT * FROM {menu}";
 
 		$menus = new Statement($sql);
 
-		return $menus->execute()->fetchAll();
+		foreach($menus->execute()->fetchAll() as $menu) {
+			$menu->items = $menu->items ? @json_decode($menu->items) : [];
+			self::$menu[] = $menu;
+		}
+
+		return self::$menu;
 	}
 }

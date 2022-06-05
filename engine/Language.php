@@ -40,13 +40,13 @@ class Language {
 		if(Session::hasCookie(Define::COOKIE_KEY['language']) && !empty(Session::getCookie(Define::COOKIE_KEY['language'])) && array_key_exists(Session::getCookie(Define::COOKIE_KEY['language']), $module_languages)) {
 			$language = Session::getCookie(Define::COOKIE_KEY['language']);
 		}
-		
+
 		return $language;
 	}
 
 	public static function setCookie($language) {
 		$cookie_key = Define::COOKIE_KEY['language'];
-		
+
 		Session::setCookie($cookie_key, $language);
 
 		return true;
