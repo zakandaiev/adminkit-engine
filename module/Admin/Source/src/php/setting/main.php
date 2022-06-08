@@ -27,7 +27,7 @@
 									<div class="mb-3">
 										<label class="form-label"><?= __('Language') ?></label>
 										<select name="language">
-											<?php foreach(Module::get('languages') as $language): ?>
+											<?php foreach(Language::getAll() as $language): ?>
 												<?php
 													$selected_language = '';
 
@@ -35,7 +35,7 @@
 														$selected_language = 'selected';
 													}
 												?>
-												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['name'] ?> - <?= $language['region'] ?></option>
+												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['region'] ?> - <?= $language['name'] ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
@@ -60,6 +60,10 @@
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="enable_registration" name="enable_registration" <?php if($settings->enable_registration == 'true'): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="enable_registration">Enable registration</label>
+									</div>
+									<div class="form-check form-switch mb-3">
+										<input class="form-check-input" type="checkbox" id="moderate_comments" name="moderate_comments" <?php if($settings->moderate_comments == 'true'): ?>checked<?php endif; ?>>
+										<label class="form-check-label" for="moderate_comments">Moderate comments</label>
 									</div>
 									<button type="submit" class="btn btn-primary">Save</button>
 								</form>

@@ -13,7 +13,7 @@
 					<?= Breadcrumb::render() ?>
 				</div>
 
-				<form action="<?= Form::edit('Comment', $comment->id); ?>" method="POST" data-redirect="<?= site('url_lang') ?>/admin/comment">
+				<form action="<?= Form::edit('Comment/Edit', $comment->id); ?>" method="POST" data-redirect="<?= site('url_lang') ?>/admin/comment">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="card">

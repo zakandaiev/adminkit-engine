@@ -283,12 +283,14 @@ var DataAction = /*#__PURE__*/function () {
     this.data_action = this.node.getAttribute('data-action');
     this.data_method = this.node.hasAttribute('data-method') ? this.node.getAttribute('data-method') : 'POST';
     this.data_confirm = this.node.getAttribute('data-confirm');
+    this.data_fields = this.node.getAttribute('data-fields');
     this.data_form = this.node.getAttribute('data-form');
     this.data_form_reset = this.node.getAttribute('data-form-reset');
     this.data_class = this.node.getAttribute('data-class');
     this.data_class_target = this.node.getAttribute('data-class-target');
     this.data_redirect = this.node.getAttribute('data-redirect');
     this.data_counter = this.node.getAttribute('data-counter');
+    this.data_counter_plus = this.node.hasAttribute('data-counter-plus') ? true : false;
     this.data_delete = this.node.getAttribute('data-delete');
     this.data_message = this.node.getAttribute('data-message');
 
@@ -359,14 +361,21 @@ var DataAction = /*#__PURE__*/function () {
         data = new FormData(document.querySelector(this.data_form));
       }
 
-      if (this.options.data) {
-        this.options.data.forEach(function (field) {
-          if (field.key) {
-            data.set(field.key, field.value ? field.value : null);
-          }
-        });
+      var options = [];
+
+      if (this.data_fields) {
+        options = options.concat(JSON.parse(this.data_fields));
       }
 
+      if (this.options.data) {
+        options = options.concat(this.options.data);
+      }
+
+      options.forEach(function (field) {
+        if (field.key) {
+          data.set(field.key, field.value ? field.value : null);
+        }
+      });
       return data;
     }
   }, {
@@ -423,10 +432,12 @@ var DataAction = /*#__PURE__*/function () {
   }, {
     key: "successCounter",
     value: function successCounter() {
+      var _this5 = this;
+
       if (this.data_counter) {
         document.querySelectorAll(this.data_counter).forEach(function (target) {
           var target_value = parseInt(target.textContent);
-          target.textContent = target_value - 1;
+          target.textContent = _this5.data_counter_plus ? target_value + 1 : target_value - 1;
         });
         return true;
       }
@@ -495,7 +506,7 @@ var DataBehabior = /*#__PURE__*/function () {
   _createClass(DataBehabior, [{
     key: "initialize",
     value: function initialize() {
-      var _this5 = this;
+      var _this6 = this;
 
       // on node init
       if (this.data_behavior === 'visibility') {
@@ -505,37 +516,37 @@ var DataBehabior = /*#__PURE__*/function () {
 
 
       this.node.addEventListener('change', function (event) {
-        if (_this5.data_behavior === 'visibility') {
-          _this5.hideItems();
+        if (_this6.data_behavior === 'visibility') {
+          _this6.hideItems();
 
-          _this5.showItems();
+          _this6.showItems();
         }
 
-        if (_this5.data_behavior === 'cyrToLat') {
-          if (_this5.data_target) {
-            _this5.data_target.split(',').forEach(function (target) {
+        if (_this6.data_behavior === 'cyrToLat') {
+          if (_this6.data_target) {
+            _this6.data_target.split(',').forEach(function (target) {
               var target_item = document.querySelector('[name=' + target + ']');
 
               if (target_item) {
-                target_item.value = cyrToLat(_this5.node.value);
+                target_item.value = cyrToLat(_this6.node.value);
               }
             });
           } else {
-            _this5.node.value = cyrToLat(_this5.node.value);
+            _this6.node.value = cyrToLat(_this6.node.value);
           }
         }
 
-        if (_this5.data_behavior === 'slug' || _this5.data_behavior === 'slug_') {
-          if (_this5.data_target) {
-            _this5.data_target.split(',').forEach(function (target) {
+        if (_this6.data_behavior === 'slug' || _this6.data_behavior === 'slug_') {
+          if (_this6.data_target) {
+            _this6.data_target.split(',').forEach(function (target) {
               var target_item = document.querySelector('[name=' + target + ']');
 
               if (target_item) {
-                target_item.value = slug(_this5.node.value, _this5.data_behavior === 'slug_' ? '_' : null);
+                target_item.value = slug(_this6.node.value, _this6.data_behavior === 'slug_' ? '_' : null);
               }
             });
           } else {
-            _this5.node.value = slug(_this5.node.value, _this5.data_behavior === 'slug_' ? '_' : null);
+            _this6.node.value = slug(_this6.node.value, _this6.data_behavior === 'slug_' ? '_' : null);
           }
         }
       });
@@ -635,7 +646,7 @@ var ForeignForm = /*#__PURE__*/function () {
   _createClass(ForeignForm, [{
     key: "initialize",
     value: function initialize() {
-      var _this6 = this;
+      var _this7 = this;
 
       // SET ID TO NODE
       this.node.setAttribute('id', this.uid); // SET UP MODAL BUTTON
@@ -644,8 +655,8 @@ var ForeignForm = /*#__PURE__*/function () {
       this.button.open_modal.setAttribute('data-bs-target', '#' + this.uid);
       this.button.open_modal.innerHTML = this.icon.add;
       this.button.open_modal.addEventListener('click', function (event) {
-        if (!_this6.is_editing) {
-          _this6.resetEditingRow();
+        if (!_this7.is_editing) {
+          _this7.resetEditingRow();
         }
       }); // SET UP STORE
 
@@ -660,18 +671,18 @@ var ForeignForm = /*#__PURE__*/function () {
         handle: '.sortable__handle',
         animation: 150,
         onSort: function onSort() {
-          return _this6.updateStore();
+          return _this7.updateStore();
         }
       }); // SET UP SUMIT BUTTON
 
       this.button.submit.addEventListener('click', function (event) {
         event.preventDefault();
 
-        _this6.clickSubmit();
+        _this7.clickSubmit();
 
-        _this6.updateStore();
+        _this7.updateStore();
 
-        _this6.resetEditingRow();
+        _this7.resetEditingRow();
       }); // RENDER
 
       this.populateTable();
@@ -679,18 +690,18 @@ var ForeignForm = /*#__PURE__*/function () {
       this.render(); // RESET EDITING ROW IF MODAL CANCELED
 
       this.node.addEventListener('hidden.bs.modal', function () {
-        return _this6.resetEditingRow();
+        return _this7.resetEditingRow();
       });
     }
   }, {
     key: "clickSubmit",
     value: function clickSubmit() {
-      var _this7 = this;
+      var _this8 = this;
 
       // EDIT ROW
       if (this.is_editing) {
         this.inputs.forEach(function (input) {
-          _this7.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent = input.value;
+          _this8.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent = input.value;
         });
         this.resetEditingRow();
         return true;
@@ -739,7 +750,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "createRow",
     value: function createRow() {
-      var _this8 = this;
+      var _this9 = this;
 
       var object = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       var trow = document.createElement('tr');
@@ -774,10 +785,10 @@ var ForeignForm = /*#__PURE__*/function () {
       btn_edit.innerHTML = this.icon.edit + ' ';
       btn_delete.innerHTML = this.icon.delete;
       btn_edit.addEventListener('click', function () {
-        return _this8.clickEdit(trow);
+        return _this9.clickEdit(trow);
       });
       btn_delete.addEventListener('click', function () {
-        return _this8.clickDelete(trow);
+        return _this9.clickDelete(trow);
       });
       tcol_actions.append(btn_sort);
       tcol_actions.append(btn_edit);
@@ -788,7 +799,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "clickEdit",
     value: function clickEdit(trow) {
-      var _this9 = this;
+      var _this10 = this;
 
       this.inputs.forEach(function (input) {
         var value = trow.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent;
@@ -799,10 +810,10 @@ var ForeignForm = /*#__PURE__*/function () {
           input.value = value;
         }
 
-        _this9.is_editing = true;
-        _this9.editing_row = trow;
+        _this10.is_editing = true;
+        _this10.editing_row = trow;
 
-        _this9.button.open_modal.click();
+        _this10.button.open_modal.click();
       });
     }
   }, {
@@ -814,7 +825,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "populateTable",
     value: function populateTable() {
-      var _this10 = this;
+      var _this11 = this;
 
       if (!this.value) {
         return true;
@@ -822,7 +833,7 @@ var ForeignForm = /*#__PURE__*/function () {
 
       var values = JSON.parse(this.value);
       values.forEach(function (value) {
-        _this10.tbody.appendChild(_this10.createRow(value));
+        _this11.tbody.appendChild(_this11.createRow(value));
       });
       return true;
     }
@@ -987,7 +998,8 @@ document.addEventListener('DOMContentLoaded', function () {
       placeholder: textarea.placeholder,
       readOnly: textarea.disabled ? true : false,
       theme: 'snow'
-    }); // POPULATE
+    });
+    textarea.quill = quill; // POPULATE
     // quill.setContents(JSON.parse(textarea.value).ops);
     // UPDATE TEXTAREA VALUE
 

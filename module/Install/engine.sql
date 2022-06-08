@@ -56,29 +56,34 @@ CREATE TABLE IF NOT EXISTS `%prefix%_group_route` (
 
 CREATE TABLE IF NOT EXISTS `%prefix%_page` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`language` VARCHAR(8) NOT NULL,
-	`is_category` BOOLEAN NOT NULL DEFAULT FALSE,
-	`author` INT NOT NULL,
-	`title` VARCHAR(300) NOT NULL,
 	`url` VARCHAR(300) NOT NULL,
+	`author` INT NOT NULL,
+	`template` VARCHAR(100) DEFAULT NULL,
+	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`date_edited` DATETIME on update CURRENT_TIMESTAMP DEFAULT NULL,
+	`date_publish` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`is_category` BOOLEAN NOT NULL DEFAULT FALSE,
+	`is_static` BOOLEAN NOT NULL DEFAULT FALSE,
+	`no_index_no_follow` BOOLEAN NOT NULL DEFAULT FALSE,
+	`allow_comment` BOOLEAN NOT NULL DEFAULT TRUE,
+	`hide_comments` BOOLEAN NOT NULL DEFAULT FALSE,
+	`views` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+	`is_enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+	PRIMARY KEY  (`id`),
+	UNIQUE `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `%prefix%_page_translation` (
+	`page_id` INT UNSIGNED NOT NULL,
+	`language` VARCHAR(8) NOT NULL,
+	`title` VARCHAR(300) NOT NULL,
 	`content` LONGTEXT DEFAULT NULL,
 	`excerpt` TEXT DEFAULT NULL,
 	`image` TEXT DEFAULT NULL,
 	`seo_description` TEXT DEFAULT NULL,
 	`seo_keywords` TEXT DEFAULT NULL,
 	`seo_image` TEXT DEFAULT NULL,
-	`no_index_no_follow` BOOLEAN NOT NULL DEFAULT FALSE,
-	`template` VARCHAR(100) DEFAULT NULL,
-	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`date_edited` DATETIME on update CURRENT_TIMESTAMP DEFAULT NULL,
-	`date_publish` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`is_static` BOOLEAN NOT NULL DEFAULT FALSE,
-	`allow_comment` BOOLEAN NOT NULL DEFAULT TRUE,
-	`hide_comments` BOOLEAN NOT NULL DEFAULT FALSE,
-	`views` BIGINT UNSIGNED NOT NULL DEFAULT 0,
-	`is_enabled` BOOLEAN NOT NULL DEFAULT TRUE,
-	PRIMARY KEY  (`id`),
-	UNIQUE `url` (`language`, `url`)
+	PRIMARY KEY (`page_id`, `language`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `%prefix%_page_category` (
@@ -89,14 +94,14 @@ CREATE TABLE IF NOT EXISTS `%prefix%_page_category` (
 
 CREATE TABLE IF NOT EXISTS `%prefix%_tag` (
 	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`language` VARCHAR(8) NOT NULL,
 	`name` VARCHAR(100) NOT NULL,
 	`url` VARCHAR(100) NOT NULL,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`date_edited` DATETIME on update CURRENT_TIMESTAMP DEFAULT NULL,
 	`is_enabled` BOOLEAN NOT NULL DEFAULT TRUE,
 	PRIMARY KEY  (`id`),
-	UNIQUE `name` (`name`),
-	UNIQUE `url` (`url`)
+	UNIQUE `language_name_url` (`language`, `name`, `url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `%prefix%_page_tag` (
@@ -120,10 +125,11 @@ CREATE TABLE IF NOT EXISTS `%prefix%_comment` (
 CREATE TABLE `%prefix%_custom_field` (
 	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`page_id` INT NOT NULL,
+	`language` VARCHAR(8) NOT NULL,
 	`name` VARCHAR(200) NOT NULL,
 	`value` LONGTEXT DEFAULT NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE `name` (`page_id`, `name`)
+	UNIQUE `page_id_language_name` (`page_id`, `language`, `name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `%prefix%_form` (
@@ -192,8 +198,11 @@ INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
 INSERT INTO `%prefix%_notification` (`user_id`, `kind`, `info`) VALUES
 (1, 'register', '{"ip":"%auth_ip%"}');
 
-INSERT INTO `%prefix%_page` (`language`, `title`, `url`, `author`) VALUES
-('en', 'Homepage', 'home', 1);
+INSERT INTO `%prefix%_page` (`url`, `author`) VALUES
+('home', 1);
+
+INSERT INTO `%prefix%_page_translation` (`page_id`, `language`, `title`) VALUES
+(1, 'en', 'Homepage');
 
 CREATE TRIGGER
 	`set_page_static`
@@ -201,10 +210,22 @@ BEFORE UPDATE ON
 	`%prefix%_page`
 FOR EACH ROW
 	SET NEW.is_static =
-		CASE WHEN (SELECT count(*) FROM `%prefix%_page_category` WHERE page_id IN (SELECT id FROM `%prefix%_page` WHERE url=NEW.url)) > 0 THEN
+		CASE WHEN (SELECT count(*) FROM `%prefix%_page_category` WHERE page_id=NEW.id) > 0 THEN
 			false
 		ELSE
 			true
+		END;
+
+CREATE TRIGGER
+	`moderate_comment`
+BEFORE INSERT ON
+	`%prefix%_comment`
+FOR EACH ROW
+	SET NEW.is_approved =
+		CASE WHEN (SELECT value FROM `%prefix%_setting` WHERE section = 'main' AND name = 'moderate_comments') <> 'true' THEN
+			true
+		ELSE
+			false
 		END;
 
 CREATE TRIGGER

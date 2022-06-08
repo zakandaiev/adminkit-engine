@@ -24,12 +24,12 @@
 					<p>Malis debet quo et, eam an lorem quaestio. Mea ex quod facer decore, eu nam mazim postea. Eu deleniti pertinacia ius. Ad elitr latine eam, ius sanctus eleifend no, cu primis graecis comprehensam eum. Ne vim prompta consectetuer, etiam signiferumque ea eum.</p>
 					<ul class="contact">
 						<?php
-							$phones = Menu::get('phones');
+							$phones = Menu::get('phones')->items;
 							$email = site('email');
 							$address = site('address');
 						?>
 						<?php foreach($phones as $phone): ?>
-							<li><i class="fa fa-phone"></i> <a href="tel:<?= $phone['url'] ?>"><?= $phone['name'] ?></a></li>
+							<li><i class="fa fa-phone"></i> <a href="tel:<?= $phone->url ?>"><?= $phone->name ?></a></li>
 						<?php endforeach; ?>
 						<?php if(!empty($email)): ?>
 							<li><i class="fa fa-envelope"></i> <a href="mailto:<?= $email ?>"><?=$email ?></a></li>

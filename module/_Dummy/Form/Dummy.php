@@ -1,7 +1,7 @@
 <?php
 
 $all_checks = [
-	// 'TYPECHECK_message' => 'Error! This field is TYPECHECK',
+	// 'CHECKNAME_message' => 'Error message',
 	'required_message' => 'This field is required',
 
 	'required' => true,
@@ -31,9 +31,9 @@ $all_checks = [
 	// 'foreign' => 'table_name@primary_key_of_current_object/primary_key_of_foreign_object'
 	'foreign' => 'user_group@user_id/group_id',
 
-	'foreign' => function($field_value, $form_data) {
+	'foreign' => function($field_value, $data) {
 		debug($field_value);
-		debug($form_data);
+		debug($data);
 		exit;
 	},
 
@@ -62,23 +62,24 @@ return [
 			'boolean' => true
 		]
 	],
-	'fields_modify' => function($fields, $form_data) {
-		// modify $fields and return it
-		return $fields;
+	'modify_fields' => function($data) {
+		// modify $data object and return it
+		return $data;
 	},
-	'execute_pre' => function($fields, $form_data) {
-		debug($fields);
-		debug($form_data);
+	'modify_sql' => function($data) {
+		// modify $data object and return it
+		return $data;
+	},
+	'execute_pre' => function($data) {
+		debug($data);
 		exit;
 	},
-	'execute' => function($fields, $form_data) {
-		debug($fields);
-		debug($form_data);
+	'execute' => function($data) {
+		debug($data);
 		exit;
 	},
-	'execute_post' => function($fields, $form_data) {
-		debug($fields);
-		debug($form_data);
+	'execute_post' => function($data) {
+		debug($data);
 		exit;
 	}
 ];

@@ -18,7 +18,7 @@ return [
 		'email' => $email,
 		'password' => $password
 	],
-	'execute' => function($fields, $form_data) {
-		Auth::register($fields);
+	'execute' => function($data) {
+		Auth::register($data->fields);
 	}
 ];

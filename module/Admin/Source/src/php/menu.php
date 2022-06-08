@@ -123,6 +123,4 @@
 	<ul class="list-group sortable" data-multi="menu" data-handle=".sortable__handle" data-callback="editMenuItems"></ul>
 </li>
 
-<script src="<?= Asset::url() ?>/js/menu.js"></script>
-
 <?php Theme::footer(); ?>

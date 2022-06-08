@@ -15,7 +15,21 @@ class Auth {
 		if(Session::hasCookie(Define::COOKIE_KEY['auth'])) {
 			$auth_key = Session::getCookie(Define::COOKIE_KEY['auth']);
 
-			$user = new Statement('SELECT * FROM {user} WHERE auth_token=:auth_token AND auth_ip=:auth_ip AND is_enabled IS true ORDER BY date_created DESC LIMIT 1');
+			$sql = '
+				SELECT
+					*
+				FROM
+					{user}
+				WHERE
+					auth_token = :auth_token
+					AND auth_ip = :auth_ip
+					AND is_enabled IS true
+				ORDER BY
+					date_created DESC
+				LIMIT 1
+			';
+
+			$user = new Statement($sql);
 
 			$user_binding = [
 				'auth_token' => $auth_key,
@@ -40,10 +54,10 @@ class Auth {
 
 		$authorize = '
 			UPDATE {user} SET
-				auth_token=:auth_token,
-				auth_ip=:auth_ip,
+				auth_token = :auth_token,
+				auth_ip = :auth_ip,
 				auth_date=CURRENT_TIMESTAMP
-			WHERE id=:user_id
+			WHERE id = :user_id
 		';
 
 		$authorize = new Statement($authorize);

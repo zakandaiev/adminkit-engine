@@ -3,12 +3,8 @@
 namespace Engine;
 
 class Path {
-	public static function class($class_name) {
-		$module = 'Admin';
-
-		if(!empty(Module::$name)) {
-			$module = trim(Module::$name, '/');
-		}
+	public static function class($class_name, $module = null) {
+		$module = $module ?? trim(Module::$name);
 
 		switch(strtolower($class_name)) {
 			case 'controller':
@@ -24,16 +20,16 @@ class Path {
 		}
 	}
 
-	public static function file($section) {
-		$module = 'Admin';
-
-		if(!empty(Module::$name)) {
-			$module = trim(Module::$name, '/');
-		}
+	public static function file($section = null, $module = null) {
+		$module = $module ?? trim(Module::$name);
 
 		switch(strtolower($section)) {
 			case 'config':
 				return ROOT_DIR . '/config';
+			case 'engine':
+				return ROOT_DIR . '/engine';
+			case 'language':
+				return ROOT_DIR . '/language';
 			case 'log':
 				return ROOT_DIR . '/' . trim(Define::LOG_FOLDER, '/');
 			case 'module':
@@ -52,37 +48,33 @@ class Path {
 				return ROOT_DIR . '/module/' . $module . '/Model';
 			case 'view': {
 				$path = ROOT_DIR . '/module/' . $module . '/View';
-				if(Module::$name === 'Public') {
+				if($module === 'Public') {
 					$path = ROOT_DIR . '/theme';
 				}
 				return $path;
 			}
 			case 'asset': {
 				$path = ROOT_DIR . '/module/' . $module . '/View/Asset';
-				if(Module::$name === 'Public') {
+				if($module === 'Public') {
 					$path = ROOT_DIR . '/theme/Asset';
 				}
 				return $path;
 			}
 			case 'form':
 				return ROOT_DIR . '/module/' . $module . '/Form';
-			case 'language':
-				return ROOT_DIR . '/module/' . $module . '/Language';
 			case 'mail':
 				return ROOT_DIR . '/module/' . $module . '/Mail';
+			case 'custom_fields':
+				return ROOT_DIR . '/theme/CustomFields';
 			default:
 				return ROOT_DIR;
 		}
 	}
 
-	public static function url($section) {
+	public static function url($section = null, $module = null) {
 		$url_base = Request::$base;
 
-		$module = 'Admin';
-
-		if(!empty(Module::$name)) {
-			$module = trim(Module::$name, '/');
-		}
+		$module = $module ?? trim(Module::$name);
 
 		switch(strtolower($section)) {
 			case 'upload':
@@ -91,7 +83,7 @@ class Path {
 				return $url_base . '/theme';
 			case 'asset': {
 				$path = $url_base . '/module/' . $module . '/View/Asset';
-				if(Module::$name === 'Public') {
+				if($module === 'Public') {
 					$path = $url_base . '/theme/Asset';
 				}
 				return $path;

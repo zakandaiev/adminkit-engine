@@ -51,7 +51,7 @@
 								</div>
 								<div class="col-md-6 mb-3">
 									<label class="form-label">Name</label>
-									<input type="text" name="name" placeholder="Name" value="<?= $user->name ?>" class="form-control" minlength="1" maxlength="200">
+									<input type="text" name="name" placeholder="Name" value="<?= $user->name ?>" class="form-control" minlength="1" maxlength="200" required>
 								</div>
 								<div class="col-md-6 mb-3">
 									<label class="form-label">Socials</label>

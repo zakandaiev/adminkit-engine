@@ -129,12 +129,32 @@ Module::route('get', '/admin/page/edit/$id/translation/add/$language', 'Page@get
 	]
 ]);
 
-Module::route('get', '/admin/page/edit/$id/translation/edit/$translation_id', 'Page@getEdit', [
+Module::route('get', '/admin/page/edit/$id/translation/edit/$language', 'Page@getEdit', [
 	'page' => [
 		'title' => __('Edit translation')
 	],
 	'breadcrumbs' => [
 		__('Pages') . '@/admin/page',
+		__('Edit')
+	]
+]);
+
+############################# COMMENT #############################
+Module::route('get', '/admin/comment', 'Comment@getAll', [
+	'page' => [
+		'title' => __('Comments')
+	],
+	'breadcrumbs' => [
+		__('Comments')
+	]
+]);
+
+Module::route('get', '/admin/comment/edit/$id', 'Comment@getEdit', [
+	'page' => [
+		'title' => __('Edit comment')
+	],
+	'breadcrumbs' => [
+		__('Comments') . '@/admin/comment',
 		__('Edit')
 	]
 ]);
@@ -159,25 +179,27 @@ Module::route('get', '/admin/menu/$id', 'Menu@getEdit', [
 	]
 ]);
 
-############################# COMMENT #############################
-Module::route('get', '/admin/comment', 'Comment@getAll', [
+############################# TRANSLATION #############################
+Module::route('get', '/admin/translation', 'Translation@getAll', [
 	'page' => [
-		'title' => __('Comments')
+		'title' => __('Translations')
 	],
 	'breadcrumbs' => [
-		__('Comments')
+		__('Translations')
 	]
 ]);
 
-Module::route('get', '/admin/comment/edit/$id', 'Comment@getEdit', [
+Module::route('get', '/admin/translation/$language', 'Translation@getEdit', [
 	'page' => [
-		'title' => __('Edit comment')
+		'title' => __('Translations')
 	],
 	'breadcrumbs' => [
-		__('Comments') . '@/admin/comment',
+		__('Translations') . '@/admin/translation',
 		__('Edit')
 	]
 ]);
+
+Module::route('post', '/admin/translation/$language', 'Translation@postEdit');
 
 ############################# USER #############################
 Module::route('get', '/admin/user', 'User@getAll', [

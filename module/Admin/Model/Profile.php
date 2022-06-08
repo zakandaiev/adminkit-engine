@@ -7,7 +7,7 @@ use Engine\Notification;
 
 class Profile {
 	public function getUserById($id) {
-		$sql = 'SELECT * FROM {user} WHERE id=:id';
+		$sql = 'SELECT * FROM {user} WHERE id = :id';
 
 		$user = new Statement($sql);
 
@@ -21,13 +21,13 @@ class Profile {
 	}
 
 	public function getUserNotificationsCount($id) {
-		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id=:user_id');
+		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id = :user_id');
 
 		return intval($notifications->execute(['user_id' => $id])->fetchColumn());
 	}
 
 	public function getUserNotifications($id) {
-		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id=:user_id ORDER BY is_read=true, date_created DESC');
+		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id = :user_id ORDER BY is_read=true, date_created DESC');
 
 		return $notifications->execute(['user_id' => $id])->fetchAll();
 	}

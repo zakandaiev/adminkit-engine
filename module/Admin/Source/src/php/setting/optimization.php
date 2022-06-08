@@ -19,18 +19,38 @@
 							<div class="card-body">
 								<form method="POST">
 									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="group_css" name="group_css" <?php if($settings->group_css == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="group_css">Group CSS assets</label>
+										<input class="form-check-input" type="checkbox" id="group_css" name="group_css" <?php if($settings->group_css != 'false'): ?>checked<?php endif; ?>>
+										<label class="form-check-label" for="group_css">
+											<?= __('Group CSS assets') ?>
+											<?php if($settings->group_css != 'false'): ?>
+												<?php
+													$file_url = Path::url('asset', 'Public') . '/css/' . $settings->group_css . '.css';
+													$file_path = Path::file('asset', 'Public') . '/css/' . $settings->group_css . '.css';
+												?>
+												<br>
+												<a class="text-sm" href="<?= $file_url ?>" target="_blank"><?= __('Final size') ?>: <?= file_size($file_path) ?></a>
+											<?php endif; ?>
+										</label>
 									</div>
 									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="group_js" name="group_js" <?php if($settings->group_js == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="group_js">Group JS assets</label>
+										<input class="form-check-input" type="checkbox" id="group_js" name="group_js" <?php if($settings->group_js != 'false'): ?>checked<?php endif; ?>>
+										<label class="form-check-label" for="group_js">
+											<?= __('Group JS assets') ?>
+											<?php if($settings->group_js != 'false'): ?>
+												<?php
+													$file_url = Path::url('asset', 'Public') . '/js/' . $settings->group_js . '.js';
+													$file_path = Path::file('asset', 'Public') . '/js/' . $settings->group_js . '.js';
+												?>
+												<br>
+												<a class="text-sm" href="<?= $file_url ?>" target="_blank"><?= __('Final size') ?>: <?= file_size($file_path) ?></a>
+											<?php endif; ?>
+										</label>
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="cache_db" name="cache_db" <?php if($settings->cache_db == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="cache_db">Cache Database Queries</label>
+										<label class="form-check-label" for="cache_db"><?= __('Cache Database Queries') ?></label>
 									</div>
-									<button type="submit" class="btn btn-primary">Save</button>
+									<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 								</form>
 							</div>
 						</div>

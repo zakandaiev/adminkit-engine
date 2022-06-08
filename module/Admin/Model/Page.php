@@ -2,18 +2,19 @@
 
 namespace Module\Admin\Model;
 
+use Engine\Path;
 use Engine\Database\Statement;
 
-class Page {
-	public function createPage($data) {
+class Page extends \Engine\Model {
+	public function createTranslation($data) {
 		$columns = implode(', ', array_keys($data));
 		$bindings = ':' . implode(', :', array_keys($data));
-		$sql = 'INSERT INTO {page} (' . $columns . ') VALUES (' . $bindings . ')';
+		$sql = 'INSERT INTO {page_translation} (' . $columns . ') VALUES (' . $bindings . ')';
 
 		$statement = new Statement($sql);
 		$statement->execute($data);
 
-		return $statement->insertId();
+		return true;
 	}
 
 	public function countPages() {
@@ -24,26 +25,29 @@ class Page {
 				{page} t_page
 			WHERE
 				(SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
-				AND language=:language
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->execute(['language' => site('language')])->fetchColumn();
+		return $statement->execute()->fetchColumn();
 	}
 
 	public function getPages() {
 		$sql = '
 			SELECT
-				t_page.*,
+				*,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_page.author) as author_name,
 				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending,
-				(SELECT JSON_ARRAYAGG(JSON_OBJECT(language, id)) FROM {page} WHERE url=t_page.url AND language<>t_page.language) as translations
+				(SELECT GROUP_CONCAT(language) FROM {page_translation} WHERE page_id=t_page.id AND language<>:language) as translations
 			FROM
 				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
 			WHERE
-				(SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
-				AND t_page.language=:language
+				t_page_translation.language = :language
+				AND (SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
 			ORDER BY
 				t_page.is_category=false, t_page.date_publish DESC
 		';
@@ -53,14 +57,7 @@ class Page {
 		$pages = $pages->paginate($this->countPages())->execute(['language' => site('language')])->fetchAll();
 
 		foreach($pages as $key => $page) {
-			$page->translations = json_decode($page->translations, true) ?? [];
-
-			foreach($page->translations as $language => $page_id) {
-				$page->translations[key($page_id)] = $page_id[key($page_id)];
-				unset($page->translations[$language]);
-			}
-
-			$pages[$key] = $page;
+			$page->translations = !empty($page->translations) ? explode(',', $page->translations) : [];
 		}
 
 		return $pages;
@@ -76,31 +73,34 @@ class Page {
 			ON
 				t_page.id = t_page_category.page_id
 			WHERE
-				t_page_category.category_id=:category_id
-				AND t_page.language=:language
+				t_page_category.category_id = :category_id
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->execute(['category_id' => $id, 'language' => site('language')])->fetchColumn();
+		return $statement->execute(['category_id' => $id])->fetchColumn();
 	}
 
 	public function getPagesByCategory($id) {
 		$sql = '
 			SELECT
-				t_page.*,
+				*,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_page.author) as author_name,
 				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending,
-				(SELECT JSON_ARRAYAGG(JSON_OBJECT(language, id)) FROM {page} WHERE url=t_page.url AND language<>t_page.language) as translations
+				(SELECT GROUP_CONCAT(language) FROM {page_translation} WHERE page_id=t_page.id AND language<>:language) as translations
 			FROM
 				{page} t_page
 			INNER JOIN
 				{page_category} t_page_category
 			ON
 				t_page.id = t_page_category.page_id
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
 			WHERE
-				t_page_category.category_id=:category_id
-				AND t_page.language=:language
+				t_page_category.category_id = :category_id
+				AND t_page_translation.language = :language
 			ORDER BY
 				t_page.is_category=false, t_page.date_publish DESC
 		';
@@ -110,25 +110,41 @@ class Page {
 		$pages = $pages->paginate($this->countPagesInCategory($id))->execute(['category_id' => $id, 'language' => site('language')])->fetchAll();
 
 		foreach($pages as $key => $page) {
-			$page->translations = json_decode($page->translations, true) ?? [];
-
-			foreach($page->translations as $language => $page_id) {
-				$page->translations[key($page_id)] = $page_id[key($page_id)];
-				unset($page->translations[$language]);
-			}
-
-			$pages[$key] = $page;
+			$page->translations = !empty($page->translations) ? explode(',', $page->translations) : [];
 		}
 
 		return $pages;
 	}
 
-	public function getPageById($id) {
-		$sql = 'SELECT * FROM {page} WHERE id=:id';
+	public static function getPage($key, $language = null) {
+		if(is_numeric($key)) {
+			$binding_key = 'id';
+		} else {
+			$binding_key = 'url';
+		}
+
+		$binding = [
+			$binding_key => $key,
+			'language' => $language ?? site('language')
+		];
+
+		$sql = "
+			SELECT
+				*
+			FROM
+				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			WHERE
+				{$binding_key} = :{$binding_key}
+				AND t_page_translation.language = :language
+		";
 
 		$page = new Statement($sql);
 
-		return $page->execute(['id' => $id])->fetch();
+		return $page->execute($binding)->fetch();
 	}
 
 	public function getAuthors() {
@@ -142,12 +158,17 @@ class Page {
 	public function getCategories($current = 0) {
 		$sql = '
 			SELECT
-				id, title
+				*
 			FROM
-				{page}
+				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
 			WHERE
-				is_category IS true AND id<>:id
-				AND language=:language
+				t_page_translation.language = :language
+				AND is_category IS true
+				AND id <> :id
 			ORDER BY
 				title ASC
 		';
@@ -157,18 +178,18 @@ class Page {
 		return $categories->execute(['id' => $current, 'language' => site('language')])->fetchAll();
 	}
 
-	public function getTags() {
-		$sql = 'SELECT * FROM {tag} ORDER BY name ASC';
+	public function getTags($language = null) {
+		$sql = 'SELECT * FROM {tag} WHERE language = :language ORDER BY name ASC';
 
 		$tags = new Statement($sql);
 
-		return $tags->execute()->fetchAll();
+		return $tags->execute(['language' => $language ?? site('language')])->fetchAll();
 	}
 
 	public function getPageCategories($page_id) {
 		$categories = [];
 
-		$sql = 'SELECT category_id FROM {page_category} WHERE page_id=:page_id';
+		$sql = 'SELECT category_id FROM {page_category} WHERE page_id = :page_id';
 
 		$statement = new Statement($sql);
 
@@ -179,25 +200,92 @@ class Page {
 		return $categories;
 	}
 
-	public function getPageTags($page_id) {
+	public function getPageTags($page_id, $language = null) {
 		$tags = [];
 
-		$sql = 'SELECT tag_id FROM {page_tag} WHERE page_id=:page_id';
+		$sql = '
+			SELECT
+				t_tag.id
+			FROM
+				{tag} t_tag
+			INNER JOIN
+				{page_tag} t_page_tag
+			ON
+				t_tag.id = t_page_tag.tag_id
+			WHERE
+				t_page_tag.page_id = :page_id
+				AND t_tag.language = :language
+		';
 
 		$statement = new Statement($sql);
 
-		foreach($statement->execute(['page_id' => $page_id])->fetchAll() as $tag) {
-			$tags[] = $tag->tag_id;
+		foreach($statement->execute(['page_id' => $page_id, 'language' => $language ?? site('language')])->fetchAll() as $tag) {
+			$tags[] = $tag->id;
 		}
 
 		return $tags;
 	}
 
-	public function getPageCustomFields($page_id) {
-		$sql = 'SELECT name, value FROM {custom_field} WHERE page_id=:page_id';
+	public function getPageCustomFields($page_id, $language = null) {
+		$sql = '
+			SELECT
+				name, value
+			FROM
+				{custom_field}
+			WHERE
+				page_id = :page_id
+				AND language = :language
+		';
 
 		$custom_fields = new Statement($sql);
 
-		return $custom_fields->execute(['page_id' => $page_id])->fetchAll();
+		$fields = new \stdClass();
+
+		foreach($custom_fields->execute(['page_id' => $page_id, 'language' => $language ?? site('language')])->fetchAll() as $field) {
+			$fields->{$field->name} = $field->value;
+		}
+
+		return $fields;
+	}
+
+	public function getPageCustomFieldSets($page = null) {
+		$fieldsets = [];
+
+		$path_fields = Path::file('custom_fields');
+
+		foreach(scandir($path_fields) as $fieldset) {
+			if(in_array($fieldset, ['.', '..'], true)) continue;
+
+			if(file_extension($fieldset) !== 'php') continue;
+
+			$file_name = strtolower(file_name($fieldset));
+
+			@list($type, $value) = explode('-', $file_name, 2);
+
+			if($type === 'all') {
+				$fieldsets[] = $path_fields . '/' . $fieldset;
+			}
+
+			if(empty((array) $page)) {
+				continue;
+			}
+
+			if(!is_object($page) && is_numeric($page)) {
+				$page = $this->getPage($page);
+			}
+			if(!isset($page->categories)) {
+				$page->categories = $this->getPageCategories($page->id);
+			}
+
+			if(
+				($type === 'id' && $value === $page->id)
+				|| ($type === 'category' && in_array($value, $page->categories))
+				|| ($type === 'template' && $value === $page->template)
+			) {
+				$fieldsets[] = $path_fields . '/' . $fieldset;
+			}
+		}
+
+		return $fieldsets;
 	}
 }

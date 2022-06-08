@@ -3,6 +3,7 @@
 namespace Module\Admin\Controller;
 
 use Engine\Server;
+use Engine\Language;
 
 class Page extends AdminController {
 	public function getAll() {
@@ -40,37 +41,36 @@ class Page extends AdminController {
 
 	public function getEdit() {
 		$page_id = $this->route['parameters']['id'];
-		$page_origin = $page_id;
 
 		$is_translation = false;
-		if(isset($this->route['parameters']['translation_id'])) {
+
+		if(isset($this->route['parameters']['language'])) {
 			$is_translation = true;
-			$page_id = $this->route['parameters']['translation_id'];
+
+			$data['page_origin'] = $this->model->getPage($page_id);
+
+			if(empty($data['page_origin'])) {
+				$this->view->error('404');
+			}
 		}
 
-		$data['page_edit'] = $this->model->getPageById($page_id);
+		$data['page_edit'] = $this->model->getPage($page_id, $is_translation ? $this->route['parameters']['language'] : null);
 
 		if(empty($data['page_edit'])) {
 			$this->view->error('404');
 		}
 
-		if($is_translation) {
-			$data['page_origin'] = $this->model->getPageById($page_origin);
-
-			if(empty($data['page_origin']) || $data['page_origin']->url !== $data['page_edit']->url) {
-				$this->view->error('404');
-			}
-		}
-
-		$data['page_edit']->is_translation = $is_translation;
+		$data['is_translation'] = $is_translation;
 
 		$data['page_edit']->categories = $this->model->getPageCategories($page_id);
-		$data['page_edit']->tags = $this->model->getPageTags($page_id);
+		$data['page_edit']->tags = $this->model->getPageTags($page_id, $is_translation ? $this->route['parameters']['language'] : null);
 		$data['page_edit']->custom_fields = $this->model->getPageCustomFields($page_id);
 
 		$data['authors'] = $this->model->getAuthors();
 		$data['categories'] = $this->model->getCategories($page_id);
-		$data['tags'] = $this->model->getTags();
+		$data['tags'] = $this->model->getTags($is_translation ? $this->route['parameters']['language'] : null);
+
+		$data['page_edit']->custom_fieldsets = $this->model->getPageCustomFieldSets($data['page_edit']);
 
 		$this->view->setData($data);
 		$this->view->render('page/edit');
@@ -80,23 +80,32 @@ class Page extends AdminController {
 		$page_id = $this->route['parameters']['id'];
 		$translation_language = $this->route['parameters']['language'];
 
-		if(!array_key_exists($translation_language, $this->module['languages'])) {
+		if(!Language::has($translation_language)) {
 			Server::redirect(site('url_language') . '/admin/page');
 		}
 
-		$page = $this->model->getPageById($page_id);
+		$page = $this->model->getPage($page_id);
 
 		if(empty($page)) {
 			Server::redirect(site('url_language') . '/admin/page');
 		}
 
-		$page = (array) $page;
+		$translation = [
+			'page_id' => $page_id,
+			'language' => $translation_language,
+			'title' => $page->title,
+			'content' => $page->content,
+			'excerpt' => $page->excerpt,
+			'image' => $page->image,
+			'seo_description' => $page->seo_description,
+			'seo_keywords' => $page->seo_keywords,
+			'seo_image' => $page->seo_image
+		];
 
-		unset($page['id']);
-		$page['language'] = $translation_language;
-
-		$translation_id = $this->model->createPage($page);
-
-		Server::redirect(site('url_language') . '/admin/page/edit/' . $page_id . '/translation/edit/' . $translation_id);
+		if($this->model->createTranslation($translation)) {
+			Server::redirect(site('url_language') . '/admin/page/edit/' . $page_id . '/translation/edit/' . $translation_language);
+		} else {
+			Server::redirect(site('url_language') . '/admin/page');
+		}
 	}
 }

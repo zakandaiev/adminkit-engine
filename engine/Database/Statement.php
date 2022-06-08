@@ -40,7 +40,7 @@ class Statement {
 		return $this;
 	}
 
-	public function execute($params = []) {		
+	public function execute($params = []) {
 		$this->prepare();
 		$this->addBinding($params);
 		$this->bind();
@@ -62,7 +62,7 @@ class Statement {
 				$error_message = $error->getMessage();
 			}
 
-			$debug_sql = Define::SHOW_ERRORS ? ['query' => $this->sql] : null;
+			$debug_sql = Define::DEBUG ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql))] : null;
 
 			Server::answer($debug_sql, 'error', $error_message, '409');
 		}
@@ -112,7 +112,7 @@ class Statement {
 		if(empty($this->binding)) {
 			return false;
 		}
-		
+
 		$pdo_param = PDO::PARAM_NULL;
 
 		foreach($this->binding as $key => $value) {

@@ -11,11 +11,11 @@
 
 				<div class="mb-3">
 					<?php
-						if($page_edit->is_translation) {
+						if($is_translation) {
 							$crumb_edit_name = __('Edit');
 							$crumb_edit_url = '/admin/page/edit/' . $page_origin->id;
 
-							$crumb_add_name = '<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="' . lang($page_edit->language, 'icon') . '" alt="' . $page_edit->language . '"> ' . $page_origin->title;
+							$crumb_add_name = '<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="' . Asset::url() . '/' . lang($page_edit->language, 'icon') . '" alt="' . $page_edit->language . '"> ' . __('translation of') . ' ' . $page_origin->title;
 
 							Breadcrumb::edit(1, $crumb_edit_name, $crumb_edit_url);
 							Breadcrumb::add($crumb_add_name);
@@ -25,14 +25,23 @@
 					?>
 				</div>
 
-				<form action="<?= Form::edit('Page', $page_edit->id); ?>" method="POST" data-redirect="/admin/page">
+				<?php
+					$form_name = 'Page';
+
+					if($is_translation) {
+						$form_name = 'PageTranslation';
+					}
+				?>
+				<form action="<?= Form::edit($form_name, $page_edit->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/page">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="tab">
 								<ul class="nav nav-tabs" role="tablist">
 									<li class="nav-item"><a class="nav-link active" href="#page-content" data-bs-toggle="tab" role="tab">Content</a></li>
 									<li class="nav-item"><a class="nav-link" href="#page-seo" data-bs-toggle="tab" role="tab">SEO</a></li>
-									<li class="nav-item"><a class="nav-link" href="#page-custom-fields" data-bs-toggle="tab" role="tab">Custom fields</a></li>
+									<?php if(!empty($page_edit->custom_fieldsets)): ?>
+										<li class="nav-item"><a class="nav-link" href="#page-custom-fields" data-bs-toggle="tab" role="tab">Custom fields</a></li>
+									<?php endif; ?>
 								</ul>
 								<div class="tab-content">
 									<div id="page-content" class="tab-pane active" role="tabpanel">
@@ -48,27 +57,25 @@
 											<label class="form-label">Content</label>
 											<textarea name="content" class="form-control wysiwyg" placeholder="Compose an epic..."><?= $page_edit->content ?></textarea>
 										</div>
-										<?php if(!$page_edit->is_translation): ?>
-											<div class="form-group mb-3">
-												<label class="form-label">Tags</label>
-												<select name="tags[]" multiple data-placeholder="Tags" data-addable="tag">
-													<option data-placeholder="true"></option>
-													<?php foreach($tags as $tag): ?>
-														<?php
-															$selected_tag = '';
+										<div class="form-group mb-3">
+											<label class="form-label">Tags</label>
+											<select name="tags[]" multiple data-placeholder="Tags" data-addable="tag">
+												<option data-placeholder="true"></option>
+												<?php foreach($tags as $tag): ?>
+													<?php
+														$selected_tag = '';
 
-															if(in_array($tag->id, $page_edit->tags)) {
-																$selected_tag = 'selected';
-															}
-														?>
-														<option value="<?= $tag->id ?>" <?= $selected_tag ?>><?= $tag->name ?></option>
-													<?php endforeach; ?>
-												</select>
-											</div>
-										<?php endif; ?>
+														if(in_array($tag->id, $page_edit->tags)) {
+															$selected_tag = 'selected';
+														}
+													?>
+													<option value="<?= $tag->id ?>" <?= $selected_tag ?>><?= $tag->name ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
 									</div>
 									<div id="page-seo" class="tab-pane" role="tabpanel">
-										<?php if(!$page_edit->is_translation): ?>
+										<?php if(!$is_translation): ?>
 											<div class="form-check form-switch mb-3">
 												<input class="form-check-input" type="checkbox" id="no_index_no_follow" name="no_index_no_follow" <?php if($page_edit->no_index_no_follow): ?>checked<?php endif; ?>>
 												<label class="form-check-label" for="no_index_no_follow">Set noindex and nofollow</label>
@@ -87,35 +94,16 @@
 											<input type="file" accept="image/*" name="seo_image" data-value='<?= Form::populateFiles($page_edit->seo_image) ?>'>
 										</div>
 									</div>
-									<div id="page-custom-fields" class="tab-pane" role="tabpanel">
-										<div class="form-group mb-3">
-											<label class="form-label">Field</label>
-											<div class="modal fade foreign-form" data-name="custom_fields" data-value='<?= hc(json_encode($page_edit->custom_fields)) ?>'>
-												<div class="modal-dialog modal-dialog-centered">
-													<div class="modal-content">
-														<div class="modal-header">
-															<h5 class="modal-title">Add custom field</h5>
-															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-														</div>
-														<div class="modal-body">
-															<div class="mb-3">
-																<label class="form-label">Field name</label>
-																<input type="text" name="name" placeholder="Name" class="form-control" minlength="1" maxlength="200">
-															</div>
-															<div class="mb-3">
-																<label class="form-label">Field value</label>
-																<input type="text" name="value" placeholder="Value" class="form-control" minlength="1" maxlength="200">
-															</div>
-														</div>
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-															<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
-														</div>
-													</div>
-												</div>
-											</div>
+									<?php if(!empty($page_edit->custom_fieldsets)): ?>
+										<div id="page-custom-fields" class="tab-pane" role="tabpanel">
+											<?php
+												foreach($page_edit->custom_fieldsets as $fieldset) {
+													include_once $fieldset;
+												}
+											?>
+											<textarea class="hidden" name="custom_fields"><?= hc(json_encode($page_edit->custom_fields)) ?></textarea>
 										</div>
-									</div>
+									<?php endif; ?>
 								</div>
 							</div>
 						</div>
@@ -128,7 +116,7 @@
 									<input type="file" accept="image/*" name="image" data-value='<?= Form::populateFiles($page_edit->image) ?>'>
 								</div>
 							</div>
-							<?php if(!$page_edit->is_translation): ?>
+							<?php if(!$is_translation): ?>
 								<div class="card">
 									<div class="card-header">
 										<h5 class="card-title mb-0">Settings</h5>
@@ -210,9 +198,6 @@
 								</div>
 							<?php endif; ?>
 							<input type="hidden" name="language" value="<?= $page_edit->language ?>">
-							<?php if($page_edit->is_translation): ?>
-								<input type="hidden" name="is_translation" value="true">
-							<?php endif; ?>
 							<button type="submit" class="btn btn-primary w-100 p-3">Edit page</button>
 						</div>
 					</div>

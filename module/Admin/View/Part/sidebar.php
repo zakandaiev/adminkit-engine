@@ -50,6 +50,12 @@ $sidebar = [
 		'access_groups' => [3]
 	],
 	[
+		'icon' => 'globe',
+		'name' => 'Translations',
+		'route' => '/admin/translation',
+		'access_groups' => [3]
+	],
+	[
 		'name' => 'Administration',
 		'is_divider' => true,
 		'access_groups' => [2]

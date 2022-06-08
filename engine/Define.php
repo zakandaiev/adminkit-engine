@@ -4,7 +4,7 @@ namespace Engine;
 
 class Define {
 	// DEBUG
-	const SHOW_ERRORS = true;
+	const DEBUG = true;
 
 	// LOG
 	const LOG_FOLDER = 'log';

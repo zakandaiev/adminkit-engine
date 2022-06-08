@@ -30,6 +30,15 @@ function file_extension($path) {
 	return pathinfo($path, PATHINFO_EXTENSION);
 }
 
+function file_size($path, $precision = 2) {
+	$size = filesize($path);
+
+	$units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  for($i = 0; $size > 1024; $i++) $size /= 1024;
+
+	return round($size, 2) . ' ' . $units[$i];
+}
+
 function glob_recursive($pattern, $flags = 0) {
 	$files = glob($pattern, $flags);
 
@@ -206,16 +215,6 @@ function slug($text, $delimiter = '-') {
 	return $slug;
 }
 
-function keyword($text) {
-	$keyword = cyr_to_lat($text);
-	$keyword = preg_replace('/[^A-Za-z_]+/', '_', $keyword);
-	$keyword = preg_replace('/[_]+/', '_', $keyword);
-	$keyword = trim($keyword, '_');
-	$keyword = strtolower($keyword);
-
-	return $keyword;
-}
-
 function word($text) {
 	$word = preg_replace('/[^\p{L}\d ]+/iu', '', $text);
 	$word = preg_replace('/[\s]+/', ' ', $word);
@@ -226,7 +225,7 @@ function word($text) {
 
 ############################# LANGUAGE #############################
 function __($key) {
-	return Language::translate($key) ?? $key;
+	return (Define::DEBUG ? '|' : '') . Language::translate($key) . (Define::DEBUG ? '|' : '');
 }
 
 function lang($lang, $key, $mixed = null) {
@@ -234,15 +233,15 @@ function lang($lang, $key, $mixed = null) {
 
 	switch(strval($key)) {
 		case 'region': {
-			$value = Module::get('languages')[$lang]['region'] ?? null;
+			$value = Language::get($lang)['region'] ?? null;
 			break;
 		}
 		case 'name': {
-			$value = Module::get('languages')[$lang]['name'] ?? null;
+			$value = Language::get($lang)['name'] ?? null;
 			break;
 		}
 		case 'icon': {
-			$value = Asset::url() . '/img/flags/' . $lang . '.' . ($mixed ?? 'png');
+			$value = 'img/flags/' . $lang . '.' . ($mixed ?? 'png');
 			break;
 		}
 	}
@@ -302,7 +301,7 @@ function site($key) {
 			$uri = trim(Request::$uri, '/');
 			$uri_parts = explode('/', $uri);
 
-			if(array_key_exists($uri_parts[0], Module::get('languages'))) {
+			if(Language::has($uri_parts[0])) {
 				array_shift($uri_parts);
 				$uri = implode('/', $uri_parts);
 			}

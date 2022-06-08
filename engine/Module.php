@@ -36,7 +36,6 @@ class Module {
 
 			$config_file = $module_path . '/' . $module . '/config.php';
 			$routes_file = $module_path . '/' . $module . '/routes.php';
-			$languages_dir = $module_path . '/' . $module . '/Language';
 
 			if(file_exists($config_file)) {
 				$config = require $config_file;
@@ -54,7 +53,6 @@ class Module {
 				continue;
 			}
 
-			self::$module[$module]['languages'] = self::getLanguages($languages_dir);
 			self::$module_name = $module;
 
 			if(file_exists($routes_file)) {
@@ -63,35 +61,6 @@ class Module {
 		}
 
 		return true;
-	}
-
-	private static function getLanguages($path) {
-		$languages = [];
-
-		if(!file_exists($path)) {
-			return $languages;
-		}
-
-		foreach(scandir($path) as $language) {
-			if(in_array($language, ['.', '..'], true)) continue;
-
-			if(file_extension($language) !== 'ini') continue;
-
-			$language = file_name($language);
-
-			list($language_key, $language_region, $language_name) = explode('@', $language, 3);
-
-			$lang['key'] = $language_key ?? null;
-			$lang['region'] = $language_region ?? null;
-			$lang['name'] = $language_name ?? null;
-			$lang['filename'] = $language;
-
-			if(!$lang['key']) continue;
-
-			$languages[$lang['key']] = $lang;
-		}
-
-		return $languages;
 	}
 
 	public static function route($method, $uri, $controller, $options = []) {

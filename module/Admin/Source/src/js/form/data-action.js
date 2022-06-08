@@ -6,12 +6,14 @@ class DataAction {
 		this.data_action = this.node.getAttribute('data-action');
 		this.data_method = this.node.hasAttribute('data-method') ? this.node.getAttribute('data-method') : 'POST';
 		this.data_confirm = this.node.getAttribute('data-confirm');
+		this.data_fields = this.node.getAttribute('data-fields');
 		this.data_form = this.node.getAttribute('data-form');
 		this.data_form_reset = this.node.getAttribute('data-form-reset');
 		this.data_class = this.node.getAttribute('data-class');
 		this.data_class_target = this.node.getAttribute('data-class-target');
 		this.data_redirect = this.node.getAttribute('data-redirect');
 		this.data_counter = this.node.getAttribute('data-counter');
+		this.data_counter_plus = this.node.hasAttribute('data-counter-plus') ? true : false;
 		this.data_delete = this.node.getAttribute('data-delete');
 		this.data_message = this.node.getAttribute('data-message');
 
@@ -72,13 +74,21 @@ class DataAction {
 			data = new FormData(document.querySelector(this.data_form));
 		}
 
-		if(this.options.data) {
-			this.options.data.forEach(field => {
-				if(field.key) {
-					data.set(field.key, field.value ? field.value : null);
-				}
-			});
+		let options = [];
+
+		if(this.data_fields) {
+			options = options.concat(JSON.parse(this.data_fields));
 		}
+
+		if(this.options.data) {
+			options = options.concat(this.options.data);
+		}
+
+		options.forEach(field => {
+			if(field.key) {
+				data.set(field.key, field.value ? field.value : null);
+			}
+		});
 
 		return data;
 	}
@@ -135,7 +145,7 @@ class DataAction {
 		if(this.data_counter) {
 			document.querySelectorAll(this.data_counter).forEach(target => {
 				const target_value = parseInt(target.textContent);
-				target.textContent = target_value - 1;
+				target.textContent = this.data_counter_plus ? target_value + 1 : target_value - 1;
 			});
 
 			return true;

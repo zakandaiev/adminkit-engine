@@ -23,9 +23,7 @@
 										<th>Message</th>
 										<th>Page</th>
 										<th>Created</th>
-										<?php if(site('moderate_comments')): ?>
-											<th>Is approved</th>
-										<?php endif; ?>
+										<th>Is approved</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -35,21 +33,26 @@
 											<td><a href="/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
 											<td>
 												<?php if(strlen($comment->message) > 50): ?>
-													<span data-bs-toggle="tooltip" data-bs-placement="top" title="<?= $comment->message ?>"><?= substr($comment->message, 0, 50) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= $comment->message ?>"><?= substr($comment->message, 0, 50) ?>...</span>
 												<?php else: ?>
 													<?= $comment->message ?>
 												<?php endif; ?>
 											</td>
 											<td><a href="<?= site('url_language') ?>/<?= $comment->page_url ?>" target="_blank"><?= $comment->page_title ?></a></td>
 											<td title="<?= format_date($comment->date_created) ?>"><?= date_when($comment->date_created) ?></td>
-											<?php if(site('moderate_comments')): ?>
-												<td><?= icon_boolean($comment->is_approved) ?></td>
-											<?php endif; ?>
+											<td>
+												<?php
+													$approve_title = $comment->is_approved ? __('Disapprove this comment') : __('Approve this comment');
+												?>
+												<a href="#" data-action="<?= Form::edit('Comment/ToggleApprove', $comment->id) ?>" data-fields='[{"key":"is_approved","value":<?= $comment->is_approved ?>}]' data-redirect="this" title="<?= $approve_title ?>" data-bs-toggle="tooltip">
+													<?= icon_boolean($comment->is_approved) ?>
+												</a>
+											</td>
 											<td class="table-action">
 												<?php
 													$edit_url = site('url_language') . '/admin/comment/edit/' . $comment->id;
 													$delete = [
-														'data-action' => Form::delete('Comment', $comment->id),
+														'data-action' => Form::delete('Comment/Edit', $comment->id),
 														'data-confirm' => __('Delete comment by') . ' ' . $comment->author_name . '?',
 														'data-delete' => 'trow',
 														'data-counter' => '#pagination-counter'

@@ -18,11 +18,11 @@ class Pagination {
 	private static $instance;
 
 	public static function getInstance() {
-		if(self::$instance instanceof self) {
-			return self::$instance;
+		if(!self::$instance instanceof self) {
+			self::$instance = new self();
 		}
 
-		return null;
+		return self::$instance;
 	}
 
 	public function __construct($total_rows, $uri_key = null) {

@@ -9,7 +9,19 @@ class Sitemap {
 		$pages = $custom_pages;
 
 		if(empty($custom_pages)) {
-			$sql = 'SELECT * FROM {page} WHERE date_publish <= NOW() AND is_enabled IS true';
+			$sql = '
+				SELECT
+					*
+				FROM
+					{page} t_page
+				INNER JOIN
+					{page_translation} t_page_translation
+				ON
+					t_page.id = t_page_translation.page_id
+				WHERE
+					date_publish <= NOW()
+					AND is_enabled IS true
+			';
 			$pages = new Statement($sql);
 			$pages = $pages->execute()->fetchAll();
 		}

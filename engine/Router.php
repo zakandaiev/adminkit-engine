@@ -71,22 +71,7 @@ class Router {
 		array_shift($route_parts);
 		array_shift($uri_parts);
 
-		$languages = [];
-		foreach(Module::getAll() as $module) {
-			if(!$module['is_enabled']) {
-				continue;
-			}
-
-			foreach($module['languages'] as $language) {
-				if(!in_array($language['key'], $languages)) {
-					$languages[] = $language['key'];
-				}
-			}
-		}
-
-		if(in_array($uri_parts[0], $languages)) {
-			Language::setCookie($uri_parts[0]);
-
+		if(Language::has($uri_parts[0])) {
 			array_shift($uri_parts);
 
 			if($route === '/' && count($uri_parts) === 0) {
@@ -127,16 +112,16 @@ class Router {
 			return false;
 		}
 
-		$now_timestamp = time();
+		$timestamp_now = time();
 
 		foreach($forms as $form) {
-			$cdate_timestamp = strtotime($form->date_created);
-			$diff_hours = ($now_timestamp - $cdate_timestamp) / 3600;
+			$timestamp_created = strtotime($form->date_created);
+			$timestamp_diff = $timestamp_now - $timestamp_created;
 
 			if(trim(self::$uri, '/') === $form->token) {
 				Module::setName($form->module);
 
-				if(intval($diff_hours) < 12) {
+				if($timestamp_diff < Define::LIFETIME['form']) {
 					Form::execute($form->action, $form->form_name, $form->item_id);
 				} else {
 					$error_message = __('Current form is already inactive. Reload the page and try again');
@@ -159,9 +144,12 @@ class Router {
 				Module::setName('Admin');
 			}
 
+			self::$route['method'] = Request::$method;
+			self::$route['uri'] = Request::$uri;
 			self::$route['controller'] = 'Error';
 			self::$route['action'] = 'get404';
 			self::$route['is_public'] = true;
+			self::$route['parameters'] = [];
 			self::$route['breadcrumbs'] = [];
 		}
 	}

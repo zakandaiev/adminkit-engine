@@ -32,7 +32,7 @@ $phone = [
 	'regexp' => '/^[0-9\+\-\(\)]*$/'
 ];
 $name = [
-	'required' => false,
+	'required' => true,
 	'minlength' => 1,
 	'maxlength' => 200,
 	'regexp' => '/^[\w ]+$/iu'

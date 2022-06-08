@@ -1,3 +1,3 @@
 <?php
 
-Module::route('get', '/dev/lang/$module_name', 'LanguageTemplate@generate');
+Module::route('get', '/dev/language-template', 'LanguageTemplate@generate');

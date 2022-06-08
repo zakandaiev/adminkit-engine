@@ -56,7 +56,7 @@ class Form {
 		return null;
 	}
 
-	public static function execute($action, $form_name, $item_id = null) {
+	public static function execute($action, $form_name, $item_id = null, $force_no_answer = false) {
 		self::clearExpired();
 
 		self::check($form_name);
@@ -65,36 +65,52 @@ class Form {
 		$table = $form['table'];
 
 		if($action !== 'delete') {
-			$sql_fields = self::processFields($form_name);
+			$fields = self::processFields($form_name);
 		}
 
 		if($action !== 'add') {
 			$statement = new Statement('SHOW KEYS FROM {' . $table . '} WHERE Key_name=\'PRIMARY\'');
 			$pk_name = $statement->execute()->fetch()->Column_name;
-			$sql_fields[$pk_name] = $item_id;
+			$fields[$pk_name] = $item_id;
 		}
 
 		$form_data = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
 
-		if(isset($form['fields_modify']) && is_callable($form['fields_modify'])) {
-			$sql_fields = $form['fields_modify']($sql_fields, $form_data);
+		if(isset($form['modify_fields']) && is_callable($form['modify_fields'])) {
+			$data = new \stdClass();
+
+			$data->fields = $fields;
+			$data->form_data = $form_data;
+
+			$fields = $form['modify_fields']($data)->fields;
+			$form_data = $form['modify_fields']($data)->form_data;
 		}
 
 		if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
-			$form['execute_pre']($sql_fields, $form_data);
+			$data = new \stdClass();
+
+			$data->fields = $fields;
+			$data->form_data = $form_data;
+
+			$form['execute_pre']($data);
 		}
 
 		if(isset($form['execute']) && is_callable($form['execute'])) {
-			$form['execute']($sql_fields, $form_data);
+			$data = new \stdClass();
+
+			$data->fields = $fields;
+			$data->form_data = $form_data;
+
+			$form['execute']($data);
 		} else {
-			$sql_fields_foreign = [];
-			$sql_fields_foreign_value = [];
+			$fields_foreign = [];
+			$fields_foreign_value = [];
 			if($action !== 'delete') {
 				foreach($form['fields'] as $field => $values_array) {
 					if(isset($values_array['foreign']) && !empty($values_array['foreign'])) {
 
 						if(is_callable($values_array['foreign'])) {
-							$sql_fields_foreign[$field] = $values_array['foreign'];
+							$fields_foreign[$field] = $values_array['foreign'];
 						} else {
 							$foreign_t = explode('@', $values_array['foreign'], 2);
 							$foreign_k = explode('/', $foreign_t[1], 2);
@@ -103,40 +119,40 @@ class Form {
 							$foreign_key_1 = $foreign_k[0];
 							$foreign_key_2 = $foreign_k[1];
 
-							$sql_fields_foreign[$field]['table'] = $foreign_table;
-							$sql_fields_foreign[$field]['key_1'] = $foreign_key_1;
-							$sql_fields_foreign[$field]['key_2'] = $foreign_key_2;
+							$fields_foreign[$field]['table'] = $foreign_table;
+							$fields_foreign[$field]['key_1'] = $foreign_key_1;
+							$fields_foreign[$field]['key_2'] = $foreign_key_2;
 						}
 
-						if(is_array($sql_fields[$field])) {
-							$sql_fields_foreign_value[$field] = $sql_fields[$field];
-						} else if(@json_decode($sql_fields[$field]) || $sql_fields[$field] === '[]') {
-							$sql_fields_foreign_value[$field] = json_decode($sql_fields[$field]) ?? [];
-						} else if(!empty($sql_fields[$field])) {
-							$sql_fields_foreign_value[$field] = array($sql_fields[$field]);
+						if(is_array($fields[$field])) {
+							$fields_foreign_value[$field] = $fields[$field];
+						} else if(@json_decode($fields[$field]) || $fields[$field] === '[]') {
+							$fields_foreign_value[$field] = json_decode($fields[$field]) ?? [];
+						} else if(!empty($fields[$field])) {
+							$fields_foreign_value[$field] = array($fields[$field]);
 						} else {
-							$sql_fields_foreign_value[$field] = [];
+							$fields_foreign_value[$field] = [];
 						}
 
-						unset($sql_fields[$field]);
+						unset($fields[$field]);
 					}
 				}
 			}
 
 			switch($action) {
 				case 'add': {
-					$columns = implode(', ', array_keys($sql_fields));
-					$bindings = ':' . implode(', :', array_keys($sql_fields));
+					$columns = implode(', ', array_keys($fields));
+					$bindings = ':' . implode(', :', array_keys($fields));
 					$sql = 'INSERT INTO {' . $table . '} (' . $columns . ') VALUES (' . $bindings . ')';
 					break;
 				}
 				case 'edit': {
-					$bindings = array_reduce(array_keys($sql_fields),function($carry,$v){return ($carry?"$carry, ":'')."$v=:$v";});
-					$sql = 'UPDATE {' . $table . '} SET ' . $bindings . ' WHERE ' . $pk_name . '=:' . $pk_name;
+					$bindings = array_reduce(array_keys($fields),function($carry,$v){return ($carry?"$carry, ":'')."$v = :$v";});
+					$sql = 'UPDATE {' . $table . '} SET ' . $bindings . ' WHERE ' . $pk_name . ' = :' . $pk_name;
 					break;
 				}
 				case 'delete': {
-					$sql = 'DELETE FROM {' . $table . '} WHERE ' . $pk_name . '=:' . $pk_name;
+					$sql = 'DELETE FROM {' . $table . '} WHERE ' . $pk_name . ' = :' . $pk_name;
 					break;
 				}
 				default: {
@@ -144,29 +160,46 @@ class Form {
 				}
 			}
 
-			$statement = new Statement($sql);
-			$statement->execute($sql_fields);
+			if(isset($form['modify_sql']) && is_callable($form['modify_sql'])) {
+				$data = new \stdClass();
 
-			if($action === 'add') {
+				$data->sql = $sql;
+				$data->fields = $fields;
+				$data->form_data = $form_data;
+
+				$sql = $form['modify_sql']($data)->sql;
+				$fields = $form['modify_sql']($data)->fields;
+				$form_data = $form['modify_sql']($data)->form_data;
+			}
+
+			$statement = new Statement($sql);
+			$statement->execute($fields);
+
+			if($action === 'add' && empty($item_id)) {
 				$item_id = $statement->insertId();
 				$form_data['item_id'] = $item_id;
 			}
 
-			foreach($sql_fields_foreign as $field_name => $field) {
+			foreach($fields_foreign as $field_name => $field) {
 				if(is_callable($field)) {
-					$field($sql_fields_foreign_value[$field_name], $form_data);
+					$data = new \stdClass();
+
+					$data->fields = $fields;
+					$data->form_data = $form_data;
+
+					$field($fields_foreign_value[$field_name], $data);
 				}
 				else if(is_array($field)) {
-					$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . '=:' . $field['key_1'];
+					$sql = 'DELETE FROM {' . $field['table'] . '} WHERE ' . $field['key_1'] . ' = :' . $field['key_1'];
 
 					$statement = new Statement($sql);
 					$statement->execute([$field['key_1'] => $item_id]);
 
-					if(empty($sql_fields_foreign_value[$field_name])) {
+					if(empty($fields_foreign_value[$field_name])) {
 						continue;
 					}
 
-					foreach($sql_fields_foreign_value[$field_name] as $value) {
+					foreach($fields_foreign_value[$field_name] as $value) {
 						$sql = '
 							INSERT INTO {' . $field['table'] . '}
 								(' . $field['key_1'] . ', ' . $field['key_2'] . ')
@@ -182,26 +215,33 @@ class Form {
 		}
 
 		if(isset($form['execute_post']) && is_callable($form['execute_post'])) {
-			$form['execute_post']($sql_fields, $form_data);
+			$data = new \stdClass();
+
+			$data->fields = $fields;
+			$data->form_data = $form_data;
+
+			$form['execute_post']($data);
 		}
 
 		if(isset($form['submit'])) {
 			if(is_callable($form['submit'])) {
-				$submit_message = $form['submit']($sql_fields, $form_data);
+				$submit_message = $form['submit']($fields, $form_data);
 			} else {
-				$submit_message = __(trim($form['submit']));
+				$submit_message = $form['submit'];
 			}
 		}
 
-		Server::answer(null, 'success', @$submit_message);
+		if(!$force_no_answer) {
+			Server::answer(null, 'success', @$submit_message);
+		}
 	}
 
 	private static function tokenExistsAndActive($action, $form_name = '', $item_id = '') {
-		$query_defining = 'action=:action AND form_name=:form_name AND item_id=:item_id';
+		$query_defining = 'action = :action AND form_name = :form_name AND item_id = :item_id';
 		$query_params = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
 
 		if($action === 'add') {
-			$query_defining = 'action=:action AND form_name=:form_name';
+			$query_defining = 'action = :action AND form_name = :form_name';
 			$query_params = ['action' => $action, 'form_name' => $form_name];
 		}
 
@@ -270,7 +310,7 @@ class Form {
 					if($check !== true) {
 						$error_message = $values_array[$key . '_message'] ?? ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
 
-						Server::answer(null, 'error', __($error_message), 409);
+						Server::answer(null, 'error', $error_message, 409);
 					}
 				}
 			}
@@ -282,7 +322,7 @@ class Form {
 	private static function isFieldValid($value, $operand, $operand_value) {
 		switch($operand) {
 			case 'boolean': {
-				if($operand_value && $value === 'on') {
+				if($operand_value) {
 					return true;
 				}
 				return false;
@@ -377,44 +417,52 @@ class Form {
 		$fields = [];
 
 		foreach($form['fields'] as $field => $values_array) {
-			if(!isset($post[$field]) || empty($post[$field])) {
-				$field_value = null;
+			$field_value = null;
 
-				if(isset($values_array['date']) && $values_array['date']) {
-					continue;
-				}
-				else if(isset($values_array['unset_null']) && $values_array['unset_null']) {
-					continue;
-				}
-				else if(isset($values_array['boolean']) && $values_array['boolean']) {
+			if(!isset($post[$field]) || empty($post[$field])) {
+				if(isset($values_array['boolean']) && $values_array['boolean']) {
 					$field_value = false;
+				}
+				if(isset($values_array['unset_null']) && $values_array['unset_null']) {
+					continue;
 				}
 
 				$fields[$field] = $field_value;
 			} else {
+				$field_value = $post[$field];
+				$is_field_formatted = false;
+
 				if(isset($values_array['boolean']) && $values_array['boolean']) {
-					$field_value = true;
+					$field_value = $field_value === 'null' ? false : true;
+					$is_field_formatted = true;
 				}
-				else if(isset($values_array['html']) && $values_array['html']) {
-					$field_value = trim($post[$field]);
+				if(isset($values_array['html']) && $values_array['html']) {
+					$field_value = trim($field_value);
+					$is_field_formatted = true;
 				}
-				else if(isset($values_array['json']) && $values_array['json']) {
-					$field_value = trim($post[$field]);
+				if(isset($values_array['json']) && $values_array['json']) {
+					$field_value = trim($field_value);
+					$is_field_formatted = true;
 				}
-				else if(isset($values_array['foreign'])) {
-					$field_value = $post[$field];
+				if(isset($values_array['foreign'])) {
+					$field_value = $field_value;
+					$is_field_formatted = true;
 				}
-				else if(isset($values_array['modify']) && is_callable($values_array['modify'])) {
-					$field_value = $values_array['modify']($post[$field]);
-				}
-				else if(is_array($post[$field])) {
-					$field_value = filter_var_array($post[$field], FILTER_SANITIZE_STRING);
+				if(is_array($field_value)) {
+					$field_value = filter_var_array($field_value, FILTER_SANITIZE_STRING);
 					$field_value = json_encode($field_value);
-				} else {
-					$field_value = filter_var(trim($post[$field]), FILTER_SANITIZE_STRING);
+					$is_field_formatted = true;
+				}
+
+				if(!$is_field_formatted) {
+					$field_value = filter_var(trim($field_value), FILTER_SANITIZE_STRING);
 				}
 
 				$fields[$field] = $field_value;
+			}
+
+			if(isset($values_array['modify']) && is_callable($values_array['modify'])) {
+				$fields[$field] = $values_array['modify']($fields[$field]);
 			}
 		}
 

@@ -16,7 +16,9 @@ class AdminModel {
 			ON
 				t_group.id = t_user_group.group_id
 			WHERE
-				t_user_group.user_id=:user_id AND t_group.is_enabled IS true AND t_group.access_all IS true
+				t_user_group.user_id = :user_id
+				AND t_group.is_enabled IS true
+				AND t_group.access_all IS true
 			LIMIT 1
 		';
 
@@ -34,7 +36,7 @@ class AdminModel {
 	public function getUserGroups($id) {
 		$user_groups = [];
 
-		$groups = new Statement('SELECT * FROM {user_group} WHERE user_id=:user_id');
+		$groups = new Statement('SELECT * FROM {user_group} WHERE user_id = :user_id');
 		$groups = $groups->execute(['user_id' => $id])->fetchAll();
 
 		foreach($groups as $group) {
@@ -61,7 +63,8 @@ class AdminModel {
 			ON
 				t_group.id = t_user_group.group_id
 			WHERE
-				t_user_group.user_id=:user_id AND t_group.is_enabled IS true
+				t_user_group.user_id = :user_id
+				AND t_group.is_enabled IS true
 		';
 
 		$routes = new Statement($routes_sql);
@@ -75,13 +78,13 @@ class AdminModel {
 	}
 
 	public function getUserNotificationsCount($id) {
-		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id=:user_id AND is_read IS false');
+		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id = :user_id AND is_read IS false');
 
 		return intval($notifications->execute(['user_id' => $id])->fetchColumn());
 	}
 
 	public function getUserNotifications($id) {
-		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id=:user_id AND is_read IS false ORDER BY date_created DESC LIMIT 5');
+		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id = :user_id AND is_read IS false ORDER BY date_created DESC LIMIT 5');
 
 		return $notifications->execute(['user_id' => $id])->fetchAll();
 	}

@@ -4,17 +4,7 @@ namespace Module\Admin\Model;
 
 use Engine\Database\Statement;
 
-class Comment {
-	private static $instance;
-
-	public static function getInstance() {
-		if(!self::$instance instanceof self) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
-
+class Comment extends \Engine\Model {
 	public function countComments() {
 		$sql = 'SELECT count(*) FROM {comment}';
 
@@ -36,21 +26,27 @@ class Comment {
 			SELECT
 				t_comment.*,
 				t_page.url as page_url,
-				t_page.title as page_title,
+				t_page_translation.title as page_title,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_comment.author) as author_name
 			FROM
 				{comment} t_comment
-			LEFT JOIN
+			INNER JOIN
 				{page} t_page
 			ON
-				t_page.id=t_comment.page_id
+				t_page.id = t_comment.page_id
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			WHERE
+				t_page_translation.language = :language
 			ORDER BY
 				t_comment.date_created DESC
 		';
 
 		$comments = new Statement($sql);
 
-		$comments = $comments->paginate($this->countComments())->execute()->fetchAll();
+		$comments = $comments->paginate($this->countComments())->execute(['language' => site('language')])->fetchAll();
 
 		return $comments;
 	}
@@ -60,20 +56,26 @@ class Comment {
 			SELECT
 				t_comment.*,
 				t_page.url as page_url,
-				t_page.title as page_title,
+				t_page_translation.title as page_title,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_comment.author) as author_name
 			FROM
 				{comment} t_comment
 			LEFT JOIN
 				{page} t_page
 			ON
-				t_page.id=t_comment.page_id
-			WHERE t_comment.id=:id
+				t_page.id = t_comment.page_id
+			LEFT JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page_translation.page_id = t_comment.page_id
+			WHERE
+				t_comment.id = :id
+				AND t_page_translation.language = :language
 		';
 
 		$comment = new Statement($sql);
 
-		return $comment->execute(['id' => $id])->fetch();
+		return $comment->execute(['id' => $id, 'language' => site('language')])->fetch();
 	}
 
 	public function getAuthors() {

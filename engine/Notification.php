@@ -29,7 +29,7 @@ class Notification {
 	}
 
 	public static function read($id, $user_id) {
-		$read_one = 'UPDATE {notification} SET is_read=true WHERE id=:id AND user_id=:user_id AND is_read IS false';
+		$read_one = 'UPDATE {notification} SET is_read=true WHERE id = :id AND user_id = :user_id AND is_read IS false';
 
 		$read_one = new Statement($read_one);
 
@@ -39,7 +39,7 @@ class Notification {
 	}
 
 	public static function readAll($user_id) {
-		$read_all = 'UPDATE {notification} SET is_read=true WHERE user_id=:user_id AND is_read IS false';
+		$read_all = 'UPDATE {notification} SET is_read=true WHERE user_id = :user_id AND is_read IS false';
 
 		$read_all = new Statement($read_all);
 

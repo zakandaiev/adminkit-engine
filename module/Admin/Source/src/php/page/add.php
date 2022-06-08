@@ -20,7 +20,6 @@
 								<ul class="nav nav-tabs" role="tablist">
 									<li class="nav-item"><a class="nav-link active" href="#page-content" data-bs-toggle="tab" role="tab">Content</a></li>
 									<li class="nav-item"><a class="nav-link" href="#page-seo" data-bs-toggle="tab" role="tab">SEO</a></li>
-									<li class="nav-item"><a class="nav-link" href="#page-custom-fields" data-bs-toggle="tab" role="tab">Custom fields</a></li>
 								</ul>
 								<div class="tab-content">
 									<div id="page-content" class="tab-pane active" role="tabpanel">
@@ -62,35 +61,6 @@
 										<div class="form-group">
 											<label class="form-label">SEO Image</label>
 											<input type="file" accept="image/*" name="seo_image">
-										</div>
-									</div>
-									<div id="page-custom-fields" class="tab-pane" role="tabpanel">
-										<div class="form-group mb-3">
-											<label class="form-label">Field</label>
-											<div class="modal fade foreign-form" data-name="custom_fields">
-												<div class="modal-dialog modal-dialog-centered">
-													<div class="modal-content">
-														<div class="modal-header">
-															<h5 class="modal-title">Add custom field</h5>
-															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-														</div>
-														<div class="modal-body">
-															<div class="mb-3">
-																<label class="form-label">Field name</label>
-																<input type="text" name="name" placeholder="Name" class="form-control" minlength="1" maxlength="200">
-															</div>
-															<div class="mb-3">
-																<label class="form-label">Field value</label>
-																<input type="text" name="value" placeholder="Value" class="form-control" minlength="1" maxlength="200">
-															</div>
-														</div>
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-															<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
-														</div>
-													</div>
-												</div>
-											</div>
 										</div>
 									</div>
 								</div>

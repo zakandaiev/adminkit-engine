@@ -17,6 +17,9 @@ Asset::js('js/quill', 'defer');
 Asset::js('js/slimselect', 'defer');
 Asset::js('js/sortable', 'defer');
 Asset::js('js/main', 'defer');
+Asset::js('js/custom-fields', 'defer', '/admin/page/edit/$id');
+Asset::js('js/menu', 'defer', ['/admin/menu', '/admin/menu/$id']);
+Asset::js('js/translations', 'defer', '/admin/translation/$language');
 
 ############################# BREADCRUMBS #############################
 Breadcrumb::setOption('render_homepage', true);
@@ -291,12 +294,12 @@ function logs($logs, $folder = null, $folder_hash = null) {
 	return $output;
 }
 
-function format_log($log_body) {
+function format_log($body) {
 	$date = '<span class="log__date">$1</span>';
 	$hyphen = '<span class="log__hyphen">$2</span>';
 	$replacement = $date . ' ' . $hyphen;
 
-	return preg_replace('/(\[.*\]) (-)/miu', $replacement, hc(trim($log_body)));
+	return preg_replace('/(\[.*\]) (-)/miu', $replacement, trim($body));
 }
 
 ############################# HELPERS #############################

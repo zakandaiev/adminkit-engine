@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			theme: 'snow'
 		});
 
+		textarea.quill = quill;
+
 		// POPULATE
 		// quill.setContents(JSON.parse(textarea.value).ops);
 

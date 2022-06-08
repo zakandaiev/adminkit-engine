@@ -32,13 +32,16 @@ class Group {
 	}
 
 	public function getRoutes() {
-		$routes_grouped = new \stdClass();
+		$routes_grouped = [];
 
 		foreach(Module::get('routes') as $route) {
-			$routes_grouped->{$route['method']}[] = $route['uri'];
+			if($route['is_public']) continue;
+			$routes_grouped[$route['method']][] = $route['uri'];
 		}
 
-		return $routes_grouped;
+		ksort($routes_grouped, SORT_NATURAL | SORT_FLAG_CASE);
+
+		return array_map(function($a) {sort($a, SORT_NATURAL | SORT_FLAG_CASE);return $a;}, $routes_grouped);
 	}
 
 	public function getUsers() {
@@ -50,7 +53,7 @@ class Group {
 	}
 
 	public function getGroupById($id) {
-		$sql = 'SELECT * FROM {group} WHERE id=:id';
+		$sql = 'SELECT * FROM {group} WHERE id = :id';
 
 		$group = new Statement($sql);
 
@@ -60,7 +63,7 @@ class Group {
 	public function getGroupRoutesById($group_id) {
 		$routes = new \stdClass();
 
-		$sql = 'SELECT route FROM {group_route} WHERE group_id=:group_id';
+		$sql = 'SELECT route FROM {group_route} WHERE group_id = :group_id';
 
 		$statement = new Statement($sql);
 
@@ -75,7 +78,7 @@ class Group {
 	public function getGroupUsersById($group_id) {
 		$users = [];
 
-		$sql = 'SELECT user_id FROM {user_group} WHERE group_id=:group_id';
+		$sql = 'SELECT user_id FROM {user_group} WHERE group_id = :group_id';
 
 		$statement = new Statement($sql);
 

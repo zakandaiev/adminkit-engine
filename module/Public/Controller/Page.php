@@ -16,7 +16,7 @@ class Page extends Controller {
 			$page_url = $this->route['parameters']['url'];
 		}
 
-		$data['page'] = $this->model->getPageByUrl($page_url);
+		$data['page'] = $this->model->getPage($page_url);
 
 		if(empty($data['page'])) {
 			$this->view->error('404');
@@ -35,13 +35,13 @@ class Page extends Controller {
 			$page_template = 'page';
 		}
 
-		$data['page']->categories = $this->model->getPageCategories($data['page']->url);
-		$data['page']->comments = $this->model->getPageComments($data['page']->url);
-		$data['page']->comments_count = $this->model->getPageCommentsCount($data['page']->url);
-		$data['page']->tags = $this->model->getPageTags($data['page']->url);
-		$data['page']->custom_fields = $this->model->getPageCustomFields($data['page']->url);
+		$data['page']->categories = $this->model->getPageCategories($data['page']->id);
+		$data['page']->comments = $this->model->getPageComments($data['page']->id);
+		$data['page']->comments_count = $this->model->getPageCommentsCount($data['page']->id);
+		$data['page']->tags = $this->model->getPageTags($data['page']->id);
+		$data['page']->custom_fields = $this->model->getPageCustomFields($data['page']->id);
 
-		$this->model->updateViewCounter($data['page']->url);
+		$this->model->updateViewCounter($data['page']->id);
 
 		$this->view->setData($data);
 		$this->view->render($page_template);

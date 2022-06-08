@@ -30,7 +30,7 @@ class User {
 	}
 
 	public function getUserById($id) {
-		$sql = 'SELECT * FROM {user} WHERE id=:id';
+		$sql = 'SELECT * FROM {user} WHERE id = :id';
 
 		$user = new Statement($sql);
 
@@ -48,7 +48,7 @@ class User {
 	public function getUserGroupsById($user_id) {
 		$groups_array = [];
 
-		$sql = 'SELECT group_id FROM {user_group} WHERE user_id=:user_id';
+		$sql = 'SELECT group_id FROM {user_group} WHERE user_id = :user_id';
 
 		$groups = new Statement($sql);
 

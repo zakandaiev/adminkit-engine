@@ -16,6 +16,7 @@ return [
 		'time_zone' => $time_zone,
 		'language' => $language,
 		'socials_allowed' => [],
-		'enable_registration' => $boolean
+		'enable_registration' => $boolean,
+		'moderate_comments' => $boolean
 	]
 ];

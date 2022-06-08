@@ -4,10 +4,12 @@ Asset::css('css/bootstrap.min');
 Asset::css('css/font-awesome.min');
 Asset::css('css/style');
 
-Asset::js('js/jquery.min');
-Asset::js('js/bootstrap.min');
-Asset::js('js/jquery.stellar.min');
-Asset::js('js/main');
+Asset::js('js/jquery.min', 'defer');
+Asset::js('js/bootstrap.min', 'defer');
+Asset::js('js/jquery.stellar.min', 'defer');
+Asset::js('js/main', 'defer');
+
+Asset::optimization('js', 'defer');
 
 ############################# POSTS #############################
 function getPosts($posts, $options) {

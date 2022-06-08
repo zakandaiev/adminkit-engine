@@ -3,57 +3,48 @@
 namespace Module\Dev\Controller;
 
 use Engine\Module;
+use Engine\Path;
 use Engine\Request;
 use Engine\Server;
 
 class LanguageTemplate extends \Engine\Controller {
-	private $module_name;
-	private $module_dir;
-	private $language_dir;
-	private $language_file;
-
+	private $modules_dir;
+	private $languages_dir;
 	private $engine_dir;
 	private $theme_dir;
 
-	private $module_files = [];
+	private $modules_files = [];
 	private $engine_files = [];
 	private $theme_files = [];
 
 	private $translations = [];
 
+	private $template_name;
+
 	public function __construct() {
 		parent::__construct();
 
-		$this->module_name = filter_var($this->route['parameters']['module_name'], FILTER_SANITIZE_STRING) ?? null;
-		$this->module_dir = ROOT_DIR . '/module/' . $this->module_name;
-		$this->language_dir = $this->module_dir . '/Language';
-		$this->language_file = $this->language_dir . '/lang@lang_REGION@LangName.ini';
+		$this->modules_dir = Path::file('module');
+		$this->languages_dir = Path::file('language');
+		$this->engine_dir = Path::file('engine');
+		$this->theme_dir = Path::file('theme');
 
-		$this->engine_dir = ROOT_DIR . '/engine';
-		$this->theme_dir = ROOT_DIR . '/theme';
+		$this->template_name = $this->languages_dir . '/lang@lang_REGION@LangName.ini';
 	}
 
 	public function generate() {
-		if(!$this->module_name) {
-			Server::answer(null, 'error', 'Enter module name');
-		}
-
-		if(!array_key_exists($this->module_name, Module::getAll())) {
-			Server::answer(null, 'error', 'There is not ' . $this->module_name . ' module');
-		}
-
 		$this->engine_files = glob_recursive($this->engine_dir . '/*.php');
 		$this->theme_files = glob_recursive($this->theme_dir . '/*.php');
-		$this->module_files = glob_recursive($this->module_dir . '/*.php');
+		$this->modules_files = glob_recursive($this->modules_dir . '/*.php');
 
 		$this->findMatches();
 		$this->saveTemplateFile();
 
-		Server::answer(null, 'success', str_replace(ROOT_DIR, Request::$base, $this->language_file));
+		Server::answer(null, 'success', str_replace(ROOT_DIR, Request::$base, $this->template_name));
 	}
 
 	private function findMatches() {
-		$files = array_merge($this->engine_files, $this->module_files, $this->theme_files);
+		$files = array_merge($this->engine_files, $this->modules_files, $this->theme_files);
 
 		foreach($files as $file) {
 			$content = file_get_contents($file);
@@ -79,13 +70,15 @@ class LanguageTemplate extends \Engine\Controller {
 	}
 
 	private function saveTemplateFile() {
-		if(!file_exists($this->language_dir)) {
-			mkdir($this->language_dir, 0755, true);
+		if(!file_exists($this->languages_dir)) {
+			mkdir($this->languages_dir, 0755, true);
 		}
 
-		if(is_file($this->language_file)) {
-			unlink($this->language_file);
+		if(is_file($this->template_name)) {
+			unlink($this->template_name);
 		}
+
+		ksort($this->translations, SORT_NATURAL | SORT_FLAG_CASE);
 
 		foreach($this->translations as $key => $files) {
 			$output = '';
@@ -96,7 +89,7 @@ class LanguageTemplate extends \Engine\Controller {
 
 			$output .= $key . ' = "' . $key . '"' . PHP_EOL . PHP_EOL;
 
-			file_put_contents($this->language_file, $output, FILE_APPEND);
+			file_put_contents($this->template_name, $output, FILE_APPEND);
 		}
 
 		return true;

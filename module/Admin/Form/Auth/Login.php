@@ -18,12 +18,12 @@ return [
 		'login' => $login,
 		'password' => $password
 	],
-	'execute' => function($fields, $form_data) {
-		$statement = new Statement('SELECT * FROM {user} WHERE login=:login or email=:login');
+	'execute' => function($data) {
+		$statement = new Statement('SELECT * FROM {user} WHERE login = :login or email = :login');
 
-		$user = $statement->execute($fields)->fetch();
+		$user = $statement->execute($data->fields)->fetch();
 
-		if(empty($user) || !password_verify($fields['password'], $user->password)) {
+		if(empty($user) || !password_verify($data->fields['password'], $user->password)) {
 			Server::answer(null, 'error', __('Invalid login or password'));
 		}
 

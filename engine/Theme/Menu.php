@@ -14,13 +14,12 @@ class Menu {
 
 		if(is_numeric($key)) {
 			$binding_key = 'id';
-			$binding = ['id' => $key];
 		} else {
 			$binding_key = 'name';
-			$binding = ['name' => $key];
 		}
+		$binding = [$binding_key => $key];
 
-		$sql = "SELECT * FROM {menu} WHERE {$binding_key}=:{$binding_key}";
+		$sql = "SELECT * FROM {menu} WHERE {$binding_key} = :{$binding_key}";
 
 		$menu = new Statement($sql);
 

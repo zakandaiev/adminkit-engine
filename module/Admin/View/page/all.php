@@ -55,11 +55,12 @@
 											</td>
 											<td>
 												<?php
-													$count_translations = count(array_intersect(array_keys($page->translations), array_keys(Module::get('languages')))) + 1;
-													$count_aviable_languages = count(Module::get('languages'));
+													$count_translations = count(array_intersect($page->translations, array_keys(Language::getAll()))) + 1;
+
+													$count_aviable_languages = count(Language::getAll());
 												?>
-												<?php foreach($page->translations as $language => $translation): ?>
-													<a href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/edit/<?= $translation ?>" title="<?= lang($language, 'name') ?>"><img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= lang($language, 'icon') ?>" alt="<?= $language ?>"></a>
+												<?php foreach($page->translations as $language): ?>
+													<a href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/edit/<?= $language ?>" title="<?= lang($language, 'name') ?>"><img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= Asset::url() ?>/<?= lang($language, 'icon') ?>" alt="<?= $language ?>"></a>
 												<?php endforeach; ?>
 												<?php if($count_translations < $count_aviable_languages): ?>
 													<div class="dropdown d-inline-block dropend">
@@ -67,11 +68,11 @@
 															<i class="align-middle" data-feather="plus"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-end" aria-labelledby="translate-dropdown-<?= $page->id ?>">
-															<?php foreach(Module::get('languages') as $language): ?>
+															<?php foreach(Language::getAll() as $language): ?>
 																<?php if($language['key'] === $page->language) continue; ?>
-																<?php if(array_key_exists($language['key'], $page->translations)) continue; ?>
+																<?php if(in_array($language['key'], $page->translations)) continue; ?>
 																<a class="dropdown-item" href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/add/<?= $language['key'] ?>">
-																	<img src="<?= lang($language['key'], 'icon') ?>" alt="<?= $language['key'] ?>" width="20" height="14" class="align-middle me-1">
+																	<img src="<?= Asset::url() ?>/<?= lang($language['key'], 'icon') ?>" alt="<?= $language['key'] ?>" width="20" height="14" class="align-middle me-1">
 																	<span class="align-middle"><?= $language['name'] ?></span>
 																</a>
 															<?php endforeach; ?>
