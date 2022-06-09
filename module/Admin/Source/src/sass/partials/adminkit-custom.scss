@@ -2371,3 +2371,15 @@ footer.footer {
 		visibility: visible;
 	}
 }
+
+.foreign-form__table {
+	thead > tr > th,
+	thead > tr > td,
+	tbody > tr > th,
+	tbody > tr > td {
+		vertical-align: baseline;
+	}
+	p {
+		margin: 0;
+	}
+}

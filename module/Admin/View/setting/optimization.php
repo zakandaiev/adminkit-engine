@@ -48,7 +48,7 @@
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="cache_db" name="cache_db" <?php if($settings->cache_db == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="cache_db"><?= __('Cache Database Queries') ?></label>
+										<label class="form-check-label" for="cache_db"><?= __('Cache database queries') ?></label>
 									</div>
 									<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 								</form>

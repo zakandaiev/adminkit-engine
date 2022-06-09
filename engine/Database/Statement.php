@@ -29,6 +29,16 @@ class Statement {
 		return $this;
 	}
 
+	public function cache($key) {
+		if(\Engine\Module::$name !== 'Public' || \Engine\Setting::get('optimization')->cache_db == 'false') {
+			return $this;
+		}
+
+		// TODO
+
+		return $this;
+	}
+
 	public function paginate($total_rows, $limit = null, $offset = null) {
 		$pagination = new Pagination($total_rows);
 

@@ -253,6 +253,10 @@ class Page extends \Engine\Model {
 
 		$path_fields = Path::file('custom_fields');
 
+		if(!file_exists($path_fields)) {
+			return $fieldsets;
+		}
+
 		foreach(scandir($path_fields) as $fieldset) {
 			if(in_array($fieldset, ['.', '..'], true)) continue;
 

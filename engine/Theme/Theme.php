@@ -8,7 +8,7 @@ use Engine\View;
 class Theme {
 	const PART_DIR = 'Part';
 
-	const RULES_NAME_FILE = [
+	const PART_MASK = [
 		'header'	=> 'header-%s',
 		'footer'	=> 'footer-%s',
 		'sidebar'	=> 'sidebar-%s',
@@ -124,6 +124,6 @@ class Theme {
 	}
 
 	private static function detectNameFile($name, $function) {
-		return empty(trim($name)) ? $function : sprintf(self::RULES_NAME_FILE[$function], $name);
+		return empty(trim($name)) ? $function : sprintf(self::PART_MASK[$function], $name);
 	}
 }

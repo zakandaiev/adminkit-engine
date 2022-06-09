@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
 	document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 		textarea.classList.add("hidden");
 
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			modules: {
 				toolbar: {
 						container: [
-							[{ header: [2, 3, false] }],
+							[{ header: [false, 3, 2] }],
 							['bold', 'italic', 'underline', 'strike'],
 							[{'align': []}, {'list': 'ordered'}, {'list': 'bullet'}],
 							[{'color': []}, {'background': []}],
@@ -53,8 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			theme: 'snow'
 		});
 
-		textarea.quill = quill;
-
 		// POPULATE
 		// quill.setContents(JSON.parse(textarea.value).ops);
 
@@ -84,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 					quill.enable(false);
 
-					fetch('/upload', {method: 'POST', body: formData})
+					fetch(BASE_URL + '/upload', {method: 'POST', body: formData})
 					.then(response => response.json())
 					.then(data => {
 						if(data.status === 'success') {
@@ -107,6 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			};
 		}
 
+		textarea.quill = quill;
 	});
-
 });

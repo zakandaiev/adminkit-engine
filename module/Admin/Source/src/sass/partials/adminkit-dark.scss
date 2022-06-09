@@ -191,7 +191,7 @@
 		color: #222e3c
 	}
 
-	table a, .table-action > * {
+	table a, .table-action > *:not(.badge) {
 		color: #a7abb1;
 		&:hover {
 			color: #fff;
@@ -589,5 +589,18 @@
 
 	.translation__comment {
 		color: var(--bs-gray-700);
+	}
+
+	.ql-snow .ql-picker-options {
+		background-color: #222e3c;
+	}
+
+	.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label,
+	.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+		border-color: #7a828a;
+	}
+
+	.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+		color: #7a828a;
 	}
 }

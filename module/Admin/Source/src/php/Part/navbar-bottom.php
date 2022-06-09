@@ -9,7 +9,7 @@
 			<div class="col-6 text-end">
 				<ul class="list-inline">
 					<li class="list-inline-item">
-						<a class="text-muted" href="https://zakandaiev.pp.ua" target="_blank"><?= __('Made by') ?> Zakandaiev</a>
+						<a class="text-muted" href="<?= Define::AUTHOR_URL ?>" target="_blank"><?= __('Made by') ?> <?= Define::AUTHOR ?></a>
 					</li>
 				</ul>
 			</div>

@@ -5,7 +5,7 @@ $uri = site('uri_cut_language');
 $sidebar = [
 	[
 		'icon' => 'home',
-		'name' => 'Dashboard',
+		'name' => __('Dashboard'),
 		'route' => '/admin'
 	],
 	[
@@ -14,24 +14,24 @@ $sidebar = [
 			$notifications_count = Auth::$user->notifications_count;
 			return $notifications_count > 0 ? $notifications_count : null;
 		},
-		'name' => 'Profile',
+		'name' => __('Profile'),
 		'route' => '/admin/profile'
 	],
 	[
 		'icon' => 'log-out',
-		'name' => 'Logout',
+		'name' => __('Logout'),
 		'route' => '/admin/logout'
 	],
 	[
-		'name' => 'Content',
+		'name' => __('Content'),
 		'is_divider' => true,
-		'access_groups' => [3]
+		'access_groups' => ['moderator']
 	],
 	[
 		'icon' => 'layout',
-		'name' => 'Pages',
+		'name' => __('Pages'),
 		'route' => '/admin/page',
-		'access_groups' => [3]
+		'access_groups' => ['moderator']
 	],
 	[
 		'icon' => 'message-square',
@@ -39,52 +39,52 @@ $sidebar = [
 			$count = \Module\Admin\Model\Comment::getInstance()->countUnapprovedComments();
 			return $count > 0 ? $count : null;
 		},
-		'name' => 'Comments',
+		'name' => __('Comments'),
 		'route' => '/admin/comment',
-		'access_groups' => [3]
+		'access_groups' => ['moderator']
 	],
 	[
 		'icon' => 'menu',
-		'name' => 'Menu',
+		'name' => __('Menu'),
 		'route' => '/admin/menu',
-		'access_groups' => [3]
+		'access_groups' => ['moderator']
 	],
 	[
 		'icon' => 'globe',
-		'name' => 'Translations',
+		'name' => __('Translations'),
 		'route' => '/admin/translation',
-		'access_groups' => [3]
+		'access_groups' => ['moderator']
 	],
 	[
-		'name' => 'Administration',
+		'name' => __('Administration'),
 		'is_divider' => true,
-		'access_groups' => [2]
+		'access_groups' => ['administrator', 'admin']
 	],
 	[
 		'icon' => 'users',
-		'name' => 'Users',
+		'name' => __('Users'),
 		'route' => [
-			'Users' => '/admin/user',
-			'Groups' => '/admin/group'
+			__('Users') => '/admin/user',
+			__('Groups') => '/admin/group'
 		],
-		'access_groups' => [2]
+		'access_groups' => ['administrator', 'admin']
 	],
 	[
 		'icon' => 'settings',
-		'name' => 'Settings',
+		'name' => __('Settings'),
 		'route' => [
-			'Main' => '/admin/setting/main',
-			'Site' => '/admin/setting/site',
-			'Contacts' => '/admin/setting/contact',
-			'Optimizations' => '/admin/setting/optimization'
+			__('Main') => '/admin/setting/main',
+			__('Site') => '/admin/setting/site',
+			__('Contacts') => '/admin/setting/contact',
+			__('Optimizations') => '/admin/setting/optimization'
 		],
-		'access_groups' => [2]
+		'access_groups' => ['administrator', 'admin']
 	],
 	[
 		'icon' => 'activity',
-		'name' => 'Logs',
+		'name' => __('Logs'),
 		'route' => '/admin/log',
-		'access_groups' => [2]
+		'access_groups' => ['administrator', 'admin']
 	]
 ];
 

@@ -21,6 +21,10 @@ function debug($obj) {
 	echo '</pre>';
 }
 
+function debug_trace($level = null) {
+	return $level ? debug_backtrace()[$level] : debug_backtrace();
+}
+
 ############################# FILE #############################
 function file_name($path) {
 	return pathinfo($path, PATHINFO_FILENAME);
@@ -225,7 +229,7 @@ function word($text) {
 
 ############################# LANGUAGE #############################
 function __($key) {
-	return (Define::DEBUG ? '|' : '') . Language::translate($key) . (Define::DEBUG ? '|' : '');
+	return Language::translate($key);
 }
 
 function lang($lang, $key, $mixed = null) {

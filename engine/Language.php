@@ -31,7 +31,7 @@ class Language {
 			self::loadTranslations();
 		}
 
-		return self::$translation[$key] ?? $key;
+		return (Define::DEBUG ? Define::DEBUG_LANG_WRAP : '') . (self::$translation[$key] ?? $key) . (Define::DEBUG ? Define::DEBUG_LANG_WRAP : '');
 	}
 
 	public static function current() {

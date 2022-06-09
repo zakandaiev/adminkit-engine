@@ -116,9 +116,17 @@ function install() {
 			mkdir(ROOT_DIR . '/upload/demo', 0755, true);
 		}
 
-		foreach(glob(ROOT_DIR . '/module/Install/demo/theme/*.*') as $file) {
-			copy($file, ROOT_DIR . '/theme/' . file_name($file) . '.' . file_extension($file));
+		foreach(glob_recursive(ROOT_DIR . '/module/Install/demo/theme/*.*') as $file) {
+			$dest_folder = str_replace('/module/Install/demo', '', $file);
+			$dest_folder = str_replace('/' . file_name($file) . '.' . file_extension($file), '', $dest_folder);
+
+			if(!file_exists($dest_folder)) {
+				mkdir($dest_folder, 0755, true);
+			}
+
+			copy($file, $dest_folder . '/' . file_name($file) . '.' . file_extension($file));
 		}
+
 		foreach(glob(ROOT_DIR . '/module/Install/demo/upload/*.*') as $file) {
 			copy($file, ROOT_DIR . '/upload/demo/' . file_name($file) . '.' . file_extension($file));
 		}

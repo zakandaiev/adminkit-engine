@@ -37,6 +37,7 @@ class Engine {
 		class_alias('\\Engine\\Theme\\Pagination', 'Pagination');
 		class_alias('\\Engine\\Server', 'Server');
 		class_alias('\\Engine\\Hash', 'Hash');
+		class_alias('\\Engine\\Cache', 'Cache');
 		class_alias('\\Engine\\Hook', 'Hook');
 		class_alias('\\Engine\\Mail', 'Mail');
 		class_alias('\\Engine\\Upload', 'Upload');

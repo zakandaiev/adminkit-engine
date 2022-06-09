@@ -188,7 +188,7 @@ function getNotificationHTML($notification, $user) {
 
 			$action_name = sprintf(__('leaved comment on %s'), $page_title);
 
-			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . $data->comment . '</div>';
+			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->comment) . '</div>';
 			break;
 		}
 		case 'comment_reply': {
@@ -198,7 +198,7 @@ function getNotificationHTML($notification, $user) {
 
 			$action_name = sprintf(__('replied to your comment on %s'), $page_title);
 
-			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . $data->reply . '</div>';
+			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->reply) . '</div>';
 			break;
 		}
 		default: {

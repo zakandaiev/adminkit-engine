@@ -1,18 +1,19 @@
 "use strict";
 
 var COLORMODE = {
-  storage_key: 'colormode_admin',
+  storage_key: 'colormode',
   attribute_key: 'data-colormode',
-  value: 'dark'
+  value_default: 'default',
+  value_dark: 'dark'
 };
 
-function setColorMode(dark) {
-  if (dark) {
-    document.body.setAttribute(COLORMODE.attribute_key, COLORMODE.value);
-    localStorage.setItem(COLORMODE.storage_key, COLORMODE.value);
+function setColorMode(isDarkMode) {
+  if (isDarkMode) {
+    document.body.setAttribute(COLORMODE.attribute_key, COLORMODE.value_dark);
+    localStorage.setItem(COLORMODE.storage_key, COLORMODE.value_dark);
   } else {
-    document.body.removeAttribute(COLORMODE.attribute_key);
-    localStorage.removeItem(COLORMODE.storage_key);
+    document.body.setAttribute(COLORMODE.attribute_key, COLORMODE.value_default);
+    localStorage.setItem(COLORMODE.storage_key, COLORMODE.value_default);
   }
 
   return true;
@@ -26,7 +27,7 @@ if (window.matchMedia && localStorage.getItem(COLORMODE.storage_key) === null) {
     setColorMode(isDarkMode);
   });
 } else {
-  var _isDarkMode = localStorage.getItem(COLORMODE.storage_key) === COLORMODE.value ? true : false;
+  var _isDarkMode = localStorage.getItem(COLORMODE.storage_key) === COLORMODE.value_dark ? true : false;
 
   setColorMode(_isDarkMode);
 }
@@ -37,6 +38,6 @@ document.addEventListener('click', function (event) {
   }
 
   event.preventDefault();
-  var isDarkMode = localStorage.getItem(COLORMODE.storage_key) === COLORMODE.value ? true : false;
+  var isDarkMode = localStorage.getItem(COLORMODE.storage_key) === COLORMODE.value_dark ? true : false;
   setColorMode(!isDarkMode);
 });

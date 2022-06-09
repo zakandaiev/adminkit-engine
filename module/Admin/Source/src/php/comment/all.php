@@ -33,9 +33,9 @@
 											<td><a href="/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
 											<td>
 												<?php if(strlen($comment->message) > 50): ?>
-													<span data-bs-toggle="tooltip" title="<?= $comment->message ?>"><?= substr($comment->message, 0, 50) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= hc($comment->message) ?>"><?= hc(substr($comment->message, 0, 50)) ?>...</span>
 												<?php else: ?>
-													<?= $comment->message ?>
+													<?= hc($comment->message) ?>
 												<?php endif; ?>
 											</td>
 											<td><a href="<?= site('url_language') ?>/<?= $comment->page_url ?>" target="_blank"><?= $comment->page_title ?></a></td>

@@ -1,8 +1,3 @@
-const BASE_URL = window.location.protocol + '//' + window.location.host;
-
-// SETTING
-@@include("util/setting.js")
-
 // UTILS
 @@include("util/fade-out.js")
 @@include("util/smooth-scroll.js")

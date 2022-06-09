@@ -44,11 +44,9 @@ class Session {
 	}
 
 	public static function setCookie($key, $value, $lifetime = null) {
-		setcookie($key, $value, time() + intval($lifetime ?? Define::LIFETIME['auth']), '/', httponly:true);
-
 		Request::$cookie[$key] = $value;
 
-		return true;
+		return setcookie($key, $value, time() + intval($lifetime ?? Define::LIFETIME['auth']), '/', null, false, true);
 	}
 
 	public static function getCookie($key) {

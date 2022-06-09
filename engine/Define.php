@@ -5,6 +5,11 @@ namespace Engine;
 class Define {
 	// DEBUG
 	const DEBUG = true;
+	const DEBUG_LANG_WRAP = '_';
+
+	// CACHE
+	const CACHE_FOLDER = 'cache';
+	const CACHE_EXTENSION = 'bin';
 
 	// LOG
 	const LOG_FOLDER = 'log';
@@ -17,7 +22,8 @@ class Define {
 	// META
 	const NAME = 'CMS';
 	const VERSION = '1.0.0';
-	const AUTHOR = 'https:://zakandaiev.pp.ua';
+	const AUTHOR = 'Zakandaiev';
+	const AUTHOR_URL = 'https://zakandaiev.pp.ua';
 
 	// COOKIES
 	const COOKIE_KEY = [
@@ -26,21 +32,16 @@ class Define {
 		'language' => 'language'
 	];
 
-	// LIFETIME (in seconds)
+	// LIFETIME (seconds)
 	const LIFETIME = [
 		'auth' => 3600 * 24 * 7, // 7 days
+		'cache' => 3600, // 1 hour
 		'form' => 3600 * 24 * 0.5 // 12 hours
 	];
 
-	// UPLOADS
+	// UPLOAD
 	const UPLOAD_FOLDER = 'upload';
 	const UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf', 'txt', 'zip', 'rar'];
-
-	// TODO -> Path
-	const VIEW_PATH_MASK = [
-		'module' => '%s/View/%s',
-		'theme' => '%s/theme/%s'
-	];
 
 	// SERVICE
 	const SERVICE = [

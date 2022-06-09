@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// FOREIGN FORM
 	document.querySelectorAll('[class*="foreign-form"]').forEach(element => {
-		new ForeignForm(element);
+		const foreignForm = new ForeignForm(element);
+
+		element.foreignForm = foreignForm;
 	});
 });

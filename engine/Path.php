@@ -35,8 +35,13 @@ class Path {
 			case 'module':
 				return ROOT_DIR . '/module';
 			case 'temp': {
+				return sys_get_temp_dir();
+				// Use below path if there are problems with sys_get_temp_dir() on shared hosting
 				$doc_root = $_SERVER['DOCUMENT_ROOT'];
 				return substr($doc_root, 0, strpos($doc_root, 'data')) . 'data/tmp';
+			}
+			case 'cache': {
+				return self::file('temp') . '/' . trim(Define::CACHE_FOLDER, '/');
 			}
 			case 'theme':
 				return ROOT_DIR . '/theme';

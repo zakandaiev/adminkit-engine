@@ -36,11 +36,23 @@ class AdminModel {
 	public function getUserGroups($id) {
 		$user_groups = [];
 
-		$groups = new Statement('SELECT * FROM {user_group} WHERE user_id = :user_id');
+		$groups = new Statement('
+			SELECT
+				t_user_group.group_id as id, LOWER(t_group.name) as alias
+			FROM
+				{user_group} t_user_group
+			LEFT JOIN
+				{group} t_group
+			ON
+				t_user_group.group_id = t_group.id
+			WHERE
+				user_id = :user_id
+		');
 		$groups = $groups->execute(['user_id' => $id])->fetchAll();
 
 		foreach($groups as $group) {
-			$user_groups[] = $group->group_id;
+			$user_groups[] = $group->id;
+			$user_groups[] = $group->alias;
 		}
 
 		return $user_groups;

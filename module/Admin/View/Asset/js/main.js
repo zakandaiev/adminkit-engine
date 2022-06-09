@@ -18,18 +18,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-var BASE_URL = window.location.protocol + '//' + window.location.host; // SETTING
-
-SETTING.loader = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
-SETTING.image_placeholder = BASE_URL + '/module/Admin/View/Asset/img/no_image.jpg';
-
-SETTING.toast = function (status) {
-  var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  toast(status, message, duration);
-}; // UTILS
-
-
+// UTILS
 function fadeOut(element) {
   var soft = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
@@ -629,14 +618,15 @@ var ForeignForm = /*#__PURE__*/function () {
       open_modal: document.createElement('span')
     };
     this.icon = {
-      add: "<span class=\"badge bg-primary cursor-pointer\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-plus align-middle feather-sm\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line></svg></span>",
+      add: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-plus align-middle feather-sm\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line></svg>",
       sort: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-move\"><polyline points=\"5 9 2 12 5 15\"></polyline><polyline points=\"9 5 12 2 15 5\"></polyline><polyline points=\"15 19 12 22 9 19\"></polyline><polyline points=\"19 9 22 12 19 15\"></polyline><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"></line><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"22\"></line></svg>",
       edit: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-edit\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path><path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg>",
       delete: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-trash\"><polyline points=\"3 6 5 6 21 6\"></polyline><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>"
     };
     this.uid = this.generateUid();
-    this.store = document.createElement('input');
+    this.store = document.createElement('textarea');
     this.table = document.createElement('table');
+    this.thead = document.createElement('thead');
     this.tbody = document.createElement('tbody');
     this.is_editing = false;
     this.editing_row = null;
@@ -653,8 +643,9 @@ var ForeignForm = /*#__PURE__*/function () {
 
       this.button.open_modal.setAttribute('data-bs-toggle', 'modal');
       this.button.open_modal.setAttribute('data-bs-target', '#' + this.uid);
+      this.button.open_modal.classList.add('badge', 'bg-primary', 'cursor-pointer');
       this.button.open_modal.innerHTML = this.icon.add;
-      this.button.open_modal.addEventListener('click', function (event) {
+      this.button.open_modal.addEventListener('click', function () {
         if (!_this7.is_editing) {
           _this7.resetEditingRow();
         }
@@ -666,6 +657,8 @@ var ForeignForm = /*#__PURE__*/function () {
 
       this.table.classList.add('table');
       this.table.classList.add('table-sm');
+      this.table.classList.add('foreign-form__table');
+      this.createThead();
       this.tbody.classList.add('sortable');
       new Sortable(this.tbody, {
         handle: '.sortable__handle',
@@ -692,6 +685,19 @@ var ForeignForm = /*#__PURE__*/function () {
       this.node.addEventListener('hidden.bs.modal', function () {
         return _this7.resetEditingRow();
       });
+      setTimeout(function () {
+        _this7.inputs.forEach(function (input) {
+          if (input.type === 'file') {
+            // console.log(input);
+            input.pond.setOptions({
+              instantUpload: true,
+              server: {
+                process: '/upload'
+              }
+            });
+          }
+        });
+      }, 1000);
     }
   }, {
     key: "clickSubmit",
@@ -701,7 +707,7 @@ var ForeignForm = /*#__PURE__*/function () {
       // EDIT ROW
       if (this.is_editing) {
         this.inputs.forEach(function (input) {
-          _this8.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent = input.value;
+          _this8.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).innerHTML = input.value;
         });
         this.resetEditingRow();
         return true;
@@ -722,7 +728,7 @@ var ForeignForm = /*#__PURE__*/function () {
             return false;
           }
 
-          obj[td.getAttribute('data-name')] = td.textContent;
+          obj[td.getAttribute('data-name')] = td.innerHTML;
         });
         data.push(obj);
       });
@@ -739,6 +745,10 @@ var ForeignForm = /*#__PURE__*/function () {
           if (!input.hasAttribute('data-native')) {
             input.slim.set(input.value);
           }
+        } else if (input.classList.contains('wysiwyg')) {
+          input.quill.setContents([{
+            insert: '\n'
+          }]);
         } else {
           input.value = '';
         }
@@ -763,14 +773,14 @@ var ForeignForm = /*#__PURE__*/function () {
 
           var tcol = document.createElement('td');
           tcol.setAttribute('data-name', key);
-          tcol.textContent = value;
+          tcol.innerHTML = value;
           trow.appendChild(tcol);
         }
       } else {
         this.inputs.forEach(function (input) {
           var tcol = document.createElement('td');
           tcol.setAttribute('data-name', input.name);
-          tcol.textContent = input.value;
+          tcol.innerHTML = input.value;
           trow.appendChild(tcol);
         });
       }
@@ -802,10 +812,12 @@ var ForeignForm = /*#__PURE__*/function () {
       var _this10 = this;
 
       this.inputs.forEach(function (input) {
-        var value = trow.querySelector("[data-name=\"".concat(input.name, "\"]")).textContent;
+        var value = trow.querySelector("[data-name=\"".concat(input.name, "\"]")).innerHTML;
 
         if (input.tagName.toLowerCase() == 'select' && !input.hasAttribute('data-native')) {
           input.slim.set(value);
+        } else if (input.classList.contains('wysiwyg')) {
+          input.quill.root.innerHTML = value;
         } else {
           input.value = value;
         }
@@ -838,10 +850,25 @@ var ForeignForm = /*#__PURE__*/function () {
       return true;
     }
   }, {
+    key: "createThead",
+    value: function createThead() {
+      var trow = document.createElement('tr');
+      this.inputs.forEach(function (input) {
+        var tcol = document.createElement('th');
+        tcol.innerText = input.getAttribute('data-label');
+        trow.appendChild(tcol);
+      });
+      var tcol = document.createElement('th');
+      tcol.classList.add('table-action');
+      tcol.appendChild(this.button.open_modal);
+      trow.appendChild(tcol);
+      this.thead.appendChild(trow);
+    }
+  }, {
     key: "render",
     value: function render() {
+      this.table.appendChild(this.thead);
       this.table.appendChild(this.tbody);
-      this.node.before(this.button.open_modal);
       this.node.before(this.store);
       this.node.before(this.table);
       return true;
@@ -955,7 +982,7 @@ document.addEventListener('DOMContentLoaded', function () {
       modules: {
         toolbar: {
           container: [[{
-            header: [2, 3, false]
+            header: [false, 3, 2]
           }], ['bold', 'italic', 'underline', 'strike'], [{
             'align': []
           }, {
@@ -1000,8 +1027,7 @@ document.addEventListener('DOMContentLoaded', function () {
       placeholder: textarea.placeholder,
       readOnly: textarea.disabled ? true : false,
       theme: 'snow'
-    });
-    textarea.quill = quill; // POPULATE
+    }); // POPULATE
     // quill.setContents(JSON.parse(textarea.value).ops);
     // UPDATE TEXTAREA VALUE
 
@@ -1027,7 +1053,7 @@ document.addEventListener('DOMContentLoaded', function () {
           var formData = new FormData();
           formData.append('file', file);
           quill.enable(false);
-          fetch('/upload', {
+          fetch(BASE_URL + '/upload', {
             method: 'POST',
             body: formData
           }).then(function (response) {
@@ -1049,6 +1075,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       };
     }
+
+    textarea.quill = quill;
   });
 });
 var slimselect_data = {
@@ -1176,6 +1204,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }); // FOREIGN FORM
 
   document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
-    new ForeignForm(element);
+    var foreignForm = new ForeignForm(element);
+    element.foreignForm = foreignForm;
   });
 });
