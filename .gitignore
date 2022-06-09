@@ -6,7 +6,7 @@
 /robots.txt
 /sitemap.xml
 node_modules/
-/theme/CutomFields/
+/theme/CustomFields/
 /theme/Form/
 /theme/**/_o*.css
 /theme/**/_o*.js
