@@ -60,8 +60,13 @@ class Path {
 				}
 				return $path;
 			}
-			case 'form':
-				return ROOT_DIR . '/module/' . $module . '/Form';
+			case 'form': {
+				$path = ROOT_DIR . '/module/' . $module . '/Form';
+				if($module === 'Public') {
+					$path = ROOT_DIR . '/theme/Form';
+				}
+				return $path;
+			}
 			case 'mail':
 				return ROOT_DIR . '/module/' . $module . '/Mail';
 			case 'custom_fields':

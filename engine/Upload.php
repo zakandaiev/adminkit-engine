@@ -15,7 +15,7 @@ class Upload {
 		}
 
 		$size = $file['size'];
-		$extension = file_extension($file['name']);
+		$extension = strtolower(file_extension($file['name']));
 
 		$path_dir = Define::UPLOAD_FOLDER;
 		if(!empty($custom_folder)) {

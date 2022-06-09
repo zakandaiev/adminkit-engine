@@ -21,7 +21,7 @@
 					<div class="section-title">
 						<h2 class="title">Contact Information</h2>
 					</div>
-					<p>Malis debet quo et, eam an lorem quaestio. Mea ex quod facer decore, eu nam mazim postea. Eu deleniti pertinacia ius. Ad elitr latine eam, ius sanctus eleifend no, cu primis graecis comprehensam eum. Ne vim prompta consectetuer, etiam signiferumque ea eum.</p>
+					<?= $page->content ?>
 					<ul class="contact">
 						<?php
 							$phones = Menu::get('phones')->items;

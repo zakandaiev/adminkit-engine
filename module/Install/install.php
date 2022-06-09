@@ -83,7 +83,10 @@ function install() {
 	$sitemap_xml .= '</urlset>';
 	file_put_contents(ROOT_DIR . '/sitemap.xml', $sitemap_xml, LOCK_EX);
 
-	// UPLOAD FOLDER
+	// FOLDERS
+	if(!file_exists(ROOT_DIR . '/theme')) {
+		mkdir(ROOT_DIR . '/theme', 0755, true);
+	}
 	if(!file_exists(ROOT_DIR . '/upload')) {
 		mkdir(ROOT_DIR . '/upload', 0755, true);
 	}
@@ -113,6 +116,9 @@ function install() {
 			mkdir(ROOT_DIR . '/upload/demo', 0755, true);
 		}
 
+		foreach(glob(ROOT_DIR . '/module/Install/demo/theme/*.*') as $file) {
+			copy($file, ROOT_DIR . '/theme/' . file_name($file) . '.' . file_extension($file));
+		}
 		foreach(glob(ROOT_DIR . '/module/Install/demo/upload/*.*') as $file) {
 			copy($file, ROOT_DIR . '/upload/demo/' . file_name($file) . '.' . file_extension($file));
 		}

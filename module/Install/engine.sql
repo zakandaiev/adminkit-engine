@@ -190,7 +190,25 @@ INSERT INTO `%prefix%_user` (`name`, `login`, `password`, `email`, `auth_token`,
 
 INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 ('Developer', true),
-('Administrator', true);
+('Administrator', true),
+('Moderator', false);
+
+INSERT INTO `%prefix%_group_route` (`group_id`, `route`) VALUES
+(3, 'delete@/upload'),
+(3, 'get@/admin/comment'),
+(3, 'get@/admin/comment/edit/$id'),
+(3, 'get@/admin/menu'),
+(3, 'get@/admin/menu/$id'),
+(3, 'get@/admin/page'),
+(3, 'get@/admin/page/add'),
+(3, 'get@/admin/page/category/$id'),
+(3, 'get@/admin/page/edit/$id'),
+(3, 'get@/admin/page/edit/$id/translation/add/$language'),
+(3, 'get@/admin/page/edit/$id/translation/edit/$language'),
+(3, 'get@/admin/translation'),
+(3, 'get@/admin/translation/$language'),
+(3, 'post@/admin/translation/$language'),
+(3, 'post@/upload');
 
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
 (1, 1);

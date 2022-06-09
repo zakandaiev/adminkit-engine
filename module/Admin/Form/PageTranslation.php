@@ -162,7 +162,7 @@ function updateCutomFields($field_value, $data) {
 
 	Module::setName('Admin');
 
-	$binding = ['page_id' => $data->form_data['item_id'], 'language' => site('language')];
+	$binding = ['page_id' => $data->form_data['item_id'], 'language' => $data->fields['language']];
 
 	foreach($fields as $name => $value) {
 		$binding['name'] = slug($name, '_');

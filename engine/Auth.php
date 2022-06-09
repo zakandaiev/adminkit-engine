@@ -56,7 +56,7 @@ class Auth {
 			UPDATE {user} SET
 				auth_token = :auth_token,
 				auth_ip = :auth_ip,
-				auth_date=CURRENT_TIMESTAMP
+				auth_date = CURRENT_TIMESTAMP
 			WHERE id = :user_id
 		';
 

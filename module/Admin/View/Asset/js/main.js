@@ -935,6 +935,8 @@ document.addEventListener('DOMContentLoaded', function () {
           labelIdle: input.getAttribute('data-placeholder')
         });
       }
+
+      input.pond = pond;
     });
   }
 });

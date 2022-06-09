@@ -144,6 +144,10 @@ class Router {
 				Module::setName('Admin');
 			}
 
+			if(Request::$method !== 'get') {
+				Server::answer(null, 'error', __('Request not found'), 404);
+			}
+
 			self::$route['method'] = Request::$method;
 			self::$route['uri'] = Request::$uri;
 			self::$route['controller'] = 'Error';

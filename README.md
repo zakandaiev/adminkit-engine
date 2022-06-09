@@ -22,7 +22,7 @@
 * Engine: Find way to use hooks between modules
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Engine: new modules auto-install (languages, DB etc.)
-* Admin: extend custom fields (image, wysiwyg...)
+* Admin: extend custom fields with ForeignForm (add image, wysiwyg...)
 * Admin: load more by data-attributes
 * Admin: make admin sidebar customizable by another modules
 * Admin: create Form models eg. User (name, login, email...)

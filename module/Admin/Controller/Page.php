@@ -64,7 +64,7 @@ class Page extends AdminController {
 
 		$data['page_edit']->categories = $this->model->getPageCategories($page_id);
 		$data['page_edit']->tags = $this->model->getPageTags($page_id, $is_translation ? $this->route['parameters']['language'] : null);
-		$data['page_edit']->custom_fields = $this->model->getPageCustomFields($page_id);
+		$data['page_edit']->custom_fields = $this->model->getPageCustomFields($page_id, $is_translation ? $this->route['parameters']['language'] : null);
 
 		$data['authors'] = $this->model->getAuthors();
 		$data['categories'] = $this->model->getCategories($page_id);

@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
 					labelIdle: input.getAttribute('data-placeholder')
 				});
 			}
+
+			input.pond = pond;
 		});
 	}
 });

@@ -67,29 +67,35 @@ INSERT INTO `%prefix%_page` (`is_category`, `author`, `url`, `template`) VALUES
 (0, 1, 'lorem-post-12', NULL),
 (0, 1, 'lorem-post-13', NULL);
 
-INSERT INTO `%prefix%_page_translation` (`page_id`, `language`, `title`, `image`) VALUES
-(2, 'en', 'About', NULL),
-(3, 'en', 'Contact', NULL),
-(4, 'en', 'Lifestyle', 'upload/demo/header-2.jpg'),
-(5, 'en', 'Fashion', 'upload/demo/header-1.jpg'),
-(6, 'en', 'Technology', NULL),
-(7, 'en', 'Travel', NULL),
-(8, 'en', 'Health', 'upload/demo/header-2.jpg'),
-(9, 'en', 'Lorem post #1', 'upload/demo/post-1.jpg'),
-(10, 'en', 'Lorem post #2', 'upload/demo/post-2.jpg'),
-(11, 'en', 'Lorem post #3', 'upload/demo/post-3.jpg'),
-(12, 'en', 'Lorem post #4', 'upload/demo/post-4.jpg'),
-(13, 'en', 'Lorem post #5', 'upload/demo/post-5.jpg'),
-(14, 'en', 'Lorem post #6', 'upload/demo/post-6.jpg'),
-(15, 'en', 'Lorem post #7', 'upload/demo/post-7.jpg'),
-(16, 'en', 'Lorem post #8', 'upload/demo/post-8.jpg'),
-(17, 'en', 'Lorem post #9', 'upload/demo/post-9.jpg'),
-(18, 'en', 'Lorem post #10', 'upload/demo/post-10.jpg'),
-(19, 'en', 'Lorem post #11', 'upload/demo/post-11.jpg'),
-(20, 'en', 'Lorem post #12', 'upload/demo/post-12.jpg'),
-(21, 'en', 'Lorem post #13', 'upload/demo/post-13.jpg');
+INSERT INTO `%prefix%_page_translation` (`page_id`, `language`, `title`, `image`, `excerpt`, `content`) VALUES
+(2, 'en', 'About', NULL, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', NULL),
+(3, 'en', 'Contact', NULL, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', '<p>Malis debet quo et, eam an lorem quaestio. Mea ex quod facer decore, eu nam mazim postea. Eu deleniti pertinacia ius. Ad elitr latine eam, ius sanctus eleifend no, cu primis graecis comprehensam eum. Ne vim prompta consectetuer, etiam signiferumque ea eum.</p>'),
+(4, 'en', 'Lifestyle', 'upload/demo/header-2.jpg', NULL, NULL),
+(5, 'en', 'Fashion', 'upload/demo/header-1.jpg', NULL, NULL),
+(6, 'en', 'Technology', NULL, NULL, NULL),
+(7, 'en', 'Travel', NULL, NULL, NULL),
+(8, 'en', 'Health', 'upload/demo/header-2.jpg', NULL, NULL),
+(9, 'en', 'Lorem post #1', 'upload/demo/post-1.jpg', NULL, NULL),
+(10, 'en', 'Lorem post #2', 'upload/demo/post-2.jpg', NULL, NULL),
+(11, 'en', 'Lorem post #3', 'upload/demo/post-3.jpg', NULL, NULL),
+(12, 'en', 'Lorem post #4', 'upload/demo/post-4.jpg', NULL, NULL),
+(13, 'en', 'Lorem post #5', 'upload/demo/post-5.jpg', NULL, NULL),
+(14, 'en', 'Lorem post #6', 'upload/demo/post-6.jpg', NULL, NULL),
+(15, 'en', 'Lorem post #7', 'upload/demo/post-7.jpg', NULL, NULL),
+(16, 'en', 'Lorem post #8', 'upload/demo/post-8.jpg', NULL, NULL),
+(17, 'en', 'Lorem post #9', 'upload/demo/post-9.jpg', NULL, NULL),
+(18, 'en', 'Lorem post #10', 'upload/demo/post-10.jpg', NULL, NULL),
+(19, 'en', 'Lorem post #11', 'upload/demo/post-11.jpg', NULL, NULL),
+(20, 'en', 'Lorem post #12', 'upload/demo/post-12.jpg', NULL, NULL),
+(21, 'en', 'Lorem post #13', 'upload/demo/post-13.jpg', NULL, NULL);
 
 UPDATE `%prefix%_page` SET `views`=(SELECT FLOOR(RAND() * (1000-10) + 10));
+
+INSERT INTO `%prefix%_custom_field` (`page_id`, `language`, `name`, `value`) VALUES
+(2, 'en', 'quote', 'Ei prima graecis consulatu vix, per cu corpora qualisque voluptaria. Bonorum moderatius in per, ius cu albucius voluptatum. Ne ius torquatos dissentiunt. Brute illum utroque eu quo. Cu tota mediocritatem vis, aliquip cotidieque eu ius, cu lorem suscipit eleifend sit.'),
+(2, 'en', 'story', '<p>Lorem ipsum dolor sit amet, mea ad idque detraxit, cu soleat graecis invenire eam. Vidisse suscipit liberavisse has ex, vocibus patrioque vim et, sed ex tation reprehendunt. Mollis volumus no vix, ut qui clita habemus, ipsum senserit est et. Ut has soluta epicurei mediocrem, nibh nostrum his cu, sea clita electram reformidans an.</p>'),
+(2, 'en', 'quote_author', 'John Doe'),
+(2, 'en', 'vision', '<p>Est in saepe accusam luptatum. Purto deleniti philosophia eum ea, impetus copiosae id mel. Vis at ignota delenit democritum, te summo tamquam delicata pro. Utinam concludaturque et vim, mei ullum intellegam ei. Eam te illum nostrud, suas sonet corrumpit ea per. Ut sea regione posidonium. Pertinax gubergren ne qui, eos an harum mundi quaestio.</p><p>Nihil persius id est, iisque tincidunt abhorreant no duo. Eripuit placerat mnesarchum ius at, ei pro laoreet invenire persecuti, per magna tibique scriptorem an. Aeque oportere incorrupte ius ea, utroque erroribus mel in, posse dolore nam in. Per veniam vulputate intellegam et, id usu case reprimique, ne aperiam scaevola sed. Veritus omnesque qui ad. In mei admodum maiorum iracundia, no omnis melius eum, ei erat vivendo his. In pri nonumes suscipit.</p>');
 
 INSERT INTO `%prefix%_tag` (`language`, `name`, `url`) VALUES
 ('en', 'Social', 'social'),
