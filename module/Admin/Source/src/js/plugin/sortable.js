@@ -9,17 +9,20 @@ const makeSortable = function(element) {
 		swapThreshold: 0.5,
 		animation: 150,
 		onEnd: event => {
-			if(!element.hasAttribute('data-callback') || !window[element.getAttribute('data-callback')]) {
-				return false;
+			if(element.onEnd && element.onEnd instanceof Function) {
+				element.onEnd();
 			}
-
-			window[element.getAttribute('data-callback')](event);
+			if(element.hasAttribute('data-callback') && window[element.getAttribute('data-callback')]) {
+				window[element.getAttribute('data-callback')](event);
+			}
 		},
 	});
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-	document.querySelectorAll('[class*="sortable"]').forEach(element => {
-		makeSortable(element);
-	});
+document.querySelectorAll('[class*="sortable"]').forEach(element => {
+	if(element.classList.contains('sortable')) {
+		const sortable = makeSortable(element);
+
+		element.sortable = sortable;
+	}
 });

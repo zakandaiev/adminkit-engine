@@ -68,8 +68,6 @@ class Translation {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-	document.querySelectorAll('.translation').forEach(element => {
-		new Translation(element);
-	});
+document.querySelectorAll('.translation').forEach(element => {
+	new Translation(element);
 });

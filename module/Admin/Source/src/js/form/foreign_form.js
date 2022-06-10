@@ -1,51 +1,128 @@
 class ForeignForm {
 	constructor(node) {
-		this.node = node;
-		this.name = node.getAttribute('data-name');
-		this.value = node.getAttribute('data-value');
-		this.inputs = node.querySelectorAll('[name]');
-		this.button = {
-			submit: node.querySelector('[type="submit"]'),
-			open_modal: document.createElement('span')
-		};
-		this.icon = {
-			add: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus align-middle feather-sm"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`,
-			sort: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-move"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>`,
-			edit: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
-			delete: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`
-		};
-		this.uid = this.generateUid();
-		this.store = document.createElement('textarea');
-		this.table = document.createElement('table');
-		this.thead = document.createElement('thead');
-		this.tbody = document.createElement('tbody');
-		this.is_editing = false;
-		this.editing_row = null;
+		this.is_edit = false;
+		this.active_row = null;
 
-		this.initialize();
+		this.uid = this.generateUid();
+
+		this.initStore(node);
+		this.initModal();
+		this.initButtons();
+		this.initTable();
+		this.populateTable();
+		this.updateStore();
+		this.render();
 	}
 
-	initialize() {
-		// SET ID TO NODE
-		this.node.setAttribute('id', this.uid);
+	generateUid() {
+		return 'ff-' + Math.random().toString(36).slice(2);
+	}
 
-		// SET UP MODAL BUTTON
-		this.button.open_modal.setAttribute('data-bs-toggle', 'modal');
-		this.button.open_modal.setAttribute('data-bs-target', '#' + this.uid);
-		this.button.open_modal.classList.add('badge', 'bg-primary', 'cursor-pointer');
-		this.button.open_modal.innerHTML = this.icon.add;
-		this.button.open_modal.addEventListener('click', () => {
-			if(!this.is_editing) {
-				this.resetEditingRow();
-			}
-		});
+	initStore(node) {
+		this.store = node;
+		this.name = this.store.name;
+		this.value = this.store.value;
 
-		// SET UP STORE
-		this.store.setAttribute('name', this.name);
+		this.store.setAttribute('data-id', this.uid);
 		this.store.setAttribute('type', 'hidden');
 		this.store.classList.add('hidden');
 
-		// SET UP TABLE
+		return true;
+	}
+
+	initModal() {
+		this.modal = this.store.nextElementSibling;
+		this.inputs = this.modal.querySelectorAll('[name]');
+
+		this.inputs.forEach(input => {
+			input.name = input.name.replace('[]', '');
+		});
+
+		setTimeout(() => {
+			this.inputs.forEach(input => {
+				if(input.type === 'file') {
+					this.initFileInput(input);
+				}
+			});
+		}, 1000);
+
+		this.modal.setAttribute('id', this.uid);
+
+		const bs = new bootstrap.Modal(this.modal);
+		this.modal.bs = bs;
+		this.modal.addEventListener('hidden.bs.modal', () => this.buttonClick('cancel'));
+
+		return true;
+	}
+
+	initFileInput(input) {
+		input?.pond?.setOptions({
+			instantUpload: true,
+			allowRevert: true,
+			server: {
+				process: {
+					url: '/upload/',
+					ondata: formData => {
+						formData.set(SETTING.csrf.key, SETTING.csrf.token);
+						return formData;
+					}
+				},
+				revert: {
+					url: '/upload/',
+					ondata: formData => {
+						formData.set(SETTING.csrf.key, SETTING.csrf.token);
+						return formData;
+					}
+				}
+			}
+		});
+
+		return true;
+	}
+
+	initButtons() {
+		this.submit = this.modal.querySelector('[type="submit"]');
+		this.submit.addEventListener('click', event => this.buttonClick('submit', event));
+
+		this.add = document.createElement('span');
+
+		this.add.setAttribute('data-bs-toggle', 'modal');
+		this.add.setAttribute('data-bs-target', '#' + this.uid);
+		this.add.classList.add('badge', 'bg-primary', 'cursor-pointer');
+		this.add.innerHTML = SETTING.icon.add;
+		this.add.addEventListener('click', () => this.buttonClick('add'));
+
+		return true;
+	}
+
+	updateButtons() {
+		const add = this.submit.querySelector('.add');
+		const edit = this.submit.querySelector('.edit');
+
+		if(this.is_edit) {
+			if(add) {
+				add.style.display = 'none';
+			}
+			if(edit) {
+				edit.style.display = 'initial';
+			}
+		} else {
+			if(add) {
+				add.style.display = 'initial';
+			}
+			if(edit) {
+				edit.style.display = 'none';
+			}
+		}
+
+		return true;
+	}
+
+	initTable() {
+		this.table = document.createElement('table');
+		this.thead = document.createElement('thead');
+		this.tbody = document.createElement('tbody');
+
 		this.table.classList.add('table');
 		this.table.classList.add('table-sm');
 		this.table.classList.add('foreign-form__table');
@@ -53,185 +130,8 @@ class ForeignForm {
 		this.createThead();
 
 		this.tbody.classList.add('sortable');
-		new Sortable(this.tbody, {
-			handle: '.sortable__handle',
-			animation: 150,
-			onSort: () => this.updateStore()
-		});
-
-		// SET UP SUMIT BUTTON
-		this.button.submit.addEventListener('click', event => {
-			event.preventDefault();
-
-			this.clickSubmit();
-			this.updateStore();
-			this.resetEditingRow();
-		});
-
-		// RENDER
-		this.populateTable();
-		this.updateStore();
-		this.render();
-
-		// RESET EDITING ROW IF MODAL CANCELED
-		this.node.addEventListener('hidden.bs.modal', () => this.resetEditingRow());
-
-		setTimeout(() => {
-			this.inputs.forEach(input => {
-				if(input.type === 'file') {
-					// console.log(input);
-					input.pond.setOptions({
-						instantUpload: true,
-						server: {
-							process: '/upload'
-						}
-					});
-				}
-			});
-		}, 1000);
-
-
-	}
-
-	clickSubmit() {
-		// EDIT ROW
-		if(this.is_editing) {
-			this.inputs.forEach(input => {
-				this.editing_row.querySelector(`[data-name="${input.name}"]`).innerHTML = input.value;
-			});
-
-			this.resetEditingRow();
-
-			return true;
-		}
-
-		// ADD ROW
-		this.tbody.appendChild(this.createRow());
-
-		return true;
-	}
-
-	updateStore() {
-		let data = [];
-
-		this.tbody.querySelectorAll('tr').forEach(tr => {
-			let obj = {};
-
-			tr.querySelectorAll('td').forEach(td => {
-				if(!td.hasAttribute('data-name')) {
-					return false;
-				}
-				obj[td.getAttribute('data-name')] = td.innerHTML;
-			});
-
-			data.push(obj);
-		});
-
-		this.store.value = JSON.stringify(data);
-
-		return true;
-	}
-
-	resetEditingRow() {
-		this.inputs.forEach(input => {
-			if(input.tagName.toLowerCase() == 'select') {
-				input.selectedIndex = 0;
-				if(!input.hasAttribute('data-native')) {
-					input.slim.set(input.value);
-				}
-			} else if(input.classList.contains('wysiwyg')) {
-				input.quill.setContents([{insert: '\n'}]);
-			} else {
-				input.value = '';
-			}
-		});
-
-		this.is_editing = false;
-		this.editing_row = null;
-
-		return true;
-	}
-
-	createRow(object = null) {
-		const trow = document.createElement('tr');
-
-		if(object) {
-			for(const [key, value] of Object.entries(object)) {
-				const tcol = document.createElement('td');
-
-				tcol.setAttribute('data-name', key);
-				tcol.innerHTML = value;
-
-				trow.appendChild(tcol);
-			}
-		} else {
-			this.inputs.forEach(input => {
-				const tcol = document.createElement('td');
-
-				tcol.setAttribute('data-name', input.name);
-				tcol.innerHTML = input.value;
-
-				trow.appendChild(tcol);
-			});
-		}
-
-		const tcol_actions = document.createElement('td');
-		tcol_actions.classList.add('table-action');
-
-		const btn_sort = document.createElement('span');
-		const btn_edit = document.createElement('span');
-		const btn_delete = document.createElement('span');
-
-		btn_sort.innerHTML = this.icon.sort + ' '; btn_sort.classList.add('sortable__handle');
-		btn_edit.innerHTML = this.icon.edit + ' ';
-		btn_delete.innerHTML = this.icon.delete;
-
-		btn_edit.addEventListener('click', () => this.clickEdit(trow));
-		btn_delete.addEventListener('click', () => this.clickDelete(trow));
-
-		tcol_actions.append(btn_sort);
-		tcol_actions.append(btn_edit);
-		tcol_actions.append(btn_delete);
-
-		trow.appendChild(tcol_actions);
-
-		return trow;
-	}
-
-	clickEdit(trow) {
-		this.inputs.forEach(input => {
-			const value = trow.querySelector(`[data-name="${input.name}"]`).innerHTML;
-
-			if(input.tagName.toLowerCase() == 'select' && !input.hasAttribute('data-native')) {
-				input.slim.set(value);
-			} else if(input.classList.contains('wysiwyg')) {
-				input.quill.root.innerHTML = value;
-			} else {
-				input.value = value;
-			}
-
-			this.is_editing = true;
-			this.editing_row = trow;
-
-			this.button.open_modal.click();
-		});
-	}
-
-	clickDelete(trow) {
-		trow.remove();
-		this.updateStore();
-	}
-
-	populateTable() {
-		if(!this.value) {
-			return true;
-		}
-
-		const values = JSON.parse(this.value);
-
-		values.forEach(value => {
-			this.tbody.appendChild(this.createRow(value));
-		});
+		this.tbody.setAttribute('data-handle', '.sortable__handle');
+		this.tbody.onEnd = () => this.updateStore();
 
 		return true;
 	}
@@ -249,23 +149,302 @@ class ForeignForm {
 
 		const tcol = document.createElement('th');
 		tcol.classList.add('table-action');
-		tcol.appendChild(this.button.open_modal);
+		tcol.appendChild(this.add);
 		trow.appendChild(tcol);
 
 		this.thead.appendChild(trow);
+
+		return true;
+	}
+
+	populateTable() {
+		if(!this.value) {
+			return false;
+		}
+
+		const values = JSON.parse(this.value);
+
+		values.forEach(value => {
+			this.active_row = this.createRow();
+			this.updateRow(value);
+			this.tbody.appendChild(this.active_row);
+		});
+
+		return true;
+	}
+
+	updateStore() {
+		let data = [];
+
+		this.tbody.querySelectorAll('tr').forEach(tr => {
+			let obj = {};
+
+			tr.querySelectorAll('td').forEach(td => {
+				if(!td.hasAttribute('data-name')) {
+					return false;
+				}
+				obj[td.getAttribute('data-name')] = td.getAttribute('data-value');
+			});
+
+			data.push(obj);
+		});
+
+		this.store.value = JSON.stringify(data);
+
+		return true;
 	}
 
 	render() {
 		this.table.appendChild(this.thead);
 		this.table.appendChild(this.tbody);
 
-		this.node.before(this.store);
-		this.node.before(this.table);
+		this.store.before(this.table);
 
 		return true;
 	}
 
-	generateUid() {
-		return 'ff-' + Math.random().toString(36).slice(2);
+	createRow() {
+		const trow = document.createElement('tr');
+
+		this.inputs.forEach(input => {
+			const tcol = document.createElement('td');
+
+			tcol.setAttribute('data-name', input.name);
+			tcol.setAttribute('data-value', '');
+
+			trow.appendChild(tcol);
+		});
+
+		const tcol = document.createElement('td');
+		tcol.classList.add('table-action');
+
+		const btn_sort = document.createElement('span');
+		const btn_edit = document.createElement('span');
+		const btn_delete = document.createElement('span');
+
+		btn_sort.innerHTML = SETTING.icon.sort + ' '; btn_sort.classList.add('sortable__handle');
+		btn_edit.innerHTML = SETTING.icon.edit + ' ';
+		btn_delete.innerHTML = SETTING.icon.delete;
+
+		btn_edit.addEventListener('click', () => this.buttonClick('edit', trow));
+		btn_delete.addEventListener('click', () => this.buttonClick('delete', trow));
+
+		tcol.append(btn_sort);
+		tcol.append(btn_edit);
+		tcol.append(btn_delete);
+
+		trow.appendChild(tcol);
+
+		return trow;
+	}
+
+	buttonClick(type, mixed = null) {
+		switch(type) {
+			case 'add': {
+				this.is_edit = false;
+
+				this.resetInputs();
+				this.updateButtons();
+
+				return true;
+			}
+			case 'edit': {
+				this.active_row = mixed;
+				this.is_edit = true;
+
+				this.resetInputs();
+				this.updateButtons(true);
+
+				this.populateInputs();
+
+				this.modal.bs.show();
+
+				return true;
+			}
+			case 'delete': {
+				this.is_edit = false;
+
+				fadeOut(mixed, false, () => this.updateStore());
+
+				return true;
+			}
+			case 'cancel': {
+				this.is_edit = false;
+
+				this.resetInputs();
+
+				return true;
+			}
+			case 'submit': {
+				mixed.preventDefault();
+
+				if(!this.is_edit) {
+					this.active_row = this.createRow();
+				}
+
+				const input_values = this.getInputsValue();
+
+				if(!input_values) {
+					return false;
+				}
+
+				this.updateRow(input_values);
+
+				if(!this.is_edit) {
+					this.tbody.appendChild(this.active_row);
+				}
+
+				this.updateStore();
+
+				this.modal.bs.hide();
+
+				return true;
+			}
+		}
+	}
+
+	updateRow(value) {
+		if(!value) {
+			return false;
+		}
+
+		this.inputs.forEach(input => {
+			const tcol = this.active_row.querySelector(`[data-name="${input.name}"]`);
+
+			if(!tcol) {
+				return false;
+			}
+
+			this.setColValue(input, tcol, value[input.name]);
+		});
+
+		return true;
+	}
+
+	setColValue(input, tcol, value = null) {
+		let output = value;
+
+		if(input.type === 'file') {
+			output = '';
+
+			let files = [];
+
+			if(input.pond) {
+				input.pond.getFiles().forEach(file => {
+					if([6,8].includes(file.status)) {
+						return false;
+					}
+					files.push(file.serverId);
+				});
+			}
+			if(value && value[0] === '[') {
+				files = files.concat(JSON.parse(value));
+			}
+
+			const gallery_uid = this.generateUid();
+
+			files.forEach(file => {
+				const file_name = file;
+				const file_url = BASE_URL + '/' + file_name;
+				const is_image = ['jpg','jpeg','png','gif','svg','webp'].includes(file_name?.split('.').pop().toLowerCase());
+
+				if(is_image) {
+					output += `<a href="${file_url}" target="_blank" data-fancybox="${gallery_uid}">${SETTING.icon.image}</a>`;
+				} else {
+					output += `<a href="${file_url}" target="_blank">${SETTING.icon.file}</a>`;
+				}
+
+				output += ' ';
+			});
+
+			value = JSON.stringify(files);
+		}
+
+		tcol.innerHTML = output;
+		tcol.setAttribute('data-value', value);
+
+		return true;
+	}
+
+	resetInputs() {
+		this.inputs.forEach(input => {
+			this.setInputValue(input, null);
+		});
+
+		return true;
+	}
+
+	populateInputs() {
+		this.active_row.querySelectorAll('[data-name]').forEach(tcol => {
+			this.inputs.forEach(input => {
+				if(input.name === tcol.getAttribute('data-name')) {
+					this.setInputValue(input, tcol.getAttribute('data-value'));
+				}
+			});
+		});
+
+		return true;
+	}
+
+	setInputValue(input, value = null) {
+		if(input.tagName.toLowerCase() === 'select') {
+			input.selectedIndex = value ?? 0;
+			if(!input.hasAttribute('data-native')) {
+				input.slim.set(value);
+			}
+		} else if(input.classList.contains('wysiwyg')) {
+			input.quill.root.innerHTML = value;
+		} else if(input.type === 'file') {
+			let files = [];
+
+			if(value) {
+				JSON.parse(value).forEach(file => {
+					let file_obj = {
+						source: file,
+						options: {
+							type: 'local',
+							metadata: {}
+						}
+					};
+
+					if(pond_input_data.allowImagePreview(input)) {
+						file_obj.options.metadata.poster = BASE_URL + '/' + file;
+					}
+
+					files.push(file_obj);
+				});
+			}
+
+			input.pond.setOptions({
+				files: files
+			});
+		} else {
+			input.value = value;
+		}
+
+		return true;
+	}
+
+	getInputsValue() {
+		let value = {};
+		let is_valid = true;
+
+		this.inputs.forEach(input => {
+			const value_lengh = input.value.replace(/(<([^>]+)>)/gi, '').length;
+			if(input.hasAttribute('data-required') && value_lengh <= 0) {
+				const sprintf = (str, ...argv) => !argv.length ? str :
+				sprintf(str = str.replace(sprintf.token||"%", argv.shift()), ...argv);
+
+				is_valid = false;
+				let required_message = SETTING?.foreignForm?.required_message ?? '% is required';
+				required_message = sprintf(required_message, input.getAttribute('data-label') ?? input.name);
+
+				SETTING.toast('error', required_message);
+			}
+
+			value[input.name] = input.value;
+		});
+
+		return is_valid ? value : is_valid;
 	}
 }

@@ -2382,4 +2382,13 @@ footer.footer {
 	p {
 		margin: 0;
 	}
+	img {
+		display: inline-block;
+		height: 1em;
+		border-radius: 0.2rem;
+		cursor: pointer;
+	}
+	.table-action {
+		min-width: 74px;
+	}
 }

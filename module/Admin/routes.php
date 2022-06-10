@@ -1,7 +1,7 @@
 <?php
 
 ############################# UPLOAD #############################
-// Module::route('get', '/upload', 'Upload@get');
+Module::route('get', '/upload', 'Upload@get');
 Module::route('post', '/upload', 'Upload@post');
 Module::route('delete', '/upload', 'Upload@delete');
 

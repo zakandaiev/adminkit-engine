@@ -1,17 +1,5 @@
 "use strict";
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -21,7 +9,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // UTILS
 function fadeOut(element) {
   var soft = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
   if (!element) {
     return false;
@@ -37,8 +25,10 @@ function fadeOut(element) {
         element.remove();
       }
 
-      if (window[callback]) {
+      if (callback instanceof String && window[callback]) {
         window[callback]();
+      } else if (callback instanceof Function) {
+        callback();
       }
     } else {
       requestAnimationFrame(fade);
@@ -54,55 +44,47 @@ function smoothScroll(element) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('table').forEach(function (table) {
-    if (!table.parentElement.classList.contains('table-responsive')) {
-      table.outerHTML = '<div class="table-responsive">' + table.outerHTML + '</div>';
-    }
-  });
+document.querySelectorAll('table').forEach(function (table) {
+  if (!table.parentElement.classList.contains('table-responsive')) {
+    table.outerHTML = '<div class="table-responsive">' + table.outerHTML + '</div>';
+  }
 });
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('a').forEach(function (anchor) {
-    if (anchor.hasAttribute('target') && anchor.getAttribute('target') === '_blank') {
-      anchor.setAttribute('rel', 'noopener noreferrer nofollow');
-    }
+document.querySelectorAll('a').forEach(function (anchor) {
+  if (anchor.hasAttribute('target') && anchor.getAttribute('target') === '_blank') {
+    anchor.setAttribute('rel', 'noopener noreferrer nofollow');
+  }
 
-    if (!anchor.hasAttribute('data-bs-toggle')) {
-      anchor.addEventListener('click', function (event) {
-        if (!event.currentTarget.hasAttribute('href')) {
+  if (!anchor.hasAttribute('data-bs-toggle')) {
+    anchor.addEventListener('click', function (event) {
+      if (!event.currentTarget.hasAttribute('href')) {
+        return;
+      }
+
+      var anchor_href = event.currentTarget.getAttribute('href');
+
+      if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
+        if (!event.currentTarget.hash) {
           return;
         }
 
-        var anchor_href = event.currentTarget.getAttribute('href');
+        var scroll_to_node = document.querySelector(event.currentTarget.hash);
 
-        if (anchor_href.charAt(0) === '#' || anchor_href.charAt(0) === '/' && anchor_href.charAt(1) === '#') {
-          if (!event.currentTarget.hash) {
-            return;
-          }
-
-          var scroll_to_node = document.querySelector(event.currentTarget.hash);
-
-          if (scroll_to_node) {
-            event.preventDefault();
-            smoothScroll(scroll_to_node);
-          }
+        if (scroll_to_node) {
+          event.preventDefault();
+          smoothScroll(scroll_to_node);
         }
-      });
-    }
-  });
+      }
+    });
+  }
 });
-document.addEventListener('DOMContentLoaded', function () {
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl);
 });
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.spinner-action').forEach(function (element) {
-    if (SETTING.loader) {
-      element.insertAdjacentHTML('beforeend', SETTING.loader);
-    }
-  });
+document.querySelectorAll('.spinner-action').forEach(function (element) {
+  if (SETTING.loader) {
+    element.insertAdjacentHTML('beforeend', SETTING.loader);
+  }
 });
 
 window.onload = function () {
@@ -609,244 +591,150 @@ var ForeignForm = /*#__PURE__*/function () {
   function ForeignForm(node) {
     _classCallCheck(this, ForeignForm);
 
-    this.node = node;
-    this.name = node.getAttribute('data-name');
-    this.value = node.getAttribute('data-value');
-    this.inputs = node.querySelectorAll('[name]');
-    this.button = {
-      submit: node.querySelector('[type="submit"]'),
-      open_modal: document.createElement('span')
-    };
-    this.icon = {
-      add: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-plus align-middle feather-sm\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line></svg>",
-      sort: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-move\"><polyline points=\"5 9 2 12 5 15\"></polyline><polyline points=\"9 5 12 2 15 5\"></polyline><polyline points=\"15 19 12 22 9 19\"></polyline><polyline points=\"19 9 22 12 19 15\"></polyline><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"></line><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"22\"></line></svg>",
-      edit: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-edit\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path><path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg>",
-      delete: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-trash\"><polyline points=\"3 6 5 6 21 6\"></polyline><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>"
-    };
+    this.is_edit = false;
+    this.active_row = null;
     this.uid = this.generateUid();
-    this.store = document.createElement('textarea');
-    this.table = document.createElement('table');
-    this.thead = document.createElement('thead');
-    this.tbody = document.createElement('tbody');
-    this.is_editing = false;
-    this.editing_row = null;
-    this.initialize();
+    this.initStore(node);
+    this.initModal();
+    this.initButtons();
+    this.initTable();
+    this.populateTable();
+    this.updateStore();
+    this.render();
   }
 
   _createClass(ForeignForm, [{
-    key: "initialize",
-    value: function initialize() {
+    key: "generateUid",
+    value: function generateUid() {
+      return 'ff-' + Math.random().toString(36).slice(2);
+    }
+  }, {
+    key: "initStore",
+    value: function initStore(node) {
+      this.store = node;
+      this.name = this.store.name;
+      this.value = this.store.value;
+      this.store.setAttribute('data-id', this.uid);
+      this.store.setAttribute('type', 'hidden');
+      this.store.classList.add('hidden');
+      return true;
+    }
+  }, {
+    key: "initModal",
+    value: function initModal() {
       var _this7 = this;
 
-      // SET ID TO NODE
-      this.node.setAttribute('id', this.uid); // SET UP MODAL BUTTON
+      this.modal = this.store.nextElementSibling;
+      this.inputs = this.modal.querySelectorAll('[name]');
+      this.inputs.forEach(function (input) {
+        input.name = input.name.replace('[]', '');
+      });
+      setTimeout(function () {
+        _this7.inputs.forEach(function (input) {
+          if (input.type === 'file') {
+            _this7.initFileInput(input);
+          }
+        });
+      }, 1000);
+      this.modal.setAttribute('id', this.uid);
+      var bs = new bootstrap.Modal(this.modal);
+      this.modal.bs = bs;
+      this.modal.addEventListener('hidden.bs.modal', function () {
+        return _this7.buttonClick('cancel');
+      });
+      return true;
+    }
+  }, {
+    key: "initFileInput",
+    value: function initFileInput(input) {
+      var _input$pond;
 
-      this.button.open_modal.setAttribute('data-bs-toggle', 'modal');
-      this.button.open_modal.setAttribute('data-bs-target', '#' + this.uid);
-      this.button.open_modal.classList.add('badge', 'bg-primary', 'cursor-pointer');
-      this.button.open_modal.innerHTML = this.icon.add;
-      this.button.open_modal.addEventListener('click', function () {
-        if (!_this7.is_editing) {
-          _this7.resetEditingRow();
+      input === null || input === void 0 ? void 0 : (_input$pond = input.pond) === null || _input$pond === void 0 ? void 0 : _input$pond.setOptions({
+        instantUpload: true,
+        allowRevert: true,
+        server: {
+          process: {
+            url: '/upload/',
+            ondata: function ondata(formData) {
+              formData.set(SETTING.csrf.key, SETTING.csrf.token);
+              return formData;
+            }
+          },
+          revert: {
+            url: '/upload/',
+            ondata: function ondata(formData) {
+              formData.set(SETTING.csrf.key, SETTING.csrf.token);
+              return formData;
+            }
+          }
         }
-      }); // SET UP STORE
+      });
+      return true;
+    }
+  }, {
+    key: "initButtons",
+    value: function initButtons() {
+      var _this8 = this;
 
-      this.store.setAttribute('name', this.name);
-      this.store.setAttribute('type', 'hidden');
-      this.store.classList.add('hidden'); // SET UP TABLE
+      this.submit = this.modal.querySelector('[type="submit"]');
+      this.submit.addEventListener('click', function (event) {
+        return _this8.buttonClick('submit', event);
+      });
+      this.add = document.createElement('span');
+      this.add.setAttribute('data-bs-toggle', 'modal');
+      this.add.setAttribute('data-bs-target', '#' + this.uid);
+      this.add.classList.add('badge', 'bg-primary', 'cursor-pointer');
+      this.add.innerHTML = SETTING.icon.add;
+      this.add.addEventListener('click', function () {
+        return _this8.buttonClick('add');
+      });
+      return true;
+    }
+  }, {
+    key: "updateButtons",
+    value: function updateButtons() {
+      var add = this.submit.querySelector('.add');
+      var edit = this.submit.querySelector('.edit');
 
+      if (this.is_edit) {
+        if (add) {
+          add.style.display = 'none';
+        }
+
+        if (edit) {
+          edit.style.display = 'initial';
+        }
+      } else {
+        if (add) {
+          add.style.display = 'initial';
+        }
+
+        if (edit) {
+          edit.style.display = 'none';
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: "initTable",
+    value: function initTable() {
+      var _this9 = this;
+
+      this.table = document.createElement('table');
+      this.thead = document.createElement('thead');
+      this.tbody = document.createElement('tbody');
       this.table.classList.add('table');
       this.table.classList.add('table-sm');
       this.table.classList.add('foreign-form__table');
       this.createThead();
       this.tbody.classList.add('sortable');
-      new Sortable(this.tbody, {
-        handle: '.sortable__handle',
-        animation: 150,
-        onSort: function onSort() {
-          return _this7.updateStore();
-        }
-      }); // SET UP SUMIT BUTTON
+      this.tbody.setAttribute('data-handle', '.sortable__handle');
 
-      this.button.submit.addEventListener('click', function (event) {
-        event.preventDefault();
+      this.tbody.onEnd = function () {
+        return _this9.updateStore();
+      };
 
-        _this7.clickSubmit();
-
-        _this7.updateStore();
-
-        _this7.resetEditingRow();
-      }); // RENDER
-
-      this.populateTable();
-      this.updateStore();
-      this.render(); // RESET EDITING ROW IF MODAL CANCELED
-
-      this.node.addEventListener('hidden.bs.modal', function () {
-        return _this7.resetEditingRow();
-      });
-      setTimeout(function () {
-        _this7.inputs.forEach(function (input) {
-          if (input.type === 'file') {
-            // console.log(input);
-            input.pond.setOptions({
-              instantUpload: true,
-              server: {
-                process: '/upload'
-              }
-            });
-          }
-        });
-      }, 1000);
-    }
-  }, {
-    key: "clickSubmit",
-    value: function clickSubmit() {
-      var _this8 = this;
-
-      // EDIT ROW
-      if (this.is_editing) {
-        this.inputs.forEach(function (input) {
-          _this8.editing_row.querySelector("[data-name=\"".concat(input.name, "\"]")).innerHTML = input.value;
-        });
-        this.resetEditingRow();
-        return true;
-      } // ADD ROW
-
-
-      this.tbody.appendChild(this.createRow());
-      return true;
-    }
-  }, {
-    key: "updateStore",
-    value: function updateStore() {
-      var data = [];
-      this.tbody.querySelectorAll('tr').forEach(function (tr) {
-        var obj = {};
-        tr.querySelectorAll('td').forEach(function (td) {
-          if (!td.hasAttribute('data-name')) {
-            return false;
-          }
-
-          obj[td.getAttribute('data-name')] = td.innerHTML;
-        });
-        data.push(obj);
-      });
-      this.store.value = JSON.stringify(data);
-      return true;
-    }
-  }, {
-    key: "resetEditingRow",
-    value: function resetEditingRow() {
-      this.inputs.forEach(function (input) {
-        if (input.tagName.toLowerCase() == 'select') {
-          input.selectedIndex = 0;
-
-          if (!input.hasAttribute('data-native')) {
-            input.slim.set(input.value);
-          }
-        } else if (input.classList.contains('wysiwyg')) {
-          input.quill.setContents([{
-            insert: '\n'
-          }]);
-        } else {
-          input.value = '';
-        }
-      });
-      this.is_editing = false;
-      this.editing_row = null;
-      return true;
-    }
-  }, {
-    key: "createRow",
-    value: function createRow() {
-      var _this9 = this;
-
-      var object = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var trow = document.createElement('tr');
-
-      if (object) {
-        for (var _i = 0, _Object$entries = Object.entries(object); _i < _Object$entries.length; _i++) {
-          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-              key = _Object$entries$_i[0],
-              value = _Object$entries$_i[1];
-
-          var tcol = document.createElement('td');
-          tcol.setAttribute('data-name', key);
-          tcol.innerHTML = value;
-          trow.appendChild(tcol);
-        }
-      } else {
-        this.inputs.forEach(function (input) {
-          var tcol = document.createElement('td');
-          tcol.setAttribute('data-name', input.name);
-          tcol.innerHTML = input.value;
-          trow.appendChild(tcol);
-        });
-      }
-
-      var tcol_actions = document.createElement('td');
-      tcol_actions.classList.add('table-action');
-      var btn_sort = document.createElement('span');
-      var btn_edit = document.createElement('span');
-      var btn_delete = document.createElement('span');
-      btn_sort.innerHTML = this.icon.sort + ' ';
-      btn_sort.classList.add('sortable__handle');
-      btn_edit.innerHTML = this.icon.edit + ' ';
-      btn_delete.innerHTML = this.icon.delete;
-      btn_edit.addEventListener('click', function () {
-        return _this9.clickEdit(trow);
-      });
-      btn_delete.addEventListener('click', function () {
-        return _this9.clickDelete(trow);
-      });
-      tcol_actions.append(btn_sort);
-      tcol_actions.append(btn_edit);
-      tcol_actions.append(btn_delete);
-      trow.appendChild(tcol_actions);
-      return trow;
-    }
-  }, {
-    key: "clickEdit",
-    value: function clickEdit(trow) {
-      var _this10 = this;
-
-      this.inputs.forEach(function (input) {
-        var value = trow.querySelector("[data-name=\"".concat(input.name, "\"]")).innerHTML;
-
-        if (input.tagName.toLowerCase() == 'select' && !input.hasAttribute('data-native')) {
-          input.slim.set(value);
-        } else if (input.classList.contains('wysiwyg')) {
-          input.quill.root.innerHTML = value;
-        } else {
-          input.value = value;
-        }
-
-        _this10.is_editing = true;
-        _this10.editing_row = trow;
-
-        _this10.button.open_modal.click();
-      });
-    }
-  }, {
-    key: "clickDelete",
-    value: function clickDelete(trow) {
-      trow.remove();
-      this.updateStore();
-    }
-  }, {
-    key: "populateTable",
-    value: function populateTable() {
-      var _this11 = this;
-
-      if (!this.value) {
-        return true;
-      }
-
-      var values = JSON.parse(this.value);
-      values.forEach(function (value) {
-        _this11.tbody.appendChild(_this11.createRow(value));
-      });
       return true;
     }
   }, {
@@ -860,30 +748,354 @@ var ForeignForm = /*#__PURE__*/function () {
       });
       var tcol = document.createElement('th');
       tcol.classList.add('table-action');
-      tcol.appendChild(this.button.open_modal);
+      tcol.appendChild(this.add);
       trow.appendChild(tcol);
       this.thead.appendChild(trow);
+      return true;
+    }
+  }, {
+    key: "populateTable",
+    value: function populateTable() {
+      var _this10 = this;
+
+      if (!this.value) {
+        return false;
+      }
+
+      var values = JSON.parse(this.value);
+      values.forEach(function (value) {
+        _this10.active_row = _this10.createRow();
+
+        _this10.updateRow(value);
+
+        _this10.tbody.appendChild(_this10.active_row);
+      });
+      return true;
+    }
+  }, {
+    key: "updateStore",
+    value: function updateStore() {
+      var data = [];
+      this.tbody.querySelectorAll('tr').forEach(function (tr) {
+        var obj = {};
+        tr.querySelectorAll('td').forEach(function (td) {
+          if (!td.hasAttribute('data-name')) {
+            return false;
+          }
+
+          obj[td.getAttribute('data-name')] = td.getAttribute('data-value');
+        });
+        data.push(obj);
+      });
+      this.store.value = JSON.stringify(data);
+      return true;
     }
   }, {
     key: "render",
     value: function render() {
       this.table.appendChild(this.thead);
       this.table.appendChild(this.tbody);
-      this.node.before(this.store);
-      this.node.before(this.table);
+      this.store.before(this.table);
       return true;
     }
   }, {
-    key: "generateUid",
-    value: function generateUid() {
-      return 'ff-' + Math.random().toString(36).slice(2);
+    key: "createRow",
+    value: function createRow() {
+      var _this11 = this;
+
+      var trow = document.createElement('tr');
+      this.inputs.forEach(function (input) {
+        var tcol = document.createElement('td');
+        tcol.setAttribute('data-name', input.name);
+        tcol.setAttribute('data-value', '');
+        trow.appendChild(tcol);
+      });
+      var tcol = document.createElement('td');
+      tcol.classList.add('table-action');
+      var btn_sort = document.createElement('span');
+      var btn_edit = document.createElement('span');
+      var btn_delete = document.createElement('span');
+      btn_sort.innerHTML = SETTING.icon.sort + ' ';
+      btn_sort.classList.add('sortable__handle');
+      btn_edit.innerHTML = SETTING.icon.edit + ' ';
+      btn_delete.innerHTML = SETTING.icon.delete;
+      btn_edit.addEventListener('click', function () {
+        return _this11.buttonClick('edit', trow);
+      });
+      btn_delete.addEventListener('click', function () {
+        return _this11.buttonClick('delete', trow);
+      });
+      tcol.append(btn_sort);
+      tcol.append(btn_edit);
+      tcol.append(btn_delete);
+      trow.appendChild(tcol);
+      return trow;
+    }
+  }, {
+    key: "buttonClick",
+    value: function buttonClick(type) {
+      var _this12 = this;
+
+      var mixed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      switch (type) {
+        case 'add':
+          {
+            this.is_edit = false;
+            this.resetInputs();
+            this.updateButtons();
+            return true;
+          }
+
+        case 'edit':
+          {
+            this.active_row = mixed;
+            this.is_edit = true;
+            this.resetInputs();
+            this.updateButtons(true);
+            this.populateInputs();
+            this.modal.bs.show();
+            return true;
+          }
+
+        case 'delete':
+          {
+            this.is_edit = false;
+            fadeOut(mixed, false, function () {
+              return _this12.updateStore();
+            });
+            return true;
+          }
+
+        case 'cancel':
+          {
+            this.is_edit = false;
+            this.resetInputs();
+            return true;
+          }
+
+        case 'submit':
+          {
+            mixed.preventDefault();
+
+            if (!this.is_edit) {
+              this.active_row = this.createRow();
+            }
+
+            var input_values = this.getInputsValue();
+
+            if (!input_values) {
+              return false;
+            }
+
+            this.updateRow(input_values);
+
+            if (!this.is_edit) {
+              this.tbody.appendChild(this.active_row);
+            }
+
+            this.updateStore();
+            this.modal.bs.hide();
+            return true;
+          }
+      }
+    }
+  }, {
+    key: "updateRow",
+    value: function updateRow(value) {
+      var _this13 = this;
+
+      if (!value) {
+        return false;
+      }
+
+      this.inputs.forEach(function (input) {
+        var tcol = _this13.active_row.querySelector("[data-name=\"".concat(input.name, "\"]"));
+
+        if (!tcol) {
+          return false;
+        }
+
+        _this13.setColValue(input, tcol, value[input.name]);
+      });
+      return true;
+    }
+  }, {
+    key: "setColValue",
+    value: function setColValue(input, tcol) {
+      var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var output = value;
+
+      if (input.type === 'file') {
+        output = '';
+        var files = [];
+
+        if (input.pond) {
+          input.pond.getFiles().forEach(function (file) {
+            if ([6, 8].includes(file.status)) {
+              return false;
+            }
+
+            files.push(file.serverId);
+          });
+        }
+
+        if (value && value[0] === '[') {
+          files = files.concat(JSON.parse(value));
+        }
+
+        var gallery_uid = this.generateUid();
+        files.forEach(function (file) {
+          var file_name = file;
+          var file_url = BASE_URL + '/' + file_name;
+          var is_image = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(file_name === null || file_name === void 0 ? void 0 : file_name.split('.').pop().toLowerCase());
+
+          if (is_image) {
+            output += "<a href=\"".concat(file_url, "\" target=\"_blank\" data-fancybox=\"").concat(gallery_uid, "\">").concat(SETTING.icon.image, "</a>");
+          } else {
+            output += "<a href=\"".concat(file_url, "\" target=\"_blank\">").concat(SETTING.icon.file, "</a>");
+          }
+
+          output += ' ';
+        });
+        value = JSON.stringify(files);
+      }
+
+      tcol.innerHTML = output;
+      tcol.setAttribute('data-value', value);
+      return true;
+    }
+  }, {
+    key: "resetInputs",
+    value: function resetInputs() {
+      var _this14 = this;
+
+      this.inputs.forEach(function (input) {
+        _this14.setInputValue(input, null);
+      });
+      return true;
+    }
+  }, {
+    key: "populateInputs",
+    value: function populateInputs() {
+      var _this15 = this;
+
+      this.active_row.querySelectorAll('[data-name]').forEach(function (tcol) {
+        _this15.inputs.forEach(function (input) {
+          if (input.name === tcol.getAttribute('data-name')) {
+            _this15.setInputValue(input, tcol.getAttribute('data-value'));
+          }
+        });
+      });
+      return true;
+    }
+  }, {
+    key: "setInputValue",
+    value: function setInputValue(input) {
+      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      if (input.tagName.toLowerCase() === 'select') {
+        input.selectedIndex = value !== null && value !== void 0 ? value : 0;
+
+        if (!input.hasAttribute('data-native')) {
+          input.slim.set(value);
+        }
+      } else if (input.classList.contains('wysiwyg')) {
+        input.quill.root.innerHTML = value;
+      } else if (input.type === 'file') {
+        var files = [];
+
+        if (value) {
+          JSON.parse(value).forEach(function (file) {
+            var file_obj = {
+              source: file,
+              options: {
+                type: 'local',
+                metadata: {}
+              }
+            };
+
+            if (pond_input_data.allowImagePreview(input)) {
+              file_obj.options.metadata.poster = BASE_URL + '/' + file;
+            }
+
+            files.push(file_obj);
+          });
+        }
+
+        input.pond.setOptions({
+          files: files
+        });
+      } else {
+        input.value = value;
+      }
+
+      return true;
+    }
+  }, {
+    key: "getInputsValue",
+    value: function getInputsValue() {
+      var value = {};
+      var is_valid = true;
+      this.inputs.forEach(function (input) {
+        var value_lengh = input.value.replace(/(<([^>]+)>)/gi, '').length;
+
+        if (input.hasAttribute('data-required') && value_lengh <= 0) {
+          var _SETTING$foreignForm$, _SETTING, _SETTING$foreignForm, _input$getAttribute;
+
+          var sprintf = function sprintf(str) {
+            for (var _len = arguments.length, argv = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+              argv[_key - 1] = arguments[_key];
+            }
+
+            return !argv.length ? str : sprintf.apply(void 0, [str = str.replace(sprintf.token || "%", argv.shift())].concat(argv));
+          };
+
+          is_valid = false;
+          var required_message = (_SETTING$foreignForm$ = (_SETTING = SETTING) === null || _SETTING === void 0 ? void 0 : (_SETTING$foreignForm = _SETTING.foreignForm) === null || _SETTING$foreignForm === void 0 ? void 0 : _SETTING$foreignForm.required_message) !== null && _SETTING$foreignForm$ !== void 0 ? _SETTING$foreignForm$ : '% is required';
+          required_message = sprintf(required_message, (_input$getAttribute = input.getAttribute('data-label')) !== null && _input$getAttribute !== void 0 ? _input$getAttribute : input.name);
+          SETTING.toast('error', required_message);
+        }
+
+        value[input.name] = input.value;
+      });
+      return is_valid ? value : is_valid;
     }
   }]);
 
   return ForeignForm;
 }(); // PLUGINS
+// FORM
 
 
+document.querySelectorAll('form').forEach(function (element) {
+  new Form(element, {
+    loader: SETTING.loader,
+    data: [{
+      key: SETTING.csrf.key,
+      value: SETTING.csrf.token
+    }]
+  });
+}); // DATA-ACTION
+
+document.querySelectorAll('[data-action]').forEach(function (element) {
+  new DataAction(element, {
+    data: [{
+      key: SETTING.csrf.key,
+      value: SETTING.csrf.token
+    }]
+  });
+}); // DATA-BEHAVIOR
+
+document.querySelectorAll('[data-behavior]').forEach(function (element) {
+  new DataBehabior(element);
+}); // FOREIGN FORM
+
+document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
+  if (element.classList.contains('foreign-form')) {
+    new ForeignForm(element);
+  }
+});
 var pond_input_data = {
   files: function files(input) {
     var files = [];
@@ -932,152 +1144,149 @@ var pond_input_data = {
     return input.hasAttribute('data-aspect-ratio') ? parseInt(input.getAttribute('data-aspect-ratio')) : 0.5625;
   }
 };
-document.addEventListener('DOMContentLoaded', function () {
-  var file_inputs = document.querySelectorAll('input[type="file"]');
+var file_inputs = document.querySelectorAll('input[type="file"]');
 
-  if (file_inputs) {
-    file_inputs.forEach(function (input) {
-      var pond = FilePond.create(input, {
-        server: {
-          load: '/'
-        },
-        storeAsFile: true,
-        instantUpload: false,
-        allowProcess: false,
-        allowRevert: false,
-        allowReorder: true,
-        dropOnPage: true,
-        dropOnElement: file_inputs.length == 1 ? false : true,
-        files: pond_input_data.files(input),
-        allowImagePreview: pond_input_data.allowImagePreview(input),
-        maxTotalFileSize: pond_input_data.maxTotalFileSize(input),
-        maxFileSize: pond_input_data.maxFileSize(input),
-        maxFiles: pond_input_data.maxFiles(input),
-        styleItemPanelAspectRatio: pond_input_data.styleItemPanelAspectRatio(input),
-        credits: false
-      });
-
-      if (input.hasAttribute('data-placeholder')) {
-        pond.setOptions({
-          labelIdle: input.getAttribute('data-placeholder')
-        });
-      }
-
-      input.pond = pond;
-    });
-  }
-});
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(function (textarea) {
-    textarea.classList.add("hidden");
-    var wysiwyg_node = document.createElement('div');
-    var quill_node = document.createElement('div');
-    quill_node.innerHTML = textarea.value;
-    wysiwyg_node.classList.add('wysiwyg');
-    wysiwyg_node.appendChild(quill_node);
-    textarea.after(wysiwyg_node);
-    var quill_icons = Quill.import('ui/icons');
-    quill_icons['expand'] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="maximize feather feather-maximize align-middle"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="minimize feather feather-minimize align-middle"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg>';
-    var quill = new Quill(quill_node, {
-      modules: {
-        toolbar: {
-          container: [[{
-            header: [false, 3, 2]
-          }], ['bold', 'italic', 'underline', 'strike'], [{
-            'align': []
-          }, {
-            'list': 'ordered'
-          }, {
-            'list': 'bullet'
-          }], [{
-            'color': []
-          }, {
-            'background': []
-          }], ['link', 'image', 'video', 'blockquote', 'code'], [{
-            'indent': '-1'
-          }, {
-            'indent': '+1'
-          }], [{
-            'script': 'sub'
-          }, {
-            'script': 'super'
-          }], ['clean'], ['expand']],
-          handlers: {
-            'image': function image(event) {
-              uploadImage();
-            },
-            'expand': function expand(event) {
-              var expand = wysiwyg_node.querySelector('.ql-expand');
-
-              function maximize() {
-                wysiwyg_node.classList.add('fullscreen');
-                if (expand) expand.classList.add('active');
-              }
-
-              function minimize() {
-                wysiwyg_node.classList.remove('fullscreen');
-                if (expand) expand.classList.remove('active');
-              }
-
-              wysiwyg_node.classList.contains('fullscreen') ? minimize() : maximize();
-            }
-          }
-        }
+if (file_inputs) {
+  file_inputs.forEach(function (input) {
+    var pond = FilePond.create(input, {
+      server: {
+        load: '/'
       },
-      placeholder: textarea.placeholder,
-      readOnly: textarea.disabled ? true : false,
-      theme: 'snow'
-    }); // POPULATE
-    // quill.setContents(JSON.parse(textarea.value).ops);
-    // UPDATE TEXTAREA VALUE
+      storeAsFile: true,
+      instantUpload: false,
+      allowProcess: false,
+      allowRevert: false,
+      allowReorder: true,
+      dropOnPage: true,
+      dropOnElement: file_inputs.length == 1 ? false : true,
+      files: pond_input_data.files(input),
+      allowImagePreview: pond_input_data.allowImagePreview(input),
+      maxTotalFileSize: pond_input_data.maxTotalFileSize(input),
+      maxFileSize: pond_input_data.maxFileSize(input),
+      maxFiles: pond_input_data.maxFiles(input),
+      styleItemPanelAspectRatio: pond_input_data.styleItemPanelAspectRatio(input),
+      credits: false
+    });
 
-    quill.on('editor-change', function (event) {
-      // textarea.value = JSON.stringify(quill.getContents());
-      textarea.value = quill.root.innerHTML;
-    }); // IMAGE UPLOAD
-
-    var Image = Quill.import('formats/image');
-    Image.className = 'image-fluid';
-    Quill.register(Image, true);
-
-    function uploadImage() {
-      var input = document.createElement('input');
-      input.setAttribute('type', 'file');
-      input.setAttribute('accept', 'image/*');
-      input.click();
-
-      input.onchange = function () {
-        var file = input.files[0];
-
-        if (file) {
-          var formData = new FormData();
-          formData.append('file', file);
-          quill.enable(false);
-          fetch(BASE_URL + '/upload', {
-            method: 'POST',
-            body: formData
-          }).then(function (response) {
-            return response.json();
-          }).then(function (data) {
-            if (data.status === 'success') {
-              var selection = quill.getSelection().index;
-              var image_url = BASE_URL + '/' + data.message;
-              quill.insertEmbed(selection, 'image', image_url);
-              quill.setSelection(selection + 1);
-            } else {
-              SETTING.toast(data.status, data.message);
-            }
-          }).catch(function (error) {
-            SETTING.toast('error', error);
-          }).finally(function () {
-            quill.enable(true);
-          });
-        }
-      };
+    if (input.hasAttribute('data-placeholder')) {
+      pond.setOptions({
+        labelIdle: input.getAttribute('data-placeholder')
+      });
     }
 
-    textarea.quill = quill;
+    input.pond = pond;
   });
+}
+
+document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(function (textarea) {
+  textarea.classList.add("hidden");
+  var wysiwyg_node = document.createElement('div');
+  var quill_node = document.createElement('div');
+  quill_node.innerHTML = textarea.value;
+  wysiwyg_node.classList.add('wysiwyg');
+  wysiwyg_node.appendChild(quill_node);
+  textarea.after(wysiwyg_node);
+  var quill_icons = Quill.import('ui/icons');
+  quill_icons['expand'] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="maximize feather feather-maximize align-middle"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="minimize feather feather-minimize align-middle"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg>';
+  var quill = new Quill(quill_node, {
+    modules: {
+      toolbar: {
+        container: [[{
+          header: [false, 3, 2]
+        }], ['bold', 'italic', 'underline', 'strike'], [{
+          'align': []
+        }, {
+          'list': 'ordered'
+        }, {
+          'list': 'bullet'
+        }], [{
+          'color': []
+        }, {
+          'background': []
+        }], ['link', 'image', 'video', 'blockquote', 'code'], [{
+          'indent': '-1'
+        }, {
+          'indent': '+1'
+        }], [{
+          'script': 'sub'
+        }, {
+          'script': 'super'
+        }], ['clean'], ['expand']],
+        handlers: {
+          'image': function image(event) {
+            uploadImage();
+          },
+          'expand': function expand(event) {
+            var expand = wysiwyg_node.querySelector('.ql-expand');
+
+            function maximize() {
+              wysiwyg_node.classList.add('fullscreen');
+              if (expand) expand.classList.add('active');
+            }
+
+            function minimize() {
+              wysiwyg_node.classList.remove('fullscreen');
+              if (expand) expand.classList.remove('active');
+            }
+
+            wysiwyg_node.classList.contains('fullscreen') ? minimize() : maximize();
+          }
+        }
+      }
+    },
+    placeholder: textarea.placeholder,
+    readOnly: textarea.disabled ? true : false,
+    theme: 'snow'
+  }); // POPULATE
+  // quill.setContents(JSON.parse(textarea.value).ops);
+  // UPDATE TEXTAREA VALUE
+
+  quill.on('editor-change', function (event) {
+    // textarea.value = JSON.stringify(quill.getContents());
+    textarea.value = quill.root.innerHTML;
+  }); // IMAGE UPLOAD
+
+  var Image = Quill.import('formats/image');
+  Image.className = 'image-fluid';
+  Quill.register(Image, true);
+
+  function uploadImage() {
+    var input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = function () {
+      var file = input.files[0];
+
+      if (file) {
+        var formData = new FormData();
+        formData.append('file', file);
+        quill.enable(false);
+        fetch(BASE_URL + '/upload', {
+          method: 'POST',
+          body: formData
+        }).then(function (response) {
+          return response.json();
+        }).then(function (data) {
+          if (data.status === 'success') {
+            var selection = quill.getSelection().index;
+            var image_url = BASE_URL + '/' + data.message;
+            quill.insertEmbed(selection, 'image', image_url);
+            quill.setSelection(selection + 1);
+          } else {
+            SETTING.toast(data.status, data.message);
+          }
+        }).catch(function (error) {
+          SETTING.toast('error', error);
+        }).finally(function () {
+          quill.enable(true);
+        });
+      }
+    };
+  }
+
+  textarea.quill = quill;
 });
 var slimselect_data = {
   addable: function addable(select) {
@@ -1130,26 +1339,24 @@ var slimselect_data = {
     return select.hasAttribute('data-placeholder-search-text') ? select.getAttribute('data-placeholder-search-text') : null;
   }
 };
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('select').forEach(function (select) {
-    if (select.hasAttribute('data-native')) {
-      return false;
-    }
+document.querySelectorAll('select').forEach(function (select) {
+  if (select.hasAttribute('data-native')) {
+    return false;
+  }
 
-    new SlimSelect({
-      select: select,
-      addable: slimselect_data.addable(select),
-      allowDeselect: slimselect_data.allowDeselect(select),
-      deselectLabel: slimselect_data.deselectLabel(select),
-      // hideSelectedOption: slimselect_data.hideSelectedOption(select), // not work with optgroups
-      closeOnSelect: slimselect_data.closeOnSelect(select),
-      showSearch: slimselect_data.showSearch(select),
-      placeholder: slimselect_data.placeholder(select),
-      placeholderText: slimselect_data.placeholder(select),
-      searchPlaceholder: slimselect_data.searchPlaceholder(select),
-      searchText: slimselect_data.searchText(select),
-      showContent: "down"
-    });
+  new SlimSelect({
+    select: select,
+    addable: slimselect_data.addable(select),
+    allowDeselect: slimselect_data.allowDeselect(select),
+    deselectLabel: slimselect_data.deselectLabel(select),
+    // hideSelectedOption: slimselect_data.hideSelectedOption(select), // not work with optgroups
+    closeOnSelect: slimselect_data.closeOnSelect(select),
+    showSearch: slimselect_data.showSearch(select),
+    placeholder: slimselect_data.placeholder(select),
+    placeholderText: slimselect_data.placeholder(select),
+    searchPlaceholder: slimselect_data.searchPlaceholder(select),
+    searchText: slimselect_data.searchText(select),
+    showContent: "down"
   });
 });
 
@@ -1164,47 +1371,20 @@ var makeSortable = function makeSortable(element) {
     swapThreshold: 0.5,
     animation: 150,
     onEnd: function onEnd(event) {
-      if (!element.hasAttribute('data-callback') || !window[element.getAttribute('data-callback')]) {
-        return false;
+      if (element.onEnd && element.onEnd instanceof Function) {
+        element.onEnd();
       }
 
-      window[element.getAttribute('data-callback')](event);
+      if (element.hasAttribute('data-callback') && window[element.getAttribute('data-callback')]) {
+        window[element.getAttribute('data-callback')](event);
+      }
     }
   });
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('[class*="sortable"]').forEach(function (element) {
-    makeSortable(element);
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  // FORM
-  document.querySelectorAll('form').forEach(function (element) {
-    new Form(element, {
-      loader: SETTING.loader,
-      data: [{
-        key: SETTING.csrf.key,
-        value: SETTING.csrf.token
-      }]
-    });
-  }); // DATA-ACTION
-
-  document.querySelectorAll('[data-action]').forEach(function (element) {
-    new DataAction(element, {
-      data: [{
-        key: SETTING.csrf.key,
-        value: SETTING.csrf.token
-      }]
-    });
-  }); // DATA-BEHAVIOR
-
-  document.querySelectorAll('[data-behavior]').forEach(function (element) {
-    new DataBehabior(element);
-  }); // FOREIGN FORM
-
-  document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
-    var foreignForm = new ForeignForm(element);
-    element.foreignForm = foreignForm;
-  });
+document.querySelectorAll('[class*="sortable"]').forEach(function (element) {
+  if (element.classList.contains('sortable')) {
+    var sortable = makeSortable(element);
+    element.sortable = sortable;
+  }
 });

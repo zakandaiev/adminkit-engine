@@ -47,7 +47,6 @@ const slimselect_data = {
 	}
 };
 
-document.addEventListener('DOMContentLoaded', () => {
 	document.querySelectorAll('select').forEach(select => {
 		if(select.hasAttribute('data-native')) {
 			return false;
@@ -68,4 +67,3 @@ document.addEventListener('DOMContentLoaded', () => {
 			showContent: "down"
 		});
 	});
-});

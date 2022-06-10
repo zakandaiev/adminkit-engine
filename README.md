@@ -17,11 +17,9 @@
 ## ToDo:
 * Engine: create Filter class
 * Engine: cache queries
-* Engine: htaccess2 -> htaccess
 * Engine: Find way to use hooks between modules
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Engine: add module install func (languages, DB queries etc.)
-* Admin: extend custom fields with ForeignForm (add image, wysiwyg...)
 * Admin: load more by data-attributes
 * Admin: make admin sidebar customizable by another modules
 * Admin: create Form models eg. User (name, login, email...)

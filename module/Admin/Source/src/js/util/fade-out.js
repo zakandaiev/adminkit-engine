@@ -1,4 +1,4 @@
-function fadeOut(element, soft = false, callback = '') {
+function fadeOut(element, soft = false, callback = null) {
 	if(!element) {
 		return false;
 	}
@@ -13,8 +13,10 @@ function fadeOut(element, soft = false, callback = '') {
 				element.remove();
 			}
 
-			if(window[callback]) {
+			if(callback instanceof String && window[callback]) {
 				window[callback]();
+			} else if(callback instanceof Function) {
+				callback();
 			}
 		} else {
 			requestAnimationFrame(fade);

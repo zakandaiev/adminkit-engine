@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-	document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
+document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 		textarea.classList.add("hidden");
 
 		const wysiwyg_node = document.createElement('div');
@@ -105,5 +104,4 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		textarea.quill = quill;
-	});
 });

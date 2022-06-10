@@ -4,42 +4,38 @@ namespace Module\Admin\Controller;
 
 use Engine\Request;
 use Engine\Server;
-// use Engine\Upload;
 
 class Upload extends AdminController {
-	/* public function get() {
+	public function get() {
 		if(!isset(Request::$get['load'])) {
 			Server::redirect('/404');
 		}
 
 		exit('Content-Disposition: inline; filename="' . Request::$get['load'] . '"');
-	} */
+	}
 
 	public function post() {
-		/*$files = Request::$files;
+		$file = Request::$files;
 
-		if(empty($files)) {
-			http_response_code(415);
-			exit;
+		if(empty($file)) {
+			Server::answerEmpty(415);
 		}
 
-		$files = $files[array_key_first($files)];
-		$files = array_map(function($n){if(is_array($n)){return strval($n[0]);}return $n;}, $files);
+		$file = $file[array_key_first($file)];
+		$file = array_map(function($n){if(is_array($n)){return strval($n[0]);}return $n;}, $file);
 
-		$upload = Upload::file($files);
+		$upload = \Engine\Upload::file($file);
 
 		if($upload->status === true) {
-			Server::answer(null, 'success', $upload->message);
+			Server::answer($upload->message);
 		}
 
-		http_response_code(415);
-		Server::answer(null, 'error', $upload->message);*/
-		exit;
+		Server::answer(null, 'error', $upload->message, 415);
 	}
 
 	public function delete() {
 		// remove temp file and return empty page
 		// ! should delete only TEMP file, not submitted to DB - not realized yet !
-		exit;
+		Server::answerEmpty();
 	}
 }

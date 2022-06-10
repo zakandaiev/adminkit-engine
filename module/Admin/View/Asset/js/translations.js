@@ -81,8 +81,6 @@ var Translation = /*#__PURE__*/function () {
   return Translation;
 }();
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.translation').forEach(function (element) {
-    new Translation(element);
-  });
+document.querySelectorAll('.translation').forEach(function (element) {
+  new Translation(element);
 });
