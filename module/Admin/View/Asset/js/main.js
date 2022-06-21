@@ -923,46 +923,91 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "setColValue",
     value: function setColValue(input, tcol) {
+      var _value;
+
       var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       var output = value;
 
-      if (input.type === 'file') {
-        output = '';
-        var files = [];
+      switch (input.type) {
+        case 'file':
+          {
+            output = '';
+            var files = [];
 
-        if (input.pond) {
-          input.pond.getFiles().forEach(function (file) {
-            if ([6, 8].includes(file.status)) {
-              return false;
+            if (input.pond) {
+              input.pond.getFiles().forEach(function (file) {
+                if ([6, 8].includes(file.status)) {
+                  return false;
+                }
+
+                files.push(file.serverId);
+              });
             }
 
-            files.push(file.serverId);
-          });
-        }
+            if (value && value[0] === '[') {
+              files = files.concat(JSON.parse(value));
+            }
 
-        if (value && value[0] === '[') {
-          files = files.concat(JSON.parse(value));
-        }
+            var gallery_uid = this.generateUid();
+            files.forEach(function (file) {
+              var file_name = file;
+              var file_url = BASE_URL + '/' + file_name;
+              var is_image = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(file_name === null || file_name === void 0 ? void 0 : file_name.split('.').pop().toLowerCase());
 
-        var gallery_uid = this.generateUid();
-        files.forEach(function (file) {
-          var file_name = file;
-          var file_url = BASE_URL + '/' + file_name;
-          var is_image = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(file_name === null || file_name === void 0 ? void 0 : file_name.split('.').pop().toLowerCase());
+              if (is_image) {
+                output += "<a href=\"".concat(file_url, "\" target=\"_blank\" data-fancybox=\"").concat(gallery_uid, "\">").concat(SETTING.icon.image, "</a>");
+              } else {
+                output += "<a href=\"".concat(file_url, "\" target=\"_blank\">").concat(SETTING.icon.file, "</a>");
+              }
 
-          if (is_image) {
-            output += "<a href=\"".concat(file_url, "\" target=\"_blank\" data-fancybox=\"").concat(gallery_uid, "\">").concat(SETTING.icon.image, "</a>");
-          } else {
-            output += "<a href=\"".concat(file_url, "\" target=\"_blank\">").concat(SETTING.icon.file, "</a>");
+              output += ' ';
+            });
+            value = JSON.stringify(files);
+            break;
           }
 
-          output += ' ';
-        });
-        value = JSON.stringify(files);
+        case 'select-multiple':
+          {
+            var _input$slim$selected, _input$slim, _JSON$parse;
+
+            var selected = (_input$slim$selected = input === null || input === void 0 ? void 0 : (_input$slim = input.slim) === null || _input$slim === void 0 ? void 0 : _input$slim.selected()) !== null && _input$slim$selected !== void 0 ? _input$slim$selected : (_JSON$parse = JSON.parse(value)) !== null && _JSON$parse !== void 0 ? _JSON$parse : [];
+            var svalues = [];
+            selected.forEach(function (sval) {
+              var option = input.querySelector('option[value="' + sval + '"]');
+              if (option) svalues.push(option.text);
+            });
+            output = svalues.join(', ');
+            value = JSON.stringify(selected);
+            break;
+          }
+
+        case 'checkbox':
+          {
+            if (input.checked) {
+              var _SETTING$icon$checkbo;
+
+              output = (_SETTING$icon$checkbo = SETTING.icon.checkbox_true) !== null && _SETTING$icon$checkbo !== void 0 ? _SETTING$icon$checkbo : '+';
+            } else {
+              var _SETTING$icon$checkbo2;
+
+              output = (_SETTING$icon$checkbo2 = SETTING.icon.checkbox_false) !== null && _SETTING$icon$checkbo2 !== void 0 ? _SETTING$icon$checkbo2 : '-';
+            }
+
+            value = input.checked;
+            break;
+          }
+
+        case 'datetime-local':
+          {
+            var _Date;
+
+            output = (_Date = new Date(value)) === null || _Date === void 0 ? void 0 : _Date.toLocaleString();
+            break;
+          }
       }
 
       tcol.innerHTML = output;
-      tcol.setAttribute('data-value', value);
+      tcol.setAttribute('data-value', (_value = value) !== null && _value !== void 0 ? _value : '');
       return true;
     }
   }, {
@@ -994,40 +1039,80 @@ var ForeignForm = /*#__PURE__*/function () {
     value: function setInputValue(input) {
       var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-      if (input.tagName.toLowerCase() === 'select') {
-        input.selectedIndex = value !== null && value !== void 0 ? value : 0;
+      switch (input.type) {
+        case 'file':
+          {
+            var files = [];
 
-        if (!input.hasAttribute('data-native')) {
-          input.slim.set(value);
-        }
-      } else if (input.classList.contains('wysiwyg')) {
-        input.quill.root.innerHTML = value;
-      } else if (input.type === 'file') {
-        var files = [];
+            if (value) {
+              JSON.parse(value).forEach(function (file) {
+                var file_obj = {
+                  source: file,
+                  options: {
+                    type: 'local',
+                    metadata: {}
+                  }
+                };
 
-        if (value) {
-          JSON.parse(value).forEach(function (file) {
-            var file_obj = {
-              source: file,
-              options: {
-                type: 'local',
-                metadata: {}
-              }
-            };
+                if (pond_input_data.allowImagePreview(input)) {
+                  file_obj.options.metadata.poster = BASE_URL + '/' + file;
+                }
 
-            if (pond_input_data.allowImagePreview(input)) {
-              file_obj.options.metadata.poster = BASE_URL + '/' + file;
+                files.push(file_obj);
+              });
             }
 
-            files.push(file_obj);
-          });
-        }
+            input.pond.setOptions({
+              files: files
+            });
+            break;
+          }
 
-        input.pond.setOptions({
-          files: files
-        });
-      } else {
-        input.value = value;
+        case 'select':
+        case 'select-multiple':
+          {
+            var _value2;
+
+            input.selectedIndex = (_value2 = value) !== null && _value2 !== void 0 ? _value2 : 0;
+
+            if (!input.hasAttribute('data-native')) {
+              if (input.type === 'select-multiple') {
+                var _value3;
+
+                value = JSON.parse(value);
+                value = (_value3 = value) !== null && _value3 !== void 0 ? _value3 : [];
+              }
+
+              input.slim.set(value);
+            }
+
+            break;
+          }
+
+        case 'checkbox':
+          {
+            if (value && value == 'true') {
+              input.checked = true;
+            } else {
+              input.checked = false;
+            }
+
+            break;
+          }
+
+        case 'textarea':
+          {
+            if (input.classList.contains('wysiwyg')) {
+              input.quill.root.innerHTML = value;
+            } else {
+              input.value = value;
+            }
+
+            break;
+          }
+
+        default:
+          input.value = value;
       }
 
       return true;

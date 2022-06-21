@@ -324,44 +324,80 @@ class ForeignForm {
 	setColValue(input, tcol, value = null) {
 		let output = value;
 
-		if(input.type === 'file') {
-			output = '';
+		switch(input.type) {
+			case 'file': {
+				output = '';
 
-			let files = [];
+				let files = [];
 
-			if(input.pond) {
-				input.pond.getFiles().forEach(file => {
-					if([6,8].includes(file.status)) {
-						return false;
-					}
-					files.push(file.serverId);
-				});
-			}
-			if(value && value[0] === '[') {
-				files = files.concat(JSON.parse(value));
-			}
-
-			const gallery_uid = this.generateUid();
-
-			files.forEach(file => {
-				const file_name = file;
-				const file_url = BASE_URL + '/' + file_name;
-				const is_image = ['jpg','jpeg','png','gif','svg','webp'].includes(file_name?.split('.').pop().toLowerCase());
-
-				if(is_image) {
-					output += `<a href="${file_url}" target="_blank" data-fancybox="${gallery_uid}">${SETTING.icon.image}</a>`;
-				} else {
-					output += `<a href="${file_url}" target="_blank">${SETTING.icon.file}</a>`;
+				if(input.pond) {
+					input.pond.getFiles().forEach(file => {
+						if([6,8].includes(file.status)) {
+							return false;
+						}
+						files.push(file.serverId);
+					});
+				}
+				if(value && value[0] === '[') {
+					files = files.concat(JSON.parse(value));
 				}
 
-				output += ' ';
-			});
+				const gallery_uid = this.generateUid();
 
-			value = JSON.stringify(files);
+				files.forEach(file => {
+					const file_name = file;
+					const file_url = BASE_URL + '/' + file_name;
+					const is_image = ['jpg','jpeg','png','gif','svg','webp'].includes(file_name?.split('.').pop().toLowerCase());
+
+					if(is_image) {
+						output += `<a href="${file_url}" target="_blank" data-fancybox="${gallery_uid}">${SETTING.icon.image}</a>`;
+					} else {
+						output += `<a href="${file_url}" target="_blank">${SETTING.icon.file}</a>`;
+					}
+
+					output += ' ';
+				});
+
+				value = JSON.stringify(files);
+
+				break;
+			}
+			case 'select-multiple': {
+				let selected = input?.slim?.selected() ?? (JSON.parse(value) ?? []);
+
+				let svalues = [];
+
+				selected.forEach(sval => {
+					const option = input.querySelector('option[value="' + sval + '"]');
+					if(option) svalues.push(option.text);
+				});
+
+				output = svalues.join(', ');
+
+				value = JSON.stringify(selected);
+
+				break;
+			}
+			case 'checkbox': {
+				if(input.checked) {
+					output = SETTING.icon.checkbox_true ?? '+';
+				} else {
+					output = SETTING.icon.checkbox_false ?? '-';
+				}
+
+				value = input.checked;
+
+				break;
+			}
+			case 'datetime-local': {
+				output = new Date(value)?.toLocaleString();
+
+				break;
+			}
 		}
 
 		tcol.innerHTML = output;
-		tcol.setAttribute('data-value', value);
+		tcol.setAttribute('data-value', value ?? '');
 
 		return true;
 	}
@@ -387,39 +423,67 @@ class ForeignForm {
 	}
 
 	setInputValue(input, value = null) {
-		if(input.tagName.toLowerCase() === 'select') {
-			input.selectedIndex = value ?? 0;
-			if(!input.hasAttribute('data-native')) {
-				input.slim.set(value);
-			}
-		} else if(input.classList.contains('wysiwyg')) {
-			input.quill.root.innerHTML = value;
-		} else if(input.type === 'file') {
-			let files = [];
+		switch(input.type) {
+			case 'file': {
+				let files = [];
 
-			if(value) {
-				JSON.parse(value).forEach(file => {
-					let file_obj = {
-						source: file,
-						options: {
-							type: 'local',
-							metadata: {}
+				if(value) {
+					JSON.parse(value).forEach(file => {
+						let file_obj = {
+							source: file,
+							options: {
+								type: 'local',
+								metadata: {}
+							}
+						};
+
+						if(pond_input_data.allowImagePreview(input)) {
+							file_obj.options.metadata.poster = BASE_URL + '/' + file;
 						}
-					};
 
-					if(pond_input_data.allowImagePreview(input)) {
-						file_obj.options.metadata.poster = BASE_URL + '/' + file;
-					}
+						files.push(file_obj);
+					});
+				}
 
-					files.push(file_obj);
+				input.pond.setOptions({
+					files: files
 				});
-			}
 
-			input.pond.setOptions({
-				files: files
-			});
-		} else {
-			input.value = value;
+				break;
+			}
+			case 'select':
+			case 'select-multiple': {
+				input.selectedIndex = value ?? 0;
+
+				if(!input.hasAttribute('data-native')) {
+					if(input.type === 'select-multiple') {
+						value = JSON.parse(value);
+						value = value ?? [];
+					}
+					input.slim.set(value);
+				}
+
+				break;
+			}
+			case 'checkbox': {
+				if(value && value == 'true') {
+					input.checked = true;
+				} else {
+					input.checked = false;
+				}
+
+				break;
+			}
+			case 'textarea': {
+				if(input.classList.contains('wysiwyg')) {
+					input.quill.root.innerHTML = value;
+				} else {
+					input.value = value;
+				}
+
+				break;
+			}
+			default: input.value = value;
 		}
 
 		return true;
@@ -431,6 +495,7 @@ class ForeignForm {
 
 		this.inputs.forEach(input => {
 			const value_lengh = input.value.replace(/(<([^>]+)>)/gi, '').length;
+
 			if(input.hasAttribute('data-required') && value_lengh <= 0) {
 				const sprintf = (str, ...argv) => !argv.length ? str :
 				sprintf(str = str.replace(sprintf.token||"%", argv.shift()), ...argv);
