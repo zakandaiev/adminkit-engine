@@ -49,7 +49,7 @@ class Optimization {
 	}
 
 	private static function minifyJS($input) {
-		$input = trim($input);
+		$input = trim($input ?? '');
 
 		if(empty($input)) {
 			return $input;
@@ -82,7 +82,7 @@ class Optimization {
 	}
 
 	private static function minifyCSS($input) {
-		$input = trim($input);
+		$input = trim($input ?? '');
 
 		if(empty($input)) {
 			return $input;

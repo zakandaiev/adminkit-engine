@@ -48,7 +48,7 @@ class Sitemap {
 			}
 
 			if($page->url === 'home') {
-				if(!empty($language)) $language = '/' . trim($language, '/');
+				if(!empty($language)) $language = '/' . trim($language ?? '', '/');
 				$url = Request::$base . $language;
 				$priority = '1.00';
 			} else {

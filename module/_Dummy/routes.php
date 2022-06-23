@@ -17,7 +17,7 @@ Module::route('get', '/page-url/sub-url/$parameter', 'ControllerName@controllerM
 		['name' => 'Page A -> B', 'url' => '/page-url/sub-url'],
 		['name' => 'Page A -> B -> C']
 	],
-	// Access to page ignoring user groups [Module\Admin\Controller\AdminController]
+	// Access to the route ignoring user groups [Module\Admin\Controller\AdminController]
 	'is_public' => false
 ]);
 

@@ -108,10 +108,10 @@ function formatMenuItems(arr = []) {
 function getItemProp(item, type = 'name') {
 	switch(type) {
 		case 'name': {
-			return item.querySelector('.menu-item > input[name="name"]')?.value;
+			return item.querySelector('.menu-item > input[name="name"]')?.value ?? '';
 		}
 		case 'url': {
-			return item.querySelector('.menu-item > input[name="url"]')?.value;
+			return item.querySelector('.menu-item > input[name="url"]')?.value ?? '';
 		}
 		default: {
 			return null;

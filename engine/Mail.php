@@ -16,7 +16,7 @@ class Mail {
 			return false;
 		}
 
-		$mail['message'] = trim($mail['message']);
+		$mail['message'] = trim($mail['message'] ?? '');
 		$mail['from'] = $mail['from'] ?? null;
 
 		if(empty($mail['recepient']) || empty($mail['subject']) || empty($mail['message'])) {
@@ -27,13 +27,13 @@ class Mail {
 	}
 
 	public static function mail($recepient, $subject, $message, $from = '') {
-		$to = trim($recepient);
-		$subj = trim($subject);
-		$msg = trim($message);
+		$to = trim($recepient ?? '');
+		$subj = trim($subject ?? '');
+		$msg = trim($message ?? '');
 		$frm = Setting::get('contact')->email;
 
 		if(!empty($from)) {
-			$frm = trim($from);
+			$frm = trim($from ?? '');
 		}
 
 		$headers = [
@@ -55,7 +55,7 @@ class Mail {
 		}
 
 		$path_mail = Path::file('mail') . '/' . $file_name . '.php';
-		
+
 		if(!file_exists($path_mail)) {
 			return [];
 		}

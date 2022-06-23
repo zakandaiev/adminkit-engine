@@ -9,6 +9,7 @@ return [
 		'socials' => $socials,
 		'phone' => $phone,
 		'address' => $address,
-		'about' => $about
+		'about' => $about,
+		'birthday' => $birthday
 	]
 ];

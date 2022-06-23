@@ -18,8 +18,8 @@ class Upload {
 		$extension = strtolower(file_extension($file['name']));
 
 		$path_dir = Define::UPLOAD_FOLDER;
-		if(!empty($custom_folder)) {
-			$path_dir = Define::UPLOAD_FOLDER . '/' . trim($custom_folder, '/');
+		if(!empty($custom_folder) && $custom_folder !== '/') {
+			$path_dir = Define::UPLOAD_FOLDER . '/' . trim($custom_folder ?? '', '/');
 		}
 		$path_file = $path_dir . '/' . $name_prepend . $name . '.' . $extension;
 		$path_full = ROOT_DIR . '/' . $path_file;

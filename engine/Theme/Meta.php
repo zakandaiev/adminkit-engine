@@ -38,7 +38,7 @@ class Meta {
 	public static function title($page) {
 		$page_title = $page->title . ' &#8212; ' . site('name');
 
-		if(Module::get('name') === 'Admin') {
+		if(Module::$name === 'Admin' || Module::get('extends') === 'Admin') {
 			$page_title = $page->title . ' &lsaquo; ' . __('Admin') . ' &#8212; ' . site('name');
 		}
 

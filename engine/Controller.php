@@ -18,7 +18,7 @@ abstract class Controller {
 	protected $page;
 
 	public function __construct() {
-		$this->module = Module::getAll()[Module::$name];
+		$this->module = Module::getSelf();
 		$this->route = Router::$route;
 
 		$this->view = new View();
@@ -43,8 +43,8 @@ abstract class Controller {
 		Breadcrumb::set($this->route['breadcrumbs']);
 	}
 
-	protected function loadModel($model_name) {
-		$model_class = Path::class('model') . '\\' . ucfirst($model_name);
+	protected function loadModel($model_name, $module = null) {
+		$model_class = Path::class('model', $module) . '\\' . ucfirst($model_name);
 
 		if(class_exists($model_class)) {
 			return new $model_class;

@@ -17,6 +17,7 @@ return [
 		'language' => $language,
 		'socials_allowed' => [],
 		'enable_registration' => $boolean,
+		'enable_password_restore' => $boolean,
 		'moderate_comments' => $boolean
 	]
 ];

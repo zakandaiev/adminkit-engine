@@ -30,7 +30,7 @@ class Form {
 
 			$token = Hash::token();
 
-			$query_params = ['module' => Module::get('name'), 'token' => $token, 'action' => $action, 'form_name' => $form_name];
+			$query_params = ['module' => Module::$name, 'token' => $token, 'action' => $action, 'form_name' => $form_name];
 
 			$query_append_field = '';
 			$query_append_binding = '';
@@ -371,6 +371,23 @@ class Form {
 				}
 				return false;
 			}
+			case 'date': {
+				if($operand_value) {
+					return strtotime($value) ? true : false;
+				}
+				return false;
+			}
+			case 'date_not_future': {
+				if($operand_value) {
+					$now = time();
+					$date = strtotime($value);
+
+					if($date && $date < $now) {
+						return true;
+					}
+				}
+				return false;
+			}
 			case 'min': {
 				$value = intval($value);
 				$operand_value = intval($operand_value);
@@ -437,11 +454,11 @@ class Form {
 					$is_field_formatted = true;
 				}
 				if(isset($values_array['html']) && $values_array['html']) {
-					$field_value = trim($field_value);
+					$field_value = trim($field_value ?? '');
 					$is_field_formatted = true;
 				}
 				if(isset($values_array['json']) && $values_array['json']) {
-					$field_value = trim($field_value);
+					$field_value = trim($field_value ?? '');
 					$is_field_formatted = true;
 				}
 				if(isset($values_array['foreign'])) {
@@ -449,13 +466,12 @@ class Form {
 					$is_field_formatted = true;
 				}
 				if(is_array($field_value)) {
-					$field_value = filter_var_array($field_value, FILTER_SANITIZE_STRING);
 					$field_value = json_encode($field_value);
 					$is_field_formatted = true;
 				}
 
 				if(!$is_field_formatted) {
-					$field_value = filter_var(trim($field_value), FILTER_SANITIZE_STRING);
+					$field_value = trim($field_value ?? '');
 				}
 
 				$fields[$field] = $field_value;

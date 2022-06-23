@@ -51,6 +51,10 @@
 		border-color: hsla(0, 0%, 100%, 0.125);
 		color: #e9eaec;
 	}
+	.list-group-item-action:not(.active):focus, .list-group-item-action:not(.active):hover {
+		background-color: #384350;
+    color: #bdc0c5;
+	}
 	.dropdown-item {
 		color: #bdc0c5;
 	}
@@ -300,11 +304,6 @@
 	.form-check-input:checked {
     background-color: #3b7ddd;
     border-color: #3b7ddd;
-	}
-
-	.list-group-item-action:focus, .list-group-item-action:hover {
-		background-color: #384350;
-    color: #bdc0c5;
 	}
 
 	[type^="date"]::-webkit-calendar-picker-indicator {

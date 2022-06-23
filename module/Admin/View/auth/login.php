@@ -27,9 +27,11 @@
 										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('Enter your password') ?>" required minlength="8" maxlength="200">
 										<small>
 											<?php if(site('enable_registration')): ?>
-												<a href="/admin/register"><?= __('Register') ?></a> •
+												<a href="/admin/register"><?= __('Register') ?></a>
 											<?php endif; ?>
-											<a href="/admin/reset-password"><?= __('Forgot password') ?></a>
+											<?php if(site('enable_password_restore')): ?>
+												<a href="/admin/reset-password"><?= __('Forgot password') ?></a>
+											<?php endif; ?>
 										</small>
 									</div>
 									<div class="text-center mt-3">

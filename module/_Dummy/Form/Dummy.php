@@ -15,6 +15,8 @@ $all_checks = [
 	'ip' => true,
 	'mac' => true,
 	'url' => true,
+	'date' => true,
+	'date_not_future' => true,
 
 	'min' => 1,
 	'max' => 100,

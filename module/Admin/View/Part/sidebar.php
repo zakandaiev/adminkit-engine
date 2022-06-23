@@ -1,92 +1,48 @@
 <?php
 
-$uri = site('uri_cut_language');
+function checkRouteAccess($route) {
+	if(Auth::$user->access_all) {
+		return true;
+	}
 
-$sidebar = [
-	[
-		'icon' => 'home',
-		'name' => __('Dashboard'),
-		'route' => '/admin'
-	],
-	[
-		'icon' => 'user',
-		'badge' => function() {
-			$notifications_count = Auth::$user->notifications_count;
-			return $notifications_count > 0 ? $notifications_count : null;
-		},
-		'name' => __('Profile'),
-		'route' => '/admin/profile'
-	],
-	[
-		'icon' => 'log-out',
-		'name' => __('Logout'),
-		'route' => '/admin/logout'
-	],
-	[
-		'name' => __('Content'),
-		'is_divider' => true,
-		'access_groups' => ['moderator']
-	],
-	[
-		'icon' => 'layout',
-		'name' => __('Pages'),
-		'route' => '/admin/page',
-		'access_groups' => ['moderator']
-	],
-	[
-		'icon' => 'message-square',
-		'badge' => function() {
-			$count = \Module\Admin\Model\Comment::getInstance()->countUnapprovedComments();
-			return $count > 0 ? $count : null;
-		},
-		'name' => __('Comments'),
-		'route' => '/admin/comment',
-		'access_groups' => ['moderator']
-	],
-	[
-		'icon' => 'menu',
-		'name' => __('Menu'),
-		'route' => '/admin/menu',
-		'access_groups' => ['moderator']
-	],
-	[
-		'icon' => 'globe',
-		'name' => __('Translations'),
-		'route' => '/admin/translation',
-		'access_groups' => ['moderator']
-	],
-	[
-		'name' => __('Administration'),
-		'is_divider' => true,
-		'access_groups' => ['administrator', 'admin']
-	],
-	[
-		'icon' => 'users',
-		'name' => __('Users'),
-		'route' => [
-			__('Users') => '/admin/user',
-			__('Groups') => '/admin/group'
-		],
-		'access_groups' => ['administrator', 'admin']
-	],
-	[
-		'icon' => 'settings',
-		'name' => __('Settings'),
-		'route' => [
-			__('Main') => '/admin/setting/main',
-			__('Site') => '/admin/setting/site',
-			__('Contacts') => '/admin/setting/contact',
-			__('Optimizations') => '/admin/setting/optimization'
-		],
-		'access_groups' => ['administrator', 'admin']
-	],
-	[
-		'icon' => 'activity',
-		'name' => __('Logs'),
-		'route' => '/admin/log',
-		'access_groups' => ['administrator', 'admin']
-	]
-];
+	if(is_array($route)) {
+		$route = array_map(function($string) {
+			return trim($string ?? '', '/');
+		}, $route);
+	} else {
+		$route = trim($route ?? '', '/');
+	}
+
+	foreach(Auth::$user->enabled_routes as $user_route) {
+		list($method, $uri) = explode('@', $user_route);
+
+		$uri = trim($uri ?? '', '/');
+
+		if($method !== 'get') {
+			continue;
+		}
+
+		if(is_array($route) && in_array($uri, $route)) {
+			return true;
+		} else if($route === $uri) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function checkRouteActive($route) {
+	$uri = site('uri_cut_language');
+
+	if(is_array($route) && in_array($uri, $route)) {
+		return true;
+	} else if($route === $uri) {
+		return true;
+	}
+
+	return false;
+}
 
 ?>
 
@@ -101,23 +57,23 @@ $sidebar = [
 		</a>
 
 		<ul class="sidebar-nav">
-			<?php foreach($sidebar as $item): ?>
-				<?php if(isset($item['access_groups']) && !Auth::$user->access_all && count(array_intersect($item['access_groups'], Auth::$user->groups)) <= 0) continue; ?>
+			<?php foreach($GLOBALS['admin_sidebar'] as $item): ?>
+				<?php if(!@$item['is_public'] && !checkRouteAccess(@$item['route'])) continue; ?>
 				<?php if(isset($item['is_divider']) && $item['is_divider']): ?>
 					<li class="sidebar-header"><?= $item['name'] ?></li>
 				<?php elseif(is_array($item['route'])): ?>
-					<li class="sidebar-item <?php if(in_array($uri, $item['route'])): ?>active<?php endif; ?>">
-						<a data-bs-target="#<?= strtolower($item['name']) ?>" data-bs-toggle="collapse" class="sidebar-link collapsed">
+					<li class="sidebar-item <?php if(checkRouteActive($item['route'])): ?>active<?php endif; ?>">
+						<a data-bs-target="#<?= strtolower($item['name'] ?? '') ?>" data-bs-toggle="collapse" class="sidebar-link collapsed">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i> <span class="align-middle"><?= $item['name'] ?></span>
 						</a>
-						<ul id="<?= strtolower($item['name']) ?>" class="sidebar-dropdown list-unstyled collapse <?php if(in_array($uri, $item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
+						<ul id="<?= strtolower($item['name'] ?? '') ?>" class="sidebar-dropdown list-unstyled collapse <?php if(checkRouteActive($item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
 							<?php foreach($item['route'] as $key => $value): ?>
-								<li class="sidebar-item <?php if($value === $uri): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= site('url_language') . $value ?>"><?= $key ?></a></li>
+								<li class="sidebar-item <?php if(checkRouteActive($value)): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= site('url_language') . $value ?>"><?= $key ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					</li>
 				<?php else: ?>
-					<li class="sidebar-item <?php if($item['route'] === $uri): ?>active<?php endif; ?>">
+					<li class="sidebar-item <?php if(checkRouteActive($item['route'])): ?>active<?php endif; ?>">
 						<a class="sidebar-link" href="<?= site('url_language') . $item['route'] ?>">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i>
 							<span class="align-middle"><?= $item['name'] ?></span>

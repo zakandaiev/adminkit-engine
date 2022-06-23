@@ -65,6 +65,7 @@ return [
 	},
 	'execute_post' => function($data) {
 		createNotification($data);
+		Sitemap::update();
 	}
 ];
 

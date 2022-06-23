@@ -22,7 +22,7 @@ class Menu extends AdminController {
 
 		$data['menus'] = \Engine\Theme\Menu::getAll();
 		$data['is_edit'] = true;
-		$data['edit_id'] = $menu_id;
+		$data['edit_id'] = intval($menu_id);
 
 		$this->view->setData($data);
 		$this->view->render('menu');

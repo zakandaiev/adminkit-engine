@@ -53,9 +53,26 @@ function glob_recursive($pattern, $flags = 0) {
 	return $files;
 }
 
+function rmdir_recursive($path) {
+  if(is_dir($path)) {
+  	$files = array_diff(scandir($path), array('.', '..'));
+
+  	foreach($files as $file) {
+			rmdir_recursive(realpath($path) . '/' . $file);
+  	}
+
+  	return rmdir($path);
+  }
+	else if(is_file($path)) {
+    return unlink($path);
+  }
+
+  return false;
+}
+
 ############################# IMAGE #############################
 function svg($file) {
-	$path = Path::file('asset') . '/img/' . trim($file, '/') . '.svg';
+	$path = Path::file('asset') . '/img/' . trim($file ?? '', '/') . '.svg';
 
 	if(!file_exists($path)) {
 		return null;
@@ -170,8 +187,8 @@ function print_time_zones($selected = '') {
 }
 
 ############################# HTML #############################
-function hc($text){
-	return htmlspecialchars($text);
+function hc($text = ''){
+	return htmlspecialchars($text ?? '');
 }
 
 function us($url) {
@@ -213,8 +230,8 @@ function slug($text, $delimiter = '-') {
 	$slug = cyr_to_lat($text);
 	$slug = preg_replace('/[^A-Za-z0-9' . $delimiter . ']+/', $delimiter, $slug);
 	$slug = preg_replace('/[' . $delimiter . ']+/', $delimiter, $slug);
-	$slug = trim($slug, $delimiter);
-	$slug = strtolower($slug);
+	$slug = trim($slug ?? '', $delimiter);
+	$slug = strtolower($slug ?? '');
 
 	return $slug;
 }
@@ -222,7 +239,7 @@ function slug($text, $delimiter = '-') {
 function word($text) {
 	$word = preg_replace('/[^\p{L}\d ]+/iu', '', $text);
 	$word = preg_replace('/[\s]+/', ' ', $word);
-	$word = trim($word);
+	$word = trim($word ?? '');
 
 	return $word;
 }
@@ -261,13 +278,13 @@ function site($key) {
 		if(isset($setting->{$key})) {
 			$value = $setting->{$key};
 
-			if($value == 'true') {
+			if($value === 'true') {
 				$value = true;
 			}
-			else if($value == 'false') {
+			if($value === 'false') {
 				$value = false;
 			}
-			else if(is_string($value) && $value[0] === "[") {
+			if(is_string($value) && $value[0] === "[") {
 				$value = json_decode($value) ?? [];
 			}
 
@@ -302,7 +319,7 @@ function site($key) {
 			break;
 		}
 		case 'uri_cut_language': {
-			$uri = trim(Request::$uri, '/');
+			$uri = trim(Request::$uri ?? '', '/');
 			$uri_parts = explode('/', $uri);
 
 			if(Language::has($uri_parts[0])) {
@@ -315,7 +332,7 @@ function site($key) {
 			break;
 		}
 		case 'permalink': {
-			$value = trim(Request::$url, '/');
+			$value = trim(Request::$url ?? '', '/');
 			break;
 		}
 		case 'version': {

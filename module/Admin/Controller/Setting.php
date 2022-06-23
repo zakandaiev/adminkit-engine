@@ -39,13 +39,13 @@ class Setting extends AdminController {
 		$fields = Form::processFields($form_name);
 
 		if($section === 'optimization') {
-			if($fields['group_css'] === true && site('group_css') === false) {
+			if($fields['group_css'] === true && !site('group_css')) {
 				$fields['group_css'] = $this->launchOptimization('css');
 			} else if($fields['group_css'] === true && is_string(site('group_css'))) {
 				$fields['group_css'] = site('group_css');
 			}
 
-			if($fields['group_js'] === true && site('group_js') === false) {
+			if($fields['group_js'] === true && !site('group_js')) {
 				$fields['group_js'] = $this->launchOptimization('js');
 			} else if($fields['group_js'] === true && is_string(site('group_js'))) {
 				$fields['group_js'] = site('group_js');
@@ -81,6 +81,6 @@ class Setting extends AdminController {
 
 		$dest = Path::file('asset') . '/' . $type;
 
-		return Optimization::{strtolower($type)}($files, $dest);
+		return Optimization::{strtolower($type ?? '')}($files, $dest);
 	}
 }

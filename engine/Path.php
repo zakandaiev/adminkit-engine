@@ -4,9 +4,9 @@ namespace Engine;
 
 class Path {
 	public static function class($class_name, $module = null) {
-		$module = $module ?? trim(Module::$name);
+		$module = $module ?? trim(Module::$name ?? '');
 
-		switch(strtolower($class_name)) {
+		switch(strtolower($class_name ?? '')) {
 			case 'controller':
 				return '\\Module\\' . ucfirst($module) . '\\Controller';
 			case 'model':
@@ -21,9 +21,9 @@ class Path {
 	}
 
 	public static function file($section = null, $module = null) {
-		$module = $module ?? trim(Module::$name);
+		$module = $module ?? trim(Module::$name ?? '');
 
-		switch(strtolower($section)) {
+		switch(strtolower($section ?? '')) {
 			case 'config':
 				return ROOT_DIR . '/config';
 			case 'engine':
@@ -84,9 +84,9 @@ class Path {
 	public static function url($section = null, $module = null) {
 		$url_base = Request::$base;
 
-		$module = $module ?? trim(Module::$name);
+		$module = $module ?? trim(Module::$name ?? '');
 
-		switch(strtolower($section)) {
+		switch(strtolower($section ?? '')) {
 			case 'upload':
 				return $url_base . '/' . trim(Define::UPLOAD_FOLDER, '/');
 			case 'theme':

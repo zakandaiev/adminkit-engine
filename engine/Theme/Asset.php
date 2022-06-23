@@ -2,6 +2,7 @@
 
 namespace Engine\Theme;
 
+use Engine\Define;
 use Engine\Module;
 use Engine\Path;
 use Engine\Router;
@@ -31,6 +32,7 @@ class Asset {
 
 		if(is_file($file_path)) {
 			self::$container[$extension][] = [
+				'module' => Module::$name,
 				'file' => $file_name . '.' . $extension,
 				'attributes' => $attributes,
 				'routes' => $routes
@@ -64,10 +66,11 @@ class Asset {
 			return false;
 		}
 
-		if(Module::$name === 'Public' && @Setting::get('optimization')->{'group_' . $extension} != 'false') {
+		$group_setting = @Setting::get('optimization')->{'group_' . $extension};
+		if(Module::$name === 'Public' && $group_setting != 'false' && !empty($group_setting)) {
 			$assets = [
 				[
-					'file' => $extension . '/' . Setting::get('optimization')->{'group_' . $extension} . '.' . $extension,
+					'file' => $extension . '/' . $group_setting . '.' . $extension,
 					'attributes' => self::$optimization[$extension]['attributes'],
 					'routes' => self::$optimization[$extension]['routes']
 				]
@@ -83,7 +86,7 @@ class Asset {
 
 			$output .= sprintf(
 				self::EXTENSION_MASK[$extension],
-				Path::url('asset') . '/' . $asset['file'] . '?version=' . Module::get('version'),
+				Path::url('asset', $asset['module']) . '/' . $asset['file'] . '?version=' . Define::VERSION,
 				!empty($asset['attributes']) ? ' ' . $asset['attributes'] : ''
 			) . PHP_EOL;
 		}
@@ -91,8 +94,9 @@ class Asset {
 		return $output;
 	}
 
-	public static function url() {
-		return !empty(self::$asset_url) ? self::$asset_url : Path::url('asset');
+	public static function url($module = null) {
+		$module = $module ?? Module::get('extends');
+		return !empty(self::$asset_url) ? self::$asset_url : Path::url('asset', $module);
 	}
 
 	public static function get($extension) {
@@ -107,10 +111,10 @@ class Asset {
 		$routes = is_array($routes) ? $routes : (!empty($routes) ? [$routes] : []);
 
 		$routes = array_map(function($string) {
-			return trim(trim(strval($string)), '/');
+			return trim(trim(strval($string ?? '')), '/');
 		}, $routes);
 
-		$route = trim(trim(Router::$route['uri']), '/');
+		$route = trim(trim(Router::$route['uri'] ?? ''), '/');
 
 		if(in_array($route, $routes)) {
 			return true;

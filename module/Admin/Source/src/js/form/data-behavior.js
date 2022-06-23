@@ -108,3 +108,7 @@ class DataBehabior {
 		return true;
 	}
 }
+
+document.querySelectorAll('[data-behavior]').forEach(element => {
+	new DataBehabior(element);
+});

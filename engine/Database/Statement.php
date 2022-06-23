@@ -58,21 +58,15 @@ class Statement {
 		try {
 			$this->statement->execute();
 		} catch(PDOException $error) {
-			$language_key = '';
+			$error_message = $error->getMessage();
 
 			if(preg_match("/Duplicate entry .+ for key '(.+)'/", $error->getMessage(), $matches)) {
-				$language_key = str_replace(Config::get('database')['prefix'] . '_', '', $matches[1]);
-				$language_key = str_replace('.', '_', $language_key);
-				$language_key = 'duplicate/' . $language_key;
+				$error_message = str_replace(Config::get('database')['prefix'] . '_', '', $matches[1]);
+				$error_message = str_replace('.', '_', $error_message);
+				$error_message = 'duplicate/' . $error_message;
 			}
 
-			$error_message = __($language_key);
-
-			if(!$error_message) {
-				$error_message = $error->getMessage();
-			}
-
-			$debug_sql = Define::DEBUG ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql))] : null;
+			$debug_sql = Define::DEBUG ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql ?? ''))] : null;
 
 			Server::answer($debug_sql, 'error', $error_message, '409');
 		}
@@ -88,7 +82,7 @@ class Statement {
 		return $this->statement->fetch($mode);
 	}
 
-	public function fetchColumn(int $column = null) {
+	public function fetchColumn(int $column = 0) {
 		return $this->statement->fetchColumn($column);
 	}
 

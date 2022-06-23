@@ -34,7 +34,13 @@ class User {
 
 		$user = new Statement($sql);
 
-		return $user->execute(['id' => $id])->fetch();
+		$user = $user->execute(['id' => $id])->fetch();
+
+		if($user && !empty($user->socials)) {
+			$user->socials = json_decode($user->socials) ?? [];
+		}
+
+		return $user;
 	}
 
 	public function getGroups() {

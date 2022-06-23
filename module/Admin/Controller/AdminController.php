@@ -13,7 +13,7 @@ class AdminController extends \Engine\Controller {
 			Server::redirect('/admin/login');
 		}
 
-		$this->modelAdmin = $this->loadModel('AdminModel');
+		$this->modelAdmin = $this->loadModel('AdminModel', 'Admin');
 
 		// CHECK USER FOR ROUTE ACCESS
 		$is_user_enabled = false;

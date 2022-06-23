@@ -2,11 +2,16 @@
 
 namespace Engine\Theme;
 
+use Engine\Module;
 use Engine\View;
 
 class Template {
-	public static function load($template, $is_required = true) {
-		$template_path = Theme::path() . '/' . $template . '.php';
+	public static function load($template, $is_required = true, $module = null) {
+		$template_path = Theme::path($module) . '/' . $template . '.php';
+
+		if(!is_file($template_path) && Module::get('extends')) {
+			$template_path = Theme::path(Module::get('extends')) . '/' . $template . '.php';
+		}
 
 		if(!is_file($template_path)) {
 			if($is_required) {

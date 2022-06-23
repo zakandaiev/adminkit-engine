@@ -24,8 +24,8 @@
 										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('Enter your email') ?>">
 										<small>
 											<a href="/admin/login"><?= __('Login') ?></a>
-											<?php if(site('enable_registration') == 'true'): ?>
-												• <a href="/admin/register"><?= __('Register') ?></a>
+											<?php if(site('enable_registration')): ?>
+												<a href="/admin/register"><?= __('Register') ?></a>
 											<?php endif; ?>
 										</small>
 									</div>

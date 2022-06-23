@@ -283,3 +283,26 @@ Module::route('get', '/admin/log/$id', 'Log@get', [
 		__('Logs') . '@/admin/log'
 	]
 ]);
+
+############################# MODULE #############################
+Module::route('get', '/admin/module', 'Module@getAll', [
+	'page' => [
+		'title' => __('Modules')
+	],
+	'breadcrumbs' => [
+		__('Modules')
+	]
+]);
+
+Module::route('get', '/admin/module/edit/$name', 'Module@getEdit', [
+	'page' => [
+		'title' => __('Modules')
+	],
+	'breadcrumbs' => [
+		__('Modules') . '@/admin/module'
+	]
+]);
+
+Module::route('post', '/admin/module/edit/$name', 'Module@postEdit');
+Module::route('post', '/admin/module/delete/$name', 'Module@postDelete');
+Module::route('post', '/admin/module/toggle/$name', 'Module@postToggle');

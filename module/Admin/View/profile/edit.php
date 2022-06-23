@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <div class="wrapper">
-	<?php Theme::block('sidebar'); ?>
+	<?php Theme::sidebar(); ?>
 
 	<div class="main">
 		<?php Theme::block('navbar-top'); ?>
@@ -31,14 +31,11 @@
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
 									Password
 								</a>
-								<!-- <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									Privacy and safety
-								</a> -->
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									Email notifications
+									Privacy
 								</a>
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									Web notifications
+									Notifications
 								</a>
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
 									Delete account
@@ -73,9 +70,11 @@
 														<input type="text" name="name" placeholder="<?= __('Name') ?>" value="<?= $user->name ?>" class="form-control" minlength="1" maxlength="200" required>
 													</div>
 												</div>
-												<div class="col-md-4 filepond--no-grid">
-													<label class="form-label"><?= __('Avatar') ?></label>
-													<input type="file" accept="image/*" name="avatar" data-value='<?= Form::populateFiles($user->avatar) ?>'>
+												<div class="col-md-4">
+													<div class="mb-3 filepond--no-grid">
+														<label class="form-label"><?= __('Avatar') ?></label>
+														<input type="file" accept="image/*" name="avatar" data-value='<?= Form::populateFiles($user->avatar) ?>'>
+													</div>
 												</div>
 											</div>
 											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
@@ -88,40 +87,19 @@
 									</div>
 									<div class="card-body">
 										<form action="<?= Form::edit('Profile/Account_Contacts', $user->id); ?>" method="POST">
-											<div class="mb-3">
-												<label class="form-label"><?= __('Socials') ?></label>
-												<div class="modal fade foreign-form" data-name="socials" data-value='<?= json_encode($user->socials) ?>'>
-													<div class="modal-dialog modal-dialog-centered">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title"><?= __('Add social') ?></h5>
-																<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-															</div>
-															<div class="modal-body">
-																<div class="mb-3">
-																	<label class="form-label"><?= __('Social') ?></label>
-																	<select name="type" data-placeholder="<?= __('Social') ?>">
-																		<?php foreach(site('socials_allowed') as $social): ?>
-																			<option value="<?= strtolower($social) ?>"><?= ucfirst($social) ?></option>
-																		<?php endforeach; ?>
-																	</select>
-																</div>
-																<div class="mb-3">
-																	<label class="form-label"><?= __('Link') ?></label>
-																	<input type="url" name="link" placeholder="<?= __('Link') ?>" class="form-control" minlength="1" maxlength="200">
-																</div>
-															</div>
-															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= __('Cancel') ?></button>
-																<button type="submit" class="btn btn-primary" data-bs-dismiss="modal"><?= __('Add') ?></button>
-															</div>
-														</div>
+											<div class="row">
+												<div class="col-xs-12 col-md-6">
+													<div class="mb-3">
+														<label class="form-label"><?= __('Phone') ?></label>
+														<input type="text" name="phone" placeholder="<?= __('Phone') ?>" value="<?= $user->phone ?>" class="form-control" minlength="8" maxlength="100">
 													</div>
 												</div>
-											</div>
-											<div class="mb-3">
-												<label class="form-label"><?= __('Phone') ?></label>
-												<input type="text" name="phone" placeholder="<?= __('Phone') ?>" value="<?= $user->phone ?>" class="form-control" minlength="8" maxlength="100">
+												<div class="col-xs-12 col-md-6">
+													<div class="mb-3">
+														<label class="form-label"><?= __('Birthday') ?></label>
+														<input type="date" name="birthday" placeholder="<?= __('Birthday') ?>" value="<?= $user->birthday ?>" class="form-control">
+													</div>
+												</div>
 											</div>
 											<div class="mb-3">
 												<label class="form-label"><?= __('Address') ?></label>
@@ -130,6 +108,9 @@
 											<div class="mb-3">
 												<label class="form-label"><?= __('About') ?></label>
 												<textarea name="about" placeholder="<?= __('About') ?>" class="form-control"><?= $user->about ?></textarea>
+											</div>
+											<div class="mb-3">
+												<?= Theme::block('form-socials', ['value' => $user->socials]) ?>
 											</div>
 											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
 										</form>

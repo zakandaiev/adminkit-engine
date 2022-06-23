@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <div class="wrapper">
-	<?php Theme::block('sidebar'); ?>
+	<?php Theme::sidebar(); ?>
 
 	<div class="main">
 		<?php Theme::block('navbar-top'); ?>
@@ -53,13 +53,17 @@
 														$selected_social = 'selected';
 													}
 												?>
-												<option value="<?= strtolower($social) ?>" <?= $selected_social ?>><?= ucfirst($social) ?></option>
+												<option value="<?= strtolower($social ?? '') ?>" <?= $selected_social ?>><?= ucfirst($social) ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="enable_registration" name="enable_registration" <?php if($settings->enable_registration == 'true'): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="enable_registration">Enable registration</label>
+									</div>
+									<div class="form-check form-switch mb-3">
+										<input class="form-check-input" type="checkbox" id="enable_password_restore" name="enable_password_restore" <?php if($settings->enable_password_restore == 'true'): ?>checked<?php endif; ?>>
+										<label class="form-check-label" for="enable_password_restore">Enable password restore</label>
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="moderate_comments" name="moderate_comments" <?php if($settings->moderate_comments == 'true'): ?>checked<?php endif; ?>>

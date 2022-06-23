@@ -2,6 +2,7 @@
 
 namespace Engine\Theme;
 
+use Engine\Module;
 use Engine\Path;
 use Engine\View;
 
@@ -22,85 +23,57 @@ class Theme {
 	private static $theme_page_templates = [];
 
 	public static function header($name = '', $data = []) {
-		$name = (string) $name;
-		$file = self::detectNameFile($name, __FUNCTION__);
-		$file = self::PART_DIR . '/' . $file;
-
-		View::setData($data);
-		Template::load($file);
+		self::loadTemplate(__FUNCTION__, $name, $data);
 	}
 
 	public static function footer($name = '', $data = []) {
-		$name = (string) $name;
-		$file = self::detectNameFile($name, __FUNCTION__);
-		$file = self::PART_DIR . '/' . $file;
-
-		View::setData($data);
-		Template::load($file);
+		self::loadTemplate(__FUNCTION__, $name, $data);
 	}
 
 	public static function sidebar($name = '', $data = []) {
-		$name = (string) $name;
-		$file = self::detectNameFile($name, __FUNCTION__);
-		$file = self::PART_DIR . '/' . $file;
-
-		View::setData($data);
-		Template::load($file);
+		self::loadTemplate(__FUNCTION__, $name, $data);
 	}
 
 	public static function widget($name = '', $data = []) {
-		$name = (string) $name;
-		$file = self::detectNameFile($name, __FUNCTION__);
-		$file = self::PART_DIR . '/' . $file;
-
-		View::setData($data);
-		Template::load($file);
+		self::loadTemplate(__FUNCTION__, $name, $data);
 	}
 
 	public static function menu($name, $data = []) {
 		$data[__FUNCTION__] = Menu::get($name);
 
-		$file = self::detectNameFile($name, __FUNCTION__);
-		$file = self::PART_DIR . '/' . $file;
-
-		View::setData($data);
-		Template::load($file);
+		self::loadTemplate(__FUNCTION__, $name, $data);
 	}
 
 	public static function breadcrumbs($name = '', $data = []) {
 		$data[__FUNCTION__] = Breadcrumb::get();
 		$data['options'] = Breadcrumb::getOptions();
 
-		$file = self::detectNameFile($name, __FUNCTION__);
-		$file = self::PART_DIR . '/' . $file;
-
-		View::setData($data);
-		Template::load($file);
+		self::loadTemplate(__FUNCTION__, $name, $data);
 	}
 
 	public static function pagination($name = '', $data = []) {
 		$data[__FUNCTION__] = Pagination::getInstance();
 
-		$file = self::detectNameFile($name, __FUNCTION__);
+		self::loadTemplate(__FUNCTION__, $name, $data);
+	}
+
+	private static function loadTemplate($type, $name = '', $data = []) {
+		$file = self::detectNameFile($name, $type);
 		$file = self::PART_DIR . '/' . $file;
 
 		View::setData($data);
-		Template::load($file);
+		Template::load($file, true, Module::get('extends'));
 	}
 
-	public static function block($name = '', $data = []) {
-		$name = (string) $name;
+	public static function block($name, $data = []) {
+		$file = self::PART_DIR . '/' . $name;
 
-		if($name !== '') {
-			$file = self::PART_DIR . '/' . $name;
-
-			View::setData($data);
-			Template::load($file);
-		}
+		View::setData($data);
+		Template::load($file, true, Module::get('extends'));
 	}
 
-	public static function path() {
-		return !empty(self::$theme_path) ? self::$theme_path : Path::file('view');
+	public static function path($module = null) {
+		return !empty(self::$theme_path) ? self::$theme_path : Path::file('view', $module);
 	}
 
 	public static function pageTemplates() {

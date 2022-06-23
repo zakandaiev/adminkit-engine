@@ -20,7 +20,7 @@ class Define {
 	const PHP_MIN = '7.0.0';
 
 	// META
-	const NAME = 'CMS';
+	const NAME = 'AdminKit Engine';
 	const VERSION = '1.0.0';
 	const AUTHOR = 'Zakandaiev';
 	const AUTHOR_URL = 'https://zakandaiev.pp.ua';

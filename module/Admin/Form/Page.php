@@ -48,6 +48,5 @@ return [
 	],
 	'execute_post' => function($data) {
 		Form::execute($data->form_data['action'], 'PageTranslation', $data->form_data['item_id'], true);
-		Sitemap::update();
 	}
 ];

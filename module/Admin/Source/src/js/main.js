@@ -11,10 +11,9 @@
 @@include("form/form.js")
 @@include("form/data-action.js")
 @@include("form/data-behavior.js")
-@@include("form/foreign_form.js")
+@@include("form/foreign-form.js")
 
 // PLUGINS
-@@include("plugin/forms.js")
 @@include("plugin/filepond.js")
 @@include("plugin/quill.js")
 @@include("plugin/slimselect.js")

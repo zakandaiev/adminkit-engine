@@ -362,6 +362,16 @@ class ForeignForm {
 
 				break;
 			}
+			case 'select-one': {
+				let selected = input?.slim?.selected() ?? (value ?? '');
+
+				const option = input.querySelector('option[value="' + selected + '"]');
+				if(option) output = option.text;
+
+				value = selected;
+
+				break;
+			}
 			case 'select-multiple': {
 				let selected = input?.slim?.selected() ?? (JSON.parse(value) ?? []);
 
@@ -386,6 +396,11 @@ class ForeignForm {
 				}
 
 				value = input.checked;
+
+				break;
+			}
+			case 'date': {
+				output = new Date(value)?.toLocaleDateString();
 
 				break;
 			}
@@ -451,7 +466,7 @@ class ForeignForm {
 
 				break;
 			}
-			case 'select':
+			case 'select-one':
 			case 'select-multiple': {
 				input.selectedIndex = value ?? 0;
 
@@ -513,3 +528,9 @@ class ForeignForm {
 		return is_valid ? value : is_valid;
 	}
 }
+
+document.querySelectorAll('[class*="foreign-form"]').forEach(element => {
+	if(element.classList.contains('foreign-form')) {
+		new ForeignForm(element);
+	}
+});

@@ -13,7 +13,7 @@ class Log {
 		$path = Path::file('log');
 
 		if(!empty($folder)) {
-			$path .= '/' . trim($folder, '/');
+			$path .= '/' . trim($folder ?? '', '/');
 		}
 
 		if(!file_exists($path)) {
@@ -84,7 +84,7 @@ class Log {
 
 	public static function get($id) {
 		$log = new \stdClass();
-		$log_id = str_replace('@', '/', trim($id, '/'));
+		$log_id = str_replace('@', '/', trim($id ?? '', '/'));
 
 		$path = Path::file('log') . '/' . $log_id . '.' . Define::LOG_EXTENSION;
 

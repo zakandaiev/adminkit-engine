@@ -243,6 +243,16 @@ var Form = /*#__PURE__*/function () {
   return Form;
 }();
 
+document.querySelectorAll('form').forEach(function (element) {
+  new Form(element, {
+    loader: SETTING.loader,
+    data: [{
+      key: SETTING.csrf.key,
+      value: SETTING.csrf.token
+    }]
+  });
+});
+
 var DataAction = /*#__PURE__*/function () {
   function DataAction(node) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -459,6 +469,15 @@ var DataAction = /*#__PURE__*/function () {
   return DataAction;
 }();
 
+document.querySelectorAll('[data-action]').forEach(function (element) {
+  new DataAction(element, {
+    data: [{
+      key: SETTING.csrf.key,
+      value: SETTING.csrf.token
+    }]
+  });
+});
+
 var DataBehabior = /*#__PURE__*/function () {
   function DataBehabior(node) {
     _classCallCheck(this, DataBehabior);
@@ -586,6 +605,10 @@ var DataBehabior = /*#__PURE__*/function () {
 
   return DataBehabior;
 }();
+
+document.querySelectorAll('[data-behavior]').forEach(function (element) {
+  new DataBehabior(element);
+});
 
 var ForeignForm = /*#__PURE__*/function () {
   function ForeignForm(node) {
@@ -923,7 +946,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "setColValue",
     value: function setColValue(input, tcol) {
-      var _value;
+      var _value2;
 
       var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       var output = value;
@@ -966,18 +989,32 @@ var ForeignForm = /*#__PURE__*/function () {
             break;
           }
 
+        case 'select-one':
+          {
+            var _input$slim$selected, _input$slim, _value;
+
+            var selected = (_input$slim$selected = input === null || input === void 0 ? void 0 : (_input$slim = input.slim) === null || _input$slim === void 0 ? void 0 : _input$slim.selected()) !== null && _input$slim$selected !== void 0 ? _input$slim$selected : (_value = value) !== null && _value !== void 0 ? _value : '';
+            var option = input.querySelector('option[value="' + selected + '"]');
+            if (option) output = option.text;
+            value = selected;
+            break;
+          }
+
         case 'select-multiple':
           {
-            var _input$slim$selected, _input$slim, _JSON$parse;
+            var _input$slim$selected2, _input$slim2, _JSON$parse;
 
-            var selected = (_input$slim$selected = input === null || input === void 0 ? void 0 : (_input$slim = input.slim) === null || _input$slim === void 0 ? void 0 : _input$slim.selected()) !== null && _input$slim$selected !== void 0 ? _input$slim$selected : (_JSON$parse = JSON.parse(value)) !== null && _JSON$parse !== void 0 ? _JSON$parse : [];
+            var _selected = (_input$slim$selected2 = input === null || input === void 0 ? void 0 : (_input$slim2 = input.slim) === null || _input$slim2 === void 0 ? void 0 : _input$slim2.selected()) !== null && _input$slim$selected2 !== void 0 ? _input$slim$selected2 : (_JSON$parse = JSON.parse(value)) !== null && _JSON$parse !== void 0 ? _JSON$parse : [];
+
             var svalues = [];
-            selected.forEach(function (sval) {
+
+            _selected.forEach(function (sval) {
               var option = input.querySelector('option[value="' + sval + '"]');
               if (option) svalues.push(option.text);
             });
+
             output = svalues.join(', ');
-            value = JSON.stringify(selected);
+            value = JSON.stringify(_selected);
             break;
           }
 
@@ -997,17 +1034,25 @@ var ForeignForm = /*#__PURE__*/function () {
             break;
           }
 
-        case 'datetime-local':
+        case 'date':
           {
             var _Date;
 
-            output = (_Date = new Date(value)) === null || _Date === void 0 ? void 0 : _Date.toLocaleString();
+            output = (_Date = new Date(value)) === null || _Date === void 0 ? void 0 : _Date.toLocaleDateString();
+            break;
+          }
+
+        case 'datetime-local':
+          {
+            var _Date2;
+
+            output = (_Date2 = new Date(value)) === null || _Date2 === void 0 ? void 0 : _Date2.toLocaleString();
             break;
           }
       }
 
       tcol.innerHTML = output;
-      tcol.setAttribute('data-value', (_value = value) !== null && _value !== void 0 ? _value : '');
+      tcol.setAttribute('data-value', (_value2 = value) !== null && _value2 !== void 0 ? _value2 : '');
       return true;
     }
   }, {
@@ -1068,19 +1113,19 @@ var ForeignForm = /*#__PURE__*/function () {
             break;
           }
 
-        case 'select':
+        case 'select-one':
         case 'select-multiple':
           {
-            var _value2;
+            var _value3;
 
-            input.selectedIndex = (_value2 = value) !== null && _value2 !== void 0 ? _value2 : 0;
+            input.selectedIndex = (_value3 = value) !== null && _value3 !== void 0 ? _value3 : 0;
 
             if (!input.hasAttribute('data-native')) {
               if (input.type === 'select-multiple') {
-                var _value3;
+                var _value4;
 
                 value = JSON.parse(value);
-                value = (_value3 = value) !== null && _value3 !== void 0 ? _value3 : [];
+                value = (_value4 = value) !== null && _value4 !== void 0 ? _value4 : [];
               }
 
               input.slim.set(value);
@@ -1149,38 +1194,14 @@ var ForeignForm = /*#__PURE__*/function () {
   }]);
 
   return ForeignForm;
-}(); // PLUGINS
-// FORM
-
-
-document.querySelectorAll('form').forEach(function (element) {
-  new Form(element, {
-    loader: SETTING.loader,
-    data: [{
-      key: SETTING.csrf.key,
-      value: SETTING.csrf.token
-    }]
-  });
-}); // DATA-ACTION
-
-document.querySelectorAll('[data-action]').forEach(function (element) {
-  new DataAction(element, {
-    data: [{
-      key: SETTING.csrf.key,
-      value: SETTING.csrf.token
-    }]
-  });
-}); // DATA-BEHAVIOR
-
-document.querySelectorAll('[data-behavior]').forEach(function (element) {
-  new DataBehabior(element);
-}); // FOREIGN FORM
+}();
 
 document.querySelectorAll('[class*="foreign-form"]').forEach(function (element) {
   if (element.classList.contains('foreign-form')) {
     new ForeignForm(element);
   }
-});
+}); // PLUGINS
+
 var pond_input_data = {
   files: function files(input) {
     var files = [];

@@ -280,7 +280,7 @@ function logs($logs, $folder = null, $folder_hash = null) {
 		} else {
 			$output .= $div_open;
 
-			$log_url = site('url_language') . '/admin/log/' . (!empty($folder) ? trim($folder, '@') . '@' : '') . $log_name;
+			$log_url = site('url_language') . '/admin/log/' . (!empty($folder) ? trim($folder ?? '', '@') . '@' : '') . $log_name;
 
 			$output .= '
 				<i class="align-middle" data-feather="file-text"></i>
@@ -299,7 +299,7 @@ function format_log($body) {
 	$hyphen = '<span class="log__hyphen">$2</span>';
 	$replacement = $date . ' ' . $hyphen;
 
-	return preg_replace('/(\[.*\]) (-)/miu', $replacement, trim($body));
+	return preg_replace('/(\[.*\]) (-)/miu', $replacement, trim($body ?? ''));
 }
 
 ############################# HELPERS #############################

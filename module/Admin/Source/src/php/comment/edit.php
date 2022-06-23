@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <div class="wrapper">
-	<?php Theme::block('sidebar'); ?>
+	<?php Theme::sidebar(); ?>
 
 	<div class="main">
 		<?php Theme::block('navbar-top'); ?>
@@ -13,7 +13,7 @@
 					<?= Breadcrumb::render() ?>
 				</div>
 
-				<form action="<?= Form::edit('Comment/Edit', $comment->id); ?>" method="POST" data-redirect="<?= site('url_lang') ?>/admin/comment">
+				<form action="<?= Form::edit('Comment/Edit', $comment->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/comment">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="card">

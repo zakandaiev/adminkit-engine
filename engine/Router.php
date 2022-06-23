@@ -39,7 +39,7 @@ class Router {
 	}
 
 	private static function checkRoute($module, $route) {
-		if(strtolower(trim($route['method'])) === self::$method && self::isRouteMatched($route['uri'])) {
+		if(strtolower(trim($route['method'] ?? '')) === self::$method && self::isRouteMatched($route['uri'])) {
 			foreach($route as $key => $value) {
 				self::$route[$key] = $value;
 			}
@@ -63,8 +63,8 @@ class Router {
 			return true;
 		}
 
-		$route = ($route === '/') ? $route : rtrim($route, '/');
-		$uri = (self::$uri === '/') ? self::$uri : rtrim(self::$uri, '/');
+		$route = ($route === '/') ? $route : rtrim($route ?? '', '/');
+		$uri = (self::$uri === '/') ? self::$uri : rtrim(self::$uri ?? '', '/');
 
 		$route_parts = explode('/', $route);
 		$uri_parts = explode('/', $uri);
@@ -87,7 +87,7 @@ class Router {
 			$route_part = $route_parts[$__i__];
 
 			if(preg_match('/^[$]/', $route_part)) {
-				$found_variable = ltrim($route_part, '$');
+				$found_variable = ltrim($route_part ?? '', '$');
 				$parameters[$found_variable] = $uri_parts[$__i__];
 			} else if($route_parts[$__i__] !== $uri_parts[$__i__]) {
 				return false;
@@ -118,7 +118,7 @@ class Router {
 			$timestamp_created = strtotime($form->date_created);
 			$timestamp_diff = $timestamp_now - $timestamp_created;
 
-			if(trim(self::$uri, '/') === $form->token) {
+			if(trim(self::$uri ?? '', '/') === $form->token) {
 				Module::setName($form->module);
 
 				if($timestamp_diff < Define::LIFETIME['form']) {

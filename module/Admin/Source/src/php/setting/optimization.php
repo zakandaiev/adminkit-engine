@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <div class="wrapper">
-	<?php Theme::block('sidebar'); ?>
+	<?php Theme::sidebar(); ?>
 
 	<div class="main">
 		<?php Theme::block('navbar-top'); ?>
@@ -19,10 +19,10 @@
 							<div class="card-body">
 								<form method="POST">
 									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="group_css" name="group_css" <?php if($settings->group_css != 'false'): ?>checked<?php endif; ?>>
+										<input class="form-check-input" type="checkbox" id="group_css" name="group_css" <?php if($settings->group_css != 'false' && !empty($settings->group_css)): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="group_css">
 											<?= __('Group CSS assets') ?>
-											<?php if($settings->group_css != 'false'): ?>
+											<?php if($settings->group_css != 'false' && !empty($settings->group_css)): ?>
 												<?php
 													$file_url = Path::url('asset', 'Public') . '/css/' . $settings->group_css . '.css';
 													$file_path = Path::file('asset', 'Public') . '/css/' . $settings->group_css . '.css';
@@ -33,10 +33,10 @@
 										</label>
 									</div>
 									<div class="form-check form-switch mb-3">
-										<input class="form-check-input" type="checkbox" id="group_js" name="group_js" <?php if($settings->group_js != 'false'): ?>checked<?php endif; ?>>
+										<input class="form-check-input" type="checkbox" id="group_js" name="group_js" <?php if($settings->group_js != 'false' && !empty($settings->group_js)): ?>checked<?php endif; ?>>
 										<label class="form-check-label" for="group_js">
 											<?= __('Group JS assets') ?>
-											<?php if($settings->group_js != 'false'): ?>
+											<?php if($settings->group_js != 'false' && !empty($settings->group_js)): ?>
 												<?php
 													$file_url = Path::url('asset', 'Public') . '/js/' . $settings->group_js . '.js';
 													$file_path = Path::file('asset', 'Public') . '/js/' . $settings->group_js . '.js';

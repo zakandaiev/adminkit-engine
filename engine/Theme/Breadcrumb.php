@@ -28,11 +28,11 @@ class Breadcrumb {
 		}
 
 		if(!empty($name)) {
-			self::$crumbs[$key]->name = trim(strval($name));
+			self::$crumbs[$key]->name = trim(strval($name ?? ''));
 		}
 
 		if(!empty($url)) {
-			self::$crumbs[$key]->url = trim(trim(strval($url)), '/');
+			self::$crumbs[$key]->url = trim(trim(strval($url ?? '')), '/');
 		}
 
 		return true;
@@ -86,7 +86,7 @@ class Breadcrumb {
 		$separator = '<span class="breadcrumbs__separator">' . self::$options['separator'] . '</span>';
 
 		if(self::$options['render_homepage']) {
-			$homepage_url = !empty(self::$options['homepage_url']) ? '/' . trim(self::$options['homepage_url'], '/') : '';
+			$homepage_url = !empty(self::$options['homepage_url']) ? '/' . trim(self::$options['homepage_url'] ?? '', '/') : '';
 			$output .= '<a href="' . site('url_language') . $homepage_url . '" class="breadcrumbs__item">' . self::$options['homepage_name'] . '</a>';
 			$output .= $separator;
 		}

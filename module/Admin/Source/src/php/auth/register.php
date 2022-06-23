@@ -34,8 +34,10 @@
 										<label class="form-label"><?= __('Password') ?></label>
 										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('Create your password') ?>" required minlength="8" maxlength="200">
 										<small>
-											<a href="/admin/login"><?= __('Login') ?></a> •
-											<a href="/admin/reset-password"><?= __('Forgot password') ?></a>
+											<a href="/admin/login"><?= __('Login') ?></a>
+											<?php if(site('enable_password_restore')): ?>
+												<a href="/admin/reset-password"><?= __('Forgot password') ?></a>
+											<?php endif; ?>
 										</small>
 									</div>
 									<div class="text-center mt-3">

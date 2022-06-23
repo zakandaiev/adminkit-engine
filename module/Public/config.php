@@ -1,8 +1,9 @@
 <?php
 
 return [
-	'version'			=> '1.0.0',
-	'name'				=> 'Public',
+	'order' => 2,
+	'version' => '1.0.0',
+	'extends' => null,
 	'description' => 'Represents Public frontend interface',
-	'is_enabled'	=> true
+	'is_enabled' => true
 ];

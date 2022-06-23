@@ -107,16 +107,16 @@ function getItemProp(item) {
   switch (type) {
     case 'name':
       {
-        var _item$querySelector;
+        var _item$querySelector$v, _item$querySelector;
 
-        return (_item$querySelector = item.querySelector('.menu-item > input[name="name"]')) === null || _item$querySelector === void 0 ? void 0 : _item$querySelector.value;
+        return (_item$querySelector$v = (_item$querySelector = item.querySelector('.menu-item > input[name="name"]')) === null || _item$querySelector === void 0 ? void 0 : _item$querySelector.value) !== null && _item$querySelector$v !== void 0 ? _item$querySelector$v : '';
       }
 
     case 'url':
       {
-        var _item$querySelector2;
+        var _item$querySelector$v2, _item$querySelector2;
 
-        return (_item$querySelector2 = item.querySelector('.menu-item > input[name="url"]')) === null || _item$querySelector2 === void 0 ? void 0 : _item$querySelector2.value;
+        return (_item$querySelector$v2 = (_item$querySelector2 = item.querySelector('.menu-item > input[name="url"]')) === null || _item$querySelector2 === void 0 ? void 0 : _item$querySelector2.value) !== null && _item$querySelector$v2 !== void 0 ? _item$querySelector$v2 : '';
       }
 
     default:

@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <div class="wrapper">
-	<?php Theme::block('sidebar'); ?>
+	<?php Theme::sidebar(); ?>
 
 	<div class="main">
 		<?php Theme::block('navbar-top'); ?>
@@ -54,48 +54,24 @@
 									<input type="text" name="name" placeholder="Name" value="<?= $user->name ?>" class="form-control" minlength="1" maxlength="200" required>
 								</div>
 								<div class="col-md-6 mb-3">
-									<label class="form-label">Socials</label>
-									<div class="modal fade foreign-form" data-name="socials" data-value='<?= $user->socials ?>'>
-										<div class="modal-dialog modal-dialog-centered">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title">Add social</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-												</div>
-												<div class="modal-body">
-													<div class="mb-3">
-														<label class="form-label">Social</label>
-														<select name="type" data-placeholder="Social">
-															<?php foreach(site('socials_allowed') as $social): ?>
-																<option value="<?= strtolower($social) ?>"><?= ucfirst($social) ?></option>
-															<?php endforeach; ?>
-														</select>
-													</div>
-													<div class="mb-3">
-														<label class="form-label">Link</label>
-														<input type="url" name="link" placeholder="Link" class="form-control" minlength="1" maxlength="200">
-													</div>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-													<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
-												</div>
-											</div>
-										</div>
-									</div>
+									<label class="form-label"><?= __('Birthday') ?></label>
+									<input type="date" name="birthday" placeholder="<?= __('Birthday') ?>" value="<?= $user->birthday ?>" class="form-control">
+								</div>
+								<div class="col-xs-12 mb-3">
+									<label class="form-label">Address</label>
+									<input type="text" name="address" placeholder="Address" value="<?= $user->address ?>" class="form-control" minlength="2" maxlength="200">
+								</div>
+								<div class="col-xs-12 mb-3">
+									<?= Theme::block('form-socials', ['value' => $user->socials]) ?>
+								</div>
+								<div class="col-md-6 mb-3 d-flex flex-column">
+									<label class="form-label">About</label>
+									<textarea name="about" placeholder="About" class="form-control flex-grow-1"><?= $user->about ?></textarea>
 								</div>
 								<div class="col-md-6 mb-3 filepond--no-grid">
 									<label class="form-label">Avatar</label>
 									<input type="file" accept="image/*" name="avatar" data-value='<?= Form::populateFiles($user->avatar) ?>'>
 								</div>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">Address</label>
-								<input type="text" name="address" placeholder="Address" value="<?= $user->address ?>" class="form-control" minlength="2" maxlength="200">
-							</div>
-							<div class="mb-3">
-								<label class="form-label">About</label>
-								<textarea name="about" placeholder="About" class="form-control"><?= $user->about ?></textarea>
 							</div>
 							<div class="form-check form-switch mb-3">
 								<input class="form-check-input" type="checkbox" id="is_enabled" name="is_enabled" <?php if($user->is_enabled): ?>checked<?php endif; ?>>

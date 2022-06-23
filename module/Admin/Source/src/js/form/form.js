@@ -129,3 +129,12 @@ class Form {
 		return false;
 	}
 }
+
+document.querySelectorAll('form').forEach(element => {
+	new Form(element, {
+		loader: SETTING.loader,
+		data: [
+			{key: SETTING.csrf.key, value: SETTING.csrf.token}
+		]
+	});
+});

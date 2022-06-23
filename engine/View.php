@@ -9,7 +9,16 @@ class View {
 	private static $data = [];
 
 	public function render($template, $is_required = true) {
+		$extends = Module::get('extends');
+		if($extends) {
+			$extends_origin = Module::$name;
+			Module::setName($extends);
+			Template::load('functions', false, $extends);
+			Module::setName($extends_origin);
+		}
+
 		Template::load('functions', false);
+
 		Template::load($template, $is_required);
 	}
 

@@ -2,6 +2,8 @@
 
 namespace Module\Admin\Controller;
 
+use Engine\Server;
+
 class Auth extends \Engine\Controller {
 	public function __construct() {
 		parent::__construct();
@@ -9,7 +11,7 @@ class Auth extends \Engine\Controller {
 
 	public function checkAuth() {
 		if($this->user->authorized) {
-			\Engine\Server::redirect('/admin');
+			Server::redirect('/admin');
 		}
 	}
 
@@ -20,16 +22,26 @@ class Auth extends \Engine\Controller {
 
 	public function getUnAuth() {
 		\Engine\Auth::unauthorize();
-		\Engine\Server::redirect('/admin/login');
+		Server::redirect('/admin/login');
 	}
 
 	public function getRestore() {
 		$this->checkAuth();
+
+		if(!site('enable_password_restore')) {
+			$this->view->error('404');
+		}
+
 		$this->view->render('auth/reset-password');
 	}
 
 	public function getRegister() {
 		$this->checkAuth();
+
+		if(!site('enable_registration')) {
+			$this->view->error('404');
+		}
+
 		$this->view->render('auth/register');
 	}
 }

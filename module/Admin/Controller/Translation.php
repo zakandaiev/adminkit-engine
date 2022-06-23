@@ -24,7 +24,7 @@ class Translation extends AdminController {
 
 		$data['body'] = file_get_contents(Path::file('language') . '/' . $data['language']['file_name']);
 
-		if(empty(trim($data['body']))) {
+		if(empty(trim($data['body'] ?? ''))) {
 			$data['body'] = '; Silence is golden';
 		}
 

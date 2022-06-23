@@ -49,6 +49,10 @@ $about = [
 $socials = [
 	'json' => true
 ];
+$birthday = [
+	'date' => true,
+	'date_not_future' => true
+];
 
 return [
 	'table' => 'user',
@@ -63,6 +67,7 @@ return [
 		'avatar' => $avatar,
 		'address' => $address,
 		'about' => $about,
+		'birthday' => $birthday,
 		'is_enabled' => [
 			'boolean' => true
 		]

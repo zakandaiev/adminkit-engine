@@ -194,3 +194,11 @@ class DataAction {
 		return true;
 	}
 }
+
+document.querySelectorAll('[data-action]').forEach(element => {
+	new DataAction(element, {
+		data: [
+			{key: SETTING.csrf.key, value: SETTING.csrf.token}
+		]
+	});
+});
