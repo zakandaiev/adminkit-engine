@@ -19,16 +19,16 @@
 							<div class="card">
 								<div class="card-header">
 									<h5 class="card-title mb-0">
-										In response to
+									<?= __('In response to') ?>
 										<a href="<?= site('url_language') ?>/<?= $comment->page_url ?>" target="_blank"><?= $comment->page_title ?></a>
 									</h5>
 									<?php if($comment->date_edited): ?>
-										<small title="<?= format_date($comment->date_edited) ?>">Last edited <?= lcfirst(date_when($comment->date_edited)) ?></small>
+										<small title="<?= format_date($comment->date_edited) ?>"><?= __('Last edited') ?> <?= lcfirst(date_when($comment->date_edited)) ?></small>
 									<?php endif; ?>
 								</div>
 								<div class="card-body">
 									<div class="form-group mb-3">
-										<label class="form-label">Author</label>
+										<label class="form-label"><?= __('Author') ?></label>
 										<select name="author" required>
 											<?php foreach($authors as $author): ?>
 												<?php
@@ -43,8 +43,8 @@
 										</select>
 									</div>
 									<div class="form-group mb-3">
-										<label class="form-label">Message</label>
-										<textarea name="message" placeholder="Message" class="form-control" required minlength="1" maxlength="1000"><?= $comment->message ?></textarea>
+										<label class="form-label"><?= __('Message') ?></label>
+										<textarea name="message" placeholder="<?= __('Message') ?>" class="form-control" required minlength="1" maxlength="1000"><?= $comment->message ?></textarea>
 									</div>
 								</div>
 							</div>
@@ -52,20 +52,20 @@
 						<div class="col-12 col-md-4">
 							<div class="card">
 								<div class="card-header">
-									<h5 class="card-title mb-0">Settings</h5>
+									<h5 class="card-title mb-0"><?= __('Settings') ?></h5>
 								</div>
 								<div class="card-body">
 									<div class="form-group mb-3">
-										<label class="form-label">Publish date</label>
+										<label class="form-label"><?= __('Publish date') ?></label>
 										<input type="datetime-local" name="date_created" value="<?= format_date_input($comment->date_created) ?>" class="form-control">
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="is_approved" name="is_approved" <?php if($comment->is_approved): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="is_approved">Is approved</label>
+										<label class="form-check-label" for="is_approved"><?= __('Is approved') ?></label>
 									</div>
 								</div>
 							</div>
-							<button type="submit" class="btn btn-primary w-100 p-3">Edit comment</button>
+							<button type="submit" class="btn btn-primary w-100 p-3"><?= __('Edit comment') ?></button>
 						</div>
 					</div>
 				</form>

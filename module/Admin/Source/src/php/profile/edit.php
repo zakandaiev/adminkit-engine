@@ -14,7 +14,7 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="/admin/profile" class="btn btn-primary">Back to profile</a>
+						<a href="<?= site('url_language') ?>/admin/profile" class="btn btn-primary"><?= __('Back to profile') ?></a>
 					</div>
 				</div>
 
@@ -22,23 +22,23 @@
 					<div class="col-md-3">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title mb-0">Profile Settings</h5>
+								<h5 class="card-title mb-0"><?= __('Profile settings') ?></h5>
 							</div>
 							<div class="list-group list-group-flush" role="tablist">
 								<a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#account" role="tab">
-									Account
+									<?= __('Account') ?>
 								</a>
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
-									Password
+									<?= __('Password') ?>
 								</a>
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									Privacy
+									<?= __('Privacy') ?>
 								</a>
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									Notifications
+									<?= __('Notifications') ?>
 								</a>
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									Delete account
+									<?= __('Delete account') ?>
 								</a>
 							</div>
 						</div>
@@ -48,7 +48,7 @@
 							<div class="tab-pane fade show active" id="account" role="tabpanel">
 								<div class="card">
 									<div class="card-header">
-										<h5 class="card-title mb-0">Main</h5>
+										<h5 class="card-title mb-0"><?= __('Main') ?></h5>
 									</div>
 									<div class="card-body">
 										<form action="<?= Form::edit('Profile/Account_Main', $user->id); ?>" method="POST">

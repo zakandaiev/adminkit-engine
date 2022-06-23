@@ -2,17 +2,19 @@
 
 $story = [
 	'required' => true,
-	'html' => true
+	'required_message' => __('Story is required')
 ];
 $quote = [
-	'required' => true
+	'required' => true,
+	'required_message' => __('Quote is required')
 ];
 $quote_author = [
-	'required' => true
+	'required' => true,
+	'required_message' => __('Quote author is required')
 ];
 $vision = [
 	'required' => true,
-	'html' => true
+	'required_message' => __('Vision author is required')
 ];
 
 return [

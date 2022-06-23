@@ -1,20 +1,6 @@
 <?php
 
-$name = [
-	'required' => true,
-	'minlength' => 2,
-	'maxlength' => 200,
-	'regexp' => '/^[\w]+$/u'
-];
-$routes = [
-	'foreign' => 'group_route@group_id/route'
-];
-$users = [
-	'foreign' => 'user_group@group_id/user_id'
-];
-$bool = [
-	'boolean' => true
-];
+require Path::file('form') . '/_Model/Group.php';
 
 return [
 	'table' => 'group',
@@ -22,7 +8,7 @@ return [
 		'name' => $name,
 		'routes' => $routes,
 		'users' => $users,
-		'access_all' => $bool,
-		'is_enabled' => $bool
+		'access_all' => $access_all,
+		'is_enabled' => $is_enabled
 	]
 ];

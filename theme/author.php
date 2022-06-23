@@ -8,7 +8,7 @@
 			<div class="col-md-offset-1 col-md-10 text-center">
 				<div class="author">
 					<?php if(!empty($author->avatar)): ?>
-						<img class="author-img center-block" src="/<?= $author->avatar ?>" alt="">
+						<img class="author-img center-block" src="<?= site('url') ?>/<?= $author->avatar ?>" alt="">
 					<?php endif; ?>
 					<h1 class="text-uppercase"><?= $author->name ?></h1>
 					<p class="lead"><?= $author->about ?></p>
@@ -45,7 +45,7 @@
 				<?php endif; ?>
 
 				<div class="section-row loadmore text-center">
-					<a href="#" class="primary-button">Load More</a>
+					<a href="#" class="primary-button"><?= __('Load More') ?></a>
 				</div>
 			</div>
 

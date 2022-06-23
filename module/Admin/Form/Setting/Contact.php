@@ -1,27 +1,13 @@
 <?php
 
-$address = [
-	'required' => false,
-	'maxlength' => 200
-];
-$coordinates = [
-	'required' => false,
-	'float' => true
-];
-$hours = [
-	'required' => false,
-	'maxlength' => 200
-];
-$email = [
-	'email' => true
-];
+require Path::file('form') . '/_Model/Setting.php';
 
 return [
 	'table' => 'setting',
 	'fields' => [
 		'address' => $address,
-		'coordinate_x' => $coordinates,
-		'coordinate_y' => $coordinates,
+		'coordinate_x' => $coordinate_x,
+		'coordinate_y' => $coordinate_y,
 		'hours' => $hours,
 		'email' => $email
 	]

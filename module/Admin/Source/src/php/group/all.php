@@ -15,7 +15,7 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="/admin/group/add" class="btn btn-primary">Add group</a>
+						<a href="<?= site('url_language') ?>/admin/group/add" class="btn btn-primary"><?= __('Add group') ?></a>
 					</div>
 				</div>
 
@@ -26,11 +26,11 @@
 								<thead>
 									<tr>
 										<th>ID</th>
-										<th>Name</th>
-										<th>Routes count</th>
-										<th>Users count</th>
-										<th>Create date</th>
-										<th>Active</th>
+										<th><?= __('Name') ?></th>
+										<th><?= __('Routes count') ?></th>
+										<th><?= __('Users count') ?></th>
+										<th><?= __('Create date') ?></th>
+										<th><?= __('Is active') ?></th>
 										<th></th>
 									</tr>
 								</thead>
@@ -41,12 +41,12 @@
 											<td><?= $group->name ?></td>
 											<td>
 												<?php if($group->access_all): ?>
-													Access all
+													<?= __('Access all') ?>
 												<?php else: ?>
 													<?= $group->count_routes ?>
 												<?php endif; ?>
 											</td>
-											<td><a href="/admin/user"><?= $group->count_users ?></a></td>
+											<td><a href="<?= site('url_language') ?>/admin/user"><?= $group->count_users ?></a></td>
 											<td title="<?= format_date($group->date_created) ?>"><?= date_when($group->date_created) ?></td>
 											<td><?= icon_boolean($group->is_enabled) ?></td>
 											<td class="table-action">
@@ -66,7 +66,7 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not groups yet</h5>
+							<h5 class="card-title mb-0"><?= __('There are not groups yet') ?></h5>
 						<?php endif; ?>
 						<div class="mt-4">
 							<?php Theme::pagination(); ?>

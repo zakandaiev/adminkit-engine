@@ -35,7 +35,7 @@
 				<?php endif; ?>
 
 				<div class="section-row loadmore text-center">
-					<a href="#" class="primary-button">Load More</a>
+					<a href="#" class="primary-button"><?= __('Load More') ?></a>
 				</div>
 			</div>
 

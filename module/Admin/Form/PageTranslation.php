@@ -1,33 +1,7 @@
 <?php
 
-$language = [
-	'required' => true,
-	'minlength' => 1,
-	'maxlength' => 8,
-	'required_message' => 'Language is required',
-	'minlength_message' => 'Language is too short',
-	'maxlength_message' => 'Language is too long'
-];
-$title = [
-	'required' => true,
-	'minlength' => 1,
-	'maxlength' => 300,
-	'required_message' => 'Title is required',
-	'minlength_message' => 'Title is too short',
-	'maxlength_message' => 'Title is too long'
-];
-$content = [
-	'html' => true
-];
-$excerpt = [];
-$image = [
-	'file' => true
-];
-$seo_description = [];
-$seo_keywords = [];
-$seo_image = [
-	'file' => true
-];
+require Path::file('form') . '/_Model/Page.php';
+
 $tags = [
 	'foreign' => function($field_value, $data) {
 		updateTags($field_value, $data);

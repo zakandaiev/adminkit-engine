@@ -66,7 +66,7 @@ function getPostHTML($post, $type) {
 	$class_title = '';
 
 	$meta = '<ul class="post-meta">';
-	$meta .= '<li><a href="/author/' . $post->author . '">' . $post->author_name . '</a></li>';
+	$meta .= '<li><a href="' . site('url_language') . '/author/' . $post->author . '">' . $post->author_name . '</a></li>';
 	$meta .= '<li>' . date_when($post->date_publish) . '</li>';
 	$meta .= '</ul>';
 
@@ -102,16 +102,16 @@ function getPostHTML($post, $type) {
 	}
 
 	$html .= '<div class="post ' . $class_post . '">';
-	$html .= '<a class="post-img" href="/' . $post->url . '"><img src="/' . $post->image . '" alt=""></a>';
+	$html .= '<a class="post-img" href="' . site('url_language') . '/' . $post->url . '"><img src="' . site('url') . '/' . $post->image . '" alt=""></a>';
 	$html .= '<div class="post-body">';
 	if(!empty($post->categories)) {
 		$html .= '<div class="post-category">';
 		foreach($post->categories as $category) {
-			$html .= '<a href="/' . $category->url . '">' . $category->title . '</a> ';
+			$html .= '<a href="' . site('url_language') . '/' . $category->url . '">' . $category->title . '</a> ';
 		}
 		$html .= '</div>';
 	}
-	$html .= '<h3 class="post-title ' . $class_title . '"><a href="/' . $post->url . '">' . $post->title . '</a></h3>';
+	$html .= '<h3 class="post-title ' . $class_title . '"><a href="' . site('url_language') . '/' . $post->url . '">' . $post->title . '</a></h3>';
 	$html .= $meta;
 	$html .= $excerpt;
 	$html .= '</div>';
@@ -132,7 +132,7 @@ function comments($comments) {
 
 		$output .= '<div class="media ' . $class . '">';
 		$output .= '<div class="media-left">';
-		$output .= '<img class="media-object" src="/' . $item['author_avatar'] . '" alt="' . hc($item['author_name']) . '">';
+		$output .= '<img class="media-object" src="' . site('url') . '/' . $item['author_avatar'] . '" alt="' . hc($item['author_name']) . '">';
 		$output .= '</div>';
 		$output .= '<div class="media-body">';
 		$output .= '<div class="media-heading">';
@@ -140,7 +140,7 @@ function comments($comments) {
 		$output .= '<span class="time">' . date_when($item['date_created']) . '</span>';
 		$output .= '</div>';
 		$output .= '<p>' . hc($item['message']) . '</p>';
-		$output .= '<a href="#" class="reply">Reply</a>';
+		$output .= '<a href="#" class="reply">' . __('Reply') . '</a>';
 
 		if(!empty($item['children'])) {
 			$output .= comments($item['children']);

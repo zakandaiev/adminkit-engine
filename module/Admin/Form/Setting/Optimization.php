@@ -1,14 +1,12 @@
 <?php
 
-$boolean = [
-	'boolean' => true
-];
+require Path::file('form') . '/_Model/Setting.php';
 
 return [
 	'table' => 'setting',
 	'fields' => [
-		'group_css' => $boolean,
-		'group_js' => $boolean,
-		'cache_db' => $boolean
+		'group_css' => $group_css,
+		'group_js' => $group_js,
+		'cache_db' => $cache_db
 	]
 ];

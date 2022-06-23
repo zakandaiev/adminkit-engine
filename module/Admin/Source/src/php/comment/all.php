@@ -19,18 +19,18 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th>Author</th>
-										<th>Message</th>
-										<th>Page</th>
-										<th>Created</th>
-										<th>Is approved</th>
+										<th><?= __('Author') ?></th>
+										<th><?= __('Message') ?></th>
+										<th><?= __('Page') ?></th>
+										<th><?= __('Created') ?></th>
+										<th><?= __('Is approved') ?></th>
 										<th></th>
 									</tr>
 								</thead>
 								<tbody>
 									<?php foreach($comments as $comment): ?>
 										<tr>
-											<td><a href="/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
+											<td><a href="<?= site('url_language') ?>/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
 											<td>
 												<?php if(strlen($comment->message) > 50): ?>
 													<span data-bs-toggle="tooltip" title="<?= hc($comment->message) ?>"><?= hc(substr($comment->message, 0, 50)) ?>...</span>
@@ -65,7 +65,7 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not comments yet</h5>
+							<h5 class="card-title mb-0"><?= __('There are not comments yet') ?></h5>
 						<?php endif; ?>
 						<div class="mt-4">
 							<?php Theme::pagination(); ?>

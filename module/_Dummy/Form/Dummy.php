@@ -2,7 +2,7 @@
 
 $all_checks = [
 	// 'CHECKNAME_message' => 'Error message',
-	'required_message' => 'This field is required',
+	'required_message' => __('This field is required'),
 
 	'required' => true,
 	'unset_null' => true,

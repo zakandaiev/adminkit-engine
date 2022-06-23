@@ -19,7 +19,7 @@
 			<div class="col-md-5">
 				<div class="section-row">
 					<div class="section-title">
-						<h2 class="title">Our story</h2>
+						<h2 class="title"><?= __('OUR STORY') ?></h2>
 					</div>
 					<?= @$page->custom_fields->story ?>
 					<blockquote class="blockquote">
@@ -31,7 +31,7 @@
 			<div class="col-md-7">
 				<div class="section-row">
 					<div class="section-title">
-						<h2 class="title">Our Vision</h2>
+						<h2 class="title"><?= __('OUR VISION') ?></h2>
 					</div>
 					<?= @$page->custom_fields->vision ?>
 				</div>

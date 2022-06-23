@@ -4,7 +4,7 @@
 <?php if(!empty($w_popular_posts)): ?>
 	<div class="aside-widget">
 		<div class="section-title">
-			<h2 class="title">Popular Posts</h2>
+			<h2 class="title"><?= __('Popular Posts') ?></h2>
 		</div>
 		<?= getPosts($w_popular_posts, ['type' => 4]) ?>
 	</div>

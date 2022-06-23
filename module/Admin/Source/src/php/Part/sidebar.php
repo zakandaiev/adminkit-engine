@@ -50,9 +50,9 @@ function checkRouteActive($route) {
 	<div class="sidebar-content js-simplebar">
 		<a class="sidebar-brand" href="<?= site('url_language') ?>/admin">
 			<?php if(!empty(site('logo_admin'))): ?>
-				<img src="<?= Request::$base ?>/<?= site('logo_admin') ?>" alt="Logo" class="d-block m-auto img-fluid">
+				<img src="<?= site('url') ?>/<?= site('logo_admin') ?>" alt="Logo" class="d-block m-auto img-fluid">
 			<?php else: ?>
-				<span class="align-middle"><?= site('name') ?></span>
+				<span><?= site('name') ?></span>
 			<?php endif; ?>
 		</a>
 

@@ -1,9 +1,9 @@
 <?php
 
-require __DIR__ . '/../User.php';
+require Path::file('form') . '/_Model/User.php';
 
 return [
-	'submit' => 'Changes saved',
+	'submit' => __('Changes saved'),
 	'table' => 'user',
 	'fields' => [
 		'socials' => $socials,

@@ -15,15 +15,15 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= hc(Request::$get['back']) ?><?php endif; ?>" class="btn btn-secondary me-2">Add category</a>
-						<a href="/admin/page/add" class="btn btn-primary">Add page</a>
+						<a href="<?= site('url_language') ?>/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= hc(Request::$get['back']) ?><?php endif; ?>" class="btn btn-secondary me-2"><?= __('Add category') ?></a>
+						<a href="<?= site('url_language') ?>/admin/page/add" class="btn btn-primary"><?= __('Add page') ?></a>
 					</div>
 				</div>
 
 				<div class="card">
 					<?php if(Request::has('back')): ?>
 						<div class="card-header">
-							<h5 class="card-title mb-0"><a href="<?= hc(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> <?= __('Back') ?></a></h5>
+							<h5 class="card-title mb-0"><a href="<?= site('url_language') ?><?= hc(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> <?= __('Back') ?></a></h5>
 						</div>
 					<?php endif; ?>
 					<div class="card-body">
@@ -31,11 +31,11 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th>Title</th>
-										<th>Translations</th>
-										<th>Author</th>
-										<th>Publish date</th>
-										<th>Published</th>
+										<th><?= __('Title') ?></th>
+										<th><?= __('Translations') ?></th>
+										<th><?= __('Author') ?></th>
+										<th><?= __('Publish date') ?></th>
+										<th><?= __('Published') ?></th>
 										<th></th>
 									</tr>
 								</thead>
@@ -80,7 +80,7 @@
 													</div>
 												<?php endif; ?>
 											</td>
-											<td><a href="/admin/profile/<?= $page->author ?>"><?= $page->author_name ?></a></td>
+											<td><a href="<?= site('url_language') ?>/admin/profile/<?= $page->author ?>"><?= $page->author_name ?></a></td>
 											<td title="<?= format_date($page->date_publish) ?>"><?= date_when($page->date_publish) ?></td>
 											<td>
 												<?php if($page->is_pending): ?>
@@ -106,7 +106,7 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not pages yet</h5>
+							<h5 class="card-title mb-0"><?= __('There are not pages yet') ?></h5>
 						<?php endif; ?>
 						<div class="mt-4">
 							<?php Theme::pagination(); ?>

@@ -54,26 +54,31 @@ class Path {
 			case 'view': {
 				$path = ROOT_DIR . '/module/' . $module . '/View';
 				if($module === 'Public') {
-					$path = ROOT_DIR . '/theme';
+					$path = self::file('theme');
 				}
 				return $path;
 			}
 			case 'asset': {
 				$path = ROOT_DIR . '/module/' . $module . '/View/Asset';
 				if($module === 'Public') {
-					$path = ROOT_DIR . '/theme/Asset';
+					$path = self::file('theme') . '/Asset';
 				}
 				return $path;
 			}
 			case 'form': {
 				$path = ROOT_DIR . '/module/' . $module . '/Form';
 				if($module === 'Public') {
-					$path = ROOT_DIR . '/theme/Form';
+					$path = self::file('theme') . '/Form';
 				}
 				return $path;
 			}
-			case 'mail':
-				return ROOT_DIR . '/module/' . $module . '/Mail';
+			case 'mail': {
+				$path = ROOT_DIR . '/module/' . $module . '/Mail';
+				if($module === 'Public') {
+					$path = self::file('theme') . '/Mail';
+				}
+				return $path;
+			}
 			case 'custom_fields':
 				return ROOT_DIR . '/theme/CustomFields';
 			default:
@@ -94,7 +99,7 @@ class Path {
 			case 'asset': {
 				$path = $url_base . '/module/' . $module . '/View/Asset';
 				if($module === 'Public') {
-					$path = $url_base . '/theme/Asset';
+					$path = self::url('theme') . '/Asset';
 				}
 				return $path;
 			}

@@ -5,14 +5,14 @@ if(!function_exists('menu')) {
 		$output = '';
 
 		foreach($menu as $item) {
-			$has_url = 'href="/'. $item->url . '"';
+			$has_url = 'href="' . site('url_language') . '/'. $item->url . '"';
 			$has_dropdown = '';
 			if(!empty($item->children)) {
 				$has_url = '';
 				$has_dropdown = 'class="has-dropdown"';
 			}
 
-			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item->name . '</a>';
+			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . __($item->name) . '</a>';
 
 			if(!empty($item->children)) {
 				$output .= '<div class="dropdown">';
@@ -37,14 +37,14 @@ if(!function_exists('aside')) {
 		$output = '';
 
 		foreach($menu as $item) {
-			$has_url = 'href="/'. $item->url . '"';
+			$has_url = 'href="' . site('url_language') . '/'. $item->url . '"';
 			$has_dropdown = '';
 			if(!empty($item->children)) {
 				$has_url = '';
 				$has_dropdown = 'class="has-dropdown"';
 			}
 
-			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item->name . '</a>';
+			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . __($item->name) . '</a>';
 
 			if(!empty($item->children)) {
 				$output .= '<ul class="dropdown">';

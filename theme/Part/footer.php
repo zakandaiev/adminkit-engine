@@ -4,7 +4,7 @@
 			<div class="col-md-3">
 				<div class="footer-widget">
 					<div class="footer-logo">
-						<a href="/" class="logo"><img src="/<?= site('logo_alt') ?>" alt=""></a>
+						<a href="<?= site('url_language') ?>" class="logo"><img src="<?= site('url') ?>/<?= site('logo_alt') ?>" alt=""></a>
 					</div>
 					<p><?= site('description') ?></p>
 					<?php Theme::menu('socials', ['class' => 'contact-social']); ?>
@@ -16,11 +16,11 @@
 			<?php if(!empty($fw_categories)): ?>
 				<div class="col-md-3">
 					<div class="footer-widget">
-						<h3 class="footer-title">Categories</h3>
+						<h3 class="footer-title"><?= __('Categories') ?></h3>
 						<div class="category-widget">
 							<ul>
 								<?php foreach($fw_categories as $category): ?>
-									<li><a href="/<?= $category->url ?>"><?= $category->title ?> <span><?= $category->count_pages ?></span></a></li>
+									<li><a href="<?= site('url_language') ?>/<?= $category->url ?>"><?= $category->title ?> <span><?= $category->count_pages ?></span></a></li>
 								<?php endforeach; ?>
 							</ul>
 						</div>
@@ -33,11 +33,11 @@
 			<?php if(!empty($fw_tags)): ?>
 				<div class="col-md-3">
 					<div class="footer-widget">
-						<h3 class="footer-title">Tags</h3>
+						<h3 class="footer-title"><?= __('Tags') ?></h3>
 						<div class="tags-widget">
 							<ul>
 								<?php foreach($fw_tags as $tag): ?>
-									<li><a href="/tag/<?= $tag->url ?>"><?= $tag->name ?></a></li>
+									<li><a href="<?= site('url_language') ?>/tag/<?= $tag->url ?>"><?= $tag->name ?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						</div>
@@ -46,12 +46,12 @@
 			<?php endif; ?>
 			<div class="col-md-3">
 				<div class="footer-widget">
-					<h3 class="footer-title">Newsletter</h3>
+					<h3 class="footer-title"><?= __('Newsletter') ?></h3>
 					<div class="newsletter-widget">
 						<form>
-							<p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
-							<input class="input" name="newsletter" placeholder="Enter Your Email">
-							<button class="primary-button">Subscribe</button>
+							<p><?= __('Nec feugiat nisl pretium fusce id velit ut tortor pretium.') ?></p>
+							<input class="input" name="newsletter" placeholder="<?= __('Enter Your Email') ?>">
+							<button class="primary-button"><?= __('Subscribe') ?></button>
 						</form>
 					</div>
 				</div>

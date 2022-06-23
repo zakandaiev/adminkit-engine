@@ -10,13 +10,13 @@
 				<?php if(!empty($page->categories)): ?>
 					<div class="post-category">
 						<?php foreach($page->categories as $category): ?>
-							<a href="/<?= $category->url ?>"><?= $category->title ?></a>
+							<a href="<?= site('url_language') ?>/<?= $category->url ?>"><?= $category->title ?></a>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
 				<h1><?= $page->title ?></h1>
 				<ul class="post-meta">
-					<li><a href="/author/<?= $page->author ?>"><?= $page->author_name ?></a></li>
+					<li><a href="<?= site('url_language') ?>/author/<?= $page->author ?>"><?= $page->author_name ?></a></li>
 					<li><?= date_when($page->date_publish) ?></li>
 					<li><i class="fa fa-comments"></i> <?= $page->comments_count ?></li>
 					<li><i class="fa fa-eye"></i> <?= $page->views ?></li>
@@ -32,10 +32,10 @@
 			<div class="col-md-8">
 				<div class="section-row">
 					<div class="post-share">
-						<a href="#" class="social-facebook"><i class="fa fa-facebook"></i><span>Share</span></a>
-						<a href="#" class="social-twitter"><i class="fa fa-twitter"></i><span>Tweet</span></a>
-						<a href="#" class="social-pinterest"><i class="fa fa-pinterest"></i><span>Pin</span></a>
-						<a href="#" ><i class="fa fa-envelope"></i><span>Email</span></a>
+						<a href="#" class="social-facebook"><i class="fa fa-facebook"></i><span><?= __('Share') ?></span></a>
+						<a href="#" class="social-twitter"><i class="fa fa-twitter"></i><span><?= __('Tweet') ?></span></a>
+						<a href="#" class="social-pinterest"><i class="fa fa-pinterest"></i><span><?= __('Pin') ?></span></a>
+						<a href="#" ><i class="fa fa-envelope"></i><span><?= __('Email') ?></span></a>
 					</div>
 				</div>
 
@@ -45,9 +45,9 @@
 					<div class="section-row">
 						<div class="post-tags">
 							<ul>
-								<li>TAGS:</li>
+								<li><?= __('TAGS') ?>:</li>
 								<?php foreach($page->tags as $tag): ?>
-									<li><a href="/tag/<?= $tag->url ?>"><?= $tag->name ?></a></li>
+									<li><a href="<?= site('url_language') ?>/tag/<?= $tag->url ?>"><?= $tag->name ?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						</div>
@@ -62,16 +62,16 @@
 						<div class="post-nav">
 							<?php if(!empty($prev_next->prev->url)): ?>
 								<div class="prev-post">
-									<a class="post-img" href="/<?= $prev_next->prev->url ?>"><img src="/<?= $prev_next->prev->image ?>" alt=""></a>
-									<h3 class="post-title"><a href="/<?= $prev_next->prev->url ?>"><?= $prev_next->prev->title ?></a></h3>
-									<span>Previous post</span>
+									<a class="post-img" href="<?= site('url_language') ?>/<?= $prev_next->prev->url ?>"><img src="<?= site('url') ?>/<?= $prev_next->prev->image ?>" alt=""></a>
+									<h3 class="post-title"><a href="<?= site('url_language') ?>/<?= $prev_next->prev->url ?>"><?= $prev_next->prev->title ?></a></h3>
+									<span><?= __('Previous post') ?></span>
 								</div>
 							<?php endif; ?>
 							<?php if(!empty($prev_next->next->url)): ?>
 								<div class="next-post">
-									<a class="post-img" href="/<?= $prev_next->next->url ?>"><img src="/<?= $prev_next->next->image ?>" alt=""></a>
-									<h3 class="post-title"><a href="/<?= $prev_next->next->url ?>"><?= $prev_next->next->title ?></a></h3>
-									<span>Next post</span>
+									<a class="post-img" href="<?= site('url_language') ?>/<?= $prev_next->next->url ?>"><img src="<?= site('url') ?>/<?= $prev_next->next->image ?>" alt=""></a>
+									<h3 class="post-title"><a href="<?= site('url_language') ?>/<?= $prev_next->next->url ?>"><?= $prev_next->next->title ?></a></h3>
+									<span><?= __('Next post') ?></span>
 								</div>
 							<?php endif; ?>
 						</div>
@@ -85,12 +85,12 @@
 				<?php if(!empty($page->author_name) && !empty($author->about)): ?>
 					<div class="section-row">
 						<div class="section-title">
-							<h3 class="title">About <a href="/author/<?= $author->id ?>"><?= $page->author_name ?></a></h3>
+							<h3 class="title"><?= __('About') ?> <a href="<?= site('url_language') ?>/author/<?= $author->id ?>"><?= $page->author_name ?></a></h3>
 						</div>
 						<div class="author media">
 							<div class="media-left">
-								<a href="/author/<?= $author->id ?>">
-									<img class="author-img media-object" src="/<?= $author->avatar ?>" alt="">
+								<a href="<?= site('url_language') ?>/author/<?= $author->id ?>">
+									<img class="author-img media-object" src="<?= site('url') ?>/<?= $author->avatar ?>" alt="">
 								</a>
 							</div>
 							<div class="media-body">

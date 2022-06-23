@@ -351,10 +351,14 @@ class Page extends \Engine\Model {
 
 		$sql = "
 			SELECT
-				t_page.{$options['fields']},
+				{$options['fields']},
 				(SELECT name FROM {user} WHERE id=t_page.author) as author_name
 			FROM
 				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
 			WHERE
 				t_page.author = :user_id
 				AND t_page.date_publish <= NOW()

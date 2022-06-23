@@ -1,35 +1,15 @@
 <?php
 
-$name = [
-	'required' => true,
-	'maxlength' => 300
-];
-$description = [
-	'required' => false,
-	'maxlength' => 1000
-];
-$analytics_gtag = [
-	'required' => false,
-	'maxlength' => 30
-];
-$image = [
-	'file' => true
-];
-$pagination_limit = [
-	'int' => true
-];
-$no_index_no_follow = [
-	'boolean' => true
-];
+require Path::file('form') . '/_Model/Setting.php';
 
 return [
 	'table' => 'setting',
 	'fields' => [
-		'logo_admin' => $image,
-		'logo_public' => $image,
-		'logo_alt' => $image,
-		'placeholder_avatar' => $image,
-		'placeholder_image' => $image,
+		'logo_admin' => $logo_admin,
+		'logo_public' => $logo_public,
+		'logo_alt' => $logo_alt,
+		'placeholder_avatar' => $placeholder_avatar,
+		'placeholder_image' => $placeholder_image,
 		'name' => $name,
 		'description' => $description,
 		'analytics_gtag' => $analytics_gtag,

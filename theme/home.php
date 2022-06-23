@@ -32,7 +32,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="section-title">
-								<h2 class="title"><?= $page->custom_fields->section_recent_posts ?? __('Recent posts') ?></h2>
+								<h2 class="title"><?= __('Recent posts') ?></h2>
 							</div>
 						</div>
 						<?= getPosts($recent_posts, ['type' => 2, 'wrap' => 'col-md-6']) ?>
@@ -46,7 +46,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="section-title">
-								<h2 class="title"><?= $page->custom_fields->section_lifestyle ?? 'Lifestyle' ?></h2>
+								<h2 class="title"><?= __('Lifestyle') ?></h2>
 							</div>
 						</div>
 						<?= getPosts($lifestyle_posts, ['type' => 3, 'wrap' => 'col-md-4']) ?>
@@ -60,7 +60,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="section-title">
-								<h2 class="title">Fashion & Travel</h2>
+								<h2 class="title"><?= __('Fashion & Travel') ?></h2>
 							</div>
 						</div>
 						<?= getPosts($fashion_travel_posts, ['type' => 3, 'wrap' => 'col-md-4']) ?>
@@ -74,7 +74,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="section-title">
-								<h2 class="title">Technology</h2>
+								<h2 class="title"><?= __('Technology') ?></h2>
 							</div>
 						</div>
 						<?= getPosts($technology_posts, ['type' => 3, 'wrap' => 'col-md-4']) ?>

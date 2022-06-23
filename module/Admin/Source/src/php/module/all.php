@@ -19,11 +19,11 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th>Order</th>
-										<th>Name</th>
-										<th>Description</th>
-										<th>Version</th>
-										<th>Is enabled</th>
+										<th><?= __('Order') ?></th>
+										<th><?= __('Name') ?></th>
+										<th><?= __('Description') ?></th>
+										<th><?= __('Version') ?></th>
+										<th><?= __('Is enabled') ?></th>
 										<th></th>
 									</tr>
 								</thead>
@@ -70,7 +70,7 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not modules yet</h5>
+							<h5 class="card-title mb-0"><?= __('There are not modules yet') ?></h5>
 						<?php endif; ?>
 						<div class="mt-4">
 							<div class="row">

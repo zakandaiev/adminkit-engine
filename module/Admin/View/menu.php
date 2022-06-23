@@ -78,7 +78,7 @@
 				</div>
 				<div class="modal-body">
 					<label class="form-label"><?= __('Menu name') ?></label>
-					<input type="text" name="name" placeholder="Name" class="form-control" minlength="1" maxlength="200" data-behavior="slug_">
+					<input type="text" name="name" placeholder="<?= __('Name') ?>" class="form-control" minlength="1" maxlength="200" data-behavior="slug_">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= __('Cancel') ?></button>
@@ -100,7 +100,7 @@
 					</div>
 					<div class="modal-body">
 						<label class="form-label"><?= __('Menu name') ?></label>
-						<input type="text" name="name" placeholder="Name" value="<?= $menu->name ?>" class="form-control" minlength="1" maxlength="200" data-behavior="slug_">
+						<input type="text" name="name" placeholder="<?= __('Name') ?>" value="<?= $menu->name ?>" class="form-control" minlength="1" maxlength="200" data-behavior="slug_">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= __('Cancel') ?></button>

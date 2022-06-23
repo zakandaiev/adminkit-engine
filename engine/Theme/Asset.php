@@ -86,7 +86,7 @@ class Asset {
 
 			$output .= sprintf(
 				self::EXTENSION_MASK[$extension],
-				Path::url('asset', $asset['module']) . '/' . $asset['file'] . '?version=' . Define::VERSION,
+				Path::url('asset', @$asset['module']) . '/' . $asset['file'] . '?version=' . Define::VERSION,
 				!empty($asset['attributes']) ? ' ' . $asset['attributes'] : ''
 			) . PHP_EOL;
 		}

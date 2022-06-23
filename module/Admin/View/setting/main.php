@@ -26,7 +26,7 @@
 									</div>
 									<div class="mb-3">
 										<label class="form-label"><?= __('Language') ?></label>
-										<select name="language">
+										<select name="language" data-placeholder="<?= __('Language') ?>">
 											<?php foreach(Language::getAll() as $language): ?>
 												<?php
 													$selected_language = '';
@@ -40,8 +40,8 @@
 										</select>
 									</div>
 									<div class="mb-3">
-										<label class="form-label">Socials allowed</label>
-										<select name="socials_allowed[]" multiple data-addable="tag">
+										<label class="form-label"><?= __('Socials allowed') ?></label>
+										<select name="socials_allowed[]" multiple data-addable="tag" data-placeholder="<?= __('Socials allowed') ?>">
 											<?php
 												$settings->socials_allowed = json_decode($settings->socials_allowed) ?? [];
 											?>
@@ -59,17 +59,17 @@
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="enable_registration" name="enable_registration" <?php if($settings->enable_registration == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="enable_registration">Enable registration</label>
+										<label class="form-check-label" for="enable_registration"><?= __('Enable registration') ?></label>
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="enable_password_restore" name="enable_password_restore" <?php if($settings->enable_password_restore == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="enable_password_restore">Enable password restore</label>
+										<label class="form-check-label" for="enable_password_restore"><?= __('Enable password restore') ?></label>
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="moderate_comments" name="moderate_comments" <?php if($settings->moderate_comments == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="moderate_comments">Moderate comments</label>
+										<label class="form-check-label" for="moderate_comments"><?= __('Moderate comments') ?></label>
 									</div>
-									<button type="submit" class="btn btn-primary">Save</button>
+									<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 								</form>
 							</div>
 						</div>

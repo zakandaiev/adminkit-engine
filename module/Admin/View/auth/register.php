@@ -7,15 +7,17 @@
 				<div class="d-table-cell align-middle">
 
 					<div class="text-center mt-4">
-						<?php if(!empty(site('logo'))): ?>
-							<img class="w-50 mb-3" src="<?= Asset::path() ?>/<?= site('logo') ?>" alt="Logo">
+						<?php if(!empty(site('logo_admin'))): ?>
+							<img class="w-25 mb-3" src="<?= site('url') ?>/<?= site('logo_admin') ?>" alt="Logo">
+						<?php else: ?>
+							<h1 class="h2"><?= site('name') ?></h1>
 						<?php endif; ?>
-						<h1 class="h2"><?= site('name') ?></h1>
 						<p class="lead"><?= __('Get started') ?></p>
 					</div>
 
 					<div class="card">
 						<div class="card-body">
+							<?php Theme::widget('lang'); ?>
 							<div class="m-sm-4">
 								<form action="<?= Form::add('Auth/Register'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/profile">
 									<div class="mb-3">
@@ -34,9 +36,9 @@
 										<label class="form-label"><?= __('Password') ?></label>
 										<input class="form-control form-control-lg" type="password" name="password" placeholder="<?= __('Create your password') ?>" required minlength="8" maxlength="200">
 										<small>
-											<a href="/admin/login"><?= __('Login') ?></a>
+											<a href="<?= site('url_language') ?>/admin/login"><?= __('Login') ?></a>
 											<?php if(site('enable_password_restore')): ?>
-												<a href="/admin/reset-password"><?= __('Forgot password') ?></a>
+												<a href="<?= site('url_language') ?>/admin/reset-password"><?= __('Forgot password') ?></a>
 											<?php endif; ?>
 										</small>
 									</div>

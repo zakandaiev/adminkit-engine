@@ -1,18 +1,37 @@
 <?php
 
-$password = [
+$password_current = [
 	'required' => true,
 	'minlength' => 8,
-	'maxlength' => 200
+	'maxlength' => 200,
+	'required_message' => __('Enter current password'),
+	'minlength_message' => __('Current password is too short'),
+	'maxlength_message' => __('Current password is too long')
+];
+$password_new = [
+	'required' => true,
+	'minlength' => 8,
+	'maxlength' => 200,
+	'required_message' => __('Enter new password'),
+	'minlength_message' => __('New password is too short'),
+	'maxlength_message' => __('New password is too long')
+];
+$password_confirm = [
+	'required' => true,
+	'minlength' => 8,
+	'maxlength' => 200,
+	'required_message' => __('Confirm your new password'),
+	'minlength_message' => __('Confirmation password is too short'),
+	'maxlength_message' => __('Confirmation password is too long')
 ];
 
 return [
-	'submit' => 'Password changed',
+	'submit' => __('Password changed'),
 	'table' => 'user',
 	'fields' => [
-		'password_current' => $password,
-		'password_new' => $password,
-		'password_confirm' => $password
+		'password_current' => $password_current,
+		'password_new' => $password_new,
+		'password_confirm' => $password_confirm
 	],
 	'execute' => function($data) {
 		$user_id = $data->fields['id'];

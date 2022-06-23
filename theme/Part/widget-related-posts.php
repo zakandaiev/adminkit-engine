@@ -4,7 +4,7 @@
 <?php if(!empty($w_related_posts)): ?>
 	<div class="section-row">
 		<div class="section-title">
-			<h3 class="title">Related Posts</h3>
+			<h3 class="title"><?= __('Related Posts') ?></h3>
 		</div>
 		<div class="row">
 			<?= getPosts($w_related_posts, ['type' => 3, 'wrap' => 'col-md-4']) ?>

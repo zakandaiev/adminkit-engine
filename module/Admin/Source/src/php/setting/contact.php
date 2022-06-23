@@ -19,32 +19,32 @@
 							<div class="card-body">
 								<form method="POST">
 									<div class="mb-3">
-										<label class="form-label">Address</label>
-										<input type="text" name="address" placeholder="Address" value="<?= $settings->address ?>" class="form-control">
+										<label class="form-label"><?= __('Address') ?></label>
+										<input type="text" name="address" placeholder="<?= __('Address') ?>" value="<?= $settings->address ?>" class="form-control">
 									</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group mb-3">
-												<label class="form-label">Coordinate X</label>
-												<input type="text" name="coordinate_x" placeholder="Coordinate X" value="<?= $settings->coordinate_x ?>" class="form-control">
+												<label class="form-label"><?= __('Coordinate X') ?></label>
+												<input type="text" name="coordinate_x" placeholder="<?= __('Coordinate X') ?>" value="<?= $settings->coordinate_x ?>" class="form-control">
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group mb-3">
-												<label class="form-label">Coordinate Y</label>
-												<input type="text" name="coordinate_y" placeholder="Coordinate Y" value="<?= $settings->coordinate_y ?>" class="form-control">
+												<label class="form-label"><?= __('Coordinate Y') ?></label>
+												<input type="text" name="coordinate_y" placeholder="<?= __('Coordinate Y') ?>" value="<?= $settings->coordinate_y ?>" class="form-control">
 											</div>
 										</div>
 									</div>
 									<div class="mb-3">
-										<label class="form-label">Work hours</label>
-										<input type="text" name="hours" placeholder="Work hours" value="<?= $settings->hours ?>" class="form-control">
+										<label class="form-label"><?= __('Work hours') ?></label>
+										<input type="text" name="hours" placeholder="<?= __('Work hours') ?>" value="<?= $settings->hours ?>" class="form-control">
 									</div>
 									<div class="mb-3">
-										<label class="form-label">Email</label>
-										<input type="text" name="email" placeholder="Email" value="<?= $settings->email ?>" class="form-control" required>
+										<label class="form-label"><?= __('Email') ?></label>
+										<input type="text" name="email" placeholder="<?= __('Email') ?>" value="<?= $settings->email ?>" class="form-control" required>
 									</div>
-									<button type="submit" class="btn btn-primary">Save</button>
+									<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 								</form>
 							</div>
 						</div>

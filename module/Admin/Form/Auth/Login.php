@@ -3,13 +3,19 @@
 $login = [
 	'required' => true,
 	'minlength' => 2,
-	'maxlength' => 200
+	'maxlength' => 200,
+	'required_message' => __('Enter your login'),
+	'minlength_message' => __('Login is too short'),
+	'maxlength_message' => __('Login is too long')
 ];
 
 $password = [
 	'required' => true,
 	'minlength' => 8,
-	'maxlength' => 200
+	'maxlength' => 200,
+	'required_message' => __('Enter your password'),
+	'minlength_message' => __('Password is too short'),
+	'maxlength_message' => __('Password is too long')
 ];
 
 return [

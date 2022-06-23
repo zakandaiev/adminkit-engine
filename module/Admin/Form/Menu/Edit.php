@@ -1,11 +1,6 @@
 <?php
 
-$name = [
-	'required' => true,
-	'minlength' => 1,
-	'maxlength' => 200,
-	'regexp' => '/^[a-z0-9_]+$/u'
-];
+require Path::file('form') . '/_Model/Menu.php';
 
 return [
 	'table' => 'menu',

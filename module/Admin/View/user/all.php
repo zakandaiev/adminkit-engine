@@ -15,7 +15,7 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="/admin/user/add" class="btn btn-primary">Add user</a>
+						<a href="<?= site('url_language') ?>/admin/user/add" class="btn btn-primary"><?= __('Add user') ?></a>
 					</div>
 				</div>
 
@@ -26,11 +26,11 @@
 								<thead>
 									<tr>
 										<th>ID</th>
-										<th>Name</th>
-										<th>Groups count</th>
-										<th>Create date</th>
-										<th>Last login</th>
-										<th>Active</th>
+										<th><?= __('Name') ?></th>
+										<th><?= __('Groups count') ?></th>
+										<th><?= __('Create date') ?></th>
+										<th><?= __('Last login') ?></th>
+										<th><?= __('Active') ?></th>
 										<th></th>
 									</tr>
 								</thead>
@@ -66,7 +66,7 @@
 								</tbody>
 							</table>
 						<?php else: ?>
-							<h5 class="card-title mb-0">There are not users yet</h5>
+							<h5 class="card-title mb-0"><?= __('There are not users yet') ?></h5>
 						<?php endif; ?>
 						<div class="mt-4">
 							<?php Theme::pagination(); ?>

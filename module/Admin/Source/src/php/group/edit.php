@@ -15,15 +15,15 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?= Form::edit('Group', $group->id); ?>" method="POST" data-redirect="/admin/group">
+						<form action="<?= Form::edit('Group', $group->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/group">
 							<div class="mb-3">
-								<label class="form-label">Name</label>
-								<input type="text" name="name" value="<?= $group->name ?>" placeholder="Name" class="form-control" minlength="2" maxlength="200" required>
+								<label class="form-label"><?= __('Name') ?></label>
+								<input type="text" name="name" value="<?= $group->name ?>" placeholder="<?= __('Name') ?>" class="form-control" minlength="2" maxlength="200" required>
 							</div>
 							<div class="mb-3">
-								<label class="form-label">Routes</label>
-								<select name="routes[]" multiple data-placeholder="Routes">
-									<option data-placeholder="true"></option>
+								<label class="form-label"><?= __('Routes') ?></label>
+								<select name="routes[]" multiple data-placeholder="<?= __('Routes') ?>">
+									<option data-placeholder></option>
 									<?php foreach($routes as $method => $routes_array): ?>
 										<optgroup label="<?= $method ?>">
 											<?php sort($routes_array, SORT_NATURAL); ?>
@@ -42,9 +42,9 @@
 								</select>
 							</div>
 							<div class="mb-3">
-								<label class="form-label">Users</label>
-								<select name="users[]" multiple data-placeholder="Users">
-									<option data-placeholder="true"></option>
+								<label class="form-label"><?= __('Users') ?></label>
+								<select name="users[]" multiple data-placeholder="<?= __('Users') ?>">
+									<option data-placeholder></option>
 									<?php foreach($users as $user): ?>
 										<?php
 											$selected_user = '';
@@ -59,13 +59,13 @@
 							</div>
 							<div class="form-check form-switch mb-3">
 								<input class="form-check-input" type="checkbox" id="access_all" name="access_all" <?php if($group->access_all): ?>checked<?php endif; ?>>
-								<label class="form-check-label" for="access_all">Access all</label>
+								<label class="form-check-label" for="access_all"><?= __('Access all') ?></label>
 							</div>
 							<div class="form-check form-switch mb-3">
 								<input class="form-check-input" type="checkbox" id="is_enabled" name="is_enabled" <?php if($group->is_enabled): ?>checked<?php endif; ?>>
-								<label class="form-check-label" for="is_enabled">Is enabled</label>
+								<label class="form-check-label" for="is_enabled"><?= __('Is enabled') ?></label>
 							</div>
-							<button type="submit" class="btn btn-primary">Submit</button>
+							<button type="submit" class="btn btn-primary"><?= __('Edit group') ?></button>
 						</form>
 					</div>
 				</div>

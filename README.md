@@ -29,8 +29,6 @@
 * Admin: realize reset password
 * Admin: profile settings: privacy, notifications, delete account
 * Modules: set min/maxlength, required for all inputs
-* Modules: check all links for site('url_language')
-* Modules: translate all texts
 * Modules: log all events
 * Public: getPagePrevNext - consider category
 * Public: getRelatedPages - select posts with similar tags and categories else random
