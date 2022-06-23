@@ -29,7 +29,13 @@ class Sitemap {
 		$path = ROOT_DIR . '/sitemap.xml';
 		$sitemap = self::format($pages);
 
-		return file_put_contents($path, $sitemap, LOCK_EX);
+		if(file_put_contents($path, $sitemap, LOCK_EX)) {
+			Log::write('Sitmap updated from IP: ' . Request::$ip, 'sitemap');
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private static function format($pages) {

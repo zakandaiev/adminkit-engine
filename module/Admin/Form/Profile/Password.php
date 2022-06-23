@@ -56,15 +56,17 @@ return [
 	'execute_post' => function($data) {
 		$user_data = new \stdClass();
 		$user_data->user_id = $data->form_data['item_id'];
+		$user_data->ip = Request::$ip;
 
 		$user_email = 'SELECT email FROM {user} WHERE id = :id ORDER BY date_created DESC LIMIT 1';
 		$user_email = new Statement($user_email);
-		$user_data->user_email = $user_email->execute(['id' => $user_data->user_id])->fetchColumn();
+		$user_data->email = $user_email->execute(['id' => $user_data->user_id])->fetchColumn();
 
 		$user_data->password_old = $data->fields['password_current'];
 		$user_data->password_new = $data->fields['password_new'];
 
 		Mail::send('ChangePassword', $user_data);
 		Notification::create('change_password', $user_data->user_id, $user_data);
+		Log::write('User ID: ' . $user_data->user_id . ' changed password from IP: ' . $user_data->ip, 'user');
 	}
 ];

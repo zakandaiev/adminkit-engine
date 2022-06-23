@@ -39,6 +39,7 @@ class Engine {
 		class_alias('\\Engine\\Hash', 'Hash');
 		class_alias('\\Engine\\Cache', 'Cache');
 		class_alias('\\Engine\\Hook', 'Hook');
+		class_alias('\\Engine\\Log', 'Log');
 		class_alias('\\Engine\\Mail', 'Mail');
 		class_alias('\\Engine\\Upload', 'Upload');
 		class_alias('\\Engine\\Notification', 'Notification');

@@ -90,7 +90,8 @@ class Module {
 	}
 
 	public static function update($key, $value, $module = null) {
-		$config_file = Path::file('module') . '/' . ($module ?? self::$name) . '/config.php';
+		$name = $module ?? self::$name;
+		$config_file = Path::file('module') . '/' . $name . '/config.php';
 
 		if(!file_exists($config_file)) {
 			return false;
@@ -121,7 +122,15 @@ class Module {
 
 		$config_content = preg_replace($pattern, $replacement, $config_content);
 
+		static $is_edited = false;
+
 		if(file_put_contents($config_file, $config_content, LOCK_EX)) {
+			if(!$is_edited) {
+				Log::write('Module: ' . $name. ' edited by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'module');
+			}
+
+			$is_edited = true;
+
 			return true;
 		}
 
@@ -129,6 +138,8 @@ class Module {
 	}
 
 	public static function delete($name) {
+		Log::write('Module: ' . $name. ' deleted by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'module');
+
 		return rmdir_recursive(Path::file('module') . '/' . $name);
 	}
 

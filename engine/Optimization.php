@@ -154,7 +154,7 @@ class Optimization {
 		file_put_contents($path, $content, LOCK_EX);
 
 		$path_url = str_replace(ROOT_DIR, Path::url(), $path);
-		$log = sprintf('Optimized %s assets to %s', strtoupper(self::$type), $path_url);
+		$log = sprintf('%s assets optimized to %s', strtoupper(self::$type), $path_url);
 
 		Log::write($log, 'optimization');
 

@@ -8,5 +8,5 @@ $name = [
 	'required_message' => __('Name is required'),
 	'minlength_message' => __('Name is too short'),
 	'maxlength_message' => __('Name is too long'),
-	'regexp_message' => __('Name should consist only small latin letters, numbers or dashes')
+	'regexp_message' => __('Name should consist only small latin letters, numbers or underscores')
 ];

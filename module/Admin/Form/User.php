@@ -19,5 +19,8 @@ return [
 		'is_enabled' => [
 			'boolean' => true
 		]
-	]
+	],
+	'execute_post' => function($data) {
+		Log::write('User ID: ' . $data->form_data['item_id'] . ' ' . $data->form_data['action'] . 'ed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'user');
+	}
 ];

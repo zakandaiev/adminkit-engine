@@ -4,11 +4,11 @@ $name = [
 	'required' => true,
 	'minlength' => 2,
 	'maxlength' => 200,
-	'regexp' => '/^[\w]+$/u',
+	'regexp' => '/^[\a-zA-Z]+$/u',
 	'required_message' => __('Name is required'),
 	'minlength_message' => __('Name is too short'),
 	'maxlength_message' => __('Name is too long'),
-	'regexp_message' => __('Name should consist only letters')
+	'regexp_message' => __('Name should consist only latin letters')
 ];
 $routes = [
 	'foreign' => 'group_route@group_id/route'

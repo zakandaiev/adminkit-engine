@@ -71,11 +71,15 @@ class Auth {
 
 		Notification::create('login', $user->id, ['ip' => $user->ip]);
 
+		Log::write('User ID: ' . $user->id . ' logged in from IP: ' . $user->ip, 'user');
+
 		return true;
 	}
 
 	public static function unauthorize() {
 		Session::unsetCookie(Define::COOKIE_KEY['auth']);
+
+		Log::write('User ID: ' . self::$user->id . ' logged out from IP: ' . Request::$ip, 'user');
 
 		self::$user = new \stdClass();
 		self::$user->authorized = false;
@@ -107,7 +111,10 @@ class Auth {
 		Notification::create('register', $user->id, ['ip' => $user->ip]);
 
 		$user->password = $user_password;
+
 		Mail::send('Register', $user);
+
+		Log::write('User ID: ' . $user->id . ' registered from IP: ' . $user->ip, 'user');
 
 		return true;
 	}

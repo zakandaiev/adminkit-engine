@@ -9,9 +9,7 @@ $language = [
 	'required' => true,
 	'required_message' => __('Language is required')
 ];
-$socials_allowed = [
-	'json' => true
-];
+$socials_allowed = [];
 $enable_registration = [
 	'boolean' => true
 ];

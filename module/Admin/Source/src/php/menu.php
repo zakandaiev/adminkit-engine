@@ -32,8 +32,12 @@
 										<span class="align-middle"><?= $item->name ?></span>
 										<?php if($is_edit && $edit_id === $item->id): ?>
 											<span class="float-end">
-												<i data-feather="edit" class="feather-sm" data-bs-toggle="modal" data-bs-target="#menu-edit"></i>
-												<i data-feather="trash" class="feather-sm" data-action="<?= Form::delete('Menu/Edit', $item->id); ?>" data-confirm="<?=  __('Delete') . ' ' . $item->name . '?' ?>" data-redirect="<?= site('url_language') ?>/admin/menu"></i>
+												<span data-bs-toggle="modal" data-bs-target="#menu-edit">
+													<i data-feather="edit" class="feather-sm"></i>
+												</span>
+												<span data-action="<?= Form::delete('Menu/Edit', $item->id); ?>" data-confirm="<?=  __('Delete') . ' ' . $item->name . '?' ?>" data-redirect="<?= site('url_language') ?>/admin/menu">
+													<i data-feather="trash" class="feather-sm"></i>
+												</span>
 											</span>
 										<?php endif; ?>
 									</a>

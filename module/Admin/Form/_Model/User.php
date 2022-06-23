@@ -7,12 +7,13 @@ $login = [
 	'required' => true,
 	'minlength' => 2,
 	'maxlength' => 200,
-	'regexp' => '/^[\w\d]+$/',
-	'regexp2' => '/(?i)^(?![a4]dm[i1_][n]*)+/i',
+	'regexp' => '/^[a-z0-9_]+$/',
+	'regexp2' => '/(?i)^(?![a4]dm[i1_][n]*|m[o0]d[e3]r[a4]t[o0][r]*)+/i',
 	'required_message' => __('Login is required'),
 	'minlength_message' => __('Login is too short'),
 	'maxlength_message' => __('Login is too long'),
-	'regexp_message' => __('Login should consist only letters, numbers or dashes')
+	'regexp_message' => __('Login should consist only small latin letters, numbers or undersores'),
+	'regexp2_message' => __('Login format is invalid')
 ];
 $password = [
 	'unset_null' => true,

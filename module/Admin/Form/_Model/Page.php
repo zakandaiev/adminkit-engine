@@ -5,7 +5,7 @@ $url = [
 	'required' => true,
 	'minlength' => 1,
 	'maxlength' => 200,
-	'regexp' => '/^[a-z0-9_\-]+$/',
+	'regexp' => '/^[a-z0-9\-]+$/',
 	'required_message' => __('URL Slug is required'),
 	'minlength_message' => __('URL Slug is too short'),
 	'maxlength_message' => __('URL Slug is too long'),
@@ -21,7 +21,7 @@ $template = [
 	'maxlength' => 200,
 	'regexp' => '/^[a-z0-9_\-]*$/',
 	'maxlength_message' => __('Template is too long'),
-	'regexp_message' => __('Template should consist only small latin letters, numbers or dashes')
+	'regexp_message' => __('Template should consist only small latin letters, numbers, underscores or dashes')
 ];
 $date_publish = [
 	'date' => true

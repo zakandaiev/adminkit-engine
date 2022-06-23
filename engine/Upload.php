@@ -71,6 +71,10 @@ class Upload {
 		$response->status = $status;
 		$response->message = $message;
 
+		if($status) {
+			Log::write(Path::url() . '/' . $message . ' uploaded from IP: ' . Request::$ip, 'upload');
+		}
+
 		return $response;
 	}
 }

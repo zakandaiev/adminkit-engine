@@ -34,6 +34,8 @@ class Setting {
 
 		$statement->execute($params);
 
+		Log::write('Setting: ' . $name . ' changed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'setting');
+
 		return true;
 	}
 

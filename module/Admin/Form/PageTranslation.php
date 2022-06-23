@@ -39,7 +39,10 @@ return [
 	},
 	'execute_post' => function($data) {
 		createNotification($data);
+
 		Sitemap::update();
+
+		Log::write('Page ID: ' . $data->form_data['item_id'] . ' ' . $data->form_data['action'] . 'ed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'page');
 	}
 ];
 

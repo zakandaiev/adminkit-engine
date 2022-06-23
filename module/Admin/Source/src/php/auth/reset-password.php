@@ -23,7 +23,7 @@
 								<form method="POST">
 									<div class="mb-3">
 										<label class="form-label"><?= __('Email') ?></label>
-										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('Enter your email') ?>">
+										<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('Enter your email') ?>" required minlength="6" maxlength="200">
 										<small>
 											<a href="<?= site('url_language') ?>/admin/login"><?= __('Login') ?></a>
 											<?php if(site('enable_registration')): ?>

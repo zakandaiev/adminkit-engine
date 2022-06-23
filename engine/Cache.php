@@ -15,7 +15,9 @@ class Cache {
 			mkdir($path, 0660, true);
 		}
 
-		$path = $path . '/' . md5($key) . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
+		$key = md5($key);
+
+		$path = $path . '/' . $key . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
 
 		$content[self::CACHE_KEY['data']] = $data;
 		$content[self::CACHE_KEY['expires']] = time() + intval($lifetime ?? Define::LIFETIME['cache']);
@@ -26,6 +28,8 @@ class Cache {
 		catch(\Exception $error) {
 			throw new \Exception(sprintf('Cache error: %s', $error->getMessage()));
 		}
+
+		Log::write('Cache: ' . $key . ' created from IP: ' . Request::$ip, 'cache');
 
 		return true;
 	}
@@ -45,13 +49,17 @@ class Cache {
 	}
 
 	public static function delete($key) {
-		$path = Path::file('cache') . '/' . md5($key) . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
+		$key = md5($key);
+
+		$path = Path::file('cache') . '/' . $key . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
 
 		if(!file_exists($path)) {
 			return false;
 		}
 
 		unlink($path);
+
+		Log::write('Cache: ' . $key . ' deleted from IP: ' . Request::$ip, 'cache');
 
 		return true;
 	}
@@ -70,6 +78,8 @@ class Cache {
 
 			unlink($path . '/' . $file);
 		}
+
+		Log::write('Cache: all deleted from IP: ' . Request::$ip, 'cache');
 
 		return true;
 	}

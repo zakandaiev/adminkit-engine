@@ -44,6 +44,8 @@ class Mail {
 			'Reply-To' => $frm
 		];
 
+		Log::write($subj .  ' sent to ' . $to . ' from IP: ' . Request::$ip, 'mail');
+
 		return mail($to, $subj, $msg, $headers);
 	}
 

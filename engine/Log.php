@@ -72,12 +72,12 @@ class Log {
 
 		self::$logs = dirToArray(Path::file('log'));
 
-		arsort(self::$logs);
-		foreach(self::$logs as &$log) {
-			if(is_array($log)) {
-				arsort($log);
+		uasort(self::$logs, function ($log1, $log2) {
+			if(is_string($log1)) {
+				return 1;
 			}
-		}
+			return 0;
+		});
 
 		return self::$logs;
 	}

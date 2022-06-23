@@ -301,11 +301,7 @@ class Form {
 		foreach($form['fields'] as $field => $values_array) {
 			if(array_key_exists($field, $post)) {
 				foreach($values_array as $key => $value) {
-					if(isset($values_array['required']) && !$values_array['required'] && empty($post[$field])) {
-						$check = true;
-					} else {
-						$check = self::isFieldValid($post[$field], $key, $value);
-					}
+					$check = self::isFieldValid($post[$field], $key, $value, @$values_array['required']);
 
 					if($check !== true) {
 						$error_message = $values_array[$key . '_message'] ?? ucfirst($field) . ' ' . $key . ' is ' . (is_bool($value) ? 'true' : $value);
@@ -319,18 +315,22 @@ class Form {
 		return true;
 	}
 
-	private static function isFieldValid($value, $operand, $operand_value) {
+	private static function isFieldValid($value, $operand, $operand_value, $is_required = false) {
+		if(!$is_required && empty($value)) {
+			return true;
+		}
+
 		switch($operand) {
-			case 'boolean': {
-				if($operand_value) {
-					return true;
-				}
-				return false;
-			}
 			case 'required': {
 				if($operand_value && !empty($value)) {
 					return true;
 				} else if(!$operand_value) {
+					return true;
+				}
+				return false;
+			}
+			case 'boolean': {
+				if($operand_value) {
 					return true;
 				}
 				return false;

@@ -11,5 +11,8 @@ return [
 		'address' => $address,
 		'about' => $about,
 		'birthday' => $birthday
-	]
+	],
+	'execute_post' => function($data) {
+		Log::write('User ID: ' . Auth::$user->id . ' changed contact information from IP: ' . Request::$ip, 'user');
+	}
 ];
