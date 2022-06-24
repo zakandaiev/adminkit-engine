@@ -11,6 +11,6 @@ return [
 		'is_approved' => $is_approved
 	],
 	'execute_post' => function($data) {
-		Log::write('Comment ID: ' . $data->form_data['item_id'] . ' ' . $data->form_data['action'] . 'ed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'comment');
+		Hook::run('admin_comment_' . $data->form_data['action'], $data);
 	}
 ];

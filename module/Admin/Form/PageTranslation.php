@@ -38,11 +38,7 @@ return [
 		return $data;
 	},
 	'execute_post' => function($data) {
-		createNotification($data);
-
-		Sitemap::update();
-
-		Log::write('Page ID: ' . $data->form_data['item_id'] . ' ' . $data->form_data['action'] . 'ed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'page');
+		Hook::run('admin_page_' . $data->form_data['action'], $data);
 	}
 ];
 
@@ -102,35 +98,12 @@ function updateTags($tags, $data) {
 	return true;
 }
 
-function createNotification($data) {
-	if($data->form_data['action'] !== 'add') {
-		return false;
-	}
-
-	$page_origin = Module\Admin\Model\Page::getInstance()->getPage($data->form_data['item_id']);
-
-	$notification_kind = $page_origin->is_category ? 'category_add' : 'page_add';
-
-	$page_data = new \stdClass();
-
-	$page_data->url = $page_origin->url;
-	$page_data->author = $page_origin->author;
-
-	$page_data->title = $data->fields['title'];
-	$page_data->image = $data->fields['image'];
-	$page_data->excerpt = $data->fields['excerpt'];
-
-	Notification::create($notification_kind, $page_data->author, $page_data);
-
-	return true;
-}
-
 function updateCutomFields($field_value, $data) {
 	$fields = [];
 
 	Module::setName('Public');
 
-	foreach(Module\Admin\Model\Page::getInstance()->getPageCustomFieldSets($data->form_data['item_id']) as $fieldset) {
+	foreach(\Module\Admin\Model\Page::getInstance()->getPageCustomFieldSets($data->form_data['item_id']) as $fieldset) {
 		$form_name = 'CustomFields/' . file_name($fieldset);
 
 		Form::check($form_name);

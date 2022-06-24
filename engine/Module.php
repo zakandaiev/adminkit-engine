@@ -127,6 +127,7 @@ class Module {
 		if(file_put_contents($config_file, $config_content, LOCK_EX)) {
 			if(!$is_edited) {
 				Log::write('Module: ' . $name. ' edited by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'module');
+				Hook::run('module_update', $name);
 			}
 
 			$is_edited = true;
@@ -139,6 +140,8 @@ class Module {
 
 	public static function delete($name) {
 		Log::write('Module: ' . $name. ' deleted by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'module');
+
+		Hook::run('module_delete', $name);
 
 		return rmdir_recursive(Path::file('module') . '/' . $name);
 	}

@@ -36,6 +36,8 @@ class Setting {
 
 		Log::write('Setting: ' . $name . ' changed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'setting');
 
+		Hook::run('setting_update', $params);
+
 		return true;
 	}
 

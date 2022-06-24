@@ -2,9 +2,8 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Auth;
+use Engine\Hook;
 use Engine\Language;
-use Engine\Log;
 use Engine\Path;
 use Engine\Request;
 use Engine\Server;
@@ -53,7 +52,7 @@ class Translation extends AdminController {
 			Server::answer(null, 'error', $error->getMessage());
 		}
 
-		Log::write('Translation: ' . $data['language']['file_name'] . ' edited by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'translation');
+		Hook::run('admin_translation_edit', $data['language']);
 
 		Server::answer(null, 'success', __('Translation saved'));
 	}

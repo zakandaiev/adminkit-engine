@@ -6,7 +6,7 @@
 ############################# RUN #############################
 $sidebar = [];
 
-foreach(Hook::run('admin_sidebar_get') as $route) {
+foreach($GLOBALS['admin_sidebar'] as $route) {
 	$sidebar[] = $route;
 
 	if(is_string($route['route']) && $route['route'] === '/admin/translation') {

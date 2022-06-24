@@ -30,7 +30,9 @@ class Sitemap {
 		$sitemap = self::format($pages);
 
 		if(file_put_contents($path, $sitemap, LOCK_EX)) {
-			Log::write('Sitmap updated from IP: ' . Request::$ip, 'sitemap');
+			Log::write('Sitmap updated by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'sitemap');
+
+			Hook::run('sitemap_update');
 
 			return true;
 		}

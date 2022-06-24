@@ -73,6 +73,8 @@ class Upload {
 
 		if($status) {
 			Log::write(Path::url() . '/' . $message . ' uploaded from IP: ' . Request::$ip, 'upload');
+
+			Hook::run('upload', $message);
 		}
 
 		return $response;

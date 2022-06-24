@@ -46,6 +46,8 @@ class Mail {
 
 		Log::write($subj .  ' sent to ' . $to . ' from IP: ' . Request::$ip, 'mail');
 
+		Hook::run('mail_send');
+
 		return mail($to, $subj, $msg, $headers);
 	}
 

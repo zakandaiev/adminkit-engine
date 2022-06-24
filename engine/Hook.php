@@ -7,7 +7,7 @@ class Hook {
 
 	public static function register($name, $function) {
 		if(is_string($name) && !empty($name) && is_callable($function)) {
-			self::$actions[$name] = $function;
+			self::$actions[$name][] = $function;
 
 			return true;
 		}
@@ -15,9 +15,13 @@ class Hook {
 		return false;
 	}
 
-	public static function run($name, $data = []) {
-		if(isset(self::$actions[$name])) {
-			return self::$actions[$name]($data);
+	public static function run($name, $data = null) {
+		if(isset(self::$actions[$name]) && !empty(self::$actions[$name])) {
+			foreach(self::$actions[$name] as $hook) {
+				$hook($data);
+			}
+
+			return true;
 		}
 
 		return false;

@@ -73,6 +73,8 @@ class Auth {
 
 		Log::write('User ID: ' . $user->id . ' logged in from IP: ' . $user->ip, 'user');
 
+		Hook::run('user_authorize', $user);
+
 		return true;
 	}
 
@@ -80,6 +82,8 @@ class Auth {
 		Session::unsetCookie(Define::COOKIE_KEY['auth']);
 
 		Log::write('User ID: ' . self::$user->id . ' logged out from IP: ' . Request::$ip, 'user');
+
+		Hook::run('user_unauthorize', self::$user);
 
 		self::$user = new \stdClass();
 		self::$user->authorized = false;
@@ -115,6 +119,8 @@ class Auth {
 		Mail::send('Register', $user);
 
 		Log::write('User ID: ' . $user->id . ' registered from IP: ' . $user->ip, 'user');
+
+		Hook::run('user_register', $user);
 
 		return true;
 	}

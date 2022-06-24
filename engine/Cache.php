@@ -64,7 +64,7 @@ class Cache {
 		return true;
 	}
 
-	public static function deleteAll() {
+	public static function flush() {
 		$path = Path::file('cache');
 
 		if(!file_exists($path)) {
@@ -80,6 +80,8 @@ class Cache {
 		}
 
 		Log::write('Cache: all deleted from IP: ' . Request::$ip, 'cache');
+
+		Hook::run('cache_flush');
 
 		return true;
 	}

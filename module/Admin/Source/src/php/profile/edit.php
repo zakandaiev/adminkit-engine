@@ -51,7 +51,7 @@
 										<h5 class="card-title mb-0"><?= __('Main') ?></h5>
 									</div>
 									<div class="card-body">
-										<form action="<?= Form::edit('Profile/Account_Main', $user->id); ?>" method="POST">
+										<form action="<?= Form::edit('Profile/Main', $user->id); ?>" method="POST">
 											<div class="row">
 												<div class="col-md-8">
 													<div class="mb-3">
@@ -86,7 +86,7 @@
 										<h5 class="card-title mb-0"><?= __('Contacts') ?></h5>
 									</div>
 									<div class="card-body">
-										<form action="<?= Form::edit('Profile/Account_Contacts', $user->id); ?>" method="POST">
+										<form action="<?= Form::edit('Profile/Contacts', $user->id); ?>" method="POST">
 											<div class="row">
 												<div class="col-xs-12 col-md-6">
 													<div class="mb-3">

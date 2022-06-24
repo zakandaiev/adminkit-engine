@@ -12,7 +12,7 @@ return [
 		return $data;
 	},
 	'execute_post' => function($data) {
-		Log::write('Menu ID: ' . $data->form_data['item_id'] . ' ' . $data->form_data['action'] . 'ed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'menu');
+		Hook::run('admin_menu_' . $data->form_data['action'], $data);
 	},
 	'submit' => function($fields, $form_data) {
 		return $form_data['item_id'];
