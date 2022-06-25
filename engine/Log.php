@@ -51,33 +51,34 @@ class Log {
 				return [];
 			}
 
-			$cdir = scandir($dir);
+			$scdir = scandir($dir);
 
-			foreach($cdir as $key => $value) {
-				if(in_array($value, ['.', '..'])) {
+			foreach($scdir as $log_name) {
+				if(in_array($log_name, ['.', '..'])) {
 					continue;
 				}
 
-				$file = $dir . '/' . $value;
+				$file = $dir . '/' . $log_name;
 
 				if(is_dir($file)) {
-					$result[$value] = dirToArray($file);
-				} else if(file_extension($value) === Define::LOG_EXTENSION) {
-					$result[] = file_name($value);
+					$result[$log_name] = dirToArray($file);
+				} else if(file_extension($log_name) === Define::LOG_EXTENSION) {
+					$result[] = file_name($log_name);
 				}
 			}
+
+			uasort($result, function ($log1, $log2) {
+				if(is_string($log1) && is_array($log2)) {
+					return 1;
+				}
+
+				return 0;
+			});
 
 			return $result;
 		}
 
 		self::$logs = dirToArray(Path::file('log'));
-
-		uasort(self::$logs, function ($log1, $log2) {
-			if(is_string($log1)) {
-				return 1;
-			}
-			return 0;
-		});
 
 		return self::$logs;
 	}

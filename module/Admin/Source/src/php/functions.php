@@ -132,7 +132,8 @@ function getNotificationHTML($notification, $user) {
 			break;
 		}
 		case 'restore': {
-			$action_name = 'restored password';
+			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$action_name = sprintf(__('restored password from %s'), $from);
 			break;
 		}
 		case 'change_login': {

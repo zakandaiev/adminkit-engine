@@ -45,8 +45,8 @@ $name = [
 $description = [
 	'required' => false,
 	'maxlength' => 1000,
-	'required_message' => __('Slogan is required'),
-	'maxlength_message' => __('Slogan is too long')
+	'required_message' => __('Description is required'),
+	'maxlength_message' => __('Description is too long')
 ];
 $analytics_gtag = [
 	'required' => false,

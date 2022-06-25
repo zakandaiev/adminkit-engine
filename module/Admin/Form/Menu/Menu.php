@@ -8,13 +8,20 @@ return [
 		'name' => $name
 	],
 	'modify_fields' => function($data) {
-		$data->fields['items'] = '[{"name":"","url":"","children":[]}]';
+		if($data->form_data['action'] === 'add') {
+			$data->fields['items'] = '[{"name":"","url":"","children":[]}]';
+		}
+
 		return $data;
 	},
 	'execute_post' => function($data) {
 		Hook::run('admin_menu_' . $data->form_data['action'], $data);
 	},
-	'submit' => function($fields, $form_data) {
-		return $form_data['item_id'];
+	'submit' => function($data) {
+		if($data->form_data['action'] === 'add') {
+			return $data->form_data['item_id'];
+		}
+
+		return null;
 	}
 ];

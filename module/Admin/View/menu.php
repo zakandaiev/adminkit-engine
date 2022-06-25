@@ -35,7 +35,7 @@
 												<span data-bs-toggle="modal" data-bs-target="#menu-edit">
 													<i data-feather="edit" class="feather-sm"></i>
 												</span>
-												<span data-action="<?= Form::delete('Menu/Edit', $item->id); ?>" data-confirm="<?=  __('Delete') . ' ' . $item->name . '?' ?>" data-redirect="<?= site('url_language') ?>/admin/menu">
+												<span data-action="<?= Form::delete('Menu/Menu', $item->id); ?>" data-confirm="<?=  __('Delete') . ' ' . $item->name . '?' ?>" data-redirect="<?= site('url_language') ?>/admin/menu">
 													<i data-feather="trash" class="feather-sm"></i>
 												</span>
 											</span>
@@ -75,7 +75,7 @@
 <div class="modal fade" id="menu-add">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<form action="<?= Form::add('Menu/Add'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/menu/{id}" data-message="">
+			<form action="<?= Form::add('Menu/Menu'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/menu/{id}" data-message="">
 				<div class="modal-header">
 					<h5 class="modal-title"><?= __('Add menu') ?></h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -97,7 +97,7 @@
 	<div class="modal fade" id="menu-edit">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
-				<form action="<?= Form::edit('Menu/Edit', $menu->id); ?>" method="POST" data-redirect="this">
+				<form action="<?= Form::edit('Menu/Menu', $menu->id); ?>" method="POST" data-redirect="this">
 					<div class="modal-header">
 						<h5 class="modal-title"><?= __('Edit menu') ?></h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>

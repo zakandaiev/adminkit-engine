@@ -55,8 +55,8 @@
 										<input type="text" name="name" placeholder="<?= __('Name') ?>" value="<?= $settings->name ?>" class="form-control" required>
 									</div>
 									<div class="mb-3">
-										<label class="form-label"><?= __('Slogan') ?></label>
-										<input type="text" name="description" placeholder="<?= __('Slogan') ?>" value="<?= $settings->description ?>" class="form-control">
+										<label class="form-label"><?= __('Description') ?></label>
+										<input type="text" name="description" placeholder="<?= __('Description') ?>" value="<?= $settings->description ?>" class="form-control">
 									</div>
 									<div class="mb-3">
 										<label class="form-label"><?= __('Google analytics tag') ?></label>

@@ -225,7 +225,12 @@ class Form {
 
 		if(isset($form['submit'])) {
 			if(is_callable($form['submit'])) {
-				$submit_message = $form['submit']($fields, $form_data);
+				$data = new \stdClass();
+
+				$data->fields = $fields;
+				$data->form_data = $form_data;
+
+				$submit_message = $form['submit']($data);
 			} else {
 				$submit_message = $form['submit'];
 			}

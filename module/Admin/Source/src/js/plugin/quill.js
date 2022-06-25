@@ -77,21 +77,18 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(textarea => {
 				if(file) {
 					let formData = new FormData();
 					formData.append('file', file);
+					formData.append(SETTING.csrf.key, SETTING.csrf.token);
 
 					quill.enable(false);
 
-					fetch(BASE_URL + '/upload', {method: 'POST', body: formData})
-					.then(response => response.json())
+					fetch(BASE_URL + '/upload/', {method: 'POST', body: formData})
+					.then(response => response.text())
 					.then(data => {
-						if(data.status === 'success') {
-							const selection = quill.getSelection().index;
-							const image_url = BASE_URL + '/' + data.message;
+						const selection = quill.getSelection().index;
+						const image_url = BASE_URL + '/' + data;
 
-							quill.insertEmbed(selection, 'image', image_url);
-							quill.setSelection(selection + 1);
-						} else {
-							SETTING.toast(data.status, data.message);
-						}
+						quill.insertEmbed(selection, 'image', image_url);
+						quill.setSelection(selection + 1);
 					})
 					.catch(error => {
 						SETTING.toast('error', error);

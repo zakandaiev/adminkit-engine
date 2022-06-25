@@ -10,7 +10,7 @@
 			<div class="modal-body">
 				<div class="mb-3">
 					<label class="form-label"><?= __('Social type') ?></label>
-					<select name="type" data-placeholder="<?= __('Social') ?>" data-label="<?= __('Social type') ?>">
+					<select name="type" data-placeholder="<?= __('Social') ?>" data-label="<?= __('Social type') ?>" data-required>
 						<?php foreach(site('socials_allowed') as $social): ?>
 							<option value="<?= strtolower($social ?? '') ?>"><?= ucfirst($social) ?></option>
 						<?php endforeach; ?>
@@ -18,12 +18,12 @@
 				</div>
 				<div class="mb-3">
 					<label class="form-label"><?= __('Link') ?></label>
-					<input type="url" name="link" placeholder="<?= __('Link') ?>" class="form-control" minlength="1" maxlength="200" data-label="<?= __('Link') ?>">
+					<input type="url" name="link" placeholder="<?= __('Link') ?>" class="form-control" minlength="1" maxlength="200" data-label="<?= __('Link') ?>" data-required>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= __('Cancel') ?></button>
-				<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+				<button type="submit" class="btn btn-primary">
 					<span class="add"><?= __('Add') ?></span>
 					<span class="edit"><?= __('Edit') ?></span>
 				</button>

@@ -124,4 +124,38 @@ class Auth {
 
 		return true;
 	}
+
+	public static function restore($email) {
+		$statement = new Statement('SELECT * FROM {user} WHERE email = :email LIMIT 1');
+
+		$user = $statement->execute(['email' => $email])->fetch();
+
+		if(empty($user)) {
+			return false;
+		}
+
+		$new_password = Hash::generatePassword();
+
+		$update_password = '
+			UPDATE {user} SET
+				password = :new_password
+			WHERE id = :id
+		';
+
+		$update_password = new Statement($update_password);
+
+		$update_password->execute(['id' => $user->id, 'new_password' => Hash::password($new_password)]);
+
+		$user->password = $new_password;
+
+		Notification::create('restore', $user->id, ['ip' => Request::$ip]);
+
+		Mail::send('Restore', $user);
+
+		Log::write('User ID: ' . $user->id . ' restored password from IP: ' . Request::$ip, 'user');
+
+		Hook::run('user_restore', $user);
+
+		return true;
+	}
 }

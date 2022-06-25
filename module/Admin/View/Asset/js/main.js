@@ -1368,21 +1368,18 @@ document.querySelectorAll('textarea[class*="wysiwyg"]').forEach(function (textar
       if (file) {
         var formData = new FormData();
         formData.append('file', file);
+        formData.append(SETTING.csrf.key, SETTING.csrf.token);
         quill.enable(false);
-        fetch(BASE_URL + '/upload', {
+        fetch(BASE_URL + '/upload/', {
           method: 'POST',
           body: formData
         }).then(function (response) {
-          return response.json();
+          return response.text();
         }).then(function (data) {
-          if (data.status === 'success') {
-            var selection = quill.getSelection().index;
-            var image_url = BASE_URL + '/' + data.message;
-            quill.insertEmbed(selection, 'image', image_url);
-            quill.setSelection(selection + 1);
-          } else {
-            SETTING.toast(data.status, data.message);
-          }
+          var selection = quill.getSelection().index;
+          var image_url = BASE_URL + '/' + data;
+          quill.insertEmbed(selection, 'image', image_url);
+          quill.setSelection(selection + 1);
         }).catch(function (error) {
           SETTING.toast('error', error);
         }).finally(function () {

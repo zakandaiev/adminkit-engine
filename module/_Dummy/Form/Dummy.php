@@ -52,7 +52,6 @@ $title = [
 ];
 
 return [
-	'submit' => 'Saved',
 	'table' => 'page',
 	'fields' => [
 		'title' => $title,
@@ -83,5 +82,6 @@ return [
 	'execute_post' => function($data) {
 		debug($data);
 		exit;
-	}
+	},
+	'submit' => 'Saved',
 ];

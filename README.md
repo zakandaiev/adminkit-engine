@@ -24,6 +24,7 @@
 * Engine: add module install func (languages, DB queries etc.)
 * Admin: load more by data-attributes
 * Admin: data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
+* Admin: data-action for input change
 * Admin: create mails
 * Admin: realize reset password
 * Admin: profile settings: privacy, notifications, delete account
