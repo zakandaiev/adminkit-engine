@@ -29,7 +29,7 @@ class Profile {
 	public function getUserNotifications($id) {
 		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id = :user_id ORDER BY is_read=true, date_created DESC');
 
-		return $notifications->execute(['user_id' => $id])->fetchAll();
+		return $notifications->paginate($this->getUserNotificationsCount($id))->execute(['user_id' => $id])->fetchAll();
 	}
 
 	public function readNotifications($user_id) {

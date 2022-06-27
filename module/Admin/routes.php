@@ -80,6 +80,9 @@ Module::route('get', '/admin/profile/$id', 'Profile@getProfile', [
 	]
 ]);
 
+Module::route('post', '/admin/profile/notification', 'Profile@postNotification');
+Module::route('post', '/admin/profile/$id/notification', 'Profile@postNotification');
+
 ############################# PAGE #############################
 Module::route('get', '/admin/page', 'Page@getAll', [
 	'page' => [
@@ -264,6 +267,7 @@ Module::route('get', '/admin/group/edit/$id', 'Group@getEdit', [
 ############################# SETTING #############################
 Module::route('get', '/admin/setting/$section', 'Setting@getSection');
 Module::route('post', '/admin/setting/$section', 'Setting@postSection');
+Module::route('post', '/admin/setting/optimization/flush-cache', 'Setting@postFlushCache');
 
 ############################# LOG #############################
 Module::route('get', '/admin/log', 'Log@getAll', [

@@ -17,14 +17,14 @@ class Upload {
 		$size = $file['size'];
 		$extension = strtolower(file_extension($file['name']));
 
-		$path_dir = Define::UPLOAD_FOLDER;
+		$path_dir = UPLOAD['folder'];
 		if(!empty($custom_folder) && $custom_folder !== '/') {
-			$path_dir = Define::UPLOAD_FOLDER . '/' . trim($custom_folder ?? '', '/');
+			$path_dir = UPLOAD['folder'] . '/' . trim($custom_folder ?? '', '/');
 		}
 		$path_file = $path_dir . '/' . $name_prepend . $name . '.' . $extension;
 		$path_full = ROOT_DIR . '/' . $path_file;
 
-		$allowed_extensions = Define::UPLOAD_EXTENSIONS;
+		$allowed_extensions = UPLOAD['extensions'];
 		if(!empty($extensions) && is_array($extensions)) {
 			$allowed_extensions = $extensions;
 		}

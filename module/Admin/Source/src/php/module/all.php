@@ -23,7 +23,7 @@
 										<th><?= __('Name') ?></th>
 										<th><?= __('Description') ?></th>
 										<th><?= __('Version') ?></th>
-										<th><?= __('Is enabled') ?></th>
+										<th><?= __('Active') ?></th>
 										<th></th>
 									</tr>
 								</thead>

@@ -35,7 +35,7 @@
 														$selected_language = 'selected';
 													}
 												?>
-												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['region'] ?> - <?= $language['name'] ?></option>
+												<option value="<?= $language['key'] ?>" <?= $selected_language ?>><?= $language['key'] ?>_<?= $language['region'] ?> - <?= $language['name'] ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>

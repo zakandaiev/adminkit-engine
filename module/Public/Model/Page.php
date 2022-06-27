@@ -41,7 +41,7 @@ class Page extends \Engine\Model {
 				{$binding_key} = :{$binding_key}
 				AND t_page_translation.language =
 					(CASE WHEN
-						(SELECT count(*) FROM {page_translation} pt INNER JOIN pre_page p ON p.id = pt.page_id WHERE {$binding_key} = :{$binding_key} AND language = :language) > 0
+						(SELECT count(*) FROM {page_translation} pt INNER JOIN {page} p ON p.id = pt.page_id WHERE {$binding_key} = :{$binding_key} AND language = :language) > 0
 					THEN
 						:language
 					ELSE
@@ -92,7 +92,7 @@ class Page extends \Engine\Model {
 	public function getPageTags($page_id, $language = null) {
 		$sql = '
 			SELECT
-				t_tag.name, t_tag.url
+				t_tag.*
 			FROM
 				{tag} t_tag
 			INNER JOIN
@@ -271,63 +271,79 @@ class Page extends \Engine\Model {
 		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
 	}
 
-	public function getPagePrevNext($page_id, $category_id = null, $language = null) {
-		$sql = '
+	public function getPagePrevNext($page_id, $language = null) {
+		$sql_prev = '
 			SELECT
-				JSON_OBJECT(
-					"title", prev_title,
-					"url", prev_url,
-					"image", prev_image
-				) as page_prev,
-				JSON_OBJECT(
-					"title", next_title,
-					"url", next_url,
-					"image", next_image
-				) as page_next
-			FROM (
-				SELECT id,
-					LAG(title) OVER (ORDER BY date_publish) as prev_title,
-					LAG(url) OVER (ORDER BY date_publish) as prev_url,
-					LAG(image) OVER (ORDER BY date_publish) as prev_image,
-					LEAD(title) OVER (ORDER BY date_publish) as next_title,
-					LEAD(url) OVER (ORDER BY date_publish) as next_url,
-					LEAD(image) OVER (ORDER BY date_publish) as next_image
-				FROM
-					{page} t_page
-				INNER JOIN
-					{page_category} t_page_category
-				ON
-					t_page.id = t_page_category.category_id
-				INNER JOIN
-					{page_translation} t_page_translation
-				ON
-					t_page.id = t_page_translation.page_id
-				WHERE
-					t_page_category.page_id = (SELECT id FROM {page} WHERE id = :page_id)
-					AND t_page_translation.language =
-						(CASE WHEN
-							(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
-						THEN
-							:language
-						ELSE
-							(SELECT value FROM {setting} WHERE section = \'main\' AND name = \'language\')
-						END)
-					AND date_publish <= NOW()
-					AND is_enabled IS true
-					AND is_category IS false
-					AND is_static IS false
-			) t
-			WHERE id = :page_id
+				*,
+				(SELECT name FROM {user} WHERE id=t_page.author) as author_name
+			FROM
+				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			WHERE
+				id <> :page_id
+				AND date_publish <= (SELECT date_publish FROM {page} WHERE id = :page_id)
+				AND id IN (SELECT page_id FROM {page_category} WHERE category_id IN (SELECT category_id FROM {page_category} WHERE page_id = :page_id))
+				AND t_page_translation.language =
+					(CASE WHEN
+						(SELECT count(*) FROM {page_translation} pt INNER JOIN {page} p ON p.id = pt.page_id WHERE page_id = :page_id AND language = :language) > 0
+					THEN
+						:language
+					ELSE
+						(SELECT value FROM {setting} WHERE section = \'main\' AND name = \'language\')
+					END)
+				AND date_publish <= NOW()
+				AND is_enabled IS true
+				AND is_category IS false
+				AND is_static IS false
+			ORDER BY
+				date_publish DESC
+			LIMIT 1
 		';
 
-		$pages = new Statement($sql);
+		$sql_next = '
+			SELECT
+				*,
+				(SELECT name FROM {user} WHERE id=t_page.author) as author_name
+			FROM
+				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			WHERE
+				id <> :page_id
+				AND date_publish >= (SELECT date_publish FROM {page} WHERE id = :page_id)
+				AND id IN (SELECT page_id FROM {page_category} WHERE category_id IN (SELECT category_id FROM {page_category} WHERE page_id = :page_id))
+				AND t_page_translation.language =
+					(CASE WHEN
+						(SELECT count(*) FROM {page_translation} pt INNER JOIN {page} p ON p.id = pt.page_id WHERE page_id = :page_id AND language = :language) > 0
+					THEN
+						:language
+					ELSE
+						(SELECT value FROM {setting} WHERE section = \'main\' AND name = \'language\')
+					END)
+				AND date_publish <= NOW()
+				AND is_enabled IS true
+				AND is_category IS false
+				AND is_static IS false
+			ORDER BY
+				date_publish ASC
+			LIMIT 1
+		';
 
-		$pages = $pages->execute(['page_id' => $page_id, 'language' => $language ?? site('language_current')])->fetch();
+		$prev = new Statement($sql_prev);
+		$prev = $prev->execute(['page_id' => $page_id, 'language' => $language ?? site('language_current')])->fetch();
+
+		$next = new Statement($sql_next);
+		$next = $next->execute(['page_id' => $page_id, 'language' => $language ?? site('language_current')])->fetch();
 
 		$prev_next = new \stdClass();
 
-		$prev_next->prev = @json_decode($pages->page_prev);
-		$prev_next->next = @json_decode($pages->page_next);
+		$prev_next->prev = $prev;
+		$prev_next->next = $next;
 
 		return $prev_next;
 	}
@@ -364,7 +380,8 @@ class Page extends \Engine\Model {
 				AND t_page.date_publish <= NOW()
 				AND t_page.is_enabled IS true
 				AND t_page.is_category IS false
-				AND t_page.is_static IS false {$options['where']}
+				AND t_page.is_static IS false
+				{$options['where']}
 			ORDER BY
 				{$options['order']}
 			LIMIT {$options['limit']}
@@ -384,6 +401,26 @@ class Page extends \Engine\Model {
 			'limit' => $options['limit'] ?? site('pagination_limit'),
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
 		];
+
+		$page_tags = [];
+
+		foreach($page->tags as $tag) {
+			$page_tags[] = $tag->id;
+		}
+
+		if(!empty($page_tags)) {
+			$options['where'] .= ' AND id IN (SELECT page_id FROM {page_tag} WHERE tag_id IN (' . implode(',', $page_tags) . ') AND page_id <> ' . $page->id . ')';
+		} else {
+			$page_categories = [];
+
+			foreach($page->categories as $category) {
+				$page_categories[] = $category->id;
+			}
+
+			if(!empty($page_categories)) {
+				$options['where'] .= ' AND id IN (SELECT page_id FROM {page_category} WHERE category_id IN (' . implode(',', $page_categories) . ') AND page_id <> ' . $page->id . ')';
+			}
+		}
 
 		$sql = "
 			SELECT
@@ -407,6 +444,7 @@ class Page extends \Engine\Model {
 				AND date_publish <= NOW()
 				AND is_enabled IS true
 				AND is_category IS false
+				AND is_static IS false
 				{$options['where']}
 			ORDER BY
 				{$options['order']}
@@ -569,7 +607,8 @@ class Page extends \Engine\Model {
 				{tag} t_tag
 			WHERE
 				language = :language
-				AND is_enabled IS true {$options['where']}
+				AND is_enabled IS true
+				{$options['where']}
 			ORDER BY
 				count_pages DESC {$options['order']}
 			LIMIT {$options['limit']}

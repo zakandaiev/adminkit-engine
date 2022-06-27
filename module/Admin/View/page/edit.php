@@ -180,7 +180,7 @@
 										</div>
 										<div class="form-check form-switch mb-3">
 											<input class="form-check-input" type="checkbox" id="is_category" name="is_category" <?php if($page_edit->is_category): ?>checked<?php endif; ?>>
-											<label class="form-check-label" for="is_category"><?= __('Is category') ?></label>
+											<label class="form-check-label" for="is_category"><?= __('Category') ?></label>
 										</div>
 										<div class="form-check form-switch mb-3">
 											<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" <?php if($page_edit->allow_comment): ?>checked<?php endif; ?>>

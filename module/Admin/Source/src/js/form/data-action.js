@@ -4,6 +4,7 @@ class DataAction {
 		this.options = options;
 
 		this.data_action = this.node.getAttribute('data-action');
+		this.data_event = this.node.hasAttribute('data-event') ? this.node.getAttribute('data-event') : 'click';
 		this.data_method = this.node.hasAttribute('data-method') ? this.node.getAttribute('data-method') : 'POST';
 		this.data_confirm = this.node.getAttribute('data-confirm');
 		this.data_fields = this.node.getAttribute('data-fields');
@@ -23,7 +24,7 @@ class DataAction {
 	}
 
 	initialize() {
-		this.node.addEventListener('click', event => {
+		this.node.addEventListener(this.data_event, event => {
 			event.preventDefault();
 
 			if(!this.confirmation()) {

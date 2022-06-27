@@ -262,6 +262,7 @@ var DataAction = /*#__PURE__*/function () {
     this.node = node;
     this.options = options;
     this.data_action = this.node.getAttribute('data-action');
+    this.data_event = this.node.hasAttribute('data-event') ? this.node.getAttribute('data-event') : 'click';
     this.data_method = this.node.hasAttribute('data-method') ? this.node.getAttribute('data-method') : 'POST';
     this.data_confirm = this.node.getAttribute('data-confirm');
     this.data_fields = this.node.getAttribute('data-fields');
@@ -285,7 +286,7 @@ var DataAction = /*#__PURE__*/function () {
     value: function initialize() {
       var _this2 = this;
 
-      this.node.addEventListener('click', function (event) {
+      this.node.addEventListener(this.data_event, function (event) {
         event.preventDefault();
 
         if (!_this2.confirmation()) {

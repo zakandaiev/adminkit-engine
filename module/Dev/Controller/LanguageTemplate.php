@@ -29,7 +29,7 @@ class LanguageTemplate extends \Engine\Controller {
 		$this->engine_dir = Path::file('engine');
 		$this->theme_dir = Path::file('theme');
 
-		$this->template_name = $this->languages_dir . '/lang@lang_REGION@LangName.ini';
+		$this->template_name = $this->languages_dir . '/lang@REGION@LangName.ini';
 	}
 
 	public function generate() {

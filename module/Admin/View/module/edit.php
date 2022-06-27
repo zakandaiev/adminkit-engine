@@ -40,7 +40,7 @@
 							</div>
 							<div class="form-check form-switch mb-3">
 								<input class="form-check-input" type="checkbox" id="is_enabled" name="is_enabled" <?php if($module['is_enabled']): ?>checked<?php endif; ?>>
-								<label class="form-check-label" for="is_enabled"><?= __('Is enabled') ?></label>
+								<label class="form-check-label" for="is_enabled"><?= __('Active') ?></label>
 							</div>
 							<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 						</form>

@@ -2,11 +2,12 @@
 
 namespace Module\Admin\Controller;
 
+use Engine\Cache;
 use Engine\Form;
-use Engine\Path;
-use Engine\Server;
 use Engine\Module;
 use Engine\Optimization;
+use Engine\Path;
+use Engine\Server;
 use Engine\Theme\Asset;
 use Engine\Theme\Breadcrumb;
 
@@ -82,5 +83,11 @@ class Setting extends AdminController {
 		$dest = Path::file('asset') . '/' . $type;
 
 		return Optimization::{strtolower($type ?? '')}($files, $dest);
+	}
+
+	public function postFlushCache() {
+		Cache::flush();
+
+		Server::answer(null, 'success', __('Cache successfully flushed'));
 	}
 }

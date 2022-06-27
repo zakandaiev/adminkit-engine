@@ -1,6 +1,14 @@
 <?php
 
-use \Engine\Define;
+define('LOG', [
+	'folder' => 'log',
+	'file_mask' => 'Y-m-d',
+	'extension' => 'log'
+]);
+define('COOKIE_KEY', ['auth' => 'auth_token']);
+define('LIFETIME', ['auth' => 3600 * 24 * 7]);
+
+use \Engine\Engine;
 use \Engine\Hash;
 use \Engine\Log;
 use \Engine\Session;
@@ -44,44 +52,6 @@ function tableExists($connection, $table) {
 
 function install() {
 	$data = Session::getAll();
-	$db_config_path = ROOT_DIR . '/config';
-	$site_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];
-
-	// CONFIG
-	$db_config_file  = "<?php" . PHP_EOL . PHP_EOL;
-	$db_config_file .= "return [" . PHP_EOL;
-	$db_config_file .= "\t'host'\t\t\t=> '{$data['db_host']}'," . PHP_EOL;
-	$db_config_file .= "\t'name'\t\t\t=> '{$data['db_name']}'," . PHP_EOL;
-	$db_config_file .= "\t'username'\t=> '{$data['db_user']}'," . PHP_EOL;
-	$db_config_file .= "\t'password'\t=> '{$data['db_pass']}'," . PHP_EOL;
-	$db_config_file .= "\t'charset'\t\t=> '{$data['db_charset']}'," . PHP_EOL;
-	$db_config_file .= "\t'prefix'\t\t=> '{$data['db_prefix']}'," . PHP_EOL;
-	$db_config_file .= "\t'options'\t\t=> [" . PHP_EOL;
-	$db_config_file .= "\t\tPDO::ATTR_PERSISTENT => true," . PHP_EOL;
-	$db_config_file .= "\t\tPDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION," . PHP_EOL;
-	$db_config_file .= "\t\tPDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES {$data['db_charset']}'" . PHP_EOL;
-	$db_config_file .= "\t]" . PHP_EOL;
-	$db_config_file .= "];" . PHP_EOL;
-	if(!file_exists($db_config_path)) {
-		mkdir($db_config_path, 0755, true);
-	}
-	file_put_contents($db_config_path . '/database.php', $db_config_file, LOCK_EX);
-
-	// ROBOTS
-	$robots_txt = 'User-agent: *' . PHP_EOL;
-	$robots_txt .= 'Disallow: /404' . PHP_EOL;
-	$robots_txt .= 'Disallow: /admin' . PHP_EOL;
-	$robots_txt .= 'Disallow: /admin/' . PHP_EOL;
-	$robots_txt .= 'Disallow: /log/' . PHP_EOL . PHP_EOL;
-	$robots_txt .= 'Sitemap: ' . $site_url . '/sitemap.xml';
-	file_put_contents(ROOT_DIR . '/robots.txt', $robots_txt, LOCK_EX);
-
-	// SITEMAP
-	$sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-	$sitemap_xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . PHP_EOL;
-	$sitemap_xml .= '<url><loc>' . $site_url . '</loc><lastmod>' . date('c') . '</lastmod><priority>1.00</priority></url>' . PHP_EOL;
-	$sitemap_xml .= '</urlset>';
-	file_put_contents(ROOT_DIR . '/sitemap.xml', $sitemap_xml, LOCK_EX);
 
 	// FOLDERS
 	if(!file_exists(ROOT_DIR . '/theme')) {
@@ -90,6 +60,9 @@ function install() {
 	if(!file_exists(ROOT_DIR . '/upload')) {
 		mkdir(ROOT_DIR . '/upload', 0755, true);
 	}
+
+	installConfig($data);
+	installSEO($data);
 
 	// INSTALL PROCESS
 	$dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', $data['db_host'], $data['db_name'], $data['db_charset']);
@@ -164,12 +137,118 @@ function storePostData() {
 }
 
 function generateAuthToken() {
-	$auth_key = Define::COOKIE_KEY['auth'];
+	$auth_key = COOKIE_KEY['auth'];
 	$auth_token = Session::hasCookie($auth_key) ? Session::getCookie($auth_key) : Hash::token();
 
 	Session::setCookie($auth_key, $auth_token);
 
 	return $auth_token;
+}
+
+function installConfig($data) {
+	$path = ROOT_DIR . '/config.php';
+
+	// CONFIG START
+	$config  = "<?php" . PHP_EOL . PHP_EOL;
+
+	// DATABASE
+	$config .= "define('DATABASE', [" . PHP_EOL;
+	$config .= "\t'host' => '{$data['db_host']}'," . PHP_EOL;
+	$config .= "\t'name' => '{$data['db_name']}'," . PHP_EOL;
+	$config .= "\t'username' => '{$data['db_user']}'," . PHP_EOL;
+	$config .= "\t'password' => '{$data['db_pass']}'," . PHP_EOL;
+	$config .= "\t'charset' => '{$data['db_charset']}'," . PHP_EOL;
+	$config .= "\t'prefix' => '{$data['db_prefix']}'," . PHP_EOL;
+	$config .= "\t'options' => [" . PHP_EOL;
+	$config .= "\t\tPDO::ATTR_PERSISTENT => true," . PHP_EOL;
+	$config .= "\t\tPDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION," . PHP_EOL;
+	$config .= "\t\tPDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES {$data['db_charset']}'" . PHP_EOL;
+	$config .= "\t]" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// DEBUG
+	$config .= "define('DEBUG', [" . PHP_EOL;
+	$config .= "\t'is_enabled' => true," . PHP_EOL;
+	$config .= "\t'lang_wrap' => '_'" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// CACHE
+	$config .= "define('CACHE', [" . PHP_EOL;
+	$config .= "\t'folder' => 'cache'," . PHP_EOL;
+	$config .= "\t'extension' => 'bin'" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// LOG
+	$config .= "define('LOG', [" . PHP_EOL;
+	$config .= "\t'folder' => 'log'," . PHP_EOL;
+	$config .= "\t'file_mask' => 'Y-m-d'," . PHP_EOL;
+	$config .= "\t'extension' => 'log'" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// COOKIE_KEY
+	$config .= "define('COOKIE_KEY', [" . PHP_EOL;
+	$config .= "\t'auth' => 'auth_token'," . PHP_EOL;
+	$config .= "\t'csrf' => 'csrf_token'," . PHP_EOL;
+	$config .= "\t'language' => 'language'" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// LIFETIME
+	$config .= "define('LIFETIME', [" . PHP_EOL;
+	$config .= "\t'auth' => 3600 * 24 * 7, // 7 days" . PHP_EOL;
+	$config .= "\t'cache' => 3600, // 1 hour" . PHP_EOL;
+	$config .= "\t'form' => 3600 * 12 // 12 hours" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// PAGINATION
+	$config .= "define('PAGINATION', [" . PHP_EOL;
+	$config .= "\t'uri_key' => 'page'" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// SERVICE
+	$config .= "define('SERVICE', [" . PHP_EOL;
+	$config .= "\t'ip_checker' => 'https://check-host.net/ip-info?host=%s'" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// UPLOAD
+	$config .= "define('UPLOAD', [" . PHP_EOL;
+	$config .= "\t'folder' => 'upload'," . PHP_EOL;
+	$config .= "\t'extensions' => ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf', 'txt', 'zip', 'rar']" . PHP_EOL;
+	$config .= "]);" . PHP_EOL;
+	$config .= PHP_EOL;
+
+	// CONFIG END
+	file_put_contents($path, $config, LOCK_EX);
+
+	return true;
+}
+
+function installSEO($data) {
+	$site_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];
+
+	// ROBOTS
+	$robots_txt = 'User-agent: *' . PHP_EOL;
+	$robots_txt .= 'Disallow: /404' . PHP_EOL;
+	$robots_txt .= 'Disallow: /admin' . PHP_EOL;
+	$robots_txt .= 'Disallow: /admin/' . PHP_EOL . PHP_EOL;
+	$robots_txt .= 'Sitemap: ' . $site_url . '/sitemap.xml';
+	file_put_contents(ROOT_DIR . '/robots.txt', $robots_txt, LOCK_EX);
+
+	// SITEMAP
+	$sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+	$sitemap_xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . PHP_EOL;
+	$sitemap_xml .= '<url><loc>' . $site_url . '</loc><lastmod>' . date('c') . '</lastmod><priority>1.00</priority></url>' . PHP_EOL;
+	$sitemap_xml .= '</urlset>';
+	file_put_contents(ROOT_DIR . '/sitemap.xml', $sitemap_xml, LOCK_EX);
+
+	return true;
 }
 
 ?>
@@ -203,7 +282,7 @@ function generateAuthToken() {
 				<div class="d-table-cell align-middle">
 
 					<div class="text-center mt-4">
-						<h1 class="h2"><?= Define::NAME ?></h1>
+						<h1 class="h2"><?= Engine::NAME ?></h1>
 						<p class="lead">Installing</p>
 					</div>
 

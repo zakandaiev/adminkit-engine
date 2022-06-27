@@ -15,6 +15,14 @@ UPDATE `%prefix%_setting` SET
 WHERE `section`='site' AND `name`='logo_alt';
 
 UPDATE `%prefix%_setting` SET
+`value`='upload/demo/no-avatar.jpg'
+WHERE `section`='site' AND `name`='placeholder_avatar';
+
+UPDATE `%prefix%_setting` SET
+`value`='upload/demo/no-image.jpg'
+WHERE `section`='site' AND `name`='placeholder_image';
+
+UPDATE `%prefix%_setting` SET
 `value`='123 6th St.Melbourne, FL 32904'
 WHERE `section`='contact' AND `name`='address';
 

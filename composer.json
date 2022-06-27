@@ -13,6 +13,7 @@
 			"Module\\": "module"
 		},
 		"files": [
+			"config.php",
 			"engine/functions.php"
 		]
 	}

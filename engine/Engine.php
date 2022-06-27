@@ -5,18 +5,26 @@ namespace Engine;
 use Engine\Database\Database;
 
 class Engine {
+	const PHP_MIN = '7.0.0';
+	const NAME = 'AdminKit Engine';
+	const VERSION = '1.0.0';
+	const AUTHOR = 'Zakandaiev';
+	const AUTHOR_URL = 'https://zakandaiev.pp.ua';
+
+	private static $time_start;
+
 	public static function start() {
-		if(Define::DEBUG) {
+		if(DEBUG['is_enabled']) {
 			ini_set('display_errors', '1');
 			ini_set('display_startup_errors', '1');
 			error_reporting(E_ALL);
+
+			self::$time_start = hrtime(true);
 		}
 
 		class_alias('\\Engine\\Engine', 'Engine');
-		class_alias('\\Engine\\Define', 'Define');
 		class_alias('\\Engine\\Path', 'Path');
 		class_alias('\\Engine\\Request', 'Request');
-		class_alias('\\Engine\\Config', 'Config');
 		class_alias('\\Engine\\Database\\Database', 'Database');
 		class_alias('\\Engine\\Database\\Statement', 'Statement');
 		class_alias('\\Engine\\Setting', 'Setting');
@@ -49,7 +57,6 @@ class Engine {
 		Session::initialize();
 		Request::initialize();
 		Language::initialize();
-		Config::initialize();
 		Database::initialize();
 		Setting::initialize();
 		Auth::initialize();
@@ -59,5 +66,13 @@ class Engine {
 
 	public static function stop() {
 		Database::finalize();
+
+		if(DEBUG['is_enabled']) {
+			$time_end = hrtime(true);
+			$time_result = $time_end - self::$time_start;
+			$time_result /= 1e+6; // convert ns to ms
+
+			echo "\n<!-- Execution time: $time_result ms -->";
+		}
 	}
 }

@@ -48,7 +48,12 @@
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="cache_db" name="cache_db" <?php if($settings->cache_db == 'true'): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="cache_db"><?= __('Cache database queries') ?></label>
+										<label class="form-check-label" for="cache_db">
+											<?= __('Cache database queries') ?>
+											<?php if($settings->cache_db == 'true'): ?>
+												<a data-action="<?= site('url_language') ?>/admin/setting/optimization/flush-cache" data-confirm="<?= __('Flush cache') ?>?" data-class="submit" data-class-target="form" data-delete="this" href="#" class="text-sm"><br><?= __('Cache size') ?>: <?= file_size(Path::file('cache')) ?></a>
+											<?php endif; ?>
+										</label>
 									</div>
 									<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 								</form>

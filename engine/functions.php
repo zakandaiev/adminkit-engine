@@ -35,7 +35,15 @@ function file_extension($path) {
 }
 
 function file_size($path, $precision = 2) {
-	$size = filesize($path);
+	$size = 0;
+
+	if(is_file($path)) {
+		$size = filesize($path);
+	} else {
+		foreach(glob_recursive($path . '/*.*') as $file) {
+			$size += filesize($file);
+		}
+	}
 
 	$units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
   for($i = 0; $size > 1024; $i++) $size /= 1024;
@@ -294,11 +302,11 @@ function site($key) {
 
 	switch(strval($key)) {
 		case 'name': {
-			$value = $value ?? Define::NAME;
+			$value = $value ?? Engine::NAME;
 			break;
 		}
 		case 'charset': {
-			$value = Config::get('database')['charset'];
+			$value = DATABASE['charset'];
 			break;
 		}
 		case 'language_current': {
@@ -336,7 +344,7 @@ function site($key) {
 			break;
 		}
 		case 'version': {
-			$value = Define::VERSION;
+			$value = Engine::VERSION;
 			break;
 		}
 	}

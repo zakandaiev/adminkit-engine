@@ -52,4 +52,10 @@ abstract class Controller {
 
 		return null;
 	}
+
+	public function get404() {
+		$this->view->error('404');
+
+		return true;
+	}
 }

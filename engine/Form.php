@@ -254,7 +254,7 @@ class Form {
 			SELECT token FROM {form}
 			WHERE
 				' . $query_defining . '
-				AND date_created > DATE_SUB(NOW(), INTERVAL ' . Define::LIFETIME['form'] . ' SECOND)
+				AND date_created > DATE_SUB(NOW(), INTERVAL ' . LIFETIME['form'] . ' SECOND)
 		';
 
 		$statement = new Statement($sql);
@@ -271,7 +271,7 @@ class Form {
 	}
 
 	private static function clearExpired() {
-		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . intval(Define::LIFETIME['form']) * 2 . ' SECOND)');
+		$statement = new Statement('DELETE FROM {form} WHERE date_created <= DATE_SUB(NOW(), INTERVAL ' . intval(LIFETIME['form']) * 2 . ' SECOND)');
 		$statement->execute();
 
 		return true;

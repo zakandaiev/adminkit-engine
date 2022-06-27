@@ -30,7 +30,7 @@
 										<th><?= __('Routes count') ?></th>
 										<th><?= __('Users count') ?></th>
 										<th><?= __('Create date') ?></th>
-										<th><?= __('Is active') ?></th>
+										<th><?= __('Active') ?></th>
 										<th></th>
 									</tr>
 								</thead>

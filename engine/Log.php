@@ -20,7 +20,7 @@ class Log {
 			mkdir($path, 0660, true);
 		}
 
-		$path .= '/' . date(Define::LOG_FILENAME) . '.' . Define::LOG_EXTENSION;
+		$path .= '/' . date(LOG['file_mask']) . '.' . LOG['extension'];
 
 		return file_put_contents($path, $string, FILE_APPEND | LOCK_EX);
 	}
@@ -62,7 +62,7 @@ class Log {
 
 				if(is_dir($file)) {
 					$result[$log_name] = dirToArray($file);
-				} else if(file_extension($log_name) === Define::LOG_EXTENSION) {
+				} else if(file_extension($log_name) === LOG['extension']) {
 					$result[] = file_name($log_name);
 				}
 			}
@@ -87,7 +87,7 @@ class Log {
 		$log = new \stdClass();
 		$log_id = str_replace('@', '/', trim($id ?? '', '/'));
 
-		$path = Path::file('log') . '/' . $log_id . '.' . Define::LOG_EXTENSION;
+		$path = Path::file('log') . '/' . $log_id . '.' . LOG['extension'];
 
 		if(!file_exists($path)) {
 			return $log;

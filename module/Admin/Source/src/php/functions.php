@@ -16,6 +16,7 @@ Asset::js('js/filepond', 'defer');
 Asset::js('js/quill', 'defer');
 Asset::js('js/slimselect', 'defer');
 Asset::js('js/sortable', 'defer');
+Asset::js('js/load-more', 'defer');
 Asset::js('js/custom-fields', 'defer', ['/admin/page/edit/$id', '/admin/page/edit/$id/translation/edit/$language']);
 Asset::js('js/menu', 'defer', ['/admin/menu', '/admin/menu/$id']);
 Asset::js('js/translations', 'defer', '/admin/translation/$language');
@@ -122,17 +123,17 @@ function getNotificationHTML($notification, $user) {
 
 	switch($notification->kind) {
 		case 'register': {
-			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			$action_name = sprintf(__('created account from %s'), $from);
 			break;
 		}
 		case 'login': {
-			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			$action_name = sprintf(__('authorized from %s'), $from);
 			break;
 		}
 		case 'restore': {
-			$from = '<a href="' . sprintf(DEFINE::SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			$action_name = sprintf(__('restored password from %s'), $from);
 			break;
 		}
@@ -158,25 +159,15 @@ function getNotificationHTML($notification, $user) {
 			$action_name = sprintf(__('changed email from %s to %s'), $from, $to);
 			break;
 		}
-		case 'page_add': {
-			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
-
-			$action_name = sprintf(__('posted %s'), $page_title);
-
-			$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
-
-			if(!empty($data->excerpt)) {
-				$action_body .= '<div class="text-sm text-muted mt-1">' . $data->excerpt . '</div>';
-			}
-
-			break;
-		}
+		case 'page_add':
 		case 'category_add': {
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('posted %s'), $page_title);
 
-			$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
+			if($data->image) {
+				$action_body = '<div class="mt-2"><img src="' . site('url') . '/' . placeholder_image($data->image) . '" class="w-25" alt="' . $data->title . '" data-fancybox></div>';
+			}
 
 			if(!empty($data->excerpt)) {
 				$action_body .= '<div class="text-sm text-muted mt-1">' . $data->excerpt . '</div>';
@@ -212,7 +203,7 @@ function getNotificationHTML($notification, $user) {
 
 	$output = '
 		<div class="activity">
-			<img src="/' . $user_avatar . '" width="36" height="36" class="rounded-circle me-2" alt="' . $user_name . '">
+			<img src="' . site('url') . '/' . $user_avatar . '" width="36" height="36" class="rounded-circle me-2" alt="' . $user_name . '">
 			<div class="flex-grow-1">
 				<small class="float-end text-navy">' . $when . '</small>
 				<strong>' . $user_name . '</strong>

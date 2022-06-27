@@ -1,6 +1,4 @@
 <script>
-	const BASE_URL = '<?= site('url') ?>';
-
 	SETTING.loader = '<div class="spinner-border text-primary" role="status"></div>';
 	SETTING.image_placeholder = '<?= Asset::url() . '/img/no_image.jpg' ?>';
 	SETTING.icon = {

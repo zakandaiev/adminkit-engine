@@ -23,7 +23,7 @@
 										<th><?= __('Message') ?></th>
 										<th><?= __('Page') ?></th>
 										<th><?= __('Created') ?></th>
-										<th><?= __('Is approved') ?></th>
+										<th><?= __('Approved') ?></th>
 										<th></th>
 									</tr>
 								</thead>

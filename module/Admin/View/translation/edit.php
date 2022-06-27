@@ -11,7 +11,7 @@
 
 				<div class="mb-3">
 				<?php
-						$crumb_add_name = '<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="' . Asset::url() . '/' . lang($language['key'], 'icon') . '" alt="' . $language['key'] . '"> ' . $language['region'] . ' - ' . $language['name'];
+						$crumb_add_name = '<img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="' . Asset::url() . '/' . lang($language['key'], 'icon') . '" alt="' . $language['key'] . '"> ' . $language['key'] . '_' . $language['region'] . ' - ' . $language['name'];
 
 						Breadcrumb::add($crumb_add_name);
 

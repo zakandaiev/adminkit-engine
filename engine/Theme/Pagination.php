@@ -2,7 +2,6 @@
 
 namespace Engine\Theme;
 
-use Engine\Define;
 use Engine\Request;
 use Engine\Setting;
 
@@ -26,7 +25,7 @@ class Pagination {
 	}
 
 	public function __construct($total_rows, $uri_key = null) {
-		$this->uri_key = $uri_key ?? Define::PAGINATION_URI_KEY;
+		$this->uri_key = $uri_key ?? PAGINATION['uri_key'];
 		$this->uri = $this->handleUri();
 		$this->limit = intval(Setting::get('site')->pagination_limit);
 		$this->total_rows = intval($total_rows);

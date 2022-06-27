@@ -6,8 +6,6 @@ use \PDO;
 use \PDOException;
 use \Exception;
 
-use Engine\Config;
-
 class Database {
 	public static $connection;
 
@@ -21,24 +19,26 @@ class Database {
 
 	public static function finalize() {
 		self::$connection = null;
-		
+
 		return true;
 	}
 
 	private static function connect() {
-		$config = Config::get('database');
-
-		if(empty($config)) {
-			throw new Exception(sprintf('Database config file is empty or invalid', $path));
+		if(!defined('DATABASE')) {
+			throw new Exception('Database config is missed');
 		}
 
-		extract($config);
+		if(empty(DATABASE)) {
+			throw new Exception('Database config is empty');
+		}
+
+		extract(DATABASE);
+
+		if(!isset($host) || !isset($name) || !isset($username) || !isset($password) || !isset($charset) || !isset($prefix) || !isset($options)) {
+			throw new Exception('Database config is invalid');
+		}
 
 		$dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', $host, $name, $charset);
-
-		if(empty($username) || empty($name) || !isset($prefix)) {
-			return null;
-		}
 
 		try {
 			$connection = new PDO($dsn, $username, $password, $options);

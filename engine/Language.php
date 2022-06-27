@@ -31,14 +31,14 @@ class Language {
 			self::loadTranslations();
 		}
 
-		return (Define::DEBUG ? Define::DEBUG_LANG_WRAP : '') . (self::$translation[$key] ?? $key) . (Define::DEBUG ? Define::DEBUG_LANG_WRAP : '');
+		return (DEBUG['is_enabled'] ? DEBUG['lang_wrap'] : '') . (self::$translation[$key] ?? $key) . (DEBUG['is_enabled'] ? DEBUG['lang_wrap'] : '');
 	}
 
 	public static function current() {
-		$language_from_cookie = Session::hasCookie(Define::COOKIE_KEY['language']) ? Session::getCookie(Define::COOKIE_KEY['language']) : null;
+		$language_from_cookie = Session::hasCookie(COOKIE_KEY['language']) ? Session::getCookie(COOKIE_KEY['language']) : null;
 
 		if(!empty($language_from_cookie) && Language::has($language_from_cookie)) {
-			$language = Session::getCookie(Define::COOKIE_KEY['language']);
+			$language = Session::getCookie(COOKIE_KEY['language']);
 		} else {
 			$language = Setting::get('main')->language;
 		}
@@ -51,7 +51,7 @@ class Language {
 			return false;
 		}
 
-		Session::setCookie(Define::COOKIE_KEY['language'], $language);
+		Session::setCookie(COOKIE_KEY['language'], $language);
 
 		return true;
 	}

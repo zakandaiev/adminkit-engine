@@ -12,8 +12,8 @@ class Auth {
 		self::$user->authorized = false;
 		self::$user->groups = [];
 
-		if(Session::hasCookie(Define::COOKIE_KEY['auth'])) {
-			$auth_key = Session::getCookie(Define::COOKIE_KEY['auth']);
+		if(Session::hasCookie(COOKIE_KEY['auth'])) {
+			$auth_key = Session::getCookie(COOKIE_KEY['auth']);
 
 			$sql = '
 				SELECT
@@ -64,7 +64,7 @@ class Auth {
 
 		$authorize->execute(['user_id' => $user->id, 'auth_ip' => $user->ip, 'auth_token' => $auth_token]);
 
-		Session::setCookie(Define::COOKIE_KEY['auth'], $auth_token, $lifetime ?? Define::LIFETIME['auth']);
+		Session::setCookie(COOKIE_KEY['auth'], $auth_token, $lifetime ?? LIFETIME['auth']);
 
 		self::$user = $user;
 		self::$user->authorized = true;
@@ -79,7 +79,7 @@ class Auth {
 	}
 
 	public static function unauthorize() {
-		Session::unsetCookie(Define::COOKIE_KEY['auth']);
+		Session::unsetCookie(COOKIE_KEY['auth']);
 
 		Log::write('User ID: ' . self::$user->id . ' logged out from IP: ' . Request::$ip, 'user');
 

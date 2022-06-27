@@ -17,13 +17,15 @@ class Cache {
 
 		$key = md5($key);
 
-		$path = $path . '/' . $key . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
+		$path = $path . '/' . $key . '.' . trim(trim(CACHE['extension']), '.');
 
 		$content[self::CACHE_KEY['data']] = $data;
-		$content[self::CACHE_KEY['expires']] = time() + intval($lifetime ?? Define::LIFETIME['cache']);
+		$content[self::CACHE_KEY['expires']] = time() + intval($lifetime ?? LIFETIME['cache']);
+
+		$content = serialize($content);
 
 		try {
-			file_put_contents($path, serialize($content));
+			file_put_contents($path, $content);
 		}
 		catch(\Exception $error) {
 			throw new \Exception(sprintf('Cache error: %s', $error->getMessage()));
@@ -35,7 +37,7 @@ class Cache {
 	}
 
 	public static function get($key) {
-		$path = Path::file('cache') . '/' . md5($key) . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
+		$path = Path::file('cache') . '/' . md5($key) . '.' . trim(trim(CACHE['extension']), '.');
 
 		if(file_exists($path)) {
 			$content = unserialize(file_get_contents($path));
@@ -51,7 +53,7 @@ class Cache {
 	public static function delete($key) {
 		$key = md5($key);
 
-		$path = Path::file('cache') . '/' . $key . '.' . trim(trim(Define::CACHE_EXTENSION), '.');
+		$path = Path::file('cache') . '/' . $key . '.' . trim(trim(CACHE['extension']), '.');
 
 		if(!file_exists($path)) {
 			return false;
@@ -74,12 +76,12 @@ class Cache {
 		foreach(scandir($path) as $file) {
 			if(in_array($file, ['.', '..'], true)) continue;
 
-			if(file_extension($file) !== trim(trim(Define::CACHE_EXTENSION), '.')) continue;
+			if(file_extension($file) !== trim(trim(CACHE['extension']), '.')) continue;
 
 			unlink($path . '/' . $file);
 		}
 
-		Log::write('Cache: all deleted from IP: ' . Request::$ip, 'cache');
+		Log::write('Cache: flushed from IP: ' . Request::$ip, 'cache');
 
 		Hook::run('cache_flush');
 

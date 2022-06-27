@@ -61,7 +61,7 @@
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="is_approved" name="is_approved" <?php if($comment->is_approved): ?>checked<?php endif; ?>>
-										<label class="form-check-label" for="is_approved"><?= __('Is approved') ?></label>
+										<label class="form-check-label" for="is_approved"><?= __('Approved') ?></label>
 									</div>
 								</div>
 							</div>

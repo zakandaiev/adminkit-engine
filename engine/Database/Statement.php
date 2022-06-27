@@ -5,9 +5,10 @@ namespace Engine\Database;
 use \PDO;
 use \PDOException;
 
-use Engine\Define;
-use Engine\Config;
+use Engine\Cache;
+use Engine\Module;
 use Engine\Server;
+use Engine\Setting;
 use Engine\Theme\Pagination;
 
 class Statement {
@@ -17,7 +18,7 @@ class Statement {
 	private $binding = [];
 
 	public function __construct(string $sql) {
-		$this->prefix = Config::get('database')['prefix'];
+		$this->prefix = DATABASE['prefix'];
 
 		$replacement = '$1';
 		if(!empty($this->prefix)) {
@@ -25,16 +26,6 @@ class Statement {
 		}
 
 		$this->sql = preg_replace('/{([^{}]+)}/miu', $replacement, $sql);
-
-		return $this;
-	}
-
-	public function cache($key) {
-		if(\Engine\Module::$name !== 'Public' || \Engine\Setting::get('optimization')->cache_db == 'false') {
-			return $this;
-		}
-
-		// TODO
 
 		return $this;
 	}
@@ -51,6 +42,11 @@ class Statement {
 	}
 
 	public function execute($params = []) {
+		if($this->isCached()) {
+			$this->addBinding($params);
+			return $this;
+		}
+
 		$this->prepare();
 		$this->addBinding($params);
 		$this->bind();
@@ -61,12 +57,12 @@ class Statement {
 			$error_message = $error->getMessage();
 
 			if(preg_match("/Duplicate entry .+ for key '(.+)'/", $error->getMessage(), $matches)) {
-				$error_message = str_replace(Config::get('database')['prefix'] . '_', '', $matches[1]);
+				$error_message = str_replace(DATABASE['prefix'] . '_', '', $matches[1]);
 				$error_message = str_replace('.', '_', $error_message);
 				$error_message = 'duplicate/' . $error_message;
 			}
 
-			$debug_sql = Define::DEBUG ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql ?? ''))] : null;
+			$debug_sql = DEBUG['is_enabled'] ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql ?? ''))] : null;
 
 			Server::answer($debug_sql, 'error', $error_message, '409');
 		}
@@ -74,16 +70,58 @@ class Statement {
 		return $this;
 	}
 
+	private function isCached() {
+		$is_cached = false;
+
+		if(Module::$name === 'Public' && Setting::get('optimization')->cache_db == 'true') {
+			if(preg_match('/^[\s]*SELECT/i', $this->sql)) {
+				$is_cached = true;
+			}
+		}
+
+		return $is_cached;
+	}
+
+	private function cache() {
+
+
+		return $this;
+	}
+
+	private function fetchCache($type, $mode) {
+		if($this->isCached()) {
+			$cache_key = implode('@', $this->binding) . '@' . $this->sql;
+
+			$cache = Cache::get($cache_key);
+
+			if($cache) {
+				return $cache;
+			} else {
+				$this->prepare();
+				$this->bind();
+				$this->statement->execute();
+
+				$cache = $this->statement->{$type}($mode);
+
+				Cache::set($cache_key, $cache);
+
+				return $cache;
+			}
+		}
+
+		return $this->statement->{$type}($mode);
+	}
+
 	public function fetchAll($mode = PDO::FETCH_OBJ) {
-		return $this->statement->fetchAll($mode);
+		return $this->fetchCache(__FUNCTION__, $mode);
 	}
 
 	public function fetch($mode = PDO::FETCH_OBJ) {
-		return $this->statement->fetch($mode);
+		return $this->fetchCache(__FUNCTION__, $mode);
 	}
 
 	public function fetchColumn(int $column = 0) {
-		return $this->statement->fetchColumn($column);
+		return $this->fetchCache(__FUNCTION__, $column);
 	}
 
 	public function insertId() {

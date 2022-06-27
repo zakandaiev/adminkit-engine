@@ -31,7 +31,7 @@ class Path {
 			case 'language':
 				return ROOT_DIR . '/language';
 			case 'log':
-				return ROOT_DIR . '/' . trim(Define::LOG_FOLDER, '/');
+				return ROOT_DIR . '/' . trim(LOG['folder'], '/');
 			case 'module':
 				return ROOT_DIR . '/module';
 			case 'temp': {
@@ -41,12 +41,12 @@ class Path {
 				return substr($doc_root, 0, strpos($doc_root, 'data')) . 'data/tmp';
 			}
 			case 'cache': {
-				return self::file('temp') . '/' . trim(Define::CACHE_FOLDER, '/');
+				return self::file('temp') . '/' . trim(CACHE['folder'], '/');
 			}
 			case 'theme':
 				return ROOT_DIR . '/theme';
 			case 'upload':
-				return ROOT_DIR . '/' . trim(Define::UPLOAD_FOLDER, '/');
+				return ROOT_DIR . '/' . trim(UPLOAD['folder'], '/');
 			case 'controller':
 				return ROOT_DIR . '/module/' . $module . '/Controller';
 			case 'model':
@@ -93,7 +93,7 @@ class Path {
 
 		switch(strtolower($section ?? '')) {
 			case 'upload':
-				return $url_base . '/' . trim(Define::UPLOAD_FOLDER, '/');
+				return $url_base . '/' . trim(UPLOAD['folder'], '/');
 			case 'theme':
 				return $url_base . '/theme';
 			case 'asset': {

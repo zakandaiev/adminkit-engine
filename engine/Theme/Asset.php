@@ -2,7 +2,7 @@
 
 namespace Engine\Theme;
 
-use Engine\Define;
+use Engine\Engine;
 use Engine\Module;
 use Engine\Path;
 use Engine\Router;
@@ -86,7 +86,7 @@ class Asset {
 
 			$output .= sprintf(
 				self::EXTENSION_MASK[$extension],
-				Path::url('asset', @$asset['module']) . '/' . $asset['file'] . '?version=' . Define::VERSION,
+				Path::url('asset', @$asset['module']) . '/' . $asset['file'] . '?version=' . Engine::VERSION,
 				!empty($asset['attributes']) ? ' ' . $asset['attributes'] : ''
 			) . PHP_EOL;
 		}

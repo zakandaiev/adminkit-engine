@@ -19,15 +19,9 @@
 
 ## ToDo:
 * Engine: create Filter class
-* Engine: cache queries
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Engine: add module install func (languages, DB queries etc.)
-* Admin: load more by data-attributes
 * Admin: data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
-* Admin: data-action for input change
-* Admin: create mails
-* Admin: realize reset password
 * Admin: profile settings: privacy, notifications, delete account
-* Public: getPagePrevNext - consider category
-* Public: getRelatedPages - select posts with similar tags and categories else random
+* Modules: refactor SQL queries
 * API: create API module

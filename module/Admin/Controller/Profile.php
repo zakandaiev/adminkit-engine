@@ -14,8 +14,8 @@ class Profile extends AdminController {
 			$this->view->error('404');
 		}
 
-		$data['user']->notifications_count = $this->model->getUserNotificationsCount($data['user']->id);
 		$data['user']->notifications = $this->model->getUserNotifications($data['user']->id);
+		$data['user']->notifications_count = $this->model->getUserNotificationsCount($data['user']->id);
 
 		$this->model->readNotifications($data['user']->id);
 
@@ -28,5 +28,19 @@ class Profile extends AdminController {
 
 		$this->view->setData($data);
 		$this->view->render('profile/edit');
+	}
+
+	public function postNotification() {
+		$data['user'] = clone $this->user;
+
+		if(isset($this->route['parameters']['id'])) {
+			$data['user'] = $this->model->getUserById($this->route['parameters']['id']);
+		}
+
+		$data['notifications'] = $this->model->getUserNotifications($data['user']->id);
+		$data['notifications_count'] = $this->model->getUserNotificationsCount($data['user']->id);
+
+		$this->view->setData($data);
+		$this->view->render('profile/notification-load-more');
 	}
 }

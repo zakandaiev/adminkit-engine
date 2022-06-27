@@ -71,7 +71,7 @@
 							<div class="card-header">
 								<h5 class="card-title mb-0"><?= __('Activities') ?></h5>
 							</div>
-							<div class="card-body h-100">
+							<div class="card-body h-100 spinner-action">
 								<?php
 									$notifications = $user->notifications;
 									$notifications_count = $user->notifications_count;
@@ -80,8 +80,8 @@
 										echo getNotificationHTML($notification, $user);
 									}
 								?>
-								<div class="d-grid">
-									<a href="#" class="btn btn-primary"><?= __('Load more') ?></a>
+								<div id="notification-target" class="d-grid">
+									<button data-load-more="<?= site('permalink') ?>/notification" data-total="<?= $notifications_count ?>" data-target="#notification-target" data-target-position="beforebegin" data-class="spinner-action_active" data-class-target=".spinner-action" class="btn btn-primary"><?= __('Load more') ?></button>
 								</div>
 							</div>
 						</div>

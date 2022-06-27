@@ -2,7 +2,7 @@
 
 namespace Engine\Theme;
 
-use Engine\Define;
+use Engine\Engine;
 use Engine\Module;
 use Engine\Request;
 
@@ -25,7 +25,7 @@ class Meta {
 		return self::$meta;
 	}
 
-	public static function no_index_no_follow($page) {
+	private static function no_index_no_follow($page) {
 		$no_index_no_follow = '';
 
 		if(site('no_index_no_follow') || $page->no_index_no_follow) {
@@ -35,7 +35,7 @@ class Meta {
 		return $no_index_no_follow;
 	}
 
-	public static function title($page) {
+	private static function title($page) {
 		$page_title = $page->title . ' &#8212; ' . site('name');
 
 		if(Module::$name === 'Admin' || Module::get('extends') === 'Admin') {
@@ -45,36 +45,50 @@ class Meta {
 		return $page_title;
 	}
 
-	public static function seo_image($page) {
+	private static function seo_image($page) {
 		return $page->seo_image ?? site('logo_public');
 	}
 
-	public static function seo_description($page) {
+	private static function seo_description($page) {
 		return $page->seo_description ?? site('name') . '. ' . site('description');
 	}
 
-	public static function seo_keywords($page) {
+	private static function seo_keywords($page) {
 		return $page->seo_keywords ?? trim(preg_replace('/[\s\.;]+/', ',', self::get('seo_description', $page)), ',');
 	}
 
-	public static function author() {
-		return Define::AUTHOR;
+	private static function author() {
+		return Engine::AUTHOR;
 	}
 
-	public static function locale() {
-		return lang(site('language_current'), 'region');
+	private static function locale() {
+		return site('language_current') . '_' . lang(site('language_current'), 'region');
 	}
 
-	public static function setting() {
+	private static function setting() {
 		return '
 			<script>
+				const BASE_URL = "' . site('url') . '";
 				let SETTING = {
-					language: "' . site('language') . '",
+					language: "' . site('language_current') . '",
 					csrf: {
-						key: "' . Define::COOKIE_KEY['csrf'] . '",
+						key: "' . COOKIE_KEY['csrf'] . '",
 						token: "' . Request::$csrf . '"
-					}
+					},
+					pagination_limit: ' . site('pagination_limit') . ',
 				};
+			</script>
+		';
+	}
+
+	private static function analytics_gtag() {
+		return '
+			<script async src="https://www.googletagmanager.com/gtag/js?id=' . site('analytics_gtag') . '"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag("js", new Date());
+				gtag("config", "' . site('analytics_gtag') . '");
 			</script>
 		';
 	}
@@ -98,6 +112,7 @@ class Meta {
 		$page->favicon_png = Asset::url() . '/favicon.png';
 
 		$page->setting = self::setting();
+		$page->analytics_gtag = self::analytics_gtag();
 
 		$meta = self::no_index_no_follow($page);
 		$meta .= '
@@ -134,6 +149,7 @@ class Meta {
 			<link rel="apple-touch-icon" href="' . $page->favicon_png . '">
 
 			' . $page->setting . '
+			' . $page->analytics_gtag . '
 		';
 
 		return $meta;

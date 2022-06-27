@@ -1,8 +1,8 @@
-/config/
 /log/
 /upload/
 /vendor/
 /composer.lock
+/config.php
 /robots.txt
 /sitemap.xml
 node_modules/

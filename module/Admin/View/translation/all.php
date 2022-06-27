@@ -27,7 +27,7 @@
 										<tr>
 											<td>
 												<i data-feather="file-text" class="align-middle"></i>
-												<a href="<?= site('url_language') ?>/admin/translation/<?= $language['key'] ?>" class="align-middle"><?= $language['region'] ?> - <?= $language['name'] ?></a>
+												<a href="<?= site('url_language') ?>/admin/translation/<?= $language['key'] ?>" class="align-middle"><?= $language['key'] ?>_<?= $language['region'] ?> - <?= $language['name'] ?></a>
 											</td>
 										</tr>
 									<?php endforeach; ?>

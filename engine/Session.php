@@ -46,7 +46,7 @@ class Session {
 	public static function setCookie($key, $value, $lifetime = null) {
 		Request::$cookie[$key] = $value;
 
-		return setcookie($key, $value, time() + intval($lifetime ?? Define::LIFETIME['auth']), '/', '', false, true);
+		return setcookie($key, $value, time() + intval($lifetime ?? LIFETIME['auth']), '/', '', false, true);
 	}
 
 	public static function getCookie($key) {

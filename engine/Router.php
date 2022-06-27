@@ -121,7 +121,7 @@ class Router {
 			if(trim(self::$uri ?? '', '/') === $form->token) {
 				Module::setName($form->module);
 
-				if($timestamp_diff < Define::LIFETIME['form']) {
+				if($timestamp_diff < LIFETIME['form']) {
 					Form::execute($form->action, $form->form_name, $form->item_id);
 				} else {
 					$error_message = __('Current form is already inactive. Reload the page and try again');

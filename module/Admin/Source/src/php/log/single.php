@@ -25,7 +25,7 @@
 					<div class="card-header">
 						<h5 class="card-title mb-0">
 							<?php
-								$log_url = site('url') . '/log/' . $log->name . '.' . Define::LOG_EXTENSION;
+								$log_url = site('url') . '/log/' . $log->name . '.' . LOG['extension'];
 								echo '<a href="' . $log_url . '" target="_blank">' . $log_url . '</a>';
 							?>
 						</h5>
