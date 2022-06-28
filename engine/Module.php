@@ -74,6 +74,9 @@ class Module {
 
 			$routes_file = $module_path . '/' . $module['name'] . '/routes.php';
 			$hooks_file = $module_path . '/' . $module['name'] . '/hooks.php';
+			if($module['name'] === 'Public') {
+				$hooks_file = Path::file('theme') . '/hooks.php';
+			}
 
 			self::$module_name = $module['name'];
 
@@ -190,5 +193,74 @@ class Module {
 		}
 
 		return $formatted;
+	}
+
+	public static function install($name) {
+		$path = Path::file('module') . '/' . $name . '/Install';
+
+		if(!file_exists($path)) {
+			return false;
+		}
+
+		self::uninstall($name);
+
+		// INSTALL SCRIPT
+		$path_install = $path . '/install.php';
+
+		if(is_file($path_install)) {
+			require $path_install;
+		}
+
+		// LANGUAGE
+		$path_language = $path . '/Language';
+
+		foreach(scandir($path_language) as $language) {
+			if(in_array($language, ['.', '..'], true)) continue;
+
+			if(file_extension($language) !== 'ini') continue;
+
+			$content = file_get_contents($path_language . '/' . $language);
+
+			if(empty($content)) continue;
+
+			$main_language = Path::file('language') . '/' . $language;
+
+			$flags = LOCK_EX;
+			if(is_file($main_language)) $flags = LOCK_EX | FILE_APPEND;
+
+			$content = PHP_EOL . '# BEGIN Module: ' . $name . PHP_EOL . PHP_EOL . $content . PHP_EOL . '# END Module: ' . $name . PHP_EOL . PHP_EOL;
+
+			file_put_contents($main_language, $content, $flags);
+		}
+
+		return true;
+	}
+
+	public static function uninstall($name) {
+		$path = Path::file('module') . '/' . $name . '/Install';
+
+		if(!file_exists($path)) {
+			return false;
+		}
+
+		// UNINSTALL SCRIPT
+		$path_install = $path . '/uninstall.php';
+
+		if(is_file($path_install)) {
+			require $path_install;
+		}
+
+		// LANGUAGE
+		$path_language = Path::file('language');
+
+		foreach(Language::getAll() as $language) {
+			$lp = $path_language . '/' . $language['file_name'];
+			$pattern = '/#[\s]+BEGIN[\s]+Module:[\s]+' . $name . '[\s\S]*#[\s]+END[\s]+Module:[\s]+' . $name . '/mi';
+			$content = file_get_contents($lp);
+			$content = preg_replace($pattern, '', $content);
+			file_put_contents($lp, $content, LOCK_EX);
+		}
+
+		return true;
 	}
 }
