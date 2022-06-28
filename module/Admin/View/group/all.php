@@ -25,12 +25,12 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th>ID</th>
-										<th><?= __('Name') ?></th>
-										<th><?= __('Routes count') ?></th>
-										<th><?= __('Users count') ?></th>
-										<th><?= __('Create date') ?></th>
-										<th><?= __('Active') ?></th>
+										<th><?= sort_link('oid', 'ID') ?></th>
+										<th><?= sort_link('oname', __('Name')) ?></th>
+										<th><?= sort_link('oroutes', __('Routes count')) ?></th>
+										<th><?= sort_link('ousers', __('Users count')) ?></th>
+										<th><?= sort_link('ocreate', __('Create date')) ?></th>
+										<th><?= sort_link('oactive', __('Active')) ?></th>
 										<th></th>
 									</tr>
 								</thead>

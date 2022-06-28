@@ -36,7 +36,7 @@ class Pagination {
 		self::$instance = $this;
 	}
 
-	public function handleUri() {
+	private function handleUri() {
 		$uri = explode('?', Request::$uri, 2);
 		$uri_handle = $uri[0] . '?';
 
@@ -53,11 +53,11 @@ class Pagination {
 		return hc($uri_handle);
 	}
 
-	public function countPages() {
+	private function countPages() {
 		return ceil($this->total_rows / $this->limit) ?? 1;
 	}
 
-	public function currentPage() {
+	private function currentPage() {
 		$page = Request::get($this->uri_key);
 
 		if(isset($page) && !empty($page) && is_numeric($page)) {

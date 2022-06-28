@@ -25,12 +25,12 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th>ID</th>
-										<th><?= __('Name') ?></th>
-										<th><?= __('Groups count') ?></th>
-										<th><?= __('Create date') ?></th>
-										<th><?= __('Last login') ?></th>
-										<th><?= __('Active') ?></th>
+										<th><?= sort_link('oid', 'ID') ?></th>
+										<th><?= sort_link('oname', __('Name')) ?></th>
+										<th><?= sort_link('ogroups', __('Groups count')) ?></th>
+										<th><?= sort_link('ocreated', __('Create date')) ?></th>
+										<th><?= sort_link('olastauth', __('Last login')) ?></th>
+										<th><?= sort_link('oactive', __('Active')) ?></th>
 										<th></th>
 									</tr>
 								</thead>
@@ -38,7 +38,7 @@
 									<?php foreach($users as $user): ?>
 										<tr>
 											<td><?= $user->id ?></td>
-											<td><?= $user->name ?> (@<?= $user->login ?>)</td>
+											<td><a href="<?= site('url_language') ?>/admin/profile/<?= $user->id ?>"><?= $user->name ?> (@<?= $user->login ?>)</a></td>
 											<td><a href="/admin/group"><?= $user->count_groups ?></a></td>
 											<td title="<?= format_date($user->date_created) ?>"><?= date_when($user->date_created) ?></td>
 											<td>

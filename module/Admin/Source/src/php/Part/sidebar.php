@@ -33,7 +33,7 @@ function checkRouteAccess($route) {
 }
 
 function checkRouteActive($route) {
-	$uri = site('uri_cut_language');
+	$uri = strtok(site('uri_cut_language'), '?');
 
 	if(is_array($route) && in_array($uri, $route)) {
 		return true;

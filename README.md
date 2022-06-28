@@ -18,10 +18,10 @@
 5. Create & enjoy ;)
 
 ## ToDo:
-* Engine: create Filter class
+* Engine: Statement class - use regex to auto-insert Filter parts and create query to count total pages for Pagination
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Engine: add module install func (languages, DB queries etc.)
 * Admin: data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
 * Admin: profile settings: privacy, notifications, delete account
-* Modules: refactor SQL queries
+* Modules: refactor all SQL queries
 * API: create API module

@@ -19,18 +19,18 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th><?= __('Author') ?></th>
+										<th><?= sort_link('oauthor', __('Author')) ?></th>
 										<th><?= __('Message') ?></th>
-										<th><?= __('Page') ?></th>
-										<th><?= __('Created') ?></th>
-										<th><?= __('Approved') ?></th>
+										<th><?= sort_link('opage', __('Page')) ?></th>
+										<th><?= sort_link('ocreated', __('Created')) ?></th>
+										<th><?= sort_link('oapproved', __('Approved')) ?></th>
 										<th></th>
 									</tr>
 								</thead>
 								<tbody>
 									<?php foreach($comments as $comment): ?>
 										<tr>
-											<td><a href="<?= site('url_language') ?>/admin/profile/<?= $comment->author ?>"><?= $comment->author_name ?></a></td>
+											<td><?= filter_link('author', $comment->author, $comment->author_name) ?></td>
 											<td>
 												<?php if(strlen($comment->message) > 50): ?>
 													<span data-bs-toggle="tooltip" title="<?= hc($comment->message) ?>"><?= hc(substr($comment->message, 0, 50)) ?>...</span>

@@ -30,10 +30,44 @@ class Statement {
 		return $this;
 	}
 
-	public function paginate($total_rows, $limit = null, $offset = null) {
+	public function filter($name, $straight = null, $force_no_order = false) {
+		$filter = new Filter($name);
+
+		if(empty($filter->sql) && empty($filter->order)) {
+			return $this;
+		}
+
+		if(isset($straight)) {
+			$sql = !empty($filter->sql) ? "{$this->sql} $straight {$filter->sql}" : $this->sql;
+		} else {
+			$sql = !empty($filter->sql) ? "WHERE {$filter->sql}" : '';
+
+			$sql = "SELECT * FROM ({$this->sql}) t_filter $sql";
+		}
+
+		foreach($filter->binding as $key => $value) {
+			$this->addBinding($key, $value);
+		}
+
+		if(!empty($filter->order) && !$force_no_order) {
+			$order_pattern = '/(ORDER[\s]+BY[\s]+)([\w\s,=\-\'\'\`]+)$/mi';
+
+			if(preg_match($order_pattern, $sql)) {
+				$sql = preg_replace($order_pattern, "ORDER BY {$filter->order}, $2", $sql);
+			} else {
+				$sql .= " ORDER BY {$filter->order}";
+			}
+		}
+
+		$this->sql = $sql;
+
+		return $this;
+	}
+
+	public function paginate($total_rows = null, $limit = null, $offset = null) {
 		$pagination = new Pagination($total_rows);
 
-		$this->sql = $this->sql . ' LIMIT :limit OFFSET :offset';
+		$this->sql .= ' LIMIT :limit OFFSET :offset';
 
 		$this->addBinding('limit', $limit ?? $pagination->limit);
 		$this->addBinding('offset', $offset ?? $pagination->offset);
@@ -80,12 +114,6 @@ class Statement {
 		}
 
 		return $is_cached;
-	}
-
-	private function cache() {
-
-
-		return $this;
 	}
 
 	private function fetchCache($type, $mode) {

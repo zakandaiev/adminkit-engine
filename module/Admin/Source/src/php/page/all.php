@@ -15,7 +15,7 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="<?= site('url_language') ?>/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= hc(Request::$get['back']) ?><?php endif; ?>" class="btn btn-secondary me-2"><?= __('Add category') ?></a>
+						<a href="<?= site('url_language') ?>/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= hc(Request::get('back')) ?><?php endif; ?>" class="btn btn-secondary me-2"><?= __('Add category') ?></a>
 						<a href="<?= site('url_language') ?>/admin/page/add" class="btn btn-primary"><?= __('Add page') ?></a>
 					</div>
 				</div>
@@ -23,7 +23,7 @@
 				<div class="card">
 					<?php if(Request::has('back')): ?>
 						<div class="card-header">
-							<h5 class="card-title mb-0"><a href="<?= site('url_language') ?><?= hc(Request::$get['back']) ?>"><i class="align-middle" data-feather="arrow-left"></i> <?= __('Back') ?></a></h5>
+							<h5 class="card-title mb-0"><a href="<?= site('url_language') ?><?= hc(Request::get('back')) ?>"><i class="align-middle" data-feather="arrow-left"></i> <?= __('Back') ?></a></h5>
 						</div>
 					<?php endif; ?>
 					<div class="card-body">
@@ -31,11 +31,11 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th><?= __('Title') ?></th>
+										<th><?= sort_link('otitle', __('Title')) ?></th>
 										<th><?= __('Translations') ?></th>
-										<th><?= __('Author') ?></th>
-										<th><?= __('Publish date') ?></th>
-										<th><?= __('Published') ?></th>
+										<th><?= sort_link('oauthor', __('Author')) ?></th>
+										<th><?= sort_link('opublishdate', __('Publish date')) ?></th>
+										<th><?= sort_link('opublished', __('Published')) ?></th>
 										<th></th>
 									</tr>
 								</thead>
@@ -45,7 +45,7 @@
 											<td>
 												<?php if($page->is_category): ?>
 													<i class="align-middle" data-feather="folder"></i>
-													<a href="<?= site('url_language') ?>/admin/page/category/<?= $page->id ?>?back=<?= urlencode(Request::$uri) ?>"><span class="align-middle"><?= $page->title ?></span></a>
+													<a href="<?= site('url_language') ?>/admin/page/category/<?= $page->id ?>?back=<?= urlencode(strtok(Request::$uri ?? '', '?')) ?>"><span class="align-middle"><?= $page->title ?></span></a>
 												<?php else: ?>
 													<i class="align-middle" data-feather="file-text"></i>
 													<span class="align-middle"><?= $page->title ?></span>
@@ -80,7 +80,7 @@
 													</div>
 												<?php endif; ?>
 											</td>
-											<td><a href="<?= site('url_language') ?>/admin/profile/<?= $page->author ?>"><?= $page->author_name ?></a></td>
+											<td><?= filter_link('author', $page->author, $page->author_name) ?></td>
 											<td title="<?= format_date($page->date_publish) ?>"><?= date_when($page->date_publish) ?></td>
 											<td>
 												<?php if($page->is_pending): ?>

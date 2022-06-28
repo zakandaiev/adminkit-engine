@@ -13,8 +13,6 @@ class Path {
 				return '\\Module\\' . ucfirst($module) . '\\Model';
 			case 'view':
 				return '\\Module\\' . ucfirst($module) . '\\View';
-			case 'form':
-				return '\\Module\\' . ucfirst($module) . '\\Form';
 			default:
 				return null;
 		}
@@ -62,6 +60,13 @@ class Path {
 				$path = ROOT_DIR . '/module/' . $module . '/View/Asset';
 				if($module === 'Public') {
 					$path = self::file('theme') . '/Asset';
+				}
+				return $path;
+			}
+			case 'filter': {
+				$path = ROOT_DIR . '/module/' . $module . '/Filter';
+				if($module === 'Public') {
+					$path = self::file('theme') . '/Filter';
 				}
 				return $path;
 			}

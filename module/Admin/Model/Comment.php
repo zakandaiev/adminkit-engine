@@ -10,7 +10,7 @@ class Comment extends \Engine\Model {
 
 		$count = new Statement($sql);
 
-		return $count->execute()->fetchColumn();
+		return $count->filter('Page', 'WHERE', true)->execute()->fetchColumn();
 	}
 
 	public function countUnapprovedComments() {
@@ -46,7 +46,7 @@ class Comment extends \Engine\Model {
 
 		$comments = new Statement($sql);
 
-		$comments = $comments->paginate($this->countComments())->execute(['language' => site('language')])->fetchAll();
+		$comments = $comments->filter('Comment')->paginate($this->countComments())->execute(['language' => site('language')])->fetchAll();
 
 		return $comments;
 	}

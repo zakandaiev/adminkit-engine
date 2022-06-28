@@ -11,7 +11,7 @@ class Group {
 
 		$count = new Statement($sql);
 
-		return $count->execute()->fetchColumn();
+		return $count->filter('Group', 'WHERE', true)->execute()->fetchColumn();
 	}
 
 	public function getGroups() {
@@ -26,7 +26,7 @@ class Group {
 
 		$groups = new Statement($sql);
 
-		$groups = $groups->paginate($this->countGroups())->execute()->fetchAll();
+		$groups = $groups->filter('Group', 'WHERE')->paginate($this->countGroups())->execute()->fetchAll();
 
 		return $groups;
 	}

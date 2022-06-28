@@ -23,13 +23,17 @@ class Page extends \Engine\Model {
 				COUNT(*)
 			FROM
 				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
 			WHERE
 				(SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
 		';
 
 		$statement = new Statement($sql);
 
-		return $statement->execute()->fetchColumn();
+		return $statement->filter('Page', 'AND', true)->execute()->fetchColumn();
 	}
 
 	public function getPages() {
@@ -54,7 +58,7 @@ class Page extends \Engine\Model {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->paginate($this->countPages())->execute(['language' => site('language')])->fetchAll();
+		$pages = $pages->filter('Page')->paginate($this->countPages())->execute(['language' => site('language')])->fetchAll();
 
 		foreach($pages as $key => $page) {
 			$page->translations = !empty($page->translations) ? explode(',', $page->translations) : [];
@@ -69,6 +73,10 @@ class Page extends \Engine\Model {
 			FROM
 				{page} t_page
 			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			INNER JOIN
 				{page_category} t_page_category
 			ON
 				t_page.id = t_page_category.page_id
@@ -78,13 +86,13 @@ class Page extends \Engine\Model {
 
 		$statement = new Statement($sql);
 
-		return $statement->execute(['category_id' => $id])->fetchColumn();
+		return $statement->filter('Page', 'AND', true)->execute(['category_id' => $id])->fetchColumn();
 	}
 
 	public function getPagesByCategory($id) {
 		$sql = '
 			SELECT
-				*,
+				t_page.*, t_page_translation.*,
 				(SELECT TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) FROM {user} WHERE id=t_page.author) as author_name,
 				(CASE WHEN t_page.date_publish > NOW() THEN true ELSE false END) as is_pending,
 				(SELECT GROUP_CONCAT(language) FROM {page_translation} WHERE page_id=t_page.id AND language<>:language) as translations
@@ -107,7 +115,7 @@ class Page extends \Engine\Model {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->paginate($this->countPagesInCategory($id))->execute(['category_id' => $id, 'language' => site('language')])->fetchAll();
+		$pages = $pages->filter('Page')->paginate($this->countPagesInCategory($id))->execute(['category_id' => $id, 'language' => site('language')])->fetchAll();
 
 		foreach($pages as $key => $page) {
 			$page->translations = !empty($page->translations) ? explode(',', $page->translations) : [];

@@ -10,7 +10,7 @@ class User {
 
 		$count = new Statement($sql);
 
-		return $count->execute()->fetchColumn();
+		return $count->filter('User', 'WHERE', true)->execute()->fetchColumn();
 	}
 
 	public function getUsers() {
@@ -24,7 +24,7 @@ class User {
 
 		$users = new Statement($sql);
 
-		$users = $users->paginate($this->countUsers())->execute()->fetchAll();
+		$users = $users->filter('User', 'WHERE')->paginate($this->countUsers())->execute()->fetchAll();
 
 		return $users;
 	}

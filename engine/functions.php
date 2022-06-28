@@ -340,7 +340,7 @@ function site($key) {
 			break;
 		}
 		case 'permalink': {
-			$value = trim(Request::$url ?? '', '/');
+			$value = trim(strtok(Request::$url ?? '', '?'), '/');
 			break;
 		}
 		case 'version': {

@@ -7,11 +7,11 @@ use Engine\Server;
 
 class Upload extends AdminController {
 	public function get() {
-		if(!isset(Request::$get['load'])) {
+		if(!isset(Request::get('load'))) {
 			Server::redirect('/404');
 		}
 
-		exit('Content-Disposition: inline; filename="' . Request::$get['load'] . '"');
+		exit('Content-Disposition: inline; filename="' . Request::get('load') . '"');
 	}
 
 	public function post() {
