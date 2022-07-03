@@ -13,6 +13,6 @@ return [
 		'birthday' => $birthday
 	],
 	'execute_post' => function($data) {
-		Hook::run('admin_profile_change_contacts', $data);
+		Hook::run('user_change_contacts', $data);
 	}
 ];

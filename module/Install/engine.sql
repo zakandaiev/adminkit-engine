@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_user` (
 	`avatar` TEXT DEFAULT NULL,
 	`socials` TEXT DEFAULT NULL,
 	`birthday` DATE DEFAULT NULL,
+	`setting` LONGTEXT DEFAULT NULL,
 	`auth_token` VARCHAR(200) DEFAULT NULL,
 	`auth_ip` VARCHAR(32) DEFAULT NULL,
 	`auth_date` DATETIME NULL DEFAULT NULL,
@@ -154,7 +155,7 @@ CREATE TABLE `%prefix%_menu` (
 CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
 	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`user_id` INT NOT NULL,
-	`kind` VARCHAR(100) NOT NULL,
+	`type` VARCHAR(100) NOT NULL,
 	`info` TEXT DEFAULT NULL,
 	`is_read` BOOLEAN NOT NULL DEFAULT FALSE,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -215,8 +216,8 @@ INSERT INTO `%prefix%_group_route` (`group_id`, `route`) VALUES
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
 (1, 1);
 
-INSERT INTO `%prefix%_notification` (`user_id`, `kind`, `info`) VALUES
-(1, 'register', '{"ip":"%auth_ip%"}');
+INSERT INTO `%prefix%_notification` (`user_id`, `type`, `info`) VALUES
+(1, 'user_register', '{"ip":"%auth_ip%"}');
 
 INSERT INTO `%prefix%_page` (`url`, `author`) VALUES
 ('home', 1);

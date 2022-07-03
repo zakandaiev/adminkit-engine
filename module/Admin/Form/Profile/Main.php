@@ -15,11 +15,7 @@ return [
 		$user_data = new \stdClass();
 		$user_data->id = $data->form_data['item_id'];
 
-		$user_old = 'SELECT * FROM {user} WHERE id = :id ORDER BY date_created DESC LIMIT 1';
-
-		$user_old = new Statement($user_old);
-
-		$user_old = $user_old->execute(['id' => $user_data->id])->fetch();
+		$user_old = User::get($user_data->id);
 
 		$login_old = $user_old->login;
 		$email_old = $user_old->email;
@@ -36,7 +32,7 @@ return [
 
 			$user_data->email = $email_new;
 
-			Hook::run('admin_profile_change_login', $user_data);
+			Hook::run('user_change_login', $user_data);
 		}
 
 		// CHECK EMAIL CHANGE
@@ -46,7 +42,7 @@ return [
 
 			$user_data->email = $email_old;
 
-			Hook::run('admin_profile_change_email', $user_data);
+			Hook::run('user_change_email', $user_data);
 		}
 
 		// CHECK NAME CHANGE
@@ -56,7 +52,7 @@ return [
 
 			$user_data->email = $email_new;
 
-			Hook::run('admin_profile_change_name', $user_data);
+			Hook::run('user_change_name', $user_data);
 		}
 	}
 ];

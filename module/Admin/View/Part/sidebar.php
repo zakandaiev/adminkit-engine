@@ -1,7 +1,7 @@
 <?php
 
 function checkRouteAccess($route) {
-	if(Auth::$user->access_all) {
+	if(User::get()->access_all) {
 		return true;
 	}
 
@@ -13,7 +13,7 @@ function checkRouteAccess($route) {
 		$route = trim($route ?? '', '/');
 	}
 
-	foreach(Auth::$user->enabled_routes as $user_route) {
+	foreach(User::get()->routes as $user_route) {
 		list($method, $uri) = explode('@', $user_route);
 
 		$uri = trim($uri ?? '', '/');

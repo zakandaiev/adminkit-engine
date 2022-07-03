@@ -115,7 +115,7 @@ class Page extends \Engine\Model {
 
 		$count = new Statement($sql);
 
-		return intval($count->execute(['page_id' => $page_id])->fetchColumn());
+		return $count->execute(['page_id' => $page_id])->fetchColumn();
 	}
 
 	public function getPageComments($page_id) {
@@ -127,7 +127,7 @@ class Page extends \Engine\Model {
 			LEFT JOIN
 				{user} t_user
 			ON
-				t_user.id=t_comment.author
+				t_user.id = t_comment.author
 			WHERE
 				t_comment.page_id = :page_id
 				AND t_comment.is_approved IS true

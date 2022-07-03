@@ -29,7 +29,7 @@ class User extends AdminController {
 		}
 
 		$data['groups'] = $this->model->getGroups();
-		$data['user']->groups = $this->model->getUserGroupsById($user_id);
+		$data['user']->groups = $this->model->getUserGroups($user_id);
 
 		$this->view->setData($data);
 		$this->view->render('user/edit');

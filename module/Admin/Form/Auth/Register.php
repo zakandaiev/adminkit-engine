@@ -23,6 +23,6 @@ return [
 		'password' => $password
 	],
 	'execute' => function($data) {
-		Auth::register($data->fields);
+		User::register($data->fields);
 	}
 ];

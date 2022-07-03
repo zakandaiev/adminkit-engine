@@ -158,6 +158,7 @@ class Optimization {
 
 		Log::write($log, 'optimization');
 
+		Hook::run('optimization', $file_extenstion);
 		Hook::run('optimization_' . $file_extenstion);
 
 		return $file_name;

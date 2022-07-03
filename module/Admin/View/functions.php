@@ -29,138 +29,82 @@ Breadcrumb::setOption('homepage_url', 'admin');
 Breadcrumb::setOption('separator', '<i class="align-middle" data-feather="arrow-right"></i>');
 
 ############################# NOTIFICATIONS #############################
-function getNotifications() {
-	$notifications = [];
+function notification($type, $key = null) {
+	$notifications = $GLOBALS['admin_notification'];
 
-	$notifications['register'] = [
-		'name' => __('Registration'),
-		'icon' => 'user-plus',
-		'color' => 'success'
-	];
-	$notifications['login'] = [
-		'name' => __('Authorization'),
-		'icon' => 'log-in',
-		'color' => 'warning'
-	];
-	$notifications['restore'] = [
-		'name' => __('Password restore'),
-		'icon' => 'unlock',
-		'color' => 'danger'
-	];
-	$notifications['change_login'] = [
-		'name' => __('Login change'),
-		'icon' => 'at-sign',
-		'color' => 'danger'
-	];
-	$notifications['change_name'] = [
-		'name' => __('Name change'),
-		'icon' => 'edit',
-		'color' => 'warning'
-	];
-	$notifications['change_password'] = [
-		'name' => __('Password change'),
-		'icon' => 'lock',
-		'color' => 'danger'
-	];
-	$notifications['change_email'] = [
-		'name' => __('Email change'),
-		'icon' => 'mail',
-		'color' => 'danger'
-	];
-	$notifications['page_add'] = [
-		'name' => __('Page creation'),
-		'icon' => 'file-text',
-		'color' => 'primary'
-	];
-	$notifications['category_add'] = [
-		'name' => __('Category creation'),
-		'icon' => 'folder',
-		'color' => 'primary'
-	];
-	$notifications['comment'] = [
-		'name' => __('Comment'),
-		'icon' => 'message-square',
-		'color' => 'primary'
-	];
-	$notifications['comment_reply'] = [
-		'name' => __('Comment reply'),
-		'icon' => 'corner-down-right',
-		'color' => 'primary'
-	];
-
-	return $notifications;
-}
-
-function notification($kind, $key = null) {
-	$notifications = getNotifications();
-
-	if(!isset($notifications[strval($kind)])) {
+	if(isset($key) && isset($notifications[$type][$key])) {
+		return $notifications[$type][$key];
+	} else if(isset($key)) {
 		return null;
 	}
 
-	if(isset($key)) {
-		return $notifications[strval($kind)][strval($key)];
+	if(!isset($notifications[$type])) {
+		return [];
 	}
 
-	return $notifications[strval($kind)];
+	return $notifications[$type];
 }
 
-function notification_icon($kind) {
-	$icon = notification($kind, 'icon');
-	$color = notification($kind, 'color');
+function notification_icon($type) {
+	$icon = notification($type, 'icon');
+	$color = notification($type, 'color');
+
+	if(empty($icon) || empty($color)) {
+		return null;
+	}
 
 	return '<i class="text-' . $color . ' align-middle" data-feather="' . $icon . '"></i>';
 }
 
 function getNotificationHTML($notification, $user) {
-	$icon = notification_icon($notification->kind);
+	$icon = notification_icon($notification->type);
 	$when = date_when($notification->date_created);
-	$user_name = (Auth::$user->id == $notification->user_id) ? __('You') : $user->name . ' (@' . $user->login . ')';
+	$user_name = (User::get()->id == $notification->user_id) ? __('You') : $user->nicename;
 	$user_avatar = placeholder_avatar($user->avatar);
 	$action_name = '';
 	$action_body = '';
-	$data = json_decode($notification->info);
+	$data = $notification->info;
 
-	switch($notification->kind) {
-		case 'register': {
-			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
-			$action_name = sprintf(__('created account from %s'), $from);
-			break;
-		}
-		case 'login': {
+	switch($notification->type) {
+		case 'user_authorize': {
 			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			$action_name = sprintf(__('authorized from %s'), $from);
 			break;
 		}
-		case 'restore': {
+		case 'user_register': {
+			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
+			$action_name = sprintf(__('created account from %s'), $from);
+			break;
+		}
+		case 'user_restore': {
 			$from = '<a href="' . sprintf(SERVICE['ip_checker'], $data->ip) . '" target="_blank"><strong>' . $data->ip . '</strong></a>';
 			$action_name = sprintf(__('restored password from %s'), $from);
 			break;
 		}
-		case 'change_login': {
+		case 'user_change_login': {
 			$from = '<strong>' . $data->login_old . '</strong>';
 			$to = '<strong>' . $data->login_new . '</strong>';
 			$action_name = sprintf(__('changed login from %s to %s'), $from, $to);
 			break;
 		}
-		case 'change_name': {
+		case 'user_change_name': {
 			$from = '<strong>' . $data->name_old . '</strong>';
 			$to = '<strong>' . $data->name_new . '</strong>';
 			$action_name = sprintf(__('changed name from %s to %s'), $from, $to);
 			break;
 		}
-		case 'change_password': {
+		case 'user_change_password': {
 			$action_name = __('changed password');
 			break;
 		}
-		case 'change_email': {
+		case 'user_change_email': {
 			$from = '<strong>' . $data->email_old . '</strong>';
 			$to = '<strong>' . $data->email_new . '</strong>';
 			$action_name = sprintf(__('changed email from %s to %s'), $from, $to);
 			break;
 		}
 		case 'page_add':
-		case 'category_add': {
+		case 'page_add_category': {
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('posted %s'), $page_title);
@@ -175,7 +119,7 @@ function getNotificationHTML($notification, $user) {
 
 			break;
 		}
-		case 'comment': {
+		case 'page_comment': {
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('leaved comment on %s'), $page_title);
@@ -194,9 +138,14 @@ function getNotificationHTML($notification, $user) {
 			break;
 		}
 		default: {
-			$action_name = $notification->kind;
+			$action_name = $notification->type;
 			break;
 		}
+	}
+
+	if(is_callable(notification($notification->type, 'html'))) {
+		$action_name = @notification($notification->type, 'html')($data)->name;
+		$action_body = @notification($notification->type, 'html')($data)->body;
 	}
 
 	$action_name = $icon . ' ' . $action_name;

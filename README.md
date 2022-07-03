@@ -7,7 +7,7 @@
 * Multilingual
 
 ## Web environment requirements
-* PHP 7.0+
+* PHP 7.4+
 * MySQL 5.6+ or MariaDB 10.3+
 
 ## Installation
@@ -20,7 +20,6 @@
 ## ToDo:
 * Engine: Statement class - use regex to auto-insert Filter parts and create query to count total pages for Pagination
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
-* Engine: add module install func (languages, DB queries etc.)
 * Admin: data-behavior refactor, add lowercase & uppercase, data-behavior-oninput:bool
 * Admin: profile settings: privacy, notifications, delete account
 * Modules: refactor all SQL queries

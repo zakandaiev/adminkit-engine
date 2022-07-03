@@ -9,7 +9,7 @@
 	</div>
 <?php endif; ?>
 
-<?php if($page->allow_comment && Auth::$user->authorized): ?>
+<?php if($page->allow_comment && User::get()->authorized): ?>
 	<div class="section-row">
 		<div class="section-title">
 			<h3 class="title"><?= __('Leave a reply') ?></h3>

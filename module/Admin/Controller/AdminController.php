@@ -2,8 +2,8 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Server;
 use Engine\Database\Statement;
+use Engine\Server;
 
 class AdminController extends \Engine\Controller {
 	public function __construct() {
@@ -20,12 +20,12 @@ class AdminController extends \Engine\Controller {
 
 		$this->user->access_all = $this->modelAdmin->getUserAccessAll($this->user->id);
 		$this->user->groups = $this->modelAdmin->getUserGroups($this->user->id);
-		$this->user->enabled_routes = $this->modelAdmin->getUserRoutes($this->user->id);
+		$this->user->routes = $this->modelAdmin->getUserRoutes($this->user->id);
 
 		if($this->route['is_public'] || $this->user->access_all) {
 			$is_user_enabled = true;
 		} else {
-			foreach($this->user->enabled_routes as $route) {
+			foreach($this->user->routes as $route) {
 				list($method, $uri) = explode('@', $route);
 
 				if($this->route['method'] === $method && $this->route['uri'] === $uri) {

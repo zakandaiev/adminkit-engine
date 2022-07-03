@@ -53,7 +53,7 @@
 												$selected_user = 'selected';
 											}
 										?>
-										<option value="<?= $user->id ?>" <?= $selected_user ?>><?= $user->name ?></option>
+										<option value="<?= $user->id ?>" <?= $selected_user ?>><?= $user->nicename ?></option>
 									<?php endforeach; ?>
 								</select>
 							</div>

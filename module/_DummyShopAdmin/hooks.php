@@ -24,4 +24,4 @@ foreach($GLOBALS['admin_sidebar'] as $route) {
 	}
 }
 
-Hook::run('admin_sidebar_modify', $sidebar);
+Hook::run('sidebar_modify', $sidebar);

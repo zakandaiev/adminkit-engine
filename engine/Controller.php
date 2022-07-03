@@ -26,10 +26,7 @@ abstract class Controller {
 
 		$this->setting = Setting::getAll();
 
-		$this->user = Auth::$user;
-		if(isset($this->user->socials)) {
-			$this->user->socials = json_decode($this->user->socials) ?? [];
-		}
+		$this->user = User::get();
 
 		$this->page = new \stdClass();
 		$this->page->title = $this->route['page']->title ?? __('Admin');

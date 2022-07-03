@@ -45,25 +45,21 @@ return [
 		if($password_new !== $password_confirm) {
 			Server::answer(null, 'error', __('Confirmation password is incorrect'));
 		}
-		if(!password_verify($password_current, Auth::$user->password)) {
+		if(!password_verify($password_current, User::get($user_id)->password)) {
 			Server::answer(null, 'error', __('Current password is incorrect'));
 		}
 
-		$sql = 'UPDATE {user} SET password = :password WHERE id = :id';
-		$statement = new Statement($sql);
-		$statement->execute(['password' => Hash::password($password_new), 'id' => $user_id]);
+		User::update('password', Hash::password($password_new), $user_id);
 	},
 	'execute_post' => function($data) {
 		$user_data = new \stdClass();
 		$user_data->id = $data->form_data['item_id'];
 
-		$user_email = 'SELECT email FROM {user} WHERE id = :id ORDER BY date_created DESC LIMIT 1';
-		$user_email = new Statement($user_email);
-		$user_data->email = $user_email->execute(['id' => $user_data->id])->fetchColumn();
+		$user_data->email = User::get($user_data->id)->email;
 
 		$user_data->password_old = $data->fields['password_current'];
 		$user_data->password_new = $data->fields['password_new'];
 
-		Hook::run('admin_profile_change_password', $user_data);
+		Hook::run('user_change_password', $user_data);
 	}
 ];

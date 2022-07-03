@@ -12,6 +12,6 @@ return [
 		'is_enabled' => $is_enabled
 	],
 	'execute_post' => function($data) {
-		Hook::run('admin_group_' . $data->form_data['action'], $data);
+		Hook::run('group_' . $data->form_data['action'], $data);
 	}
 ];

@@ -38,7 +38,7 @@ return [
 		return $data;
 	},
 	'execute_post' => function($data) {
-		Hook::run('admin_page_' . $data->form_data['action'], $data);
+		Hook::run('page_' . $data->form_data['action'], $data);
 	}
 ];
 

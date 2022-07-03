@@ -5,12 +5,18 @@ namespace Engine;
 use Engine\Database\Statement;
 
 class Notification {
-	public static function create($kind, $user_id, $info = null) {
+	public static function create($type, $user_id, $info = null) {
+		$user = User::get($user_id);
+
+		if(!$user || @$user->setting->notifications->{'web_' . $type} === false) {
+			return false;
+		}
+
 		$create = '
 			INSERT INTO {notification}
-				(user_id, kind, info)
+				(user_id, type, info)
 			VALUES
-				(:user_id, :kind, :info);
+				(:user_id, :type, :info);
 		';
 
 		$create = new Statement($create);
@@ -21,7 +27,7 @@ class Notification {
 
 		$binding = [
 			'user_id' => $user_id,
-			'kind' => $kind,
+			'type' => $type,
 			'info' => $info
 		];
 

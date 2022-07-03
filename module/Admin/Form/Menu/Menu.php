@@ -15,7 +15,7 @@ return [
 		return $data;
 	},
 	'execute_post' => function($data) {
-		Hook::run('admin_menu_' . $data->form_data['action'], $data);
+		Hook::run('menu_' . $data->form_data['action'], $data);
 	},
 	'submit' => function($data) {
 		if($data->form_data['action'] === 'add') {

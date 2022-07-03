@@ -75,7 +75,7 @@ class Meta {
 						key: "' . COOKIE_KEY['csrf'] . '",
 						token: "' . Request::$csrf . '"
 					},
-					pagination_limit: ' . site('pagination_limit') . ',
+					pagination_limit: ' . site('pagination_limit') . '
 				};
 			</script>
 		';

@@ -190,7 +190,7 @@ class Statement {
 			if(is_int($value)) $pdo_param = PDO::PARAM_INT;
 			if(is_string($value)) $pdo_param = PDO::PARAM_STR;
 
-			if(is_array($value)) {
+			if(is_array($value) || is_object($value)) {
 				$pdo_param = PDO::PARAM_STR;
 				$value = json_encode($value);
 			}

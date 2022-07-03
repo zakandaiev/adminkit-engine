@@ -34,9 +34,10 @@ class Setting {
 
 		$statement->execute($params);
 
-		Log::write('Setting: ' . $name . ' changed by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'setting');
+		Log::write('Setting: ' . $name . ' changed by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'setting');
 
 		Hook::run('setting_update', $params);
+		Hook::run('setting_update_' . $name, $params);
 
 		return true;
 	}

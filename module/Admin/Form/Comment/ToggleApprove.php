@@ -13,6 +13,6 @@ return [
 		'is_approved' => $is_approved
 	],
 	'execute_post' => function($data) {
-		Hook::run('admin_comment_toggle', $data);
+		Hook::run('comment_toggle', $data);
 	}
 ];

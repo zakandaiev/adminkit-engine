@@ -37,6 +37,6 @@ return [
 			Server::answer(null, 'error', __('Your account has been disabled'));
 		}
 
-		Auth::authorize($user);
+		User::authorize($user);
 	}
 ];

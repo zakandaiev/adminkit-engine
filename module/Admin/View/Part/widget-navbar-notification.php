@@ -1,10 +1,10 @@
 <?php
-	$notifications = Auth::$user->notifications;
-	$notifications_count = Auth::$user->notifications_count;
+	$notifications = User::get()->notifications;
+	$notifications_count = User::get()->notifications_count;
 ?>
 
 <li class="nav-item dropdown">
-	<a class="nav-icon dropdown-toggle" href="<?= site('url_language') ?>/admin" id="notifications" data-bs-toggle="dropdown">
+	<a class="nav-icon dropdown-toggle" href="<?= site('url_language') ?>/admin" id="navbar-notifications" data-bs-toggle="dropdown">
 		<div class="position-relative">
 			<i class="align-middle" data-feather="bell"></i>
 			<?php if($notifications_count > 0): ?>
@@ -12,7 +12,7 @@
 			<?php endif; ?>
 		</div>
 	</a>
-	<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="notifications">
+	<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="navbar-notifications">
 		<div class="dropdown-menu-header">
 			<?= __('New Notifications') ?>
 		</div>
@@ -22,10 +22,10 @@
 					<a href="<?= site('url_language') ?>/admin/profile" class="list-group-item">
 						<div class="row g-0 align-items-center">
 							<div class="col-2">
-								<?= notification_icon($notification->kind) ?>
+								<?= notification_icon($notification->type) ?>
 							</div>
 							<div class="col-10">
-								<div class="text-dark"><?= notification($notification->kind, 'name') ?></div>
+								<div class="text-dark"><?= notification($notification->type, 'name') ?></div>
 								<div class="text-muted small mt-1"><?= date_when($notification->date_created) ?></div>
 							</div>
 						</div>

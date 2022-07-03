@@ -129,7 +129,7 @@ class Module {
 
 		if(file_put_contents($config_file, $config_content, LOCK_EX)) {
 			if(!$is_edited) {
-				Log::write('Module: ' . $name. ' edited by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'module');
+				Log::write('Module: ' . $name. ' edited by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');
 				Hook::run('module_update', $name);
 			}
 
@@ -142,7 +142,7 @@ class Module {
 	}
 
 	public static function delete($name) {
-		Log::write('Module: ' . $name. ' deleted by user ID: ' . Auth::$user->id . ' from IP: ' . Request::$ip, 'module');
+		Log::write('Module: ' . $name. ' deleted by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');
 
 		Hook::run('module_delete', $name);
 
@@ -233,6 +233,10 @@ class Module {
 			file_put_contents($main_language, $content, $flags);
 		}
 
+		Log::write('Module: ' . $name. ' installed by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');
+
+		Hook::run('module_install', $name);
+
 		return true;
 	}
 
@@ -260,6 +264,10 @@ class Module {
 			$content = preg_replace($pattern, '', $content);
 			file_put_contents($lp, $content, LOCK_EX);
 		}
+
+		Log::write('Module: ' . $name. ' uninstalled by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');
+
+		Hook::run('module_uninstall', $name);
 
 		return true;
 	}

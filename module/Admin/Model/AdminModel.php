@@ -46,8 +46,9 @@ class AdminModel {
 			ON
 				t_user_group.group_id = t_group.id
 			WHERE
-				user_id = :user_id
+				t_user_group.user_id = :user_id
 		');
+
 		$groups = $groups->execute(['user_id' => $id])->fetchAll();
 
 		foreach($groups as $group) {
@@ -90,14 +91,20 @@ class AdminModel {
 	}
 
 	public function getUserNotificationsCount($id) {
-		$notifications = new Statement('SELECT count(*) FROM {notification} WHERE user_id = :user_id AND is_read IS false');
+		$notifications = new Statement('SELECT COUNT(*) FROM {notification} WHERE user_id = :user_id AND is_read IS false');
 
-		return intval($notifications->execute(['user_id' => $id])->fetchColumn());
+		return $notifications->execute(['user_id' => $id])->fetchColumn();
 	}
 
 	public function getUserNotifications($id) {
 		$notifications = new Statement('SELECT * FROM {notification} WHERE user_id = :user_id AND is_read IS false ORDER BY date_created DESC LIMIT 5');
 
-		return $notifications->execute(['user_id' => $id])->fetchAll();
+		$notifications = $notifications->execute(['user_id' => $id])->fetchAll();
+
+		foreach($notifications as $notification) {
+			$notification->info = json_decode($notification->info);
+		}
+
+		return $notifications;
 	}
 }

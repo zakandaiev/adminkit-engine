@@ -73,15 +73,12 @@
 							</div>
 							<div class="card-body h-100 spinner-action">
 								<?php
-									$notifications = $user->notifications;
-									$notifications_count = $user->notifications_count;
-
-									foreach($notifications as $notification) {
+									foreach($user->notifications_full as $notification) {
 										echo getNotificationHTML($notification, $user);
 									}
 								?>
 								<div id="notification-target" class="d-grid">
-									<button data-load-more="<?= site('permalink') ?>/notification" data-total="<?= $notifications_count ?>" data-target="#notification-target" data-target-position="beforebegin" data-class="spinner-action_active" data-class-target=".spinner-action" class="btn btn-primary"><?= __('Load more') ?></button>
+									<button data-load-more="<?= site('permalink') ?>/notification" data-total="<?= $user->notifications_full_count ?>" data-target="#notification-target" data-target-position="beforebegin" data-class="spinner-action_active" data-class-target=".spinner-action" class="btn btn-primary"><?= __('Load more') ?></button>
 								</div>
 							</div>
 						</div>

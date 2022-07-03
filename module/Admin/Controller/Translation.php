@@ -52,7 +52,7 @@ class Translation extends AdminController {
 			Server::answer(null, 'error', $error->getMessage());
 		}
 
-		Hook::run('admin_translation_edit', $data['language']);
+		Hook::run('translation_edit', $data['language']);
 
 		Server::answer(null, 'success', __('Translation saved'));
 	}

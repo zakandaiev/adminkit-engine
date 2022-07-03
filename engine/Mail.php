@@ -2,53 +2,69 @@
 
 namespace Engine;
 
+use Engine\Database\Statement;
+
 class Mail {
 	private static $mail = [];
 
-	public static function send($file_name, $data = null) {
+	public static function send($file_name, $recepient, $data = null, $forced = false) {
 		$mail = self::load($file_name, $data);
 
-		if(!is_array($mail)) {
+		if(!is_array($mail) || !isset($mail['subject']) || !isset($mail['message'])) {
 			return false;
 		}
 
-		if(!isset($mail['recepient']) || !isset($mail['subject']) || !isset($mail['message'])) {
-			return false;
-		}
-
+		$mail['subject'] = trim($mail['subject'] ?? '');
 		$mail['message'] = trim($mail['message'] ?? '');
 		$mail['from'] = $mail['from'] ?? null;
 
-		if(empty($mail['recepient']) || empty($mail['subject']) || empty($mail['message'])) {
+		if(empty($mail['subject']) || empty($mail['message'])) {
 			return false;
 		}
 
-		self::mail($mail['recepient'], $mail['subject'], $mail['message'], $mail['from']);
+		if(!$forced) {
+			$sql = 'SELECT * FROM {user} WHERE email = :email ORDER BY date_created DESC LIMIT 1';
+
+			$user = new Statement($sql);
+
+			$user = $user->execute(['email' => $recepient])->fetch();
+
+			$user = User::format($user);
+
+			if(!$user || @$user->setting->notifications->{'mail_' . $mail['type']} === false) {
+				return false;
+			}
+		}
+
+		self::mail($recepient, $mail['subject'], $mail['message'], $mail['from']);
 	}
 
-	public static function mail($recepient, $subject, $message, $from = '') {
-		$to = trim($recepient ?? '');
-		$subj = trim($subject ?? '');
-		$msg = trim($message ?? '');
-		$frm = Setting::get('contact')->email;
-
-		if(!empty($from)) {
-			$frm = trim($from ?? '');
-		}
+	public static function mail($recepient, $subject, $message, $from = null) {
+		$recepient = trim($recepient ?? '');
+		$subject = trim($subject ?? '');
+		$message = trim($message ?? '');
+		$from = $from ?? Setting::get('contact')->email;
 
 		$headers = [
 			'Content-type' => 'text/html',
 			'charset' => 'utf-8',
 			'MIME-Version' => '1.0',
-			'From' => Setting::get('site')->name . '<'.$frm.'>',
-			'Reply-To' => $frm
+			'From' => Setting::get('site')->name . '<'.$from.'>',
+			'Reply-To' => $from
 		];
 
-		Log::write($subj .  ' sent to ' . $to . ' from IP: ' . Request::$ip, 'mail');
+		Log::write($subject .  ' sent to ' . $recepient . ' from IP: ' . Request::$ip, 'mail');
 
-		Hook::run('mail_send');
+		$data = new \stdClass();
+		$data->recepient = $recepient;
+		$data->subject = $subject;
+		$data->message = $message;
+		$data->from = $from;
+		$data->headers = $headers;
 
-		return mail($to, $subj, $msg, $headers);
+		Hook::run('mail_send', $data);
+
+		return mail($recepient, $subject, $message, $headers);
 	}
 
 	public static function load($file_name, $data) {

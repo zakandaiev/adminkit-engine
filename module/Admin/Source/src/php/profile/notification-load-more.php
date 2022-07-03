@@ -1,4 +1,4 @@
 <?php
-	foreach($notifications as $notification) {
+	foreach($notifications_full as $notification) {
 		echo getNotificationHTML($notification, $user);
 	}

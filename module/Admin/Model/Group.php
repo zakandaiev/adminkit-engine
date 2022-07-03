@@ -2,8 +2,9 @@
 
 namespace Module\Admin\Model;
 
-use Engine\Module;
 use Engine\Database\Statement;
+use Engine\Module;
+use Engine\User;
 
 class Group {
 	public function countGroups() {
@@ -45,11 +46,7 @@ class Group {
 	}
 
 	public function getUsers() {
-		$sql = 'SELECT id, TRIM(CONCAT_WS("", name, " ", "(@", login, ")")) as name FROM {user} ORDER BY name ASC, login ASC';
-
-		$users = new Statement($sql);
-
-		return $users->execute()->fetchAll();
+		return User::getAll('name ASC, login ASC');
 	}
 
 	public function getGroupById($id) {

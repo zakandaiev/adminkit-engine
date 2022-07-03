@@ -30,17 +30,7 @@ class User {
 	}
 
 	public function getUserById($id) {
-		$sql = 'SELECT * FROM {user} WHERE id = :id';
-
-		$user = new Statement($sql);
-
-		$user = $user->execute(['id' => $id])->fetch();
-
-		if($user && !empty($user->socials)) {
-			$user->socials = json_decode($user->socials) ?? [];
-		}
-
-		return $user;
+		return \Engine\User::get($id);
 	}
 
 	public function getGroups() {
@@ -51,7 +41,7 @@ class User {
 		return $groups->execute()->fetchAll();
 	}
 
-	public function getUserGroupsById($user_id) {
+	public function getUserGroups($user_id) {
 		$groups_array = [];
 
 		$sql = 'SELECT group_id FROM {user_group} WHERE user_id = :user_id';

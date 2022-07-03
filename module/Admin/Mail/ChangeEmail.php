@@ -13,7 +13,7 @@ $message = '
 ';
 
 return [
-	'recepient' => $data->email,
+	'type' => 'user_change_email',
 	'subject' => __('Email change'),
 	'message' => $message
 ];

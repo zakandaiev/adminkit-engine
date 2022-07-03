@@ -10,6 +10,6 @@ return [
 		'email' => $email
 	],
 	'execute' => function($data) {
-		Auth::restore($data->fields['email']);
+		User::restore($data->fields['email']);
 	}
 ];

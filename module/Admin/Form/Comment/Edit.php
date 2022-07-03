@@ -11,6 +11,6 @@ return [
 		'is_approved' => $is_approved
 	],
 	'execute_post' => function($data) {
-		Hook::run('admin_comment_' . $data->form_data['action'], $data);
+		Hook::run('comment_' . $data->form_data['action'], $data);
 	}
 ];

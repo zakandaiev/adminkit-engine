@@ -21,6 +21,6 @@ return [
 		]
 	],
 	'execute_post' => function($data) {
-		Hook::run('admin_user_' . $data->form_data['action'], $data);
+		Hook::run('user_' . $data->form_data['action'], $data);
 	}
 ];

@@ -29,7 +29,7 @@ class Engine {
 		class_alias('\\Engine\\Database\\Statement', 'Statement');
 		class_alias('\\Engine\\Setting', 'Setting');
 		class_alias('\\Engine\\Session', 'Session');
-		class_alias('\\Engine\\Auth', 'Auth');
+		class_alias('\\Engine\\User', 'User');
 		class_alias('\\Engine\\Module', 'Module');
 		class_alias('\\Engine\\Router', 'Router');
 		class_alias('\\Engine\\Controller', 'Controller');
@@ -59,7 +59,7 @@ class Engine {
 		Language::initialize();
 		Database::initialize();
 		Setting::initialize();
-		Auth::initialize();
+		User::initialize();
 		Module::initialize();
 		Router::initialize();
 	}

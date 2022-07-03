@@ -87,7 +87,7 @@
 												<?php
 													$selected_author = '';
 
-													if($author->id === Auth::$user->id) {
+													if($author->id === User::get()->id) {
 														$selected_author = 'selected';
 													}
 												?>

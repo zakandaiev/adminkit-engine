@@ -12,7 +12,6 @@ $message = '
 ';
 
 return [
-	'recepient' => $data->email,
 	'subject' => __('Reset password'),
 	'message' => $message
 ];

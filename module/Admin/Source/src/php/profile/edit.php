@@ -31,13 +31,10 @@
 								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
 									<?= __('Password') ?>
 								</a>
-								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-									<?= __('Privacy') ?>
-								</a>
-								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#notifications" role="tab">
 									<?= __('Notifications') ?>
 								</a>
-								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+								<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#delete-account" role="tab">
 									<?= __('Delete account') ?>
 								</a>
 							</div>
@@ -111,6 +108,66 @@
 											</div>
 											<div class="mb-3">
 												<?= Theme::block('form-socials', ['value' => $user->socials]) ?>
+											</div>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
+										</form>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="notifications" role="tabpanel">
+								<div class="card">
+									<div class="card-header">
+										<h5 class="card-title mb-0"><?= __('Web notifications') ?></h5>
+									</div>
+									<div class="card-body">
+										<form action="<?= Form::edit('Profile/Notifications_Web', $user->id); ?>" method="POST">
+											<?php foreach($GLOBALS['admin_notification'] as $key => $notification): ?>
+												<?php
+													$key = "web_$key";
+													if(isset($notification['user_can_manage']) && $notification['user_can_manage'] == false) continue;
+													if(isset($notification['type']) && !str_contains($notification['type'], 'web')) continue;
+												?>
+												<div class="form-check form-switch mb-3">
+													<input class="form-check-input" type="checkbox" id="<?= $key ?>" name="<?= $key ?>" <?php if(@$user->setting->notifications->$key !== false): ?>checked<?php endif; ?>>
+													<label class="form-check-label" for="<?= $key ?>"><?= $notification['name'] ?></label>
+												</div>
+											<?php endforeach; ?>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
+										</form>
+									</div>
+								</div>
+								<div class="card">
+									<div class="card-header">
+										<h5 class="card-title mb-0"><?= __('Email notifications') ?></h5>
+									</div>
+									<div class="card-body">
+										<form action="<?= Form::edit('Profile/Notifications_Email', $user->id); ?>" method="POST">
+											<?php foreach($GLOBALS['admin_notification'] as $key => $notification): ?>
+												<?php
+													$key = "mail_$key";
+													if(isset($notification['user_can_manage']) && $notification['user_can_manage'] == false) continue;
+													if(isset($notification['type']) && !str_contains($notification['type'], 'mail')) continue;
+												?>
+												<div class="form-check form-switch mb-3">
+													<input class="form-check-input" type="checkbox" id="<?= $key ?>" name="<?= $key ?>" <?php if(@$user->setting->notifications->$key !== false): ?>checked<?php endif; ?>>
+													<label class="form-check-label" for="<?= $key ?>"><?= $notification['name'] ?></label>
+												</div>
+											<?php endforeach; ?>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
+										</form>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="delete-account" role="tabpanel">
+								<div class="card">
+									<div class="card-header">
+										<h5 class="card-title mb-0"><?= __('Delete account') ?></h5>
+									</div>
+									<div class="card-body">
+										<form action="<?= Form::edit('Profile/Delete', $user->id); ?>" method="POST">
+											<div class="mb-3">
+												<label class="form-label"><?= __('Current password') ?></label>
+												<input type="password" name="password_current" placeholder="<?= __('Current password') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
 											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
 										</form>

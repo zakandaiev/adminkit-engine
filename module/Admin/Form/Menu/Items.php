@@ -10,6 +10,6 @@ return [
 		'items' => $items
 	],
 	'execute_post' => function($data) {
-		Hook::run('admin_menu_items_edit', $data);
+		Hook::run('menu_items_edit', $data);
 	}
 ];

@@ -8,8 +8,8 @@ class Upload {
 		$name_original = $file['name'];
 
 		$name_prepend = time();
-		if(Auth::$user->authorized) {
-			$name_prepend .= '_' . Auth::$user->id .'_';
+		if(User::get()->authorized) {
+			$name_prepend .= '_' . User::get()->id .'_';
 		} else {
 			$name_prepend .= '_uu_';
 		}

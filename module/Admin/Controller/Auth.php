@@ -3,6 +3,7 @@
 namespace Module\Admin\Controller;
 
 use Engine\Server;
+use Engine\User;
 
 class Auth extends \Engine\Controller {
 	public function __construct() {
@@ -21,7 +22,7 @@ class Auth extends \Engine\Controller {
 	}
 
 	public function getUnAuth() {
-		\Engine\Auth::unauthorize();
+		User::unauthorize();
 		Server::redirect('/admin/login');
 	}
 

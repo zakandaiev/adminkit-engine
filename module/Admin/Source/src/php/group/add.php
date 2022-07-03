@@ -39,7 +39,7 @@
 								<select name="users[]" multiple data-placeholder="<?= __('Users') ?>">
 									<option data-placeholder></option>
 									<?php foreach($users as $user): ?>
-										<option value="<?= $user->id ?>"><?= $user->name ?></option>
+										<option value="<?= $user->id ?>"><?= $user->nicename ?></option>
 									<?php endforeach; ?>
 								</select>
 							</div>

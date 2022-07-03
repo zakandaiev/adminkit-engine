@@ -4,7 +4,7 @@ namespace Module\Admin\Controller;
 
 class Profile extends AdminController {
 	public function getProfile() {
-		$data['user'] = clone $this->user;
+		$data['user'] = $this->user;
 
 		if(isset($this->route['parameters']['id'])) {
 			$data['user'] = $this->model->getUserById($this->route['parameters']['id']);
@@ -14,8 +14,8 @@ class Profile extends AdminController {
 			$this->view->error('404');
 		}
 
-		$data['user']->notifications = $this->model->getUserNotifications($data['user']->id);
-		$data['user']->notifications_count = $this->model->getUserNotificationsCount($data['user']->id);
+		$data['user']->notifications_full = $this->model->getUserNotificationsFull($data['user']->id);
+		$data['user']->notifications_full_count = $this->model->getUserNotificationsFullCount($data['user']->id);
 
 		$this->model->readNotifications($data['user']->id);
 
@@ -31,14 +31,14 @@ class Profile extends AdminController {
 	}
 
 	public function postNotification() {
-		$data['user'] = clone $this->user;
+		$data['user'] = $this->user;
 
 		if(isset($this->route['parameters']['id'])) {
 			$data['user'] = $this->model->getUserById($this->route['parameters']['id']);
 		}
 
-		$data['notifications'] = $this->model->getUserNotifications($data['user']->id);
-		$data['notifications_count'] = $this->model->getUserNotificationsCount($data['user']->id);
+		$data['notifications_full'] = $this->model->getUserNotificationsFull($data['user']->id);
+		$data['notifications_full_count'] = $this->model->getUserNotificationsFullCount($data['user']->id);
 
 		$this->view->setData($data);
 		$this->view->render('profile/notification-load-more');

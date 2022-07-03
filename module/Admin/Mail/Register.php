@@ -13,7 +13,6 @@ $message = '
 ';
 
 return [
-	'recepient' => $data->email,
 	'subject' => __('Registration'),
 	'message' => $message
 ];
