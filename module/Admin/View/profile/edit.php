@@ -114,6 +114,30 @@
 									</div>
 								</div>
 							</div>
+							<div class="tab-pane fade" id="password" role="tabpanel">
+								<div class="card">
+									<div class="card-header">
+										<h5 class="card-title mb-0"><?= __('Password') ?></h5>
+									</div>
+									<div class="card-body">
+										<form action="<?= Form::edit('Profile/Password', $user->id); ?>" method="POST" data-reset>
+											<div class="mb-3">
+												<label class="form-label"><?= __('Current password') ?></label>
+												<input type="password" name="password_current" placeholder="<?= __('Current password') ?>" class="form-control" minlength="8" maxlength="200" required>
+											</div>
+											<div class="mb-3">
+												<label class="form-label"><?= __('New password') ?></label>
+												<input type="password" name="password_new" placeholder="<?= __('New password') ?>" class="form-control" minlength="8" maxlength="200" required>
+											</div>
+											<div class="mb-3">
+												<label class="form-label"><?= __('Confirm password') ?></label>
+												<input type="password" name="password_confirm" placeholder="<?= __('Confirm password') ?>" class="form-control" minlength="8" maxlength="200" required>
+											</div>
+											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
+										</form>
+									</div>
+								</div>
+							</div>
 							<div class="tab-pane fade" id="notifications" role="tabpanel">
 								<div class="card">
 									<div class="card-header">
@@ -164,36 +188,12 @@
 										<h5 class="card-title mb-0"><?= __('Delete account') ?></h5>
 									</div>
 									<div class="card-body">
-										<form action="<?= Form::edit('Profile/Delete', $user->id); ?>" method="POST">
+										<form action="<?= Form::edit('Profile/Delete', $user->id); ?>" data-confirm="<?= __('Are you sure you want delete the account?') ?>" data-redirect="<?= site('url_language') ?>/admin" method="POST">
 											<div class="mb-3">
-												<label class="form-label"><?= __('Current password') ?></label>
-												<input type="password" name="password_current" placeholder="<?= __('Current password') ?>" class="form-control" minlength="8" maxlength="200" required>
+												<label class="form-label"><?= __('Enter your password to continue') ?></label>
+												<input type="password" name="password" placeholder="<?= __('Enter your password to continue') ?>" class="form-control" minlength="8" maxlength="200" required>
 											</div>
-											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
-										</form>
-									</div>
-								</div>
-							</div>
-							<div class="tab-pane fade" id="password" role="tabpanel">
-								<div class="card">
-									<div class="card-header">
-										<h5 class="card-title mb-0"><?= __('Password') ?></h5>
-									</div>
-									<div class="card-body">
-										<form action="<?= Form::edit('Profile/Password', $user->id); ?>" method="POST" data-reset>
-											<div class="mb-3">
-												<label class="form-label"><?= __('Current password') ?></label>
-												<input type="password" name="password_current" placeholder="<?= __('Current password') ?>" class="form-control" minlength="8" maxlength="200" required>
-											</div>
-											<div class="mb-3">
-												<label class="form-label"><?= __('New password') ?></label>
-												<input type="password" name="password_new" placeholder="<?= __('New password') ?>" class="form-control" minlength="8" maxlength="200" required>
-											</div>
-											<div class="mb-3">
-												<label class="form-label"><?= __('Confirm password') ?></label>
-												<input type="password" name="password_confirm" placeholder="<?= __('Confirm password') ?>" class="form-control" minlength="8" maxlength="200" required>
-											</div>
-											<button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
+											<button type="submit" class="btn btn-danger"><?= __('Delete account') ?></button>
 										</form>
 									</div>
 								</div>

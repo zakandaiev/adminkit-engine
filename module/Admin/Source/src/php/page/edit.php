@@ -26,10 +26,10 @@
 				</div>
 
 				<?php
-					$form_name = 'Page';
+					$form_name = 'Page/Page';
 
 					if($is_translation) {
-						$form_name = 'PageTranslation';
+						$form_name = 'Page/Translation';
 					}
 				?>
 				<form action="<?= Form::edit($form_name, $page_edit->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/page">

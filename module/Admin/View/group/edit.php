@@ -15,7 +15,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?= Form::edit('Group', $group->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/group">
+						<form action="<?= Form::edit('Group/Group', $group->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/group">
 							<div class="mb-3">
 								<label class="form-label"><?= __('Name') ?></label>
 								<input type="text" name="name" value="<?= $group->name ?>" placeholder="<?= __('Name') ?>" class="form-control" minlength="2" maxlength="200" required>

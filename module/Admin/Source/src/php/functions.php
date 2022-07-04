@@ -59,7 +59,7 @@ function notification_icon($type) {
 function getNotificationHTML($notification, $user) {
 	$icon = notification_icon($notification->type);
 	$when = date_when($notification->date_created);
-	$user_name = (User::get()->id == $notification->user_id) ? __('You') : $user->nicename;
+	$user_name = __('You');
 	$user_avatar = placeholder_avatar($user->avatar);
 	$action_name = '';
 	$action_body = '';
@@ -120,21 +120,29 @@ function getNotificationHTML($notification, $user) {
 			break;
 		}
 		case 'page_comment': {
+			$author = User::get($data->author);
+			$user_name = $author->nicename;
+			$user_avatar = placeholder_avatar($author->avatar);
+
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('leaved comment on %s'), $page_title);
 
-			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->comment) . '</div>';
+			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->message) . '</div>';
+
 			break;
 		}
 		case 'comment_reply': {
-			$user_name = $data->author;
+			$author = User::get($data->author);
+			$user_name = $author->nicename;
+			$user_avatar = placeholder_avatar($author->avatar);
 
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
 			$action_name = sprintf(__('replied to your comment on %s'), $page_title);
 
-			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->reply) . '</div>';
+			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->message) . '</div>';
+
 			break;
 		}
 		default: {

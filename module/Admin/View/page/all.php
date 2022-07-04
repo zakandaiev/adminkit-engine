@@ -86,14 +86,19 @@
 												<?php if($page->is_pending): ?>
 													<span title="Will be published <?= format_date($page->date_publish) ?>"><i class="align-middle" data-feather="clock"></i></span>
 												<?php else: ?>
-													<?= icon_boolean($page->is_enabled) ?>
+													<?php
+														$published_title = $page->is_enabled ? __('Unpublish this page') : __('Publish this page');
+													?>
+													<a href="#" data-action="<?= Form::edit('Page/TogglePublish', $page->id) ?>" data-fields='[{"key":"is_enabled","value":<?= $page->is_enabled ?>}]' data-redirect="this" title="<?= $published_title ?>" data-bs-toggle="tooltip">
+														<?= icon_boolean($page->is_enabled) ?>
+													</a>
 												<?php endif; ?>
 											</td>
 											<td class="table-action">
 												<?php
 													$edit_url = site('url_language') . '/admin/page/edit/' . $page->id;
 													$delete = [
-														'data-action' => Form::delete('Page', $page->id),
+														'data-action' => Form::delete('Page/Page', $page->id),
 														'data-confirm' => __('Delete') . ' ' . $page->title . '?',
 														'data-delete' => 'trow',
 														'data-counter' => '#pagination-counter'

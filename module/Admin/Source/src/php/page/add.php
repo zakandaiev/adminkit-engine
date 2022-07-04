@@ -13,7 +13,7 @@
 					<?= Breadcrumb::render() ?>
 				</div>
 
-				<form action="<?= Form::add('Page'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/page">
+				<form action="<?= Form::add('Page/Page'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/page">
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="tab">

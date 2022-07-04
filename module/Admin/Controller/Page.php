@@ -22,10 +22,6 @@ class Page extends AdminController {
 
 		$data['pages'] = $pages;
 
-		if(empty($data['pages'])) {
-			$this->view->error('404');
-		}
-
 		$this->view->setData($data);
 		$this->view->render('page/all');
 	}

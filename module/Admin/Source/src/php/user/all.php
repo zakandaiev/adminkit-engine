@@ -48,12 +48,19 @@
 													<i class="align-middle" data-feather="minus"></i>
 												<?php endif; ?>
 											</td>
-											<td><?= icon_boolean($user->is_enabled) ?></td>
+											<td>
+												<?php
+													$enabled_title = $user->is_enabled ? __('Disactivate this user') : __('Activate this user');
+												?>
+												<a href="#" data-action="<?= Form::edit('User/ToggleEnable', $user->id) ?>" data-fields='[{"key":"is_enabled","value":<?= $user->is_enabled ?>}]' data-redirect="this" title="<?= $enabled_title ?>" data-bs-toggle="tooltip">
+													<?= icon_boolean($user->is_enabled) ?>
+												</a>
+											</td>
 											<td class="table-action">
 												<?php
 													$edit_url = site('url_language') . '/admin/user/edit/' . $user->id;
 													$delete = [
-														'data-action' => Form::delete('User', $user->id),
+														'data-action' => Form::delete('User/User', $user->id),
 														'data-confirm' => __('Delete') . ' ' . $user->name . '(@' . $user->login . ')' . '?',
 														'data-delete' => 'trow',
 														'data-counter' => '#pagination-counter'

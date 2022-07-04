@@ -15,7 +15,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?= Form::edit('User', $user->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/user">
+						<form action="<?= Form::edit('User/User', $user->id); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/user">
 							<div class="mb-3">
 								<label class="form-label"><?= __('Groups') ?></label>
 								<select name="group[]" multiple data-placeholder="<?= __('Groups') ?>">

@@ -17,6 +17,6 @@ return [
 		'category' => $category
 	],
 	'execute_post' => function($data) {
-		Form::execute($data->form_data['action'], 'PageTranslation', $data->form_data['item_id'], true);
+		Form::execute($data->form_data['action'], 'Page/Translation', $data->form_data['item_id'], true);
 	}
 ];

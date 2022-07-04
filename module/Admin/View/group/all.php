@@ -48,12 +48,19 @@
 											</td>
 											<td><a href="<?= site('url_language') ?>/admin/user"><?= $group->count_users ?></a></td>
 											<td title="<?= format_date($group->date_created) ?>"><?= date_when($group->date_created) ?></td>
-											<td><?= icon_boolean($group->is_enabled) ?></td>
+											<td>
+												<?php
+													$enabled_title = $group->is_enabled ? __('Disactivate this group') : __('Activate this group');
+												?>
+												<a href="#" data-action="<?= Form::edit('Group/ToggleEnable', $group->id) ?>" data-fields='[{"key":"is_enabled","value":<?= $group->is_enabled ?>}]' data-redirect="this" title="<?= $enabled_title ?>" data-bs-toggle="tooltip">
+													<?= icon_boolean($group->is_enabled) ?>
+												</a>
+											</td>
 											<td class="table-action">
 												<?php
 													$edit_url = site('url_language') . '/admin/group/edit/' . $group->id;
 													$delete = [
-														'data-action' => Form::delete('Group', $group->id),
+														'data-action' => Form::delete('Group/Group', $group->id),
 														'data-confirm' => __('Delete') . ' ' . $group->name . '?',
 														'data-delete' => 'trow',
 														'data-counter' => '#pagination-counter'
