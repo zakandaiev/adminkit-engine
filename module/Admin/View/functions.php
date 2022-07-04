@@ -8,7 +8,7 @@ Asset::css('css/quill');
 Asset::css('css/slimselect');
 Asset::css('css/main');
 
-Asset::js('js/cyrToLat', 'defer');
+Asset::js('js/cyr-to-lat', 'defer');
 Asset::js('js/toast', 'defer');
 Asset::js('js/adminkit', 'defer');
 Asset::js('js/fancybox', 'defer');

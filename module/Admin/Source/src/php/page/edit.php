@@ -154,7 +154,7 @@
 											</select>
 										</div>
 										<div class="form-group mb-3">
-											<label class="form-label"><?= __('URL Slug') ?></label>
+											<label class="form-label"><?= __('URL slug') ?></label>
 											<input type="text" name="url" value="<?= $page_edit->url ?>" placeholder="sample-page" class="form-control" required minlength="1" maxlength="200" data-behavior="slug">
 										</div>
 										<div class="form-group mb-3">

@@ -82,8 +82,10 @@ function cyrToLat(text) {
   }).join('');
 }
 
-function slug(text) {
-  var delimiter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '-';
+function slug(text, delimiter) {
+  var _delimiter;
+
+  delimiter = (_delimiter = delimiter) !== null && _delimiter !== void 0 ? _delimiter : '-';
   var replace_1 = new RegExp('[^A-Za-z0-9' + delimiter + ']+', 'g');
   var replace_2 = new RegExp('[' + delimiter + ']+', 'g');
   var replace_3 = new RegExp('^' + delimiter);

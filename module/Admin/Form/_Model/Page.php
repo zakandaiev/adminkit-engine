@@ -6,10 +6,10 @@ $url = [
 	'minlength' => 1,
 	'maxlength' => 200,
 	'regexp' => '/^[a-z0-9\-]+$/',
-	'required_message' => __('URL Slug is required'),
-	'minlength_message' => __('URL Slug is too short'),
-	'maxlength_message' => __('URL Slug is too long'),
-	'regexp_message' => __('URL Slug should consist only small latin letters, numbers or dashes')
+	'required_message' => __('URL slug is required'),
+	'minlength_message' => __('URL slug is too short'),
+	'maxlength_message' => __('URL slug is too long'),
+	'regexp_message' => __('URL slug should consist only small latin letters, numbers or dashes')
 ];
 $author = [
 	'required' => true,

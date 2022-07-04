@@ -92,13 +92,12 @@ class Statement {
 
 			if(preg_match("/Duplicate entry .+ for key '(.+)'/", $error->getMessage(), $matches)) {
 				$error_message = str_replace(DATABASE['prefix'] . '_', '', $matches[1]);
-				$error_message = str_replace('.', '_', $error_message);
-				$error_message = 'duplicate/' . $error_message;
+				$error_message = 'duplicate:' . $error_message;
 			}
 
 			$debug_sql = DEBUG['is_enabled'] ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql ?? ''))] : null;
 
-			Server::answer($debug_sql, 'error', $error_message, '409');
+			Server::answer($debug_sql, 'error', __($error_message), '409');
 		}
 
 		return $this;

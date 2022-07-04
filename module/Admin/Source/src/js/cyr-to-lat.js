@@ -44,7 +44,9 @@ function cyrToLat(text) {
 	}).join('');
 }
 
-function slug(text, delimiter = '-') {
+function slug(text, delimiter) {
+	delimiter = delimiter ?? '-';
+
 	const replace_1 = new RegExp('[^A-Za-z0-9' + delimiter + ']+', 'g');
 	const replace_2 = new RegExp('[' + delimiter + ']+', 'g');
 	const replace_3 = new RegExp('^' + delimiter);

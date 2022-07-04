@@ -485,6 +485,7 @@ var DataBehabior = /*#__PURE__*/function () {
 
     this.node = node;
     this.data_behavior = this.node.getAttribute('data-behavior');
+    this.data_event = this.node.hasAttribute('data-event') ? this.node.getAttribute('data-event') : 'change';
     this.data_hide = this.node.getAttribute('data-hide');
     this.data_show = this.node.getAttribute('data-show');
     this.data_target = this.node.getAttribute('data-target');
@@ -499,55 +500,38 @@ var DataBehabior = /*#__PURE__*/function () {
     value: function initialize() {
       var _this6 = this;
 
-      // on node init
-      if (this.data_behavior === 'visibility') {
-        this.hideItems();
-        this.showItems();
-      } // on node change
+      // on init
+      this.visibilityHide();
+      this.visibilityShow();
+      this.toLower();
+      this.toUpper();
+      this.cyrToLat();
+      this.slug(); // on {event}
 
+      this.node.addEventListener(this.data_event, function () {
+        _this6.visibilityHide();
 
-      this.node.addEventListener('change', function (event) {
-        if (_this6.data_behavior === 'visibility') {
-          _this6.hideItems();
+        _this6.visibilityShow();
 
-          _this6.showItems();
-        }
+        _this6.toLower();
 
-        if (_this6.data_behavior === 'cyrToLat') {
-          if (_this6.data_target) {
-            _this6.data_target.split(',').forEach(function (target) {
-              var target_item = document.querySelector('[name=' + target + ']');
+        _this6.toUpper();
 
-              if (target_item) {
-                target_item.value = cyrToLat(_this6.node.value);
-              }
-            });
-          } else {
-            _this6.node.value = cyrToLat(_this6.node.value);
-          }
-        }
+        _this6.cyrToLat();
 
-        if (_this6.data_behavior === 'slug' || _this6.data_behavior === 'slug_') {
-          if (_this6.data_target) {
-            _this6.data_target.split(',').forEach(function (target) {
-              var target_item = document.querySelector('[name=' + target + ']');
-
-              if (target_item) {
-                target_item.value = slug(_this6.node.value, _this6.data_behavior === 'slug_' ? '_' : null);
-              }
-            });
-          } else {
-            _this6.node.value = slug(_this6.node.value, _this6.data_behavior === 'slug_' ? '_' : null);
-          }
-        }
+        _this6.slug();
       });
     }
   }, {
-    key: "hideItems",
-    value: function hideItems() {
+    key: "visibilityHide",
+    value: function visibilityHide() {
+      if (this.data_behavior !== 'visibility') {
+        return false;
+      }
+
       var hide = this.data_hide;
 
-      if (this.node.getAttribute('type') === 'checkbox' && !this.node.checked) {
+      if (this.node.type === 'checkbox' && !this.node.checked) {
         if (hide) {
           hide += ',' + this.data_show;
         } else {
@@ -555,16 +539,21 @@ var DataBehabior = /*#__PURE__*/function () {
         }
       }
 
-      if (this.node.getAttribute('type') === 'radio' && !this.node.checked) {
+      if (this.node.type === 'radio' && !this.node.checked) {
         hide = null;
       }
 
       if (hide) {
         hide.split(',').forEach(function (to_hide) {
-          var item = form.querySelector('[name="' + to_hide + '"]');
+          var item = document.querySelector('[name="' + to_hide + '"]');
+
+          if (!item) {
+            return false;
+          }
+
           var parent = item.parentElement;
 
-          if (parent.classList.contains('form-control')) {
+          if (parent && parent.classList.contains('form-group')) {
             parent.classList.add('hidden');
           } else {
             item.classList.add('hidden');
@@ -575,24 +564,33 @@ var DataBehabior = /*#__PURE__*/function () {
       return true;
     }
   }, {
-    key: "showItems",
-    value: function showItems() {
+    key: "visibilityShow",
+    value: function visibilityShow() {
+      if (this.data_behavior !== 'visibility') {
+        return false;
+      }
+
       var show = this.data_show;
 
-      if (this.node.getAttribute('type') === 'checkbox' && !this.node.checked) {
+      if (this.node.type === 'checkbox' && !this.node.checked) {
         show = null;
       }
 
-      if (this.node.getAttribute('type') === 'radio' && !this.node.checked) {
+      if (this.node.type === 'radio' && !this.node.checked) {
         show = null;
       }
 
       if (show) {
         show.split(',').forEach(function (to_show) {
-          var item = form.querySelector('[name="' + to_show + '"]');
+          var item = document.querySelector('[name="' + to_show + '"]');
+
+          if (!item) {
+            return false;
+          }
+
           var parent = item.parentElement;
 
-          if (parent.classList.contains('form-control')) {
+          if (parent && parent.classList.contains('form-group')) {
             parent.classList.remove('hidden');
           } else {
             item.classList.remove('hidden');
@@ -602,6 +600,118 @@ var DataBehabior = /*#__PURE__*/function () {
 
       return true;
     }
+  }, {
+    key: "toLower",
+    value: function toLower() {
+      var _this7 = this;
+
+      if (this.data_behavior !== 'lowercase') {
+        return false;
+      }
+
+      if (this.data_target) {
+        this.data_target.split(',').forEach(function (target) {
+          var target_item = document.querySelector('[name=' + target + ']');
+
+          if (target_item) {
+            target_item.value = _this7.node.value.toLocaleLowerCase();
+          }
+        });
+      } else {
+        this.node.value = this.node.value.toLocaleLowerCase();
+      }
+
+      return true;
+    }
+  }, {
+    key: "toUpper",
+    value: function toUpper() {
+      var _this8 = this;
+
+      if (this.data_behavior !== 'uppercase') {
+        return false;
+      }
+
+      if (this.data_target) {
+        this.data_target.split(',').forEach(function (target) {
+          var target_item = document.querySelector('[name=' + target + ']');
+
+          if (target_item) {
+            target_item.value = _this8.node.value.toLocaleUpperCase();
+          }
+        });
+      } else {
+        this.node.value = this.node.value.toLocaleUpperCase();
+      }
+
+      return true;
+    }
+  }, {
+    key: "cyrToLat",
+    value: function (_cyrToLat) {
+      function cyrToLat() {
+        return _cyrToLat.apply(this, arguments);
+      }
+
+      cyrToLat.toString = function () {
+        return _cyrToLat.toString();
+      };
+
+      return cyrToLat;
+    }(function () {
+      var _this9 = this;
+
+      if (this.data_behavior !== 'cyrToLat') {
+        return false;
+      }
+
+      if (this.data_target) {
+        this.data_target.split(',').forEach(function (target) {
+          var target_item = document.querySelector('[name=' + target + ']');
+
+          if (target_item) {
+            target_item.value = cyrToLat(_this9.node.value);
+          }
+        });
+      } else {
+        this.node.value = cyrToLat(this.node.value);
+      }
+
+      return true;
+    })
+  }, {
+    key: "slug",
+    value: function (_slug) {
+      function slug() {
+        return _slug.apply(this, arguments);
+      }
+
+      slug.toString = function () {
+        return _slug.toString();
+      };
+
+      return slug;
+    }(function () {
+      var _this10 = this;
+
+      if (!this.data_behavior.includes('slug')) {
+        return false;
+      }
+
+      if (this.data_target) {
+        this.data_target.split(',').forEach(function (target) {
+          var target_item = document.querySelector('[name=' + target + ']');
+
+          if (target_item) {
+            target_item.value = slug(_this10.node.value, _this10.data_behavior === 'slug_' ? '_' : null);
+          }
+        });
+      } else {
+        this.node.value = slug(this.node.value, this.data_behavior === 'slug_' ? '_' : null);
+      }
+
+      return true;
+    })
   }]);
 
   return DataBehabior;
@@ -646,7 +756,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "initModal",
     value: function initModal() {
-      var _this7 = this;
+      var _this11 = this;
 
       this.modal = this.store.nextElementSibling;
       this.inputs = this.modal.querySelectorAll('[name]');
@@ -654,9 +764,9 @@ var ForeignForm = /*#__PURE__*/function () {
         input.name = input.name.replace('[]', '');
       });
       setTimeout(function () {
-        _this7.inputs.forEach(function (input) {
+        _this11.inputs.forEach(function (input) {
           if (input.type === 'file') {
-            _this7.initFileInput(input);
+            _this11.initFileInput(input);
           }
         });
       }, 1000);
@@ -664,7 +774,7 @@ var ForeignForm = /*#__PURE__*/function () {
       var bs = new bootstrap.Modal(this.modal);
       this.modal.bs = bs;
       this.modal.addEventListener('hidden.bs.modal', function () {
-        return _this7.buttonClick('cancel');
+        return _this11.buttonClick('cancel');
       });
       return true;
     }
@@ -698,11 +808,11 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "initButtons",
     value: function initButtons() {
-      var _this8 = this;
+      var _this12 = this;
 
       this.submit = this.modal.querySelector('[type="submit"]');
       this.submit.addEventListener('click', function (event) {
-        return _this8.buttonClick('submit', event);
+        return _this12.buttonClick('submit', event);
       });
       this.add = document.createElement('span');
       this.add.setAttribute('data-bs-toggle', 'modal');
@@ -710,7 +820,7 @@ var ForeignForm = /*#__PURE__*/function () {
       this.add.classList.add('badge', 'bg-primary', 'cursor-pointer');
       this.add.innerHTML = SETTING.icon.add;
       this.add.addEventListener('click', function () {
-        return _this8.buttonClick('add');
+        return _this12.buttonClick('add');
       });
       return true;
     }
@@ -743,7 +853,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "initTable",
     value: function initTable() {
-      var _this9 = this;
+      var _this13 = this;
 
       this.table = document.createElement('table');
       this.thead = document.createElement('thead');
@@ -756,7 +866,7 @@ var ForeignForm = /*#__PURE__*/function () {
       this.tbody.setAttribute('data-handle', '.sortable__handle');
 
       this.tbody.onEnd = function () {
-        return _this9.updateStore();
+        return _this13.updateStore();
       };
 
       return true;
@@ -780,7 +890,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "populateTable",
     value: function populateTable() {
-      var _this10 = this;
+      var _this14 = this;
 
       if (!this.value) {
         return false;
@@ -788,11 +898,11 @@ var ForeignForm = /*#__PURE__*/function () {
 
       var values = JSON.parse(this.value);
       values.forEach(function (value) {
-        _this10.active_row = _this10.createRow();
+        _this14.active_row = _this14.createRow();
 
-        _this10.updateRow(value);
+        _this14.updateRow(value);
 
-        _this10.tbody.appendChild(_this10.active_row);
+        _this14.tbody.appendChild(_this14.active_row);
       });
       return true;
     }
@@ -825,7 +935,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "createRow",
     value: function createRow() {
-      var _this11 = this;
+      var _this15 = this;
 
       var trow = document.createElement('tr');
       this.inputs.forEach(function (input) {
@@ -844,10 +954,10 @@ var ForeignForm = /*#__PURE__*/function () {
       btn_edit.innerHTML = SETTING.icon.edit + ' ';
       btn_delete.innerHTML = SETTING.icon.delete;
       btn_edit.addEventListener('click', function () {
-        return _this11.buttonClick('edit', trow);
+        return _this15.buttonClick('edit', trow);
       });
       btn_delete.addEventListener('click', function () {
-        return _this11.buttonClick('delete', trow);
+        return _this15.buttonClick('delete', trow);
       });
       tcol.append(btn_sort);
       tcol.append(btn_edit);
@@ -858,7 +968,7 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "buttonClick",
     value: function buttonClick(type) {
-      var _this12 = this;
+      var _this16 = this;
 
       var mixed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -886,7 +996,7 @@ var ForeignForm = /*#__PURE__*/function () {
           {
             this.is_edit = false;
             fadeOut(mixed, false, function () {
-              return _this12.updateStore();
+              return _this16.updateStore();
             });
             return true;
           }
@@ -927,20 +1037,20 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "updateRow",
     value: function updateRow(value) {
-      var _this13 = this;
+      var _this17 = this;
 
       if (!value) {
         return false;
       }
 
       this.inputs.forEach(function (input) {
-        var tcol = _this13.active_row.querySelector("[data-name=\"".concat(input.name, "\"]"));
+        var tcol = _this17.active_row.querySelector("[data-name=\"".concat(input.name, "\"]"));
 
         if (!tcol) {
           return false;
         }
 
-        _this13.setColValue(input, tcol, value[input.name]);
+        _this17.setColValue(input, tcol, value[input.name]);
       });
       return true;
     }
@@ -1059,22 +1169,22 @@ var ForeignForm = /*#__PURE__*/function () {
   }, {
     key: "resetInputs",
     value: function resetInputs() {
-      var _this14 = this;
+      var _this18 = this;
 
       this.inputs.forEach(function (input) {
-        _this14.setInputValue(input, null);
+        _this18.setInputValue(input, null);
       });
       return true;
     }
   }, {
     key: "populateInputs",
     value: function populateInputs() {
-      var _this15 = this;
+      var _this19 = this;
 
       this.active_row.querySelectorAll('[data-name]').forEach(function (tcol) {
-        _this15.inputs.forEach(function (input) {
+        _this19.inputs.forEach(function (input) {
           if (input.name === tcol.getAttribute('data-name')) {
-            _this15.setInputValue(input, tcol.getAttribute('data-value'));
+            _this19.setInputValue(input, tcol.getAttribute('data-value'));
           }
         });
       });

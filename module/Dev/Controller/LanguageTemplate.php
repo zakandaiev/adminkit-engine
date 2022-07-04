@@ -121,7 +121,7 @@ class LanguageTemplate extends \Engine\Controller {
 
 		foreach($translations as $key => $files) {
 			foreach($files as $file) {
-				$output .= '; ' . str_replace(ROOT_DIR, Request::$base, $file) . PHP_EOL;
+				$output .= '; ' . str_replace(ROOT_DIR, '', $file) . PHP_EOL;
 			}
 
 			$output .= $key . ' = "' . $key . '"' . PHP_EOL . PHP_EOL;
