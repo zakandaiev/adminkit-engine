@@ -13,9 +13,11 @@
 						<?= Breadcrumb::render() ?>
 					</div>
 
-					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="<?= site('url_language') ?>/admin/profile/edit" class="btn btn-primary"><?= __('Edit profile') ?></a>
-					</div>
+					<?php if(User::get()->id == $user->id): ?>
+						<div class="col-auto ms-auto text-end mt-n1">
+							<a href="<?= site('url_language') ?>/admin/profile/edit" class="btn btn-primary"><?= __('Edit profile') ?></a>
+						</div>
+					<?php endif; ?>
 				</div>
 
 				<div class="row">

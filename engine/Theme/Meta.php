@@ -121,11 +121,7 @@ class Meta {
 			<meta charset="' . $page->charset . '">
 			<meta name="author" content="' . $page->author . '">
 			<meta http-equiv="X-UA-Compatible" content="IE=edge">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
-
-			<link rel="canonical" href="' . $page->permalink . '">
-
-			<link rel="image_src" href="' . $page->seo_image . '">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
 			<meta name="description" content="' . $page->seo_description . '">
 			<meta name="keywords" content="' . $page->seo_keywords . '">
@@ -143,6 +139,10 @@ class Meta {
 			<meta property="twitter:title" content="' . $page->title . '">
 			<meta property="twitter:description" content="' . $page->seo_description . '">
 			<meta property="twitter:image" content="' . $page->seo_image . '">
+
+			<link rel="canonical" href="' . $page->permalink . '">
+
+			<link rel="image_src" href="' . $page->seo_image . '">
 
 			<link rel="icon" href="' . $page->favicon . '" sizes="any">
 			<link rel="icon" href="' . $page->favicon_svg . '" type="image/svg+xml">

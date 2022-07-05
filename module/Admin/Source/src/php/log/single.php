@@ -22,14 +22,6 @@
 				</div>
 
 				<div class="card">
-					<div class="card-header">
-						<h5 class="card-title mb-0">
-							<?php
-								$log_url = site('url') . '/log/' . $log->name . '.' . LOG['extension'];
-								echo '<a href="' . $log_url . '" target="_blank">' . $log_url . '</a>';
-							?>
-						</h5>
-					</div>
 					<div class="card-body">
 						<div class="log__body m-0"><?= format_log($log->body) ?></div>
 					</div>

@@ -20,14 +20,6 @@
 				</div>
 
 				<div class="card">
-					<div class="card-header">
-						<h5 class="card-title mb-0">
-							<?php
-								$translation_url = site('url') . '/language/' . $language['file_name'];
-								echo '<a href="' . $translation_url . '" target="_blank">' . $translation_url . '</a>';
-							?>
-						</h5>
-					</div>
 					<div class="card-body">
 						<div class="spinner-action">
 							<div class="translation"><?= $body ?></div>

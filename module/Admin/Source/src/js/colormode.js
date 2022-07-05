@@ -1,16 +1,16 @@
 const COLORMODE = {
+	body_attribute_key: 'data-colormode',
 	storage_key: 'colormode',
-	attribute_key: 'data-colormode',
 	value_default: 'default',
 	value_dark: 'dark'
 };
 
 function setColorMode(isDarkMode) {
 	if(isDarkMode) {
-		document.body.setAttribute(COLORMODE.attribute_key, COLORMODE.value_dark);
+		document.body.setAttribute(COLORMODE.body_attribute_key, COLORMODE.value_dark);
 		localStorage.setItem(COLORMODE.storage_key, COLORMODE.value_dark);
 	} else {
-		document.body.setAttribute(COLORMODE.attribute_key, COLORMODE.value_default);
+		document.body.setAttribute(COLORMODE.body_attribute_key, COLORMODE.value_default);
 		localStorage.setItem(COLORMODE.storage_key, COLORMODE.value_default);
 	}
 

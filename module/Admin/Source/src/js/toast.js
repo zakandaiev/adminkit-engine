@@ -31,19 +31,19 @@ function toast(type, text, duration) {
 
 	container.appendChild(toast);
 
-	toast.addEventListener('click', () => toast_close(container, toast));
+	toast.addEventListener('click', () => toast_remove(container, toast));
 
-	setTimeout(() => toast_close(container, toast), duration ? duration : 5000);
+	setTimeout(() => toast_remove(container, toast), duration ? duration : 5000);
+
+	function toast_remove(container, toast) {
+		toast.classList.add('disappear');
+		setTimeout(() => {
+			toast.remove();
+			if(container && container.childElementCount <= 0) {
+				container.remove();
+			}
+		}, 500);
+	}
 
 	return true;
-}
-
-function toast_close(container, toast) {
-	toast.classList.add('disappear');
-	setTimeout(() => {
-		toast.remove();
-		if(container && container.childElementCount <= 0) {
-			container.remove();
-		}
-	}, 500);
 }

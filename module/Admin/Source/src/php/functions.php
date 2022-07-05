@@ -59,7 +59,7 @@ function notification_icon($type) {
 function getNotificationHTML($notification, $user) {
 	$icon = notification_icon($notification->type);
 	$when = date_when($notification->date_created);
-	$user_name = __('You');
+	$user_name = (User::get()->id == $notification->user_id) ? __('You') : $user->name . ' (@' . $user->login . ')';
 	$user_avatar = placeholder_avatar($user->avatar);
 	$action_name = '';
 	$action_body = '';

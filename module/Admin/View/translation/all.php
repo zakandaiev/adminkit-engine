@@ -17,11 +17,6 @@
 					<div class="card-body">
 						<?php if(!empty($languages)): ?>
 							<table class="table table-sm m-0">
-								<thead>
-									<tr>
-										<th><?= site('url') ?>/language</th>
-									</tr>
-								</thead>
 								<tbody>
 									<?php foreach($languages as $language): ?>
 										<tr>

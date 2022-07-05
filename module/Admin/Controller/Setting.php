@@ -60,27 +60,45 @@ class Setting extends AdminController {
 		Server::answer(null, 'success', __('Settings saved'));
 	}
 
-	public function launchOptimization($type) {
-		$functions = Path::file('theme') . '/functions.php';
+	private function launchOptimization($type) {
+		$files = [];
+		$modules = [];
 
-		if(!file_exists($functions)) {
-			return false;
+		foreach(Module::getAll() as $module) {
+			if(!$module['is_enabled'] || $module['extends'] !== 'Public' || $module['name'] === 'Public') {
+				continue;
+			}
+
+			$modules[] = $module['name'];
 		}
 
-		Module::setName('Public');
-		require_once $functions;
+		$modules[] = 'Public';
 
-		$files = [];
+		foreach($modules as $module) {
+			Module::setName($module);
 
-		foreach(Asset::get($type) as $file) {
-			$files[] = Path::file('asset') . '/' . $file['file'];
+			$functions = Path::file('view') . '/functions.php';
+
+			if(!file_exists($functions)) {
+				continue;
+			}
+
+			require_once $functions;
+
+			foreach(Asset::get($type) as $file) {
+				if($file['module'] !== $module) {
+					continue;
+				}
+
+				$files[] = Path::file('asset') . '/' . $file['file'];
+			}
 		}
 
 		if(empty($files)) {
 			return false;
 		}
 
-		$dest = Path::file('asset') . '/' . $type;
+		$dest = Path::file('asset', 'Public') . '/' . $type;
 
 		return Optimization::{strtolower($type ?? '')}($files, $dest);
 	}

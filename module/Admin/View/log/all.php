@@ -17,11 +17,6 @@
 					<div class="card-body">
 						<?php if(!empty($logs)): ?>
 							<table class="table table-sm m-0">
-								<thead>
-									<tr>
-										<th><?= site('url') ?>/log</th>
-									</tr>
-								</thead>
 								<tbody>
 									<tr>
 										<td>
