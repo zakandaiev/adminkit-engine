@@ -50,7 +50,7 @@
 											</td>
 											<td>
 												<?php
-													$enabled_title = $user->is_enabled ? __('Disactivate this user') : __('Activate this user');
+													$enabled_title = $user->is_enabled ? __('Deactivate this user') : __('Activate this user');
 												?>
 												<a href="#" data-action="<?= Form::edit('User/ToggleEnable', $user->id) ?>" data-fields='[{"key":"is_enabled","value":<?= $user->is_enabled ?>}]' data-redirect="this" title="<?= $enabled_title ?>" data-bs-toggle="tooltip">
 													<?= icon_boolean($user->is_enabled) ?>

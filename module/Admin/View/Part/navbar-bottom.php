@@ -9,7 +9,7 @@
 			<div class="col-6 text-end">
 				<ul class="list-inline">
 					<li class="list-inline-item">
-						<a class="text-muted" href="<?= Engine::AUTHOR_URL ?>" target="_blank"><?= __('Made by') ?> <?= Engine::AUTHOR ?></a>
+						<a class="text-muted" href="<?= Engine::AUTHOR_URL ?>" target="_blank">Made by <?= Engine::AUTHOR ?></a>
 					</li>
 				</ul>
 			</div>

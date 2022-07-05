@@ -14,7 +14,7 @@
 	</a>
 	<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="navbar-notifications">
 		<div class="dropdown-menu-header">
-			<?= __('New Notifications') ?>
+			<?= __('New notifications') ?>
 		</div>
 		<div class="list-group">
 			<?php if($notifications_count > 0): ?>

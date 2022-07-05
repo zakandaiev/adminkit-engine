@@ -50,7 +50,7 @@
 											<td title="<?= format_date($group->date_created) ?>"><?= date_when($group->date_created) ?></td>
 											<td>
 												<?php
-													$enabled_title = $group->is_enabled ? __('Disactivate this group') : __('Activate this group');
+													$enabled_title = $group->is_enabled ? __('Deactivate this group') : __('Activate this group');
 												?>
 												<a href="#" data-action="<?= Form::edit('Group/ToggleEnable', $group->id) ?>" data-fields='[{"key":"is_enabled","value":<?= $group->is_enabled ?>}]' data-redirect="this" title="<?= $enabled_title ?>" data-bs-toggle="tooltip">
 													<?= icon_boolean($group->is_enabled) ?>

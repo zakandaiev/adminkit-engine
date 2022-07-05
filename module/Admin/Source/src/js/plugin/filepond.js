@@ -78,6 +78,10 @@ if(file_inputs) {
 			});
 		}
 
+		if(typeof LOCALE_FILEPOND !== 'undefined') {
+			pond.setOptions(LOCALE_FILEPOND);
+		}
+
 		input.pond = pond;
 	});
 }

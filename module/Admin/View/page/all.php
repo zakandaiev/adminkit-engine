@@ -45,7 +45,7 @@
 											<td>
 												<?php if($page->is_category): ?>
 													<i class="align-middle" data-feather="folder"></i>
-													<a href="<?= site('url_language') ?>/admin/page/category/<?= $page->id ?>?back=<?= urlencode(strtok(Request::$uri ?? '', '?')) ?>"><span class="align-middle"><?= $page->title ?></span></a>
+													<a href="<?= site('url_language') ?>/admin/page/category/<?= $page->id ?>?back=<?= urlencode(site('uri_cut_language')) ?>"><span class="align-middle"><?= $page->title ?></span></a>
 												<?php else: ?>
 													<i class="align-middle" data-feather="file-text"></i>
 													<span class="align-middle"><?= $page->title ?></span>

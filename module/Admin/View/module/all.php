@@ -58,7 +58,7 @@
 													$edit_url = site('url_language') . '/admin/module/edit/' . $module['name'];
 													$delete = [
 														'data-action' => site('url') . '/admin/module/delete/' . $module['name'],
-														'data-confirm' => __('Delete module ') . ' ' . $module['name'] . '?',
+														'data-confirm' => __('Delete module') . ' ' . $module['name'] . '?',
 														'data-delete' => 'trow',
 														'data-counter' => '#pagination-counter'
 													];

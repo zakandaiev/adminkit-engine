@@ -19,6 +19,8 @@
 	};
 </script>
 
+<?= locale_script('filepond') ?>
+
 </body>
 
 </html>

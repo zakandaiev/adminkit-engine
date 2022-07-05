@@ -312,3 +312,35 @@ function table_actions($edit_url = null, $delete_attributes = [], $icons = []) {
 
 	return $edit . ' ' . $delete;
 }
+
+function locale_script($folder) {
+	$base = Path::file('asset') . '/js/locale/' . $folder . '/';
+
+	$url = '';
+
+	$path = $base . site('language_current') . '.js';
+	if(file_exists($path)) {
+		$url = str_replace(ROOT_DIR, Path::url(), $path);
+	}
+
+	$path = $base . sprintf('%s_%s', site('language_current'), lang(site('language_current'), 'region')) . '.js';
+	if(file_exists($path)) {
+		$url = str_replace(ROOT_DIR, Path::url(), $path);
+	}
+
+	$path = $base . sprintf('%s-%s', site('language_current'), strtolower(lang(site('language_current'), 'region'))) . '.js';
+	if(file_exists($path)) {
+		$url = str_replace(ROOT_DIR, Path::url(), $path);
+	}
+
+	$path = $base . sprintf('%s_%s', site('language_current'), strtolower(lang(site('language_current'), 'region'))) . '.js';
+	if(file_exists($path)) {
+		$url = str_replace(ROOT_DIR, Path::url(), $path);
+	}
+
+	if(empty($url)) {
+		return null;
+	}
+
+	return sprintf('<script src="%s"></script>', $url);
+}
