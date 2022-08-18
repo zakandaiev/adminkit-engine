@@ -50,7 +50,7 @@ class Pagination {
 
 		$uri_handle .= $this->uri_key . '=';
 
-		return hc($uri_handle);
+		return html($uri_handle);
 	}
 
 	private function countPages() {

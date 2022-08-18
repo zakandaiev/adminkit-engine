@@ -132,14 +132,14 @@ function comments($comments) {
 
 		$output .= '<div class="media ' . $class . '">';
 		$output .= '<div class="media-left">';
-		$output .= '<img class="media-object" src="' . site('url') . '/' . $item['author_avatar'] . '" alt="' . hc($item['author_name']) . '">';
+		$output .= '<img class="media-object" src="' . site('url') . '/' . $item['author_avatar'] . '" alt="' . html($item['author_name']) . '">';
 		$output .= '</div>';
 		$output .= '<div class="media-body">';
 		$output .= '<div class="media-heading">';
-		$output .= '<h4>' . hc($item['author_name']) . '</h4>';
+		$output .= '<h4>' . html($item['author_name']) . '</h4>';
 		$output .= '<span class="time">' . date_when($item['date_created']) . '</span>';
 		$output .= '</div>';
-		$output .= '<p>' . hc($item['message']) . '</p>';
+		$output .= '<p>' . html($item['message']) . '</p>';
 		$output .= '<a href="#" class="reply">' . __('Reply') . '</a>';
 
 		if(!empty($item['children'])) {

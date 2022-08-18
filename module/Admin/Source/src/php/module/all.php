@@ -40,9 +40,9 @@
 											<td><?= $module['name'] ?></td>
 											<td>
 												<?php if(strlen($module['description']) > 50): ?>
-													<span data-bs-toggle="tooltip" title="<?= hc($module['description']) ?>"><?= hc(substr($module['description'], 0, 50)) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= html($module['description']) ?>"><?= html(substr($module['description'], 0, 50)) ?>...</span>
 												<?php else: ?>
-													<?= hc($module['description']) ?>
+													<?= html($module['description']) ?>
 												<?php endif; ?>
 											</td>
 											<td>v<?= $module['version'] ?></td>

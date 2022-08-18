@@ -33,7 +33,7 @@ abstract class Controller {
 		$this->page->seo_description = $this->route['page']->seo_description ?? null;
 		$this->page->seo_keywords = $this->route['page']->seo_keywords ?? null;
 		$this->page->seo_image = $this->route['page']->seo_image ?? ($this->route['page']->image ??$this->setting->site->logo_public);
-		$this->page->no_index_no_follow = $this->route['page']->no_index_no_follow ?? true;
+		$this->page->no_index_no_follow = $this->route['page']->no_index_no_follow ?? false;
 
 		$this->view->setData(['page' => $this->page]);
 

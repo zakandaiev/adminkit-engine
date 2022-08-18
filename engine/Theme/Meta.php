@@ -82,15 +82,21 @@ class Meta {
 	}
 
 	private static function analytics_gtag() {
-		return '
-			<script async src="https://www.googletagmanager.com/gtag/js?id=' . site('analytics_gtag') . '"></script>
-			<script>
-				window.dataLayer = window.dataLayer || [];
-				function gtag(){dataLayer.push(arguments);}
-				gtag("js", new Date());
-				gtag("config", "' . site('analytics_gtag') . '");
-			</script>
-		';
+		$analytics_gtag = '';
+
+		if(!empty(site('analytics_gtag'))) {
+			$analytics_gtag = '
+				<script async src="https://www.googletagmanager.com/gtag/js?id=' . site('analytics_gtag') . '"></script>
+				<script>
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag("js", new Date());
+					gtag("config", "' . site('analytics_gtag') . '");
+				</script>
+			';
+		}
+
+		return $analytics_gtag;
 	}
 
 	public static function all($page_obj) {

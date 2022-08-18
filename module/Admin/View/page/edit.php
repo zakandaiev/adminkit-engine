@@ -101,7 +101,7 @@
 													include_once $fieldset;
 												}
 											?>
-											<textarea class="hidden" name="custom_fields"><?= hc(json_encode($page_edit->custom_fields)) ?></textarea>
+											<textarea class="hidden" name="custom_fields"><?= html(json_encode($page_edit->custom_fields)) ?></textarea>
 										</div>
 									<?php endif; ?>
 								</div>

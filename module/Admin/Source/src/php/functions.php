@@ -128,7 +128,7 @@ function getNotificationHTML($notification, $user) {
 
 			$action_name = sprintf(__('leaved comment on %s'), $page_title);
 
-			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->message) . '</div>';
+			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . html($data->message) . '</div>';
 
 			break;
 		}
@@ -141,7 +141,7 @@ function getNotificationHTML($notification, $user) {
 
 			$action_name = sprintf(__('replied to your comment on %s'), $page_title);
 
-			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . hc($data->message) . '</div>';
+			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . html($data->message) . '</div>';
 
 			break;
 		}
@@ -304,7 +304,7 @@ function table_actions($edit_url = null, $delete_attributes = [], $icons = []) {
 				continue;
 			}
 
-			$delete .= ' ' . $attribute . '="' . hc($value) . '"';
+			$delete .= ' ' . $attribute . '="' . html($value) . '"';
 		}
 
 		$delete .= ' href="#"><i data-feather="' . $delete_icon . '"></i></a>';

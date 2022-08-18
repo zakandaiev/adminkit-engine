@@ -15,7 +15,7 @@
 					</div>
 
 					<div class="col-auto ms-auto text-end mt-n1">
-						<a href="<?= site('url_language') ?>/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= hc(Request::get('back')) ?><?php endif; ?>" class="btn btn-secondary me-2"><?= __('Add category') ?></a>
+						<a href="<?= site('url_language') ?>/admin/page/add?is_category<?php if(Request::has('back')): ?>&category=<?= html(Request::get('back')) ?><?php endif; ?>" class="btn btn-secondary me-2"><?= __('Add category') ?></a>
 						<a href="<?= site('url_language') ?>/admin/page/add" class="btn btn-primary"><?= __('Add page') ?></a>
 					</div>
 				</div>
@@ -23,7 +23,7 @@
 				<div class="card">
 					<?php if(Request::has('back')): ?>
 						<div class="card-header">
-							<h5 class="card-title mb-0"><a href="<?= site('url_language') ?><?= hc(Request::get('back')) ?>"><i class="align-middle" data-feather="arrow-left"></i> <?= __('Back') ?></a></h5>
+							<h5 class="card-title mb-0"><a href="<?= site('url_language') ?><?= html(Request::get('back')) ?>"><i class="align-middle" data-feather="arrow-left"></i> <?= __('Back') ?></a></h5>
 						</div>
 					<?php endif; ?>
 					<div class="card-body">

@@ -116,7 +116,7 @@ function placeholder_avatar($path) {
 	return site(__FUNCTION__);
 }
 
-############################# FORMAT #############################
+############################# DATE #############################
 function format_date($date = null, $format = null) {
 	$timestamp = $date ?? time();
 	$timestamp = is_numeric($timestamp) ? $timestamp : strtotime($timestamp);
@@ -194,16 +194,19 @@ function print_time_zones($selected = '') {
 	}
 }
 
-############################# HTML #############################
-function hc($text = ''){
+############################# TEXT #############################
+function html($text = ''){
 	return htmlspecialchars($text ?? '');
 }
 
-function us($url) {
-	return str_replace(' ', '%20', $url);
+function url($url = '') {
+	return urlencode($url ?? '');
 }
 
-############################# TEXT #############################
+function tel($tel = '') {
+	return preg_replace('/[^\d+]+/m', '', $tel ?? '');
+}
+
 function cyr_to_lat($text) {
 	$gost = [
 		'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd',

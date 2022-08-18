@@ -14,7 +14,7 @@
 					<p class="lead"><?= $author->about ?></p>
 					<ul class="author-social">
 						<?php foreach($author_socials as $social): ?>
-							<li><a href="<?= us(hc($social->link)) ?>" target="_blank"><i class="fa fa-<?= $social->type ?>"></i></a></li>
+							<li><a href="<?= url(html($social->link)) ?>" target="_blank"><i class="fa fa-<?= $social->type ?>"></i></a></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>

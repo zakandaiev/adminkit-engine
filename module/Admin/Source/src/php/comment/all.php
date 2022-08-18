@@ -33,9 +33,9 @@
 											<td><?= filter_link('author', $comment->author, $comment->author_name) ?></td>
 											<td>
 												<?php if(strlen($comment->message) > 50): ?>
-													<span data-bs-toggle="tooltip" title="<?= hc($comment->message) ?>"><?= hc(substr($comment->message, 0, 50)) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= html($comment->message) ?>"><?= html(substr($comment->message, 0, 50)) ?>...</span>
 												<?php else: ?>
-													<?= hc($comment->message) ?>
+													<?= html($comment->message) ?>
 												<?php endif; ?>
 											</td>
 											<td><a href="<?= site('url_language') ?>/<?= $comment->page_url ?>" target="_blank"><?= $comment->page_title ?></a></td>
