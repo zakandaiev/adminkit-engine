@@ -9,6 +9,7 @@ return [
 		'coordinate_x' => $coordinate_x,
 		'coordinate_y' => $coordinate_y,
 		'hours' => $hours,
-		'email' => $email
+		'email' => $email,
+		'phones' => $phones
 	]
 ];

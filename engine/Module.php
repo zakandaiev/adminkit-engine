@@ -150,11 +150,16 @@ class Module {
 	}
 
 	public static function route($method, $uri, $controller, $options = []) {
-		list($route_controller, $route_action) = explode('@', $controller, 2);
+		if(is_callable($controller)) {
+			$route_controller = $controller;
+			$route_action = null;
+		} else {
+			list($route_controller, $route_action) = explode('@', $controller, 2);
 
-		if(empty($route_controller) || empty($route_action)) {
-			throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$module_name));
-			return false;
+			if(empty($route_controller) || empty($route_action)) {
+				throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$module_name));
+				return false;
+			}
 		}
 
 		$page = self::formatRouteData('page', @$options['page']);

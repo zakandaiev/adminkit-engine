@@ -174,6 +174,7 @@ INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('site', 'logo_admin', NULL),
 ('site', 'logo_public', NULL),
 ('site', 'logo_alt', NULL),
+('site', 'icon', NULL),
 ('site', 'analytics_gtag', NULL),
 ('site', 'pagination_limit', '10'),
 ('site', 'placeholder_avatar', NULL),
@@ -184,6 +185,7 @@ INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('contact', 'coordinate_y', NULL),
 ('contact', 'hours', NULL),
 ('contact', 'email', '%contact_email%'),
+('contact', 'phones', NULL),
 ('optimization', 'group_css', NULL),
 ('optimization', 'group_js', NULL),
 ('optimization', 'cache_db', NULL);

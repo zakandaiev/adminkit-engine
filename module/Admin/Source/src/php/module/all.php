@@ -40,7 +40,7 @@
 											<td><?= $module['name'] ?></td>
 											<td>
 												<?php if(strlen($module['description']) > 50): ?>
-													<span data-bs-toggle="tooltip" title="<?= html($module['description']) ?>"><?= html(substr($module['description'], 0, 50)) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= html($module['description']) ?>"><?= html(excerpt($module['description'], 50)) ?>...</span>
 												<?php else: ?>
 													<?= html($module['description']) ?>
 												<?php endif; ?>

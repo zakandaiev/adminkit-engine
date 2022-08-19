@@ -1,6 +1,6 @@
 const server = () => {
 	$.browserSync.init({
-		proxy: "cms",
+		proxy: "admin.kit",
 		/*server: {
 			baseDir: $.path.root
 		},*/

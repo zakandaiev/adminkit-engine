@@ -27,6 +27,8 @@ class ForeignForm {
 		this.store.setAttribute('type', 'hidden');
 		this.store.classList.add('hidden');
 
+		this.store.textContent = '';
+
 		return true;
 	}
 
@@ -40,7 +42,7 @@ class ForeignForm {
 
 		setTimeout(() => {
 			this.inputs.forEach(input => {
-				if(input.type === 'file') {
+				if (input.type === 'file') {
 					this.initFileInput(input);
 				}
 			});
@@ -99,18 +101,18 @@ class ForeignForm {
 		const add = this.submit.querySelector('.add');
 		const edit = this.submit.querySelector('.edit');
 
-		if(this.is_edit) {
-			if(add) {
+		if (this.is_edit) {
+			if (add) {
 				add.style.display = 'none';
 			}
-			if(edit) {
+			if (edit) {
 				edit.style.display = 'initial';
 			}
 		} else {
-			if(add) {
+			if (add) {
 				add.style.display = 'initial';
 			}
-			if(edit) {
+			if (edit) {
 				edit.style.display = 'none';
 			}
 		}
@@ -158,7 +160,7 @@ class ForeignForm {
 	}
 
 	populateTable() {
-		if(!this.value) {
+		if (!this.value) {
 			return false;
 		}
 
@@ -180,7 +182,7 @@ class ForeignForm {
 			let obj = {};
 
 			tr.querySelectorAll('td').forEach(td => {
-				if(!td.hasAttribute('data-name')) {
+				if (!td.hasAttribute('data-name')) {
 					return false;
 				}
 				obj[td.getAttribute('data-name')] = td.getAttribute('data-value');
@@ -239,7 +241,7 @@ class ForeignForm {
 	}
 
 	buttonClick(type, mixed = null) {
-		switch(type) {
+		switch (type) {
 			case 'add': {
 				this.is_edit = false;
 
@@ -278,19 +280,19 @@ class ForeignForm {
 			case 'submit': {
 				mixed.preventDefault();
 
-				if(!this.is_edit) {
+				if (!this.is_edit) {
 					this.active_row = this.createRow();
 				}
 
 				const input_values = this.getInputsValue();
 
-				if(!input_values) {
+				if (!input_values) {
 					return false;
 				}
 
 				this.updateRow(input_values);
 
-				if(!this.is_edit) {
+				if (!this.is_edit) {
 					this.tbody.appendChild(this.active_row);
 				}
 
@@ -304,14 +306,14 @@ class ForeignForm {
 	}
 
 	updateRow(value) {
-		if(!value) {
+		if (!value) {
 			return false;
 		}
 
 		this.inputs.forEach(input => {
 			const tcol = this.active_row.querySelector(`[data-name="${input.name}"]`);
 
-			if(!tcol) {
+			if (!tcol) {
 				return false;
 			}
 
@@ -324,21 +326,21 @@ class ForeignForm {
 	setColValue(input, tcol, value = null) {
 		let output = value;
 
-		switch(input.type) {
+		switch (input.type) {
 			case 'file': {
 				output = '';
 
 				let files = [];
 
-				if(input.pond) {
+				if (input.pond) {
 					input.pond.getFiles().forEach(file => {
-						if([6,8].includes(file.status)) {
+						if ([6, 8].includes(file.status)) {
 							return false;
 						}
 						files.push(file.serverId);
 					});
 				}
-				if(value && value[0] === '[') {
+				if (value && value[0] === '[') {
 					files = files.concat(JSON.parse(value));
 				}
 
@@ -347,9 +349,9 @@ class ForeignForm {
 				files.forEach(file => {
 					const file_name = file;
 					const file_url = BASE_URL + '/' + file_name;
-					const is_image = ['jpg','jpeg','png','gif','svg','webp'].includes(file_name?.split('.').pop().toLowerCase());
+					const is_image = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(file_name?.split('.').pop().toLowerCase());
 
-					if(is_image) {
+					if (is_image) {
 						output += `<a href="${file_url}" target="_blank" data-fancybox="${gallery_uid}">${SETTING.icon.image}</a>`;
 					} else {
 						output += `<a href="${file_url}" target="_blank">${SETTING.icon.file}</a>`;
@@ -366,7 +368,7 @@ class ForeignForm {
 				let selected = input?.slim?.selected() ?? (value ?? '');
 
 				const option = input.querySelector('option[value="' + selected + '"]');
-				if(option) output = option.text;
+				if (option) output = option.text;
 
 				value = selected;
 
@@ -379,7 +381,7 @@ class ForeignForm {
 
 				selected.forEach(sval => {
 					const option = input.querySelector('option[value="' + sval + '"]');
-					if(option) svalues.push(option.text);
+					if (option) svalues.push(option.text);
 				});
 
 				output = svalues.join(', ');
@@ -389,7 +391,7 @@ class ForeignForm {
 				break;
 			}
 			case 'checkbox': {
-				if(input.checked) {
+				if (input.checked) {
 					output = SETTING.icon.checkbox_true ?? '+';
 				} else {
 					output = SETTING.icon.checkbox_false ?? '-';
@@ -428,7 +430,7 @@ class ForeignForm {
 	populateInputs() {
 		this.active_row.querySelectorAll('[data-name]').forEach(tcol => {
 			this.inputs.forEach(input => {
-				if(input.name === tcol.getAttribute('data-name')) {
+				if (input.name === tcol.getAttribute('data-name')) {
 					this.setInputValue(input, tcol.getAttribute('data-value'));
 				}
 			});
@@ -438,11 +440,11 @@ class ForeignForm {
 	}
 
 	setInputValue(input, value = null) {
-		switch(input.type) {
+		switch (input.type) {
 			case 'file': {
 				let files = [];
 
-				if(value) {
+				if (value) {
 					JSON.parse(value).forEach(file => {
 						let file_obj = {
 							source: file,
@@ -452,7 +454,7 @@ class ForeignForm {
 							}
 						};
 
-						if(pond_input_data.allowImagePreview(input)) {
+						if (pond_input_data.allowImagePreview(input)) {
 							file_obj.options.metadata.poster = BASE_URL + '/' + file;
 						}
 
@@ -470,8 +472,8 @@ class ForeignForm {
 			case 'select-multiple': {
 				input.selectedIndex = value ?? 0;
 
-				if(!input.hasAttribute('data-native')) {
-					if(input.type === 'select-multiple') {
+				if (!input.hasAttribute('data-native')) {
+					if (input.type === 'select-multiple') {
 						value = JSON.parse(value);
 						value = value ?? [];
 					}
@@ -481,7 +483,7 @@ class ForeignForm {
 				break;
 			}
 			case 'checkbox': {
-				if(value && value == 'true') {
+				if (value && value == 'true') {
 					input.checked = true;
 				} else {
 					input.checked = false;
@@ -490,7 +492,7 @@ class ForeignForm {
 				break;
 			}
 			case 'textarea': {
-				if(input.classList.contains('wysiwyg')) {
+				if (input.classList.contains('wysiwyg')) {
 					input.quill.root.innerHTML = value;
 				} else {
 					input.value = value;
@@ -511,9 +513,9 @@ class ForeignForm {
 		this.inputs.forEach(input => {
 			const value_lengh = input.value.replace(/(<([^>]+)>)/gi, '').length;
 
-			if(input.hasAttribute('data-required') && value_lengh <= 0) {
+			if (input.hasAttribute('data-required') && value_lengh <= 0) {
 				const sprintf = (str, ...argv) => !argv.length ? str :
-				sprintf(str = str.replace(sprintf.token||"%", argv.shift()), ...argv);
+					sprintf(str = str.replace(sprintf.token || "%", argv.shift()), ...argv);
 
 				is_valid = false;
 				let required_message = SETTING?.foreignForm?.required_message ?? '% is required';
@@ -530,7 +532,7 @@ class ForeignForm {
 }
 
 document.querySelectorAll('[class*="foreign-form"]').forEach(element => {
-	if(element.classList.contains('foreign-form')) {
+	if (element.classList.contains('foreign-form')) {
 		new ForeignForm(element);
 	}
 });

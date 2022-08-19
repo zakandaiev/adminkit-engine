@@ -44,6 +44,9 @@
 										<label class="form-label"><?= __('Email') ?></label>
 										<input type="text" name="email" placeholder="<?= __('Email') ?>" value="<?= $settings->email ?>" class="form-control" required>
 									</div>
+									<div class="mb-3">
+										<?= Theme::block('form-phones') ?>
+									</div>
 									<button type="submit" class="btn btn-primary"><?= __('Save') ?></button>
 								</form>
 							</div>

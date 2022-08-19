@@ -99,6 +99,39 @@ class Meta {
 		return $analytics_gtag;
 	}
 
+	private static function favicon() {
+		$favicon = '
+			<link rel="icon" type="image/x-icon" sizes="any" href="' . Asset::url() . '/favicon.ico">
+			<link rel="icon" type="image/png" href="' . Asset::url() . '/favicon.png">
+			<link rel="icon" type="image/svg+xml" href="' . Asset::url() . '/favicon.svg" type="image/svg+xml">
+			<link rel="apple-touch-icon" href="' . Asset::url() . '/favicon.png">
+		';
+
+		if(empty(site('icon'))) {
+			return $favicon;
+		}
+
+		switch(file_extension(site('icon'))) {
+			case 'ico': {
+				$favicon = '<link rel="icon" type="image/x-icon" sizes="any" href="' . site('url') . '/' . site('icon') . '">';
+				break;
+			}
+			case 'png': {
+				$favicon = '
+					<link rel="icon" type="image/png" href="' . site('url') . '/' . site('icon') . '">
+					<link rel="apple-touch-icon" href="' . site('url') . '/' . site('icon') . '">
+				';
+				break;
+			}
+			case 'svg': {
+				$favicon = '<link rel="icon" type="image/svg+xml"" href="' . site('url') . '/' . site('icon') . '">';
+				break;
+			}
+		}
+
+		return $favicon;
+	}
+
 	public static function all($page_obj) {
 		$page = clone $page_obj;
 
@@ -113,10 +146,7 @@ class Meta {
 		$page->seo_description = self::seo_description($page);
 		$page->seo_keywords = self::seo_keywords($page);
 
-		$page->favicon = Asset::url() . '/favicon.ico';
-		$page->favicon_svg = Asset::url() . '/favicon.svg';
-		$page->favicon_png = Asset::url() . '/favicon.png';
-
+		$page->favicon = self::favicon();
 		$page->setting = self::setting();
 		$page->analytics_gtag = self::analytics_gtag();
 
@@ -150,10 +180,7 @@ class Meta {
 
 			<link rel="image_src" href="' . $page->seo_image . '">
 
-			<link rel="icon" href="' . $page->favicon . '" sizes="any">
-			<link rel="icon" href="' . $page->favicon_svg . '" type="image/svg+xml">
-			<link rel="apple-touch-icon" href="' . $page->favicon_png . '">
-
+			' . $page->favicon . '
 			' . $page->setting . '
 			' . $page->analytics_gtag . '
 		';

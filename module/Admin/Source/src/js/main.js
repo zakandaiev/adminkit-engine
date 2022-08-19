@@ -19,6 +19,7 @@ console.log('%cMade by Zakandaiev', 'background:#222e3c;color:#fff;padding:10px;
 
 // PLUGINS
 @@include("plugin/filepond.js")
+@@include("plugin/imask.js")
 @@include("plugin/quill.js")
 @@include("plugin/slimselect.js")
 @@include("plugin/sortable.js")

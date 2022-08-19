@@ -236,7 +236,6 @@ function installSEO($data) {
 	// ROBOTS
 	$robots_txt = 'User-agent: *' . PHP_EOL;
 	$robots_txt .= 'Disallow: /404' . PHP_EOL;
-	$robots_txt .= 'Disallow: /admin' . PHP_EOL;
 	$robots_txt .= 'Disallow: /admin/' . PHP_EOL . PHP_EOL;
 	$robots_txt .= 'Sitemap: ' . $site_url . '/sitemap.xml';
 	file_put_contents(ROOT_DIR . '/robots.txt', $robots_txt, LOCK_EX);
@@ -336,7 +335,7 @@ function installSEO($data) {
 
 										if(tableExists($connection, $_POST['db_prefix'] . '_setting') == 1) {
 											echo '<h2>Error</h2>';
-											echo '<p>Удалите все таблицы в БД <b>' . $_POST['db_name'] . '</b> и попробуйте снова.</p>';
+											echo '<p>Remove all tables from DB <b>' . $_POST['db_name'] . '</b> and try again.</p>';
 											echo '<a href="/install" class="btn btn-lg btn-primary w-100">Try again</a>';
 											exit;
 										}

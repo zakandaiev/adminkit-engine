@@ -30,6 +30,10 @@ $logo_public = [
 $logo_alt = [
 	'file' => true
 ];
+$icon = [
+	'file' => true,
+	'extensions' => ['png','svg','ico']
+];
 $placeholder_avatar = [
 	'file' => true
 ];
@@ -85,6 +89,9 @@ $hours = [
 $email = [
 	'email' => true,
 	'email_message' => __('Email format is invalid')
+];
+$phones = [
+	'json' => true
 ];
 
 ############################# OPTIMIZATION #############################

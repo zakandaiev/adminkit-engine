@@ -13,6 +13,7 @@ Asset::js('js/toast', 'defer');
 Asset::js('js/adminkit', 'defer');
 Asset::js('js/fancybox', 'defer');
 Asset::js('js/filepond', 'defer');
+Asset::js('js/imask', 'defer');
 Asset::js('js/quill', 'defer');
 Asset::js('js/slimselect', 'defer');
 Asset::js('js/sortable', 'defer');

@@ -159,6 +159,11 @@ class Router {
 	}
 
 	private static function setController() {
+		if(is_callable(self::$route['controller'])) {
+			self::$route['controller'](self::$route);
+			return true;
+		}
+
 		$controller_class = Path::class('controller') . '\\' . ucfirst(self::$route['controller']);
 
 		if(class_exists($controller_class)) {

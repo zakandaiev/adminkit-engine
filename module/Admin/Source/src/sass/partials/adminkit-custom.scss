@@ -2392,3 +2392,7 @@ footer.footer {
 		min-width: 74px;
 	}
 }
+
+.table thead a {
+	color: var(--bs-table-color);
+}

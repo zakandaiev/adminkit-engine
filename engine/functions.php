@@ -255,6 +255,29 @@ function word($text) {
 	return $word;
 }
 
+function excerpt($text, $maxchar, $end = "...") {
+	if(strlen($text) > $maxchar) {
+		$words = preg_split('/\s/', $text);
+		$output = '';
+		$i = 0;
+		while(1) {
+			$length = strlen($output)+strlen($words[$i]);
+			if($length > $maxchar) {
+				break;
+			}
+			else {
+				$output .= ' ' . $words[$i];
+				++$i;
+			}
+		}
+		$output .= $end;
+	}
+	else {
+		$output = $text;
+	}
+	return $output;
+}
+
 ############################# LANGUAGE #############################
 function __($key) {
 	return Language::translate($key);

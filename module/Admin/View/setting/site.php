@@ -39,6 +39,12 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group mb-3 filepond--no-grid">
+												<label class="form-label"><?= __('Icon') ?></label>
+												<input type="file" accept="image/png,image/x-icon,image/svg+xml" name="icon" data-value='<?= Form::populateFiles($settings->icon) ?>'>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group mb-3 filepond--no-grid">
 												<label class="form-label"><?= __('Placeholder avatar') ?></label>
 												<input type="file" accept="image/*" name="placeholder_avatar" data-value='<?= Form::populateFiles($settings->placeholder_avatar) ?>'>
 											</div>

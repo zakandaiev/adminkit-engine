@@ -8,6 +8,7 @@ return [
 		'logo_admin' => $logo_admin,
 		'logo_public' => $logo_public,
 		'logo_alt' => $logo_alt,
+		'icon' => $icon,
 		'placeholder_avatar' => $placeholder_avatar,
 		'placeholder_image' => $placeholder_image,
 		'name' => $name,
