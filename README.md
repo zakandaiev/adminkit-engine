@@ -21,7 +21,5 @@
 * Engine: Statement class - use regex to auto-insert Filter parts and create query to count total pages for Pagination
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Modules: refactor all SQL queries
-* Modules: languages from every module + cache
 * API: create API module
 * Admin: data-behavior selected value behavior features
-* Public: widget - posts cal
