@@ -34,14 +34,14 @@ class Database {
 
 		extract(DATABASE);
 
-		if(!isset($host) || !isset($name) || !isset($username) || !isset($password) || !isset($charset) || !isset($prefix) || !isset($options)) {
+		if(!isset($host) || !isset($name) || !isset($username) || !isset($password) || !isset($charset) || !isset($prefix)) {
 			throw new Exception('Database config is invalid');
 		}
 
 		$dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', $host, $name, $charset);
 
 		try {
-			$connection = new PDO($dsn, $username, $password, $options);
+			$connection = new PDO($dsn, $username, $password, @$options);
 		} catch(PDOException $error) {
 			throw new Exception($error->getMessage());
 		}
