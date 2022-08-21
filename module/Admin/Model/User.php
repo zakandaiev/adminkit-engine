@@ -5,14 +5,6 @@ namespace Module\Admin\Model;
 use Engine\Database\Statement;
 
 class User {
-	public function countUsers() {
-		$sql = 'SELECT COUNT(*) FROM {user}';
-
-		$count = new Statement($sql);
-
-		return $count->filter('User', 'WHERE', true)->execute()->fetchColumn();
-	}
-
 	public function getUsers() {
 		$sql = '
 			SELECT
@@ -24,7 +16,7 @@ class User {
 
 		$users = new Statement($sql);
 
-		$users = $users->filter('User', 'WHERE')->paginate($this->countUsers())->execute()->fetchAll();
+		$users = $users->filter('User', 'WHERE')->paginate()->execute()->fetchAll();
 
 		return $users;
 	}

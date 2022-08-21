@@ -5,14 +5,6 @@ namespace Module\Admin\Model;
 use Engine\Database\Statement;
 
 class Comment extends \Engine\Model {
-	public function countComments() {
-		$sql = 'SELECT count(*) FROM {comment}';
-
-		$count = new Statement($sql);
-
-		return $count->filter('Page', 'WHERE', true)->execute()->fetchColumn();
-	}
-
 	public function countUnapprovedComments() {
 		$sql = 'SELECT count(*) FROM {comment} WHERE is_approved IS false';
 
@@ -46,7 +38,7 @@ class Comment extends \Engine\Model {
 
 		$comments = new Statement($sql);
 
-		$comments = $comments->filter('Comment')->paginate($this->countComments())->execute(['language' => site('language')])->fetchAll();
+		$comments = $comments->filter('Comment')->paginate()->execute(['language' => site('language')])->fetchAll();
 
 		return $comments;
 	}

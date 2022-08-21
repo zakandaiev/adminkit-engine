@@ -17,25 +17,6 @@ class Page extends \Engine\Model {
 		return true;
 	}
 
-	public function countPages() {
-		$sql = '
-			SELECT
-				COUNT(*)
-			FROM
-				{page} t_page
-			INNER JOIN
-				{page_translation} t_page_translation
-			ON
-				t_page.id = t_page_translation.page_id
-			WHERE
-				(SELECT count(*) FROM {page_category} WHERE page_id=t_page.id) = 0
-		';
-
-		$statement = new Statement($sql);
-
-		return $statement->filter('Page', 'AND', true)->execute()->fetchColumn();
-	}
-
 	public function getPages() {
 		$sql = '
 			SELECT
@@ -58,35 +39,13 @@ class Page extends \Engine\Model {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->filter('Page')->paginate($this->countPages())->execute(['language' => site('language')])->fetchAll();
+		$pages = $pages->filter('Page')->paginate()->execute(['language' => site('language')])->fetchAll();
 
 		foreach($pages as $key => $page) {
 			$page->translations = !empty($page->translations) ? explode(',', $page->translations) : [];
 		}
 
 		return $pages;
-	}
-	public function countPagesInCategory($id) {
-		$sql = '
-			SELECT
-				COUNT(*)
-			FROM
-				{page} t_page
-			INNER JOIN
-				{page_translation} t_page_translation
-			ON
-				t_page.id = t_page_translation.page_id
-			INNER JOIN
-				{page_category} t_page_category
-			ON
-				t_page.id = t_page_category.page_id
-			WHERE
-				t_page_category.category_id = :category_id
-		';
-
-		$statement = new Statement($sql);
-
-		return $statement->filter('Page', 'AND', true)->execute(['category_id' => $id])->fetchColumn();
 	}
 
 	public function getPagesByCategory($id) {
@@ -115,7 +74,7 @@ class Page extends \Engine\Model {
 
 		$pages = new Statement($sql);
 
-		$pages = $pages->filter('Page')->paginate($this->countPagesInCategory($id))->execute(['category_id' => $id, 'language' => site('language')])->fetchAll();
+		$pages = $pages->filter('Page')->paginate()->execute(['category_id' => $id, 'language' => site('language')])->fetchAll();
 
 		foreach($pages as $key => $page) {
 			$page->translations = !empty($page->translations) ? explode(',', $page->translations) : [];

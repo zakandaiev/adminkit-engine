@@ -18,14 +18,12 @@
 5. Create & enjoy ;)
 
 ## ToDo:
-* Engine: Statement class - use regex to auto-insert Filter parts and create query to count total pages for Pagination
+* Engine: Statement class - use regex to create more optimized query for counting total rows for Pagination
 * Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
-* Engine: load tranlations from current module + engine, not all modules like now
+* Engine: load tranlations from current module + engine, but not from all modules like now
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
 * API: create API module
 * Admin: data-behavior selected value behavior features
-* Admin: Comments -> Model for what language binding?
 * Admin: localize quill editor
 * Public: add pagination & filter to Page model
-* Public: add user groups to User

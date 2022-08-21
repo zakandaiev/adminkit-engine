@@ -7,14 +7,6 @@ use Engine\Module;
 use Engine\User;
 
 class Group {
-	public function countGroups() {
-		$sql = 'SELECT COUNT(*) FROM {group}';
-
-		$count = new Statement($sql);
-
-		return $count->filter('Group', 'WHERE', true)->execute()->fetchColumn();
-	}
-
 	public function getGroups() {
 		$sql = '
 			SELECT
@@ -27,7 +19,7 @@ class Group {
 
 		$groups = new Statement($sql);
 
-		$groups = $groups->filter('Group', 'WHERE')->paginate($this->countGroups())->execute()->fetchAll();
+		$groups = $groups->filter('Group', 'WHERE')->paginate()->execute()->fetchAll();
 
 		return $groups;
 	}

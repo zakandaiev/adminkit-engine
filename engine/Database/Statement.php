@@ -16,6 +16,8 @@ class Statement {
 	private $prefix;
 	private $statement;
 	private $binding = [];
+	private $is_paginating = false;
+	private $pagination_total;
 
 	public function __construct(string $sql) {
 		$this->prefix = DATABASE['prefix'];
@@ -41,7 +43,6 @@ class Statement {
 			$sql = !empty($filter->sql) ? "{$this->sql} $straight {$filter->sql}" : $this->sql;
 		} else {
 			$sql = !empty($filter->sql) ? "WHERE {$filter->sql}" : '';
-
 			$sql = "SELECT * FROM ({$this->sql}) t_filter $sql";
 		}
 
@@ -64,15 +65,37 @@ class Statement {
 		return $this;
 	}
 
-	public function paginate($total_rows = null, $limit = null, $offset = null) {
-		$pagination = new Pagination($total_rows);
+	public function paginate($total = null) {
+		if(isset($total)) {
+			$this->pagination_total = $total;
+		}
 
-		$this->sql .= ' LIMIT :limit OFFSET :offset';
-
-		$this->addBinding('limit', $limit ?? $pagination->limit);
-		$this->addBinding('offset', $offset ?? $pagination->offset);
+		$this->is_paginating = true;
 
 		return $this;
+	}
+
+	private function initializePagination() {
+		if(!$this->is_paginating) {
+			return false;
+		}
+
+		if(!isset($this->pagination_total)) {
+			$total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
+
+			$total = new Statement($total);
+
+			$this->pagination_total = $total->execute($this->binding)->fetchColumn();
+		}
+
+		$pagination = new Pagination($this->pagination_total);
+
+		$this->sql = rtrim($this->sql, ';') . ' LIMIT :limit OFFSET :offset';
+
+		$this->addBinding('limit', $pagination->limit);
+		$this->addBinding('offset', $pagination->offset);
+
+		return true;
 	}
 
 	public function execute($params = []) {
@@ -81,8 +104,9 @@ class Statement {
 			return $this;
 		}
 
-		$this->prepare();
 		$this->addBinding($params);
+		$this->initializePagination();
+		$this->prepare();
 		$this->bind();
 
 		try {
@@ -107,7 +131,7 @@ class Statement {
 		$is_cached = false;
 
 		if(Module::$name === 'Public' && Setting::get('optimization')->cache_db == 'true') {
-			if(preg_match('/^[\s]*SELECT/i', $this->sql)) {
+			if(preg_match('/^[\s]*SELECT/mi', $this->sql)) {
 				$is_cached = true;
 			}
 		}
