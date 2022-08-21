@@ -1,9 +1,9 @@
 # AdminKit Engine
 * Designed for developers
-* PHP based flexible framework + CMS modules
+* PHP based flexible framework with CMS-ready modules
 * MVC pattern
 * OOP code style
-* Module system
+* Modular system
 * Multilingual
 
 ## Web environment requirements
@@ -19,7 +19,6 @@
 
 ## ToDo:
 * Engine: Statement class - use regex to create more optimized query for counting total rows for Pagination
-* Engine: generate an hash instead of AI int to ids - MD5(CONCAT(UNIX_TIMESTAMP(), RAND()))
 * Engine: load tranlations from current module + engine, but not from all modules like now
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
