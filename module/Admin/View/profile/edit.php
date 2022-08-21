@@ -88,7 +88,7 @@
 												<div class="col-xs-12 col-md-6">
 													<div class="mb-3">
 														<label class="form-label"><?= __('Phone') ?></label>
-														<input type="text" name="phone" placeholder="<?= __('Phone') ?>" value="<?= $user->phone ?>" class="form-control" minlength="8" maxlength="100">
+														<input type="tel" data-mask="tel" placeholder="<?= __('Phone') ?>" value="<?= $user->phone ?>" class="form-control" minlength="8" maxlength="100">
 													</div>
 												</div>
 												<div class="col-xs-12 col-md-6">

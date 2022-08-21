@@ -152,7 +152,7 @@ function getNotificationHTML($notification, $user) {
 		}
 	}
 
-	if(is_callable(notification($notification->type, 'html'))) {
+	if(is_closure(notification($notification->type, 'html'))) {
 		$action_name = @notification($notification->type, 'html')($data)->name;
 		$action_body = @notification($notification->type, 'html')($data)->body;
 	}

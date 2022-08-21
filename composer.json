@@ -10,7 +10,8 @@
 	"autoload": {
 		"psr-4": {
 			"Engine\\": "engine",
-			"Module\\": "module"
+			"Module\\": "module",
+			"Theme\\": "theme"
 		},
 		"files": [
 			"config.php",

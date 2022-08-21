@@ -6,7 +6,7 @@ class Hook {
 	private static $actions = [];
 
 	public static function register($name, $function) {
-		if(is_string($name) && !empty($name) && is_callable($function)) {
+		if(is_string($name) && !empty($name) && is_closure($function)) {
 			self::$actions[$name][] = $function;
 
 			return true;

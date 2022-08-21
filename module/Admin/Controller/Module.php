@@ -43,13 +43,13 @@ class Module extends AdminController {
 			$this->view->error('404');
 		}
 
-		$order = (!empty(Request::$post['order']) || Request::$post['order'] == '0') ? Request::$post['order'] : null;
+		$priority = (!empty(Request::$post['priority']) || Request::$post['priority'] == '0') ? Request::$post['priority'] : null;
 		$version = !empty(Request::$post['version']) ? Request::$post['version'] : null;
 		$extends = !empty(Request::$post['extends']) ? Request::$post['extends'] : null;
 		$description = !empty(Request::$post['description']) ? Request::$post['description'] : null;
 		$is_enabled = @Request::$post['is_enabled'] === 'on' ? true : false;
 
-		ModuleEngine::update('order', $order, $module['name']);
+		ModuleEngine::update('priority', $priority, $module['name']);
 		ModuleEngine::update('version', $version, $module['name']);
 		ModuleEngine::update('extends', $extends, $module['name']);
 		ModuleEngine::update('description', $description, $module['name']);

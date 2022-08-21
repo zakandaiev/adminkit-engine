@@ -43,7 +43,7 @@
 		"gulp-newer": "^1.4.0",
 		"gulp-sass": "^5.1.0",
 		"gulp-terser": "^2.1.0",
-		"sass": "^1.54.4"
+		"sass": "^1.54.5"
 	},
 	"dependencies": {
 		"@adminkit/core": "^3.3.0",

@@ -57,9 +57,9 @@ class Module {
 		}
 
 		usort($modules, function ($module1, $module2) {
-			if(isset($module1['order']) && isset($module2['order'])) {
-				return $module1['order'] <=> $module2['order'];
-			} else if(isset($module2['order'])) {
+			if(isset($module1['priority']) && isset($module2['priority'])) {
+				return $module2['priority'] <=> $module1['priority'];
+			} else if(isset($module1['priority'])) {
 				return 1;
 			}
 			return 0;
@@ -150,7 +150,7 @@ class Module {
 	}
 
 	public static function route($method, $uri, $controller, $options = []) {
-		if(is_callable($controller)) {
+		if(is_closure($controller)) {
 			$route_controller = $controller;
 			$route_action = null;
 		} else {
@@ -206,8 +206,6 @@ class Module {
 		if(!file_exists($path)) {
 			return false;
 		}
-
-		self::uninstall($name);
 
 		// INSTALL SCRIPT
 		$path_install = $path . '/install.php';

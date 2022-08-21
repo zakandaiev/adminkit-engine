@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'order' => 10,
+	'priority' => 10,
 	'version' => '1.0.0',
 	'extends' => 'Admin',
 	'description' => 'Dummy module to manage Shop from Admin',

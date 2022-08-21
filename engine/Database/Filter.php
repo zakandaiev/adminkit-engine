@@ -61,9 +61,11 @@ class Filter {
 		$order = [];
 
 		foreach($this->filter as $key => $type) {
-			$filter_parts = explode('@', $key);
+			$filter_parts = explode('@', $key, 2);
 
-			$request_key = array_shift($filter_parts);
+			$request_key = $filter_parts[0];
+
+			$filter_parts = explode('/', $filter_parts[1] ?? '');
 
 			if(!Request::has($request_key) || empty($filter_parts)) {
 				continue;
@@ -99,7 +101,7 @@ class Filter {
 						break;
 					}
 					case 'order': {
-						$order[$column_name] = $value;
+						$order[$column_name] = !empty($value) ? $value : 'asc';
 
 						break;
 					}

@@ -5,10 +5,10 @@ namespace Engine;
 use Engine\Database\Statement;
 
 class Sitemap {
-	public static function update($custom_pages = []) {
+	public static function update($custom_pages = [], $is_only_custom_pages = false) {
 		$pages = $custom_pages;
 
-		if(empty($custom_pages)) {
+		if(!$is_only_custom_pages) {
 			$sql = '
 				SELECT
 					*
@@ -22,8 +22,9 @@ class Sitemap {
 					date_publish <= NOW()
 					AND is_enabled IS true
 			';
-			$pages = new Statement($sql);
-			$pages = $pages->execute()->fetchAll();
+			$db_pages = new Statement($sql);
+			$db_pages = $db_pages->execute()->fetchAll();
+			$pages = array_merge($db_pages, $pages);
 		}
 
 		$path = ROOT_DIR . '/sitemap.xml';

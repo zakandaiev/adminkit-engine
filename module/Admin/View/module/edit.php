@@ -19,8 +19,8 @@
 							<div class="row">
 								<div class="col-xs-12 col-md-6">
 									<div class="mb-3">
-										<label class="form-label"><?= __('Order') ?></label>
-										<input type="number" name="order" value="<?= @$module['order'] ?>" placeholder="<?= __('Order') ?>" class="form-control" min="0">
+										<label class="form-label"><?= __('Priority') ?></label>
+										<input type="number" name="priority" value="<?= @$module['priority'] ?>" placeholder="<?= __('Priority') ?>" class="form-control" min="0">
 									</div>
 								</div>
 								<div class="col-xs-12 col-md-6">

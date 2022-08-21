@@ -33,7 +33,7 @@
 											<td><?= filter_link('author', $comment->author, $comment->author_name) ?></td>
 											<td>
 												<?php if(strlen($comment->message) > 50): ?>
-													<span data-bs-toggle="tooltip" title="<?= html($comment->message) ?>"><?= html(excerpt($comment->message, 50)) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= html($comment->message) ?>"><?= html(excerpt($comment->message, 50)) ?></span>
 												<?php else: ?>
 													<?= html($comment->message) ?>
 												<?php endif; ?>

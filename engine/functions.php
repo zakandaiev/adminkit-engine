@@ -46,7 +46,7 @@ function file_size($path, $precision = 2) {
 	}
 
 	$units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-  for($i = 0; $size > 1024; $i++) $size /= 1024;
+	for($i = 0; $size > 1024; $i++) $size /= 1024;
 
 	return round($size, 2) . ' ' . $units[$i];
 }
@@ -62,36 +62,38 @@ function glob_recursive($pattern, $flags = 0) {
 }
 
 function rmdir_recursive($path) {
-  if(is_dir($path)) {
-  	$files = array_diff(scandir($path), array('.', '..'));
+	if(is_dir($path)) {
+		$files = array_diff(scandir($path), array('.', '..'));
 
-  	foreach($files as $file) {
+		foreach($files as $file) {
 			rmdir_recursive(realpath($path) . '/' . $file);
-  	}
+		}
 
-  	return rmdir($path);
-  }
+		return rmdir($path);
+	}
 	else if(is_file($path)) {
-    return unlink($path);
-  }
+		return unlink($path);
+	}
 
-  return false;
+	return false;
 }
 
 ############################# IMAGE #############################
-function svg($file) {
-	$path = Path::file('asset') . '/img/' . trim($file ?? '', '/') . '.svg';
+function svg($file, $is_asset = true) {
+	$dir = $is_asset ? (Path::file('asset') . '/img') : ROOT_DIR;
+	$file_name = str_ireplace('.svg', '', trim($file ?? '', '/'));
+	$path_to_svg = $dir . '/' . $file_name . '.svg';
 
-	if(!file_exists($path)) {
-		return null;
+	if(!file_exists($path_to_svg)) {
+		return '<!-- SVG not found: ' . $path_to_svg .' -->';
 	} else {
-		return file_get_contents($file);
+		return file_get_contents($path_to_svg);
 	}
 }
 
-function images(array $json, $attributes = '') {
+function images($json, $attributes = '') {
 	$output = '';
-	$images = json_decode($json);
+	$images = json_decode($json) ?? [];
 
 	foreach($images as $image) {
 		$output .= '<img src="' . Request::$base . '/' . $image . '" ' . $attributes . '>';
@@ -129,7 +131,7 @@ function format_date_input($date = null) {
 
 function date_when($date, $format = null) {
 	$fmt = $format ?? 'd.m.Y';
-	$timestamp = is_numeric($date) ? $date : strtotime($date);
+	$timestamp = is_numeric($date) ? $date : strtotime($date ?? time());
 
 	$getdata = date('d.m.Y', $timestamp);
 	$yesterday = date('d.m.Y', mktime(0, 0, 0, date('m'), date('d') - 1, date('Y')));
@@ -140,11 +142,55 @@ function date_when($date, $format = null) {
 		if($yesterday === $getdata) {
 			$date = __('Yesterday at') . ' ' . date('H:i', $timestamp);
 		} else {
-			$date = date($fmt, $timestamp);
+			$date = format_date($timestamp, $format);
 		}
 	}
 
 	return $date;
+}
+
+function decl_of_num($number, $titles) {
+	$cases = array(2, 0, 1, 1, 1, 2);
+	return $number . ' ' . $titles[4 < $number % 100 && $number % 100 < 20 ? 2 : $cases[min($number % 10, 5)]];
+}
+
+function date_left($date) {
+	$now = time();
+	$then = is_numeric($date) ? $date : strtotime($date ?? time());
+
+	if($then - $now < 0) {
+		return __('The term has expired');
+	}
+
+	$difference = abs($then - $now);
+	$left = [];
+
+	$month = floor($difference / 2592000);
+	if(0 < $month) {
+		$left['month'] = decl_of_num($month, array(__('month_nominative'), __('month_singular'), __('month_plural')));
+	}
+
+	$days = floor($difference / 86400) % 30;
+	if(0 < $days) {
+		$left['days'] = decl_of_num($days, array(__('day_nominative'), __('day_singular'), __('day_plural')));
+	}
+
+	$hours = floor($difference / 3600) % 24;
+	if(0 < $hours) {
+		$left['hours'] = decl_of_num($hours, array(__('hour_nominative'), __('hour_singular'), __('hour_plural')));
+	}
+
+	$minutes = floor($difference / 60) % 60;
+	if(0 < $minutes) {
+		$left['minutes'] = decl_of_num($minutes, array(__('minute_nominative'), __('minute_singular'), __('minute_plural')));
+	}
+
+	if(0 < count($left)) {
+		$datediff = implode(' ', $left);
+		return $datediff;
+	}
+
+	return __('A few seconds');
 }
 
 ############################# TIMEZONE #############################
@@ -256,7 +302,7 @@ function word($text) {
 }
 
 function excerpt($text, $maxchar, $end = "...") {
-	if(strlen($text) > $maxchar) {
+	if(strlen($text ?? '') > $maxchar) {
 		$words = preg_split('/\s/', $text);
 		$output = '';
 		$i = 0;
@@ -296,7 +342,7 @@ function lang($lang, $key, $mixed = null) {
 			break;
 		}
 		case 'icon': {
-			$value = 'img/flags/' . $lang . '.' . ($mixed ?? 'png');
+			$value = 'img/flag/' . $lang . '.' . ($mixed ?? 'png');
 			break;
 		}
 	}
@@ -376,4 +422,31 @@ function site($key) {
 	}
 
 	return $value;
+}
+
+############################# HELPERS #############################
+function is_closure($i) {
+	return $i instanceof \Closure;
+}
+
+function is_route_active($route) {
+	$uri = trim(strtok(site('uri_cut_language'), '?'), '/');
+
+	if(is_array($route)) {
+		$route = array_map(function($r) {
+			return trim($r ?? '', '/');
+		}, $route);
+
+		if(is_array($route) && in_array($uri, $route)) {
+			return true;
+		}
+	} else {
+		$route = trim($route ?? '', '/');
+
+		if($route === $uri) {
+			return true;
+		}
+	}
+
+	return false;
 }

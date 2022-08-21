@@ -2396,3 +2396,7 @@ footer.footer {
 .table thead a {
 	color: var(--bs-table-color);
 }
+
+.ql-snow .ql-tooltip input[type=text]:focus {
+	outline: none;
+}

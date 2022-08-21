@@ -602,4 +602,18 @@
 	.ql-snow .ql-picker.ql-expanded .ql-picker-label {
 		color: #7a828a;
 	}
+
+	.ql-snow .ql-tooltip {
+		color: var(--bs-body-color);
+		background-color: var(--bs-body-bg);
+		border-color: hsla(0, 0%, 100%, 0.15);
+		box-shadow: 0 0.1rem 0.2rem hsl(0deg, 0%, 100%, 0.05);
+	}
+	.ql-snow .ql-tooltip a.ql-action::after,
+	.ql-snow .ql-tooltip input[type=text] {
+		border-color: hsla(0, 0%, 100%, 0.15);
+	}
+	.ql-snow .ql-tooltip input[type=text] {
+		background-color: var(--bs-body-bg);
+	}
 }

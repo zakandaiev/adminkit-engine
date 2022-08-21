@@ -69,7 +69,7 @@ class Meta {
 		return '
 			<script>
 				const BASE_URL = "' . site('url') . '";
-				let SETTING = {
+				const SETTING = {
 					language: "' . site('language_current') . '",
 					csrf: {
 						key: "' . COOKIE_KEY['csrf'] . '",
@@ -103,7 +103,7 @@ class Meta {
 		$favicon = '
 			<link rel="icon" type="image/x-icon" sizes="any" href="' . Asset::url() . '/favicon.ico">
 			<link rel="icon" type="image/png" href="' . Asset::url() . '/favicon.png">
-			<link rel="icon" type="image/svg+xml" href="' . Asset::url() . '/favicon.svg" type="image/svg+xml">
+			<link rel="icon" type="image/svg+xml" href="' . Asset::url() . '/favicon.svg">
 			<link rel="apple-touch-icon" href="' . Asset::url() . '/favicon.png">
 		';
 

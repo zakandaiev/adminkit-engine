@@ -25,7 +25,7 @@ class Statement {
 			$replacement = $this->prefix.'_$1';
 		}
 
-		$this->sql = preg_replace('/{([^{}]+)}/miu', $replacement, $sql);
+		$this->sql = preg_replace('/{([\w\d\-\_]+)}/miu', $replacement, $sql);
 
 		return $this;
 	}

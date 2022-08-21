@@ -9,3 +9,8 @@ Module::route('get', '/tag/$url', 'Page@getTag');
 
 ############################# AUTHOR #############################
 Module::route('get', '/author/$id', 'Page@getAuthor');
+
+
+Module::route('get', '/admin/dashboard', function($data) {
+	debug($data);
+});

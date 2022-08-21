@@ -76,7 +76,7 @@ class Form {
 
 		$form_data = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
 
-		if(isset($form['modify_fields']) && is_callable($form['modify_fields'])) {
+		if(isset($form['modify_fields']) && is_closure($form['modify_fields'])) {
 			$data = new \stdClass();
 
 			$data->fields = $fields;
@@ -86,7 +86,7 @@ class Form {
 			$form_data = $form['modify_fields']($data)->form_data;
 		}
 
-		if(isset($form['execute_pre']) && is_callable($form['execute_pre'])) {
+		if(isset($form['execute_pre']) && is_closure($form['execute_pre'])) {
 			$data = new \stdClass();
 
 			$data->fields = $fields;
@@ -95,7 +95,7 @@ class Form {
 			$form['execute_pre']($data);
 		}
 
-		if(isset($form['execute']) && is_callable($form['execute'])) {
+		if(isset($form['execute']) && is_closure($form['execute'])) {
 			$data = new \stdClass();
 
 			$data->fields = $fields;
@@ -109,7 +109,7 @@ class Form {
 				foreach($form['fields'] as $field => $values_array) {
 					if(isset($values_array['foreign']) && !empty($values_array['foreign'])) {
 
-						if(is_callable($values_array['foreign'])) {
+						if(is_closure($values_array['foreign'])) {
 							$fields_foreign[$field] = $values_array['foreign'];
 						} else {
 							$foreign_t = explode('@', $values_array['foreign'], 2);
@@ -160,7 +160,7 @@ class Form {
 				}
 			}
 
-			if(isset($form['modify_sql']) && is_callable($form['modify_sql'])) {
+			if(isset($form['modify_sql']) && is_closure($form['modify_sql'])) {
 				$data = new \stdClass();
 
 				$data->sql = $sql;
@@ -181,7 +181,7 @@ class Form {
 			}
 
 			foreach($fields_foreign as $field_name => $field) {
-				if(is_callable($field)) {
+				if(is_closure($field)) {
 					$data = new \stdClass();
 
 					$data->fields = $fields;
@@ -214,7 +214,7 @@ class Form {
 			}
 		}
 
-		if(isset($form['execute_post']) && is_callable($form['execute_post'])) {
+		if(isset($form['execute_post']) && is_closure($form['execute_post'])) {
 			$data = new \stdClass();
 
 			$data->fields = $fields;
@@ -224,7 +224,7 @@ class Form {
 		}
 
 		if(isset($form['submit'])) {
-			if(is_callable($form['submit'])) {
+			if(is_closure($form['submit'])) {
 				$data = new \stdClass();
 
 				$data->fields = $fields;
@@ -482,7 +482,7 @@ class Form {
 				$fields[$field] = $field_value;
 			}
 
-			if(isset($values_array['modify']) && is_callable($values_array['modify'])) {
+			if(isset($values_array['modify']) && is_closure($values_array['modify'])) {
 				$fields[$field] = $values_array['modify']($fields[$field]);
 			}
 		}

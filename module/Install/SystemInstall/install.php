@@ -75,12 +75,12 @@ function install() {
 
 	$connection = new PDO($dsn, $data['db_user'], $data['db_pass'], $options);
 
-	$install_file = file_get_contents(ROOT_DIR . '/module/Install/engine.sql');
+	$install_file = file_get_contents(ROOT_DIR . '/module/Install/SystemInstall/engine.sql');
 	executeSQL($data, $connection, $install_file);
 
 	// DEMO DATA
 	if(isset($data['demo_data']) && $data['demo_data'] === 'on') {
-		$demo_file = file_get_contents(ROOT_DIR . '/module/Install/demo/demo.sql');
+		$demo_file = file_get_contents(ROOT_DIR . '/module/Install/SystemInstall/demo/demo.sql');
 		executeSQL($data, $connection, $demo_file);
 
 		if(file_exists(ROOT_DIR . '/upload/demo')) {
@@ -89,8 +89,8 @@ function install() {
 			mkdir(ROOT_DIR . '/upload/demo', 0755, true);
 		}
 
-		foreach(glob_recursive(ROOT_DIR . '/module/Install/demo/theme/*.*') as $file) {
-			$dest_folder = str_replace('/module/Install/demo', '', $file);
+		foreach(glob_recursive(ROOT_DIR . '/module/Install/SystemInstall/demo/theme/*.*') as $file) {
+			$dest_folder = str_replace('/module/Install/SystemInstall/demo', '', $file);
 			$dest_folder = str_replace('/' . file_name($file) . '.' . file_extension($file), '', $dest_folder);
 
 			if(!file_exists($dest_folder)) {
@@ -100,7 +100,7 @@ function install() {
 			copy($file, $dest_folder . '/' . file_name($file) . '.' . file_extension($file));
 		}
 
-		foreach(glob(ROOT_DIR . '/module/Install/demo/upload/*.*') as $file) {
+		foreach(glob(ROOT_DIR . '/module/Install/SystemInstall/demo/upload/*.*') as $file) {
 			copy($file, ROOT_DIR . '/upload/demo/' . file_name($file) . '.' . file_extension($file));
 		}
 	}

@@ -19,7 +19,7 @@
 							<table class="table table table-striped table-sm m-0">
 								<thead>
 									<tr>
-										<th><?= __('Order') ?></th>
+										<th><?= __('Priority') ?></th>
 										<th><?= __('Name') ?></th>
 										<th><?= __('Description') ?></th>
 										<th><?= __('Version') ?></th>
@@ -31,8 +31,8 @@
 									<?php foreach($modules as $module): ?>
 										<tr>
 											<td>
-												<?php if(isset($module['order'])): ?>
-													<?= $module['order'] ?>
+												<?php if(isset($module['priority'])): ?>
+													<?= $module['priority'] ?>
 												<?php else: ?>
 													<i class="align-middle" data-feather="minus"></i>
 												<?php endif; ?>
@@ -40,7 +40,7 @@
 											<td><?= $module['name'] ?></td>
 											<td>
 												<?php if(strlen($module['description']) > 50): ?>
-													<span data-bs-toggle="tooltip" title="<?= html($module['description']) ?>"><?= html(excerpt($module['description'], 50)) ?>...</span>
+													<span data-bs-toggle="tooltip" title="<?= html($module['description']) ?>"><?= html(excerpt($module['description'], 50)) ?></span>
 												<?php else: ?>
 													<?= html($module['description']) ?>
 												<?php endif; ?>

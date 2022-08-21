@@ -159,7 +159,7 @@ class Router {
 	}
 
 	private static function setController() {
-		if(is_callable(self::$route['controller'])) {
+		if(is_closure(self::$route['controller'])) {
 			self::$route['controller'](self::$route);
 			return true;
 		}

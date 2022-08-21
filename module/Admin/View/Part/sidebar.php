@@ -32,18 +32,6 @@ function checkRouteAccess($route) {
 	return false;
 }
 
-function checkRouteActive($route) {
-	$uri = strtok(site('uri_cut_language'), '?');
-
-	if(is_array($route) && in_array($uri, $route)) {
-		return true;
-	} else if($route === $uri) {
-		return true;
-	}
-
-	return false;
-}
-
 ?>
 
 <nav id="sidebar" class="sidebar js-sidebar">
@@ -62,18 +50,18 @@ function checkRouteActive($route) {
 				<?php if(isset($item['is_divider']) && $item['is_divider']): ?>
 					<li class="sidebar-header"><?= $item['name'] ?></li>
 				<?php elseif(is_array($item['route'])): ?>
-					<li class="sidebar-item <?php if(checkRouteActive($item['route'])): ?>active<?php endif; ?>">
+					<li class="sidebar-item <?php if(is_route_active($item['route'])): ?>active<?php endif; ?>">
 						<a data-bs-target="#<?= strtolower($item['name'] ?? '') ?>" data-bs-toggle="collapse" class="sidebar-link collapsed">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i> <span class="align-middle"><?= $item['name'] ?></span>
 						</a>
-						<ul id="<?= strtolower($item['name'] ?? '') ?>" class="sidebar-dropdown list-unstyled collapse <?php if(checkRouteActive($item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
+						<ul id="<?= strtolower($item['name'] ?? '') ?>" class="sidebar-dropdown list-unstyled collapse <?php if(is_route_active($item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
 							<?php foreach($item['route'] as $key => $value): ?>
-								<li class="sidebar-item <?php if(checkRouteActive($value)): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= site('url_language') . $value ?>"><?= $key ?></a></li>
+								<li class="sidebar-item <?php if(is_route_active($value)): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= site('url_language') . $value ?>"><?= $key ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					</li>
 				<?php else: ?>
-					<li class="sidebar-item <?php if(checkRouteActive($item['route'])): ?>active<?php endif; ?>">
+					<li class="sidebar-item <?php if(is_route_active($item['route'])): ?>active<?php endif; ?>">
 						<a class="sidebar-link" href="<?= site('url_language') . $item['route'] ?>">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i>
 							<span class="align-middle"><?= $item['name'] ?></span>
@@ -81,14 +69,14 @@ function checkRouteActive($route) {
 								if(
 									isset($item['badge'])
 									&& (
-										(!is_callable($item['badge']) && !empty($item['badge']))
+										(!is_closure($item['badge']) && !empty($item['badge']))
 										||
-										(is_callable($item['badge']) && !empty($item['badge']()))
+										(is_closure($item['badge']) && !empty($item['badge']()))
 									)
 								):
 							?>
 								<span class="sidebar-badge badge bg-<?php if(isset($item['badge_color'])): ?><?= $item['badge_color'] ?><?php else: ?>primary<?php endif; ?>">
-									<?php if(is_callable($item['badge'])): ?>
+									<?php if(is_closure($item['badge'])): ?>
 										<?= $item['badge']() ?>
 									<?php else: ?>
 										<?= $item['badge'] ?>

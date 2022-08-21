@@ -159,6 +159,37 @@ class Page extends \Engine\Model {
 		return $comments_formatted;
 	}
 
+	public function getLastComments($options = []) {
+		$options = [
+			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
+			'order' => isset($options['order']) ? $options['order'] : 'date_created DESC',
+			'limit' => $options['limit'] ?? site('pagination_limit'),
+			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
+		];
+
+		$sql = "
+			SELECT
+				author,
+				date_created,
+				(SELECT coalesce(name,login) FROM {user} WHERE id = t_comment.author) as author_name,
+				(SELECT title FROM {page_translation} WHERE page_id = t_comment.page_id AND language = :language) as post_title,
+				(SELECT url FROM {page} WHERE id = t_comment.page_id) as post_url
+			FROM
+				{comment} t_comment
+			WHERE
+				is_approved IS true
+				{$options['where']}
+			ORDER BY
+				{$options['order']}
+			LIMIT {$options['limit']}
+			{$options['offset']}
+		";
+
+		$comments = new Statement($sql);
+
+		return $comments->execute(['language' => $language ?? site('language_current')])->fetchAll();
+	}
+
 	public function getPageCustomFields($page_id, $language = null) {
 		$sql = '
 			SELECT
