@@ -1,10 +1,10 @@
 const server = () => {
 	$.browserSync.init({
-		proxy: "admin.kit",
-		/*server: {
-			baseDir: $.path.root
-		},*/
+		proxy: 'admin.kit',
+		// or
+		// server: {baseDir: $.path.dist},
 		//tunnel: true,
+		port: 3000,
 		notify: false,
 		open: true
 	});

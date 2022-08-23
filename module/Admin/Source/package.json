@@ -4,7 +4,8 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "gulp",
-		"prod": "gulp --prod"
+		"prod": "gulp --prod",
+		"build": "gulp --prod"
 	},
 	"browserslist": [
 		"last 10 versions",
@@ -27,7 +28,7 @@
 	"author": "github.com/zakandaiev",
 	"license": "MIT",
 	"devDependencies": {
-		"@babel/core": "^7.18.10",
+		"@babel/core": "^7.18.13",
 		"@babel/preset-env": "^7.18.10",
 		"browser-sync": "^2.27.10",
 		"del": "^6.1.1",
@@ -37,7 +38,7 @@
 		"gulp-clean-css": "^4.3.0",
 		"gulp-file-include": "^2.3.0",
 		"gulp-group-css-media-queries": "^1.2.2",
-		"gulp-htmlmin": "^5.0.1",
+		"gulp-if": "^3.0.0",
 		"gulp-imagemin": "^7.1.0",
 		"gulp-load-plugins": "^2.0.7",
 		"gulp-newer": "^1.4.0",
