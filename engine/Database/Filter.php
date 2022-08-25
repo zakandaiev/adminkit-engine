@@ -36,7 +36,7 @@ class Filter {
 	private function load() {
 		$path = Path::file('filter') . '/' . $this->name . '.php';
 
-		if(!file_exists($path)) {
+		if(!is_file($path)) {
 			return false;
 		}
 

@@ -5,30 +5,30 @@ namespace Engine;
 class Language {
 	private static $language = [];
 	private static $translation = [];
-	private static $is_translation_loaded = false;
+	private static $loaded_modules = [];
 
-	public static function initialize() {
-		self::loadLanguages();
-		self::checkUri();
-
-		return true;
+	public static function get($key, $language = null) {
+		return Module::get('languages')[$language ?? self::current()][$key] ?? null;
 	}
 
-	public static function get($key) {
-		return self::$language[$key] ?? null;
+	public static function getFull($language = null) {
+		return Module::get('languages')[$language ?? self::current()] ?? null;
 	}
 
-	public static function has($key) {
-		return isset(self::$language[$key]);
+	public static function has($language) {
+		return isset(Module::get('languages')[$language]);
 	}
 
 	public static function getAll() {
-		return self::$language;
+		return Module::get('languages');
 	}
 
 	public static function translate($key) {
-		if(!self::$is_translation_loaded) {
-			self::loadTranslations();
+		$module_name = Module::get('name');
+
+		if(!in_array($module_name, self::$loaded_modules)) {
+			self::$loaded_modules[] = $module_name;
+			self::loadTranslations($module_name);
 		}
 
 		return (DEBUG['is_enabled'] ? DEBUG['lang_wrap'] : '') . (self::$translation[$key] ?? $key) . (DEBUG['is_enabled'] ? DEBUG['lang_wrap'] : '');
@@ -40,7 +40,7 @@ class Language {
 		if(!empty($language_from_cookie) && Language::has($language_from_cookie)) {
 			$language = Session::getCookie(COOKIE_KEY['language']);
 		} else {
-			$language = Setting::get('main')->language;
+			$language = Setting::get('main')->language ?? null;
 		}
 
 		return $language;
@@ -56,11 +56,13 @@ class Language {
 		return true;
 	}
 
-	private static function loadLanguages() {
-		$path = Path::file('language');
+	public static function getModuleLanguages($module) {
+		$path = Path::file('language', $module);
+
+		$languages = [];
 
 		if(!file_exists($path)) {
-			return false;
+			return $languages;
 		}
 
 		foreach(scandir($path) as $language) {
@@ -79,18 +81,16 @@ class Language {
 			$lang['name'] = $language_name;
 			$lang['file_name'] = $language;
 
-			self::$language[$language_key] = $lang;
+			$languages[$language_key] = $lang;
 		}
 
-		return true;
+		return $languages;
 	}
 
-	private static function loadTranslations() {
-		self::$is_translation_loaded = true;
+	private static function loadTranslations($module) {
+		$path_lang = Path::file('language', $module) . '/' . self::get('file_name');
 
-		$path_lang = Path::file('language') . '/' . self::get(self::current())['file_name'];
-
-		if(!file_exists($path_lang)) {
+		if(!is_file($path_lang)) {
 			return false;
 		}
 
@@ -100,15 +100,7 @@ class Language {
 			return false;
 		}
 
-		self::$translation = $content_lang;
-
-		return true;
-	}
-
-	private static function checkUri() {
-		$uri_parts = explode('/', Request::$uri);
-
-		self::setCurrent(@$uri_parts[1]);
+		self::$translation = array_merge(self::$translation, $content_lang);
 
 		return true;
 	}

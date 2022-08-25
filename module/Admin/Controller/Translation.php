@@ -17,7 +17,7 @@ class Translation extends AdminController {
 	}
 
 	public function getEdit() {
-		$data['language'] = Language::get($this->route['parameters']['language']);
+		$data['language'] = Language::getFull($this->route['parameters']['language']);
 
 		if(empty($data['language'])) {
 			$this->view->error('404');
@@ -34,7 +34,7 @@ class Translation extends AdminController {
 	}
 
 	public function postEdit() {
-		$data['language'] = Language::get($this->route['parameters']['language']);
+		$data['language'] = Language::getFull($this->route['parameters']['language']);
 
 		if(empty($data['language'])) {
 			$this->view->error('404');

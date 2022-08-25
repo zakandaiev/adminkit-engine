@@ -134,7 +134,7 @@ class Optimization {
 			return false;
 		}
 
-		if(!file_exists($file_name)) {
+		if(!is_file($file_name)) {
 			return false;
 		}
 

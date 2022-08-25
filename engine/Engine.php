@@ -54,13 +54,12 @@ class Engine {
 		class_alias('\\Engine\\Sitemap', 'Sitemap');
 
 		// Order matters
+		Module::initialize();
 		Session::initialize();
 		Request::initialize();
-		Language::initialize();
 		Database::initialize();
 		Setting::initialize();
 		User::initialize();
-		Module::initialize();
 		Router::initialize();
 	}
 

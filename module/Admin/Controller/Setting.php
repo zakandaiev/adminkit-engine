@@ -79,7 +79,7 @@ class Setting extends AdminController {
 
 			$functions = Path::file('view') . '/functions.php';
 
-			if(!file_exists($functions)) {
+			if(!is_file($functions)) {
 				continue;
 			}
 

@@ -130,7 +130,7 @@ class Statement {
 	private function isCached() {
 		$is_cached = false;
 
-		if(Module::$name === 'Public' && Setting::get('optimization')->cache_db == 'true') {
+		if(Module::get('name') === 'Public' && Setting::get('optimization')->cache_db == 'true') {
 			if(preg_match('/^[\s]*SELECT/mi', $this->sql)) {
 				$is_cached = true;
 			}

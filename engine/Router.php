@@ -39,15 +39,17 @@ class Router {
 	}
 
 	private static function checkRoute($module, $route) {
+		Module::setName($module);
+
 		if(strtolower(trim($route['method'] ?? '')) === self::$method && self::isRouteMatched($route['uri'])) {
 			foreach($route as $key => $value) {
 				self::$route[$key] = $value;
 			}
 
-			Module::setName($module);
-
 			return true;
 		}
+
+		Module::setName(null);
 
 		self::$route = [];
 
@@ -72,6 +74,7 @@ class Router {
 		array_shift($uri_parts);
 
 		if(Language::has($uri_parts[0])) {
+			Language::setCurrent($uri_parts[0]);
 			array_shift($uri_parts);
 
 			if($route === '/' && count($uri_parts) === 0) {

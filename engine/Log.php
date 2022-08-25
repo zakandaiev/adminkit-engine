@@ -89,7 +89,7 @@ class Log {
 
 		$path = Path::file('log') . '/' . $log_id . '.' . LOG['extension'];
 
-		if(!file_exists($path)) {
+		if(!is_file($path)) {
 			return $log;
 		}
 

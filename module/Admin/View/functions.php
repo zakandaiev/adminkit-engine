@@ -320,22 +320,22 @@ function locale_script($folder) {
 	$url = '';
 
 	$path = $base . site('language_current') . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 
 	$path = $base . sprintf('%s_%s', site('language_current'), lang(site('language_current'), 'region')) . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 
 	$path = $base . sprintf('%s-%s', site('language_current'), strtolower(lang(site('language_current'), 'region'))) . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 
 	$path = $base . sprintf('%s_%s', site('language_current'), strtolower(lang(site('language_current'), 'region'))) . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 

@@ -4,9 +4,7 @@ namespace Engine;
 
 class Module {
 	private static $module = [];
-	private static $module_name;
-
-	public static $name;
+	private static $name;
 
 	public static function initialize() {
 		self::loadModules();
@@ -42,7 +40,7 @@ class Module {
 
 			$config_file = $module_path . '/' . $module . '/config.php';
 
-			if(file_exists($config_file)) {
+			if(is_file($config_file)) {
 				$config = require $config_file;
 			} else {
 				continue;
@@ -53,6 +51,8 @@ class Module {
 			}
 
 			$config['name'] = $module;
+			$config['languages'] = Language::getModuleLanguages($module);
+
 			$modules[] = $config;
 		}
 
@@ -78,14 +78,14 @@ class Module {
 				$hooks_file = Path::file('theme') . '/hooks.php';
 			}
 
-			self::$module_name = $module['name'];
+			self::$name = $module['name'];
 
-			if(file_exists($routes_file)) {
+			if(is_file($routes_file)) {
 				require $routes_file;
 			}
 
-			if(file_exists($hooks_file)) {
-				require $hooks_file;
+			if(is_file($hooks_file)) {
+				// require $hooks_file;
 			}
 		}
 
@@ -96,7 +96,7 @@ class Module {
 		$name = $module ?? self::$name;
 		$config_file = Path::file('module') . '/' . $name . '/config.php';
 
-		if(!file_exists($config_file)) {
+		if(!is_file($config_file)) {
 			return false;
 		}
 
@@ -157,7 +157,7 @@ class Module {
 			list($route_controller, $route_action) = explode('@', $controller, 2);
 
 			if(empty($route_controller) || empty($route_action)) {
-				throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$module_name));
+				throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$name));
 				return false;
 			}
 		}
@@ -166,7 +166,7 @@ class Module {
 		$is_public = self::formatRouteData('is_public', @$options['is_public']);
 		$breadcrumbs = self::formatRouteData('breadcrumbs', @$options['breadcrumbs']);
 
-		self::$module[self::$module_name]['routes'][] = [
+		self::$module[self::$name]['routes'][] = [
 			'method' => $method,
 			'uri' => $uri,
 			'controller' => $route_controller,
@@ -214,28 +214,6 @@ class Module {
 			require $path_install;
 		}
 
-		// LANGUAGE
-		$path_language = $path . '/Language';
-
-		foreach(scandir($path_language) as $language) {
-			if(in_array($language, ['.', '..'], true)) continue;
-
-			if(file_extension($language) !== 'ini') continue;
-
-			$content = file_get_contents($path_language . '/' . $language);
-
-			if(empty($content)) continue;
-
-			$main_language = Path::file('language') . '/' . $language;
-
-			$flags = LOCK_EX;
-			if(is_file($main_language)) $flags = LOCK_EX | FILE_APPEND;
-
-			$content = PHP_EOL . '# BEGIN Module: ' . $name . PHP_EOL . PHP_EOL . $content . PHP_EOL . '# END Module: ' . $name . PHP_EOL . PHP_EOL;
-
-			file_put_contents($main_language, $content, $flags);
-		}
-
 		Log::write('Module: ' . $name. ' installed by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');
 
 		Hook::run('module_install', $name);
@@ -244,28 +222,17 @@ class Module {
 	}
 
 	public static function uninstall($name) {
-		$path = Path::file('module') . '/' . $name . '/Install';
+		$path = Path::file('module') . '/' . $name . '/Uninstall';
 
 		if(!file_exists($path)) {
 			return false;
 		}
 
 		// UNINSTALL SCRIPT
-		$path_install = $path . '/uninstall.php';
+		$path_uninstall = $path . '/uninstall.php';
 
-		if(is_file($path_install)) {
-			require $path_install;
-		}
-
-		// LANGUAGE
-		$path_language = Path::file('language');
-
-		foreach(Language::getAll() as $language) {
-			$lp = $path_language . '/' . $language['file_name'];
-			$pattern = '/#[\s]+BEGIN[\s]+Module:[\s]+' . $name . '[\s\S]*#[\s]+END[\s]+Module:[\s]+' . $name . '/mi';
-			$content = file_get_contents($lp);
-			$content = preg_replace($pattern, '', $content);
-			file_put_contents($lp, $content, LOCK_EX);
+		if(is_file($path_uninstall)) {
+			require $path_uninstall;
 		}
 
 		Log::write('Module: ' . $name. ' uninstalled by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');

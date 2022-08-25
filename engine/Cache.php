@@ -39,7 +39,7 @@ class Cache {
 	public static function get($key) {
 		$path = Path::file('cache') . '/' . md5($key) . '.' . trim(trim(CACHE['extension']), '.');
 
-		if(file_exists($path)) {
+		if(is_file($path)) {
 			$content = unserialize(file_get_contents($path));
 
 			if(time() <= $content[self::CACHE_KEY['expires']]) {
@@ -55,7 +55,7 @@ class Cache {
 
 		$path = Path::file('cache') . '/' . $key . '.' . trim(trim(CACHE['extension']), '.');
 
-		if(!file_exists($path)) {
+		if(!is_file($path)) {
 			return false;
 		}
 

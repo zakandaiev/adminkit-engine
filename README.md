@@ -22,7 +22,9 @@
 * Engine: load tranlations from current module + engine, but not from all modules like now
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
+* Modules: hooks + lang cache, test + routes remove page objs + breadcrumbs + dev language-template + localize demo theme
 * API: create API module
 * Admin: data-behavior selected value behavior features
 * Admin: localize quill editor
 * Public: add pagination & filter to Page model
+* Public: create dummy theme if no demo on install
