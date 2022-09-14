@@ -176,42 +176,16 @@ class Module {
 			}
 		}
 
-		$page = self::formatRouteData('page', @$options['page']);
-		$is_public = self::formatRouteData('is_public', @$options['is_public']);
-		$breadcrumbs = self::formatRouteData('breadcrumbs', @$options['breadcrumbs']);
-
-		self::$module[self::$name]['routes'][] = [
+		$route = array_merge([
 			'method' => $method,
 			'uri' => $uri,
 			'controller' => $route_controller,
-			'action' => $route_action,
-			'page' => $page,
-			'is_public' => $is_public,
-			'breadcrumbs' => $breadcrumbs
-		];
+			'action' => $route_action
+		], $options);
+
+		self::$module[self::$name]['routes'][] = $route;
 
 		return true;
-	}
-
-	private static function formatRouteData($type, $data = null) {
-		$formatted = $data;
-
-		switch(strtolower($type ?? '')) {
-			case 'page': {
-				$formatted = (!empty($data)) ? json_decode(json_encode($data)) : new \stdClass();
-				break;
-			}
-			case 'is_public': {
-				$formatted = is_bool($data) ? $data : false;
-				break;
-			}
-			case 'breadcrumbs': {
-				$formatted = (!empty($data)) ? json_decode(json_encode($data)) : [];
-				break;
-			}
-		}
-
-		return $formatted;
 	}
 
 	public static function install($name) {

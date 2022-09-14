@@ -2,11 +2,16 @@
 
 namespace Module\Admin\Controller;
 
+use Engine\Theme\Breadcrumb;
+
 class Comment extends AdminController {
 	public function getAll() {
 		$comments = $this->model->getComments();
 
 		$data['comments'] = $comments;
+
+		$this->page->title = __('Comments');
+		Breadcrumb::set([__('Comments')]);
 
 		$this->view->setData($data);
 		$this->view->render('comment/all');
@@ -22,6 +27,12 @@ class Comment extends AdminController {
 		}
 
 		$data['authors'] = $this->model->getAuthors();
+
+		$this->page->title = __('Edit comment');
+		Breadcrumb::set([
+			__('Comments') . '@/admin/comment',
+			__('Edit')
+		]);
 
 		$this->view->setData($data);
 		$this->view->render('comment/edit');

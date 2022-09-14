@@ -96,8 +96,6 @@ class Language {
 	private static function loadTranslations($module) {
 		$path_lang = Path::file('language', $module) . '/' . self::get('file_name');
 
-		debug($path_lang);
-
 		if(!is_file($path_lang)) {
 			return false;
 		}

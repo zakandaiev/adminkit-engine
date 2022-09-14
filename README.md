@@ -19,13 +19,16 @@
 
 ## ToDo:
 * Engine: Statement class - use regex to create more optimized query for counting total rows for Pagination
-* Engine: load tranlations from current module + engine, but not from all modules like now
+* Engine: cache tranlations
+* Engine: language switch bug
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
-* Modules: lang cache, routes remove page objs + breadcrumbs + dev language-template + localize demo theme
+* Dev: language-template
+* Modules: localize demo theme
+* Admin: remake translations according to each module
+* Dummyshop route bug
 * API: create API module
 * Admin: data-behavior selected value behavior features
 * Admin: localize quill editor
-* Admin: append to hooks name admin_
 * Public: add pagination & filter to Page model
 * Public: create dummy theme if no demo on install

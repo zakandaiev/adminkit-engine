@@ -13,6 +13,9 @@ class Module extends AdminController {
 
 		$data['modules'] = $modules;
 
+		$this->page->title = __('Modules');
+		Breadcrumb::set([__('Modules')]);
+
 		$this->view->setData($data);
 		$this->view->render('module/all');
 	}
@@ -26,8 +29,12 @@ class Module extends AdminController {
 			$this->view->error('404');
 		}
 
-		Breadcrumb::add($module['name']);
+		Breadcrumb::set([
+			__('Modules') . '@/admin/module',
+			$module['name']
+		]);
 
+		$this->page->title = __('Edit module');
 		$data['module'] = $module;
 
 		$this->view->setData($data);

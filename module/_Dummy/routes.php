@@ -3,27 +3,13 @@
 ############################# DIVIDE SECTION #############################
 Module::route('get', '/page-url/sub-url/$parameter', 'ControllerName@controllerMethod',
 	[
-		// Page meta [abstract Engine\Controller]
-		'page' => [
-			'title' => 'Page A -> B -> C',
-			'seo_description' => '',
-			'seo_keywords' => '',
-			'seo_image' => '',
-			'no_index_no_follow' => false
-		],
-		// Breadcrumbs [abstract Engine\Controller]
-		'breadcrumbs' => [
-			// aviable use short format 'name@url' or array
-			'Page A@/page-url', // is equal to ['name' => 'Page A', 'url' => '/page-url']
-			['name' => 'Page A -> B', 'url' => '/page-url/sub-url'],
-			['name' => 'Page A -> B -> C']
-		],
-		// Access to the route ignoring user groups [Module\Admin\Controller\AdminController]
+		// Options array
+		// Ex. access to the route ignoring user groups [used in Module\Admin\Controller\AdminController]
 		'is_public' => false
 	]
 );
 
-Module::route('get', '/closure', function($data) {
+Module::route('get', '/controller-closure-example', function($data) {
 	debug($data);
 });
 

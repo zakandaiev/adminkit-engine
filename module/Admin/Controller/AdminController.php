@@ -22,7 +22,7 @@ class AdminController extends \Engine\Controller {
 		$this->user->groups = $this->modelAdmin->getUserGroups($this->user->id);
 		$this->user->routes = $this->modelAdmin->getUserRoutes($this->user->id);
 
-		if($this->route['is_public'] || $this->user->access_all) {
+		if((isset($this->route['is_public']) && $this->route['is_public'] === true) || $this->user->access_all) {
 			$is_user_enabled = true;
 		} else {
 			foreach($this->user->routes as $route) {

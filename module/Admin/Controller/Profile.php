@@ -2,6 +2,8 @@
 
 namespace Module\Admin\Controller;
 
+use Engine\Theme\Breadcrumb;
+
 class Profile extends AdminController {
 	public function getProfile() {
 		$data['user'] = $this->user;
@@ -19,12 +21,21 @@ class Profile extends AdminController {
 
 		$this->model->readNotifications($data['user']->id);
 
+		$this->page->title = __('Profile');
+		Breadcrumb::set([__('Profile')]);
+
 		$this->view->setData($data);
 		$this->view->render('profile/profile');
 	}
 
 	public function getEdit() {
 		$data['user'] = $this->user;
+
+		$this->page->title = __('Edit profile');
+		Breadcrumb::set([
+			__('Profile') . '@/admin/profile',
+			__('Edit')
+		]);
 
 		$this->view->setData($data);
 		$this->view->render('profile/edit');

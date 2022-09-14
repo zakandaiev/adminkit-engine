@@ -28,7 +28,7 @@ if(defined('DATABASE') && $is_install) {
 }
 
 if($is_install) {
-	require_once ROOT_DIR . '/module/Install/SystemInstall/install.php';
+	require_once ROOT_DIR . '/module/Install/Engine/install.php';
 	exit;
 }
 

@@ -7,10 +7,14 @@ use Engine\Language;
 use Engine\Path;
 use Engine\Request;
 use Engine\Server;
+use Engine\Theme\Breadcrumb;
 
 class Translation extends AdminController {
 	public function getAll() {
 		$data['languages'] = Language::list();
+
+		$this->page->title = __('Translations');
+		Breadcrumb::set([__('Translations')]);
 
 		$this->view->setData($data);
 		$this->view->render('translation/all');
@@ -28,6 +32,12 @@ class Translation extends AdminController {
 		if(empty(trim($data['body'] ?? ''))) {
 			$data['body'] = '; Silence is golden';
 		}
+
+		$this->page->title = __('Edit translation');
+		Breadcrumb::set([
+			__('Translations') . '@/admin/translation',
+			__('Edit')
+		]);
 
 		$this->view->setData($data);
 		$this->view->render('translation/edit');

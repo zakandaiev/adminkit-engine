@@ -330,15 +330,15 @@ function __($key) {
 }
 
 function lang($lang, $key, $mixed = null) {
-	$value = null;
+	$value = '';
 
 	switch(strval($key)) {
 		case 'region': {
-			$value = Language::get('region', $lang) ?? null;
+			$value = Language::get('region', $lang) ?? '';
 			break;
 		}
 		case 'name': {
-			$value = Language::get('name', $lang) ?? null;
+			$value = Language::get('name', $lang) ?? '';
 			break;
 		}
 		case 'icon': {
