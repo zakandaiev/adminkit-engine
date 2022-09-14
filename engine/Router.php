@@ -21,7 +21,7 @@ class Router {
 	}
 
 	private static function checkRoutes() {
-		foreach(Module::getAll() as $module) {
+		foreach(Module::list() as $module) {
 			if(!$module['is_enabled']) {
 				continue;
 			}

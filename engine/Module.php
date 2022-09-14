@@ -16,11 +16,11 @@ class Module {
 		return self::$module[$name ?? self::$name][$key] ?? null;
 	}
 
-	public static function getSelf($name = null) {
+	public static function getAll($name = null) {
 		return self::$module[$name ?? self::$name] ?? null;
 	}
 
-	public static function getAll() {
+	public static function list() {
 		return self::$module;
 	}
 
@@ -59,13 +59,13 @@ class Module {
 		usort($modules, function ($module1, $module2) {
 			if(isset($module1['priority']) && isset($module2['priority'])) {
 				return $module2['priority'] <=> $module1['priority'];
-			} else if(isset($module1['priority'])) {
-				return 1;
 			}
 			return 0;
 		});
 
 		foreach($modules as $module) {
+			self::$name = $module['name'];
+
 			self::$module[$module['name']] = $module;
 
 			if(!$module['is_enabled']) {
@@ -73,19 +73,33 @@ class Module {
 			}
 
 			$routes_file = $module_path . '/' . $module['name'] . '/routes.php';
+
+			if(is_file($routes_file)) {
+				require $routes_file;
+			}
+		}
+
+		usort($modules, function ($module1, $module2) {
+			if(isset($module1['priority']) && isset($module2['priority'])) {
+				return $module1['priority'] <=> $module2['priority'];
+			}
+			return 0;
+		});
+
+		foreach($modules as $module) {
+			self::$name = $module['name'];
+
+			if(!$module['is_enabled']) {
+				continue;
+			}
+
 			$hooks_file = $module_path . '/' . $module['name'] . '/hooks.php';
 			if($module['name'] === 'Public') {
 				$hooks_file = Path::file('theme') . '/hooks.php';
 			}
 
-			self::$name = $module['name'];
-
-			if(is_file($routes_file)) {
-				require $routes_file;
-			}
-
 			if(is_file($hooks_file)) {
-				// require $hooks_file;
+				require $hooks_file;
 			}
 		}
 
@@ -222,7 +236,7 @@ class Module {
 	}
 
 	public static function uninstall($name) {
-		$path = Path::file('module') . '/' . $name . '/Uninstall';
+		$path = Path::file('module') . '/' . $name . '/Install';
 
 		if(!file_exists($path)) {
 			return false;

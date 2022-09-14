@@ -1,30 +1,28 @@
 <?php
 
-############################# NOTIFICATION #############################
-$GLOBALS['admin_notification'] = [];
-
-Hook::register('notification_add_type', function($notification) {
-	if(!is_array($notification)) {
-		return false;
-	}
-
-	$GLOBALS['admin_notification'][key($notification)] = $notification[key($notification)];
-});
-Hook::register('notification_modify_type', function($type, $notification) {
-	if(!isset($GLOBALS['admin_notification'][$type]) || !is_array($notification)) {
-		return false;
-	}
-
-	$GLOBALS['admin_notification'][$type] = $notification;
-});
-
-############################# SIDEBAR #############################
+############################# ADMIN SIDEBAR #############################
 $GLOBALS['admin_sidebar'] = [];
 
-Hook::register('sidebar_add', function($route) {
+Hook::register('admin_sidebar_append', function($route) {
 	$GLOBALS['admin_sidebar'][] = $route;
 });
-Hook::register('sidebar_modify', function($sidebar) {
+Hook::register('admin_sidebar_prepend', function($route) {
+	array_unshift($GLOBALS['admin_sidebar'] , $route);
+});
+Hook::register('admin_sidebar_append_after', function($position, $append_route) {
+	$sidebar = [];
+
+	foreach($GLOBALS['admin_sidebar'] as $route) {
+		$sidebar[] = $route;
+
+		if(is_string($route['route']) && trim($route['route'], '/') === trim($position, '/')) {
+			$sidebar[] = $append_route;
+		}
+	}
+
+	$GLOBALS['admin_sidebar'] = $sidebar;
+});
+Hook::register('admin_sidebar_change', function($sidebar) {
 	if(!is_array($sidebar)) {
 		return false;
 	}
@@ -32,6 +30,24 @@ Hook::register('sidebar_modify', function($sidebar) {
 	$GLOBALS['admin_sidebar'] = $sidebar;
 
 	return true;
+});
+
+############################# NOTIFICATION #############################
+$GLOBALS['admin_notification'] = [];
+
+Hook::register('notification_add', function($type, $data) {
+	if(empty($type) || empty($data)) {
+		return false;
+	}
+
+	$GLOBALS['admin_notification'][$type] = $data;
+});
+Hook::register('notification_modify', function($type, $data) {
+	if(!isset($GLOBALS['admin_notification'][$type]) || empty($data)) {
+		return false;
+	}
+
+	$GLOBALS['admin_notification'][$type] = $data;
 });
 
 ############################# TRANSLATION #############################
@@ -157,99 +173,88 @@ Hook::register('user_change_contacts', function($data) {
 });
 
 ############################# RUN #############################
-Hook::run('notification_add_type', [
-	'user_register' => [
+Hook::run('notification_add', 'user_register', [
 		'name' => __('Registration'),
 		'icon' => 'user-plus',
 		'color' => 'success',
 		'user_can_manage' => false
 	]
-]);
-Hook::run('notification_add_type', [
-	'user_restore' => [
+);
+Hook::run('notification_add', 'user_restore', [
 		'name' => __('Password restore'),
 		'icon' => 'unlock',
 		'color' => 'danger',
 		'user_can_manage' => false
 	]
-]);
-Hook::run('notification_add_type', [
-	'user_authorize' => [
+);
+Hook::run('notification_add', 'user_authorize', [
 		'name' => __('Authorization'),
 		'icon' => 'log-in',
 		'color' => 'warning',
 		'type' => 'web'
 	]
-]);
-Hook::run('notification_add_type', [
-	'user_change_name' => [
+);
+Hook::run('notification_add', 'user_change_name', [
 		'name' => __('Name change'),
 		'icon' => 'edit',
 		'color' => 'warning',
 		'type' => 'web'
 	]
-]);
-Hook::run('notification_add_type', [
-	'user_change_email' => [
+);
+Hook::run('notification_add', 'user_change_email', [
 		'name' => __('Email change'),
 		'icon' => 'mail',
 		'color' => 'danger'
 	]
-]);
-Hook::run('notification_add_type', [
-	'user_change_login' => [
+);
+Hook::run('notification_add', 'user_change_login', [
 		'name' => __('Login change'),
 		'icon' => 'at-sign',
 		'color' => 'danger'
 	]
-]);
-Hook::run('notification_add_type', [
-	'user_change_password' => [
+);
+Hook::run('notification_add', 'user_change_password', [
 		'name' => __('Password change'),
 		'icon' => 'lock',
 		'color' => 'danger'
 	]
-]);
-Hook::run('notification_add_type', [
-	'page_add' => [
+);
+Hook::run('notification_add', 'page_add', [
 		'name' => __('Page creation'),
 		'icon' => 'file-text',
 		'color' => 'primary',
 		'type' => 'web'
 	]
-]);
-Hook::run('notification_add_type', [
-	'page_add_category' => [
+);
+Hook::run('notification_add', 'page_add_category', [
 		'name' => __('Category creation'),
 		'icon' => 'folder',
 		'color' => 'primary',
 		'type' => 'web'
 	]
-]);
-Hook::run('notification_add_type', [
-	'page_comment' => [
+);
+Hook::run('notification_add', 'page_comment', [
 		'name' => __('Page comment'),
 		'icon' => 'message-square',
 		'color' => 'primary',
 		'type' => 'web'
 	]
-]);
-Hook::run('notification_add_type', [
-	'comment_reply' => [
+);
+Hook::run('notification_add', 'comment_reply', [
 		'name' => __('Comment reply'),
 		'icon' => 'corner-down-right',
 		'color' => 'primary',
 		'type' => 'web'
 	]
-]);
+);
 
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'home',
 	'name' => __('Dashboard'),
 	'route' => '/admin',
 	'is_public' => true
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'user',
 	'badge' => function() {
 		$notifications_count = User::get()->notifications_count;
@@ -259,23 +264,23 @@ Hook::run('sidebar_add', [
 	'route' => '/admin/profile',
 	'is_public' => true
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'log-out',
 	'name' => __('Logout'),
 	'route' => '/admin/logout',
 	'is_public' => true
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'name' => __('Content'),
 	'is_divider' => true,
 	'route' => '/admin/page'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'layout',
 	'name' => __('Pages'),
 	'route' => '/admin/page'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'message-square',
 	'badge' => function() {
 		$count = \Module\Admin\Model\Comment::getInstance()->countUnapprovedComments();
@@ -284,22 +289,22 @@ Hook::run('sidebar_add', [
 	'name' => __('Comments'),
 	'route' => '/admin/comment'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'menu',
 	'name' => __('Menu'),
 	'route' => '/admin/menu'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'globe',
 	'name' => __('Translations'),
 	'route' => '/admin/translation'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'name' => __('Administration'),
 	'is_divider' => true,
 	'route' => '/admin/user'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'users',
 	'name' => __('Users'),
 	'route' => [
@@ -307,7 +312,7 @@ Hook::run('sidebar_add', [
 		__('Groups') => '/admin/group'
 	]
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'settings',
 	'name' => __('Settings'),
 	'route' => [
@@ -317,12 +322,12 @@ Hook::run('sidebar_add', [
 		__('Optimizations') => '/admin/setting/optimization'
 	]
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'activity',
 	'name' => __('Logs'),
 	'route' => '/admin/log'
 ]);
-Hook::run('sidebar_add', [
+Hook::run('admin_sidebar_append', [
 	'icon' => 'box',
 	'name' => __('Modules'),
 	'route' => '/admin/module'

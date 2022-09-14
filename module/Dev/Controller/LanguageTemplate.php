@@ -32,7 +32,7 @@ class LanguageTemplate extends \Engine\Controller {
 		$this->saveTemplateFile('Engine', $this->getMatches(glob_recursive($this->engine_dir . '/*.php')));
 		$this->saveTemplateFile('Theme', $this->getMatches(glob_recursive($this->theme_dir . '/*.php')));
 
-		foreach(Module::getAll() as $module) {
+		foreach(Module::list() as $module) {
 			if(!$module['is_enabled']) continue;
 
 			$section = 'Module: ' . $module['name'];
@@ -45,7 +45,7 @@ class LanguageTemplate extends \Engine\Controller {
 	}
 
 	public function generateModule() {
-		$module = Module::getSelf($this->route['parameters']['name']);
+		$module = Module::getAll($this->route['parameters']['name']);
 
 		if(empty($module)) {
 			Module::setName('Admin');

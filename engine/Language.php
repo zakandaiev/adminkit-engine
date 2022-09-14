@@ -11,7 +11,7 @@ class Language {
 		return Module::get('languages')[$language ?? self::current()][$key] ?? null;
 	}
 
-	public static function getFull($language = null) {
+	public static function getAll($language = null) {
 		return Module::get('languages')[$language ?? self::current()] ?? null;
 	}
 
@@ -19,7 +19,7 @@ class Language {
 		return isset(Module::get('languages')[$language]);
 	}
 
-	public static function getAll() {
+	public static function list() {
 		return Module::get('languages');
 	}
 
@@ -31,7 +31,13 @@ class Language {
 			self::loadTranslations($module_name);
 		}
 
-		return (DEBUG['is_enabled'] ? DEBUG['lang_wrap'] : '') . (self::$translation[$key] ?? $key) . (DEBUG['is_enabled'] ? DEBUG['lang_wrap'] : '');
+		$translation = self::$translation[$key] ?? $key;
+
+		if(DEBUG['is_enabled']) {
+			$translation = DEBUG['lang_wrap'] . $translation . DEBUG['lang_wrap'];
+		}
+
+		return $translation;
 	}
 
 	public static function current() {
@@ -89,6 +95,8 @@ class Language {
 
 	private static function loadTranslations($module) {
 		$path_lang = Path::file('language', $module) . '/' . self::get('file_name');
+
+		debug($path_lang);
 
 		if(!is_file($path_lang)) {
 			return false;

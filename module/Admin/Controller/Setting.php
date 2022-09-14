@@ -64,7 +64,7 @@ class Setting extends AdminController {
 		$files = [];
 		$modules = [];
 
-		foreach(Module::getAll() as $module) {
+		foreach(Module::list() as $module) {
 			if(!$module['is_enabled'] || $module['extends'] !== 'Public' || $module['name'] === 'Public') {
 				continue;
 			}

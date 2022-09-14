@@ -10,14 +10,14 @@ use Engine\Server;
 
 class Translation extends AdminController {
 	public function getAll() {
-		$data['languages'] = Language::getAll();
+		$data['languages'] = Language::list();
 
 		$this->view->setData($data);
 		$this->view->render('translation/all');
 	}
 
 	public function getEdit() {
-		$data['language'] = Language::getFull($this->route['parameters']['language']);
+		$data['language'] = Language::getAll($this->route['parameters']['language']);
 
 		if(empty($data['language'])) {
 			$this->view->error('404');
@@ -34,7 +34,7 @@ class Translation extends AdminController {
 	}
 
 	public function postEdit() {
-		$data['language'] = Language::getFull($this->route['parameters']['language']);
+		$data['language'] = Language::getAll($this->route['parameters']['language']);
 
 		if(empty($data['language'])) {
 			$this->view->error('404');

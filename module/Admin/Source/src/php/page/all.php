@@ -55,9 +55,9 @@
 											</td>
 											<td>
 												<?php
-													$count_translations = count(array_intersect($page->translations, array_keys(Language::getAll()))) + 1;
+													$count_translations = count(array_intersect($page->translations, array_keys(Language::list()))) + 1;
 
-													$count_aviable_languages = count(Language::getAll());
+													$count_aviable_languages = count(Language::list());
 												?>
 												<?php foreach($page->translations as $language): ?>
 													<a href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/edit/<?= $language ?>" title="<?= lang($language, 'name') ?>"><img width="18" height="18" class="d-inline-block mw-100 rounded-circle" src="<?= Asset::url() ?>/<?= lang($language, 'icon') ?>" alt="<?= $language ?>"></a>
@@ -68,7 +68,7 @@
 															<i class="align-middle" data-feather="plus"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-end" aria-labelledby="translate-dropdown-<?= $page->id ?>">
-															<?php foreach(Language::getAll() as $language): ?>
+															<?php foreach(Language::list() as $language): ?>
 																<?php if($language['key'] === $page->language) continue; ?>
 																<?php if(in_array($language['key'], $page->translations)) continue; ?>
 																<a class="dropdown-item" href="<?= site('url_language') ?>/admin/page/edit/<?= $page->id ?>/translation/add/<?= $language['key'] ?>">

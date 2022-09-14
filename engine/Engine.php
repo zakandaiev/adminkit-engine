@@ -5,7 +5,7 @@ namespace Engine;
 use Engine\Database\Database;
 
 class Engine {
-	const PHP_MIN = '7.0.0';
+	const PHP_MIN = '7.4.0';
 	const NAME = 'AdminKit Engine';
 	const VERSION = '1.0.0';
 	const AUTHOR = 'Zakandaiev';

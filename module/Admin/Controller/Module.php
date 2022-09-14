@@ -9,7 +9,7 @@ use Engine\Theme\Breadcrumb;
 
 class Module extends AdminController {
 	public function getAll() {
-		$modules = ModuleEngine::getAll();
+		$modules = ModuleEngine::list();
 
 		$data['modules'] = $modules;
 
@@ -20,7 +20,7 @@ class Module extends AdminController {
 	public function getEdit() {
 		$name = $this->route['parameters']['name'];
 
-		$module = ModuleEngine::getSelf($name);
+		$module = ModuleEngine::getAll($name);
 
 		if(!isset($module)) {
 			$this->view->error('404');
@@ -37,7 +37,7 @@ class Module extends AdminController {
 	public function postEdit() {
 		$name = $this->route['parameters']['name'];
 
-		$module = ModuleEngine::getSelf($name);
+		$module = ModuleEngine::getAll($name);
 
 		if(!isset($module)) {
 			$this->view->error('404');
@@ -61,7 +61,7 @@ class Module extends AdminController {
 	public function postDelete() {
 		$name = $this->route['parameters']['name'];
 
-		$module = ModuleEngine::getSelf($name);
+		$module = ModuleEngine::getAll($name);
 
 		if(!isset($module)) {
 			$this->view->error('404');
@@ -75,7 +75,7 @@ class Module extends AdminController {
 	public function postToggle() {
 		$name = $this->route['parameters']['name'];
 
-		$module = ModuleEngine::getSelf($name);
+		$module = ModuleEngine::getAll($name);
 
 		if(!isset($module)) {
 			$this->view->error('404');

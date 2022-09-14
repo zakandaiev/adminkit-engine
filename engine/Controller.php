@@ -18,7 +18,7 @@ abstract class Controller {
 	protected $page;
 
 	public function __construct() {
-		$this->module = Module::getSelf();
+		$this->module = Module::getAll();
 		$this->route = Router::$route;
 
 		$this->view = new View();
