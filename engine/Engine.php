@@ -26,6 +26,7 @@ class Engine {
 		class_alias('\\Engine\\Path', 'Path');
 		class_alias('\\Engine\\Request', 'Request');
 		class_alias('\\Engine\\Database\\Database', 'Database');
+		class_alias('\\Engine\\Database\\Filter', 'Filter');
 		class_alias('\\Engine\\Database\\Statement', 'Statement');
 		class_alias('\\Engine\\Setting', 'Setting');
 		class_alias('\\Engine\\Session', 'Session');

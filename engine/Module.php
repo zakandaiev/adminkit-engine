@@ -5,6 +5,7 @@ namespace Engine;
 class Module {
 	private static $module = [];
 	private static $name;
+	private static $is_hooks_loaded = false;
 
 	public static function initialize() {
 		self::loadModules();
@@ -86,9 +87,28 @@ class Module {
 			return 0;
 		});
 
-		foreach($modules as $module) {
-			self::$name = $module['name'];
+		return true;
+	}
 
+	public static function loadHooks() {
+		if(self::$is_hooks_loaded) {
+			return false;
+		}
+
+		self::$is_hooks_loaded = true;
+
+		$module_path = Path::file('module');
+
+		$modules = self::$module;
+
+		usort($modules, function ($module1, $module2) {
+			if(isset($module1['priority']) && isset($module2['priority'])) {
+				return $module1['priority'] <=> $module2['priority'];
+			}
+			return 0;
+		});
+
+		foreach($modules as $module) {
 			if(!$module['is_enabled']) {
 				continue;
 			}

@@ -5,15 +5,9 @@ namespace Engine;
 use Engine\Database\Statement;
 
 class Router {
-	private static $uri;
-	private static $method;
-
 	public static $route = [];
 
 	public static function initialize() {
-		self::$method = Request::$method;
-		self::$uri = strtok(Request::$uri, '?');
-
 		self::checkRoutes();
 		self::checkForm();
 		self::check404();
@@ -40,8 +34,9 @@ class Router {
 
 	private static function checkRoute($module, $route) {
 		Module::setName($module);
+		Module::loadHooks(); // todo - check module name
 
-		if(strtolower(trim($route['method'] ?? '')) === self::$method && self::isRouteMatched($route['uri'])) {
+		if(strtolower(trim($route['method'] ?? '')) === Request::$method && self::isRouteMatched($route['uri'])) {
 			foreach($route as $key => $value) {
 				self::$route[$key] = $value;
 			}
@@ -61,17 +56,16 @@ class Router {
 
 		self::$route['parameters'] = $parameters;
 
-		if($route === '/' && self::$uri === '/') {
+		if($route === '/' && Request::$uri_clean === '/') {
 			return true;
 		}
 
 		$route = ($route === '/') ? $route : rtrim($route ?? '', '/');
-		$uri = (self::$uri === '/') ? self::$uri : rtrim(self::$uri ?? '', '/');
+		$uri = (Request::$uri_clean === '/') ? Request::$uri_clean : rtrim(Request::$uri_clean ?? '', '/');
 
 		$route_parts = explode('/', $route);
-		$uri_parts = explode('/', $uri);
 		array_shift($route_parts);
-		array_shift($uri_parts);
+		$uri_parts = Request::$uri_parts;
 
 		if(Language::has($uri_parts[0])) {
 			Language::setCurrent($uri_parts[0]);
@@ -103,7 +97,7 @@ class Router {
 	}
 
 	private static function checkForm() {
-		if(self::$method !== 'post') {
+		if(Request::$method !== 'post') {
 			return false;
 		}
 
@@ -121,7 +115,7 @@ class Router {
 			$timestamp_created = strtotime($form->date_created);
 			$timestamp_diff = $timestamp_now - $timestamp_created;
 
-			if(trim(self::$uri ?? '', '/') === $form->token) {
+			if(trim(Request::$uri_clean ?? '', '/') === $form->token) {
 				Module::setName($form->module);
 
 				if($timestamp_diff < LIFETIME['form']) {
@@ -158,7 +152,11 @@ class Router {
 			self::$route['is_public'] = true;
 			self::$route['parameters'] = [];
 			self::$route['breadcrumbs'] = [];
+
+			return true;
 		}
+
+		return false;
 	}
 
 	private static function setController() {
