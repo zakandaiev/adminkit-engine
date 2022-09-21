@@ -265,11 +265,10 @@ function installSEO($data) {
 	<link rel="stylesheet" href="/module/Admin/View/Asset/css/adminkit.css">
 	<link rel="stylesheet" href="/module/Admin/View/Asset/css/main.css">
 
-	<link rel="icon" href="/module/Admin/View/Asset/favicon.ico" sizes="any">
-	<link rel="icon" href="/module/Admin/View/Asset/favicon.svg" type="image/svg+xml">
+	<link rel="icon" type="image/x-icon" sizes="any" href="/module/Admin/View/Asset/favicon.ico">
+	<link rel="icon" type="image/png" href="/module/Admin/View/Asset/favicon.png">
+	<link rel="icon" type="image/svg+xml" href="/module/Admin/View/Asset/favicon.svg">
 	<link rel="apple-touch-icon" href="/module/Admin/View/Asset/favicon.png">
-
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>

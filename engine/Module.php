@@ -21,6 +21,10 @@ class Module {
 		return self::$module[$name ?? self::$name] ?? null;
 	}
 
+	public static function has($name) {
+		return isset(self::$module[$name]);
+	}
+
 	public static function list() {
 		return self::$module;
 	}
@@ -87,6 +91,8 @@ class Module {
 			return 0;
 		});
 
+		self::$name = null;
+
 		return true;
 	}
 
@@ -113,6 +119,8 @@ class Module {
 				continue;
 			}
 
+			self::$name = $module['name'];
+
 			$hooks_file = $module_path . '/' . $module['name'] . '/hooks.php';
 			if($module['name'] === 'Public') {
 				$hooks_file = Path::file('theme') . '/hooks.php';
@@ -122,6 +130,8 @@ class Module {
 				require $hooks_file;
 			}
 		}
+
+		self::$name = null;
 
 		return true;
 	}

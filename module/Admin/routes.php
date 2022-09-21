@@ -41,9 +41,9 @@ Module::route('get', '/admin/menu/$id', 'Menu@getEdit');
 
 ############################# TRANSLATION #############################
 Module::route('get', '/admin/translation', 'Translation@getAll');
-Module::route('get', '/admin/translation/$language', 'Translation@getEdit');
+Module::route('get', '/admin/translation/$module/$language', 'Translation@getEdit');
 
-Module::route('post', '/admin/translation/$language', 'Translation@postEdit');
+Module::route('post', '/admin/translation/$module/$language', 'Translation@postEdit');
 
 ############################# USER #############################
 Module::route('get', '/admin/user', 'User@getAll');

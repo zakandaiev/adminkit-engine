@@ -29,10 +29,6 @@ class Language {
 		if(!in_array($module_name, self::$loaded_modules)) {
 			self::$loaded_modules[] = $module_name;
 			self::loadTranslations($module_name);
-			debug(debug_backtrace());
-			debug($module_name);
-			debug($key);
-			// debug(self::$translation);
 		}
 
 		$translation = self::$translation[$key] ?? $key;

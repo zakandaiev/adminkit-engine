@@ -12,6 +12,6 @@ $message = '
 return [
 	'subject' => __('Mail test'),
 	'message' => $message,
-	'from' => 'dummy@mail.org', // if set to null then from = Setting::get('contact')->email;
-	'type' => 'change_login' // if set then it will check user preferences from $user->setting->notifications->{'mail_' . $type}
+	'from' => 'dummy@mail.org', // if set to null then 'from' => Setting::get('contact')->email
+	'type' => 'change_login' // if isset then it will check user preferences from $user->setting->notifications->{'mail_' . $type}
 ];

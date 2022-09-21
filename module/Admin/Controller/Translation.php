@@ -4,6 +4,7 @@ namespace Module\Admin\Controller;
 
 use Engine\Hook;
 use Engine\Language;
+use Engine\Module;
 use Engine\Path;
 use Engine\Request;
 use Engine\Server;
@@ -11,7 +12,13 @@ use Engine\Theme\Breadcrumb;
 
 class Translation extends AdminController {
 	public function getAll() {
-		$data['languages'] = Language::list();
+		$languages = [];
+
+		foreach(Module::list() as $module) {
+			$languages[$module['name']] = $module['languages'];
+		}
+
+		$data['languages'] = $languages;
 
 		$this->page->title = __('Translations');
 		Breadcrumb::set([__('Translations')]);

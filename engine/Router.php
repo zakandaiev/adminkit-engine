@@ -34,12 +34,14 @@ class Router {
 
 	private static function checkRoute($module, $route) {
 		Module::setName($module);
-		Module::loadHooks(); // todo - check module name
 
 		if(strtolower(trim($route['method'] ?? '')) === Request::$method && self::isRouteMatched($route['uri'])) {
 			foreach($route as $key => $value) {
 				self::$route[$key] = $value;
 			}
+
+			Module::loadHooks();
+			Module::setName($module);
 
 			return true;
 		}
