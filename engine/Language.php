@@ -19,8 +19,8 @@ class Language {
 		return isset(Module::get('languages')[$language]);
 	}
 
-	public static function list() {
-		return Module::get('languages');
+	public static function list($module_name = null) {
+		return Module::get('languages', $module_name);
 	}
 
 	public static function translate($key) {

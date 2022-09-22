@@ -14,7 +14,13 @@ class Module {
 	}
 
 	public static function get($key, $name = null) {
-		return self::$module[$name ?? self::$name][$key] ?? null;
+		$module_name = $name ?? self::$name;
+
+		if($key === 'languages' && empty($name)) {
+			$module_name = Module::get('extends') ?? $module_name;
+		}
+
+		return self::$module[$module_name][$key] ?? null;
 	}
 
 	public static function getAll($name = null) {

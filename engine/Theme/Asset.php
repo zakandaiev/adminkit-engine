@@ -15,7 +15,6 @@ class Asset {
 	];
 
 	private static $container = [];
-	private static $asset_url;
 	private static $optimization = [
 		'js' => [
 			'attributes' => null,
@@ -95,8 +94,7 @@ class Asset {
 	}
 
 	public static function url($module = null) {
-		$module = $module ?? Module::get('extends');
-		return !empty(self::$asset_url) ? self::$asset_url : Path::url('asset', $module);
+		return Path::url('asset', $module ?? Module::get('extends'));
 	}
 
 	public static function get($extension) {
