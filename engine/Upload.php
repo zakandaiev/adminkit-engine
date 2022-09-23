@@ -35,11 +35,11 @@ class Upload {
 			}
 
 			if(is_array($allowed_extensions) && !empty($allowed_extensions) && !in_array($extension, $allowed_extensions)) {
-				return self::response(false, "File extension .{$extension} is forbidden");
+				return self::response(false, sprintf(__('File extension .%s is forbidden'), $extension));
 			}
 
 			if($size > self::getMaxSize()) {
-				return self::response(false, "Size of {$name_original} is too large");
+				return self::response(false, sprintf(__('Size of %s is too large'), $name_original));
 			}
 
 			move_uploaded_file($file['tmp_name'], $path_full);

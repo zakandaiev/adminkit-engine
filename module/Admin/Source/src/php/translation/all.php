@@ -26,23 +26,20 @@
 													<a data-bs-toggle="collapse" href="#module-<?= $module ?>" role="button" aria-expanded="false" aria-controls="module-<?= $module ?>" class="collapsed">
 														<span class="align-middle"><?= $module ?></span>
 													</a>
-													<?php if(!empty($module_languages)): ?>
-														<?php foreach($module_languages as $language): ?>
-															<div id="module-<?= $module ?>" class="log collapse">
-																	<i class="align-middle" data-feather="file-text"></i>
-																	<a href="<?= site('url_language') ?>/admin/translation/<?= $module ?>/<?= $language['key'] ?>" class="align-middle">
-																		<?= $language['key'] ?>_<?= $language['region'] ?> - <?= $language['name'] ?>
-																	</a>
-															</div>
-														<?php endforeach; ?>
-													<?php else: ?>
+													<div id="module-<?= $module ?>" class="log collapse">
+														<i class="align-middle" data-feather="plus"></i>
+														<a href="<?= site('url_language') ?>/admin/translation/<?= $module ?>/add" class="align-middle">
+															<?= __('Create new translation') ?>
+														</a>
+													</div>
+													<?php foreach($module_languages as $language): ?>
 														<div id="module-<?= $module ?>" class="log collapse">
-															<i class="align-middle" data-feather="plus"></i>
-															<a href="<?= site('url_language') ?>/admin/translation/<?= $module ?>/add" class="align-middle">
-																<?= __('Create new translation') ?>
-															</a>
+																<i class="align-middle" data-feather="file-text"></i>
+																<a href="<?= site('url_language') ?>/admin/translation/<?= $module ?>/<?= $language['key'] ?>" class="align-middle">
+																	<?= $language['key'] ?>_<?= $language['region'] ?> - <?= $language['name'] ?>
+																</a>
 														</div>
-													<?php endif; ?>
+													<?php endforeach; ?>
 												</div>
 											</td>
 										</tr>

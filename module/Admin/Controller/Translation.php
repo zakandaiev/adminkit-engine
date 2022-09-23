@@ -27,6 +27,22 @@ class Translation extends AdminController {
 		$this->view->render('translation/all');
 	}
 
+	public function getAdd() {
+		$languages = [];
+
+		foreach(Module::list() as $module) {
+			$languages[$module['name']] = $module['languages'];
+		}
+
+		$data['languages'] = $languages;
+
+		$this->page->title = __('Translations');
+		Breadcrumb::set([__('Translations')]);
+
+		$this->view->setData($data);
+		$this->view->render('translation/add');
+	}
+
 	public function getEdit() {
 		$data['language'] = Language::getAll($this->route['parameters']['language']);
 

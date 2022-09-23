@@ -15,43 +15,24 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?= Form::add('Group/Group'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/group">
-							<div class="mb-3">
-								<label class="form-label"><?= __('Name') ?></label>
-								<input type="text" name="name" placeholder="<?= __('Name') ?>" class="form-control" minlength="2" maxlength="200" required>
+						<form action="<?= Form::add('Translation/Translation'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/translation">
+							<div class="form-group mb-3">
+								<label class="form-label"><?= __('Language key') ?></label>
+								<input type="text" name="key" placeholder="<?= __('For example') ?>: en" class="form-control" minlength="2" maxlength="2" required>
 							</div>
-							<div class="mb-3">
-								<label class="form-label"><?= __('Routes') ?></label>
-								<select name="routes[]" multiple data-placeholder="<?= __('Routes') ?>">
-									<option data-placeholder></option>
-									<?php foreach($routes as $method => $routes_array): ?>
-										<optgroup label="<?= $method ?>">
-											<?php sort($routes_array, SORT_NATURAL); ?>
-											<?php foreach($routes_array as $route): ?>
-												<option value="<?= $method ?>@<?= $route ?>"><?= $route ?></option>
-											<?php endforeach; ?>
-										</optgroup>
-									<?php endforeach; ?>
-								</select>
+							<div class="form-group mb-3">
+								<label class="form-label"><?= __('Language region') ?></label>
+								<input type="text" name="region" placeholder="<?= __('For example') ?>: US" class="form-control" minlength="2" maxlength="2" required>
 							</div>
-							<div class="mb-3">
-								<label class="form-label"><?= __('Users') ?></label>
-								<select name="users[]" multiple data-placeholder="<?= __('Users') ?>">
-									<option data-placeholder></option>
-									<?php foreach($users as $user): ?>
-										<option value="<?= $user->id ?>"><?= $user->nicename ?></option>
-									<?php endforeach; ?>
-								</select>
+							<div class="form-group mb-3">
+								<label class="form-label"><?= __('Language name') ?></label>
+								<input type="text" name="name" placeholder="<?= __('For example') ?>: English" class="form-control" minlength="2" maxlength="32" required>
 							</div>
-							<div class="form-check form-switch mb-3">
-								<input class="form-check-input" type="checkbox" id="access_all" name="access_all">
-								<label class="form-check-label" for="access_all"><?= __('Access all') ?></label>
+							<div class="form-group mb-3">
+								<label class="form-label"><?= __('Icon') ?></label>
+								<input type="file" accept="image/*" name="icon" required>
 							</div>
-							<div class="form-check form-switch mb-3">
-								<input class="form-check-input" type="checkbox" id="is_enabled" name="is_enabled" checked>
-								<label class="form-check-label" for="is_enabled"><?= __('Active') ?></label>
-							</div>
-							<button type="submit" class="btn btn-primary"><?= __('Add group') ?></button>
+							<button type="submit" class="btn btn-primary"><?= __('Add translation') ?></button>
 						</form>
 					</div>
 				</div>
