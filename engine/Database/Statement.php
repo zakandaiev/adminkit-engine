@@ -179,6 +179,10 @@ class Statement {
 		return Database::$connection->lastInsertId();
 	}
 
+	public function rowCount() {
+		return $this->statement->rowCount();
+	}
+
 	private function prepare() {
 		$this->statement = Database::$connection->prepare($this->sql);
 

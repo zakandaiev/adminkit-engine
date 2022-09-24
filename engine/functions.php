@@ -212,7 +212,7 @@ function get_time_zones() {
 		$zones = DateTimeZone::listIdentifiers($mask);
 
 		foreach($zones as $timezone) {
-			$time = new DateTime(NULL, new DateTimeZone($timezone));
+			$time = new DateTime('now', new DateTimeZone($timezone));
 
 			$timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i');
 		}

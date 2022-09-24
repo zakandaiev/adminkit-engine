@@ -23,6 +23,8 @@
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
 * API: create API module
-* Admin: localize settings, menu, quill editor
 * Public: add pagination & filter to Page model
-* NEW Admin: make translations like how in menu
+
+# New Admin
+* find new localizeable wysiwyg
+* make translations like how in menu

@@ -118,6 +118,7 @@ class Router {
 			$timestamp_diff = $timestamp_now - $timestamp_created;
 
 			if(trim(Request::$uri_clean ?? '', '/') === $form->token) {
+				Module::loadHooks();
 				Module::setName($form->module);
 
 				if($timestamp_diff < LIFETIME['form']) {

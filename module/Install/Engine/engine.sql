@@ -147,9 +147,15 @@ CREATE TABLE IF NOT EXISTS `%prefix%_form` (
 CREATE TABLE `%prefix%_menu` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(200) NOT NULL,
-	`items` LONGTEXT DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `%prefix%_menu_translation` (
+	`menu_id` INT UNSIGNED NOT NULL,
+	`language` VARCHAR(8) NOT NULL,
+	`items` LONGTEXT DEFAULT NULL,
+	PRIMARY KEY (`menu_id`, `language`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
@@ -211,8 +217,10 @@ INSERT INTO `%prefix%_group_route` (`group_id`, `route`) VALUES
 (3, 'get@/admin/page/edit/$id/translation/add/$language'),
 (3, 'get@/admin/page/edit/$id/translation/edit/$language'),
 (3, 'get@/admin/translation'),
-(3, 'get@//admin/translation/$module/$language'),
-(3, 'post@//admin/translation/$module/$language'),
+(3, 'get@/admin/translation/$module/add'),
+(3, 'get@/admin/translation/$module/$language'),
+(3, 'post@/admin/translation/$module/add'),
+(3, 'post@/admin/translation/$module/$language'),
 (3, 'post@/upload');
 
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES
@@ -266,6 +274,13 @@ FOR EACH ROW
 	DELETE FROM `%prefix%_comment` t_c WHERE t_c.page_id=OLD.id;
 
 CREATE TRIGGER
+	`clear_page_translation`
+AFTER DELETE ON
+	`%prefix%_page`
+FOR EACH ROW
+	DELETE FROM `%prefix%_page_translation` t_pt WHERE t_pt.page_id=OLD.id;
+
+CREATE TRIGGER
 	`clear_page_tag_by_page_delete`
 AFTER DELETE ON
 	`%prefix%_page`
@@ -278,6 +293,13 @@ AFTER DELETE ON
 	`%prefix%_tag`
 FOR EACH ROW
   DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.tag_id=OLD.id;
+
+CREATE TRIGGER
+	`clear_menu_translation`
+AFTER DELETE ON
+	`%prefix%_menu`
+FOR EACH ROW
+	DELETE FROM `%prefix%_menu_translation` t_mt WHERE t_mt.menu_id=OLD.id;
 
 CREATE TRIGGER
 	`clear_group_route_by_group_delete`

@@ -219,6 +219,7 @@ class Form {
 
 			$data->fields = $fields;
 			$data->form_data = $form_data;
+			$data->count = $statement->rowCount();
 
 			$form['execute_post']($data);
 		}

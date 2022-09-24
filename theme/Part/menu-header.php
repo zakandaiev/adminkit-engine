@@ -12,7 +12,7 @@ if(!function_exists('menu')) {
 				$has_dropdown = 'class="has-dropdown"';
 			}
 
-			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . __($item->name) . '</a>';
+			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item->name . '</a>';
 
 			if(!empty($item->children)) {
 				$output .= '<div class="dropdown">';
@@ -44,7 +44,7 @@ if(!function_exists('aside')) {
 				$has_dropdown = 'class="has-dropdown"';
 			}
 
-			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . __($item->name) . '</a>';
+			$output .= '<li ' . $has_dropdown . '><a ' . $has_url . '>' . $item->name . '</a>';
 
 			if(!empty($item->children)) {
 				$output .= '<ul class="dropdown">';

@@ -153,8 +153,14 @@ INSERT INTO `%prefix%_comment` (`parent`, `page_id`, `author`, `message`) VALUES
 (NULL, 9, 1, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
 (1, 9, 1, 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
 
-INSERT INTO `%prefix%_menu` (`name`, `items`) VALUES
-('header', '[{"name":"Home","url":"","parent":null,"children":[]},{"name":"Categories","url":"","parent":null,"children":[{"name":"Lifestyle","url":"lifestyle","parent":"Categories","children":[]},{"name":"Fashion","url":"fashion","parent":"Categories","children":[]},{"name":"Health","url":"health","parent":"Categories","children":[]},{"name":"Travel","url":"travel","parent":"Categories","children":[]},{"name":"Technology","url":"technology","parent":"Categories","children":[]}]},{"name":"Contacts","url":"contact","parent":null,"children":[]},{"name":"About Us","url":"about","parent":null,"children":[]}]'),
-('footer', '[{"name":"Home","url":"","parent":null,"children":[]},{"name":"Contacts","url":"contact","parent":null,"children":[]},{"name":"About Us","url":"about","parent":null,"children":[]}]'),
-('phones', '[{"name":"202-555-0194","url":"tel:2025550194","parent":null,"children":[]}]'),
-('socials', '[{"name":"facebook","url":"#","parent":null,"children":[]},{"name":"twitter","url":"#","parent":null,"children":[]},{"name":"instagram","url":"#","parent":null,"children":[]}]');
+INSERT INTO `%prefix%_menu` (`name`) VALUES
+('header'),
+('footer'),
+('phones'),
+('socials');
+
+INSERT INTO `%prefix%_menu_translation` (`menu_id`, `language`, `items`) VALUES
+(1, 'en', '[{"name":"Home","url":"","parent":null,"children":[]},{"name":"Categories","url":"","parent":null,"children":[{"name":"Lifestyle","url":"lifestyle","parent":"Categories","children":[]},{"name":"Fashion","url":"fashion","parent":"Categories","children":[]},{"name":"Health","url":"health","parent":"Categories","children":[]},{"name":"Travel","url":"travel","parent":"Categories","children":[]},{"name":"Technology","url":"technology","parent":"Categories","children":[]}]},{"name":"Contacts","url":"contact","parent":null,"children":[]},{"name":"About Us","url":"about","parent":null,"children":[]}]'),
+(2, 'en', '[{"name":"Home","url":"","parent":null,"children":[]},{"name":"Contacts","url":"contact","parent":null,"children":[]},{"name":"About Us","url":"about","parent":null,"children":[]}]'),
+(3, 'en', '[{"name":"202-555-0194","url":"tel:2025550194","parent":null,"children":[]}]'),
+(4, 'en', '[{"name":"facebook","url":"#","parent":null,"children":[]},{"name":"twitter","url":"#","parent":null,"children":[]},{"name":"instagram","url":"#","parent":null,"children":[]}]');

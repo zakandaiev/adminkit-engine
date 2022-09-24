@@ -13,10 +13,10 @@ function fadeOut(element, soft = false, callback = null) {
 				element.remove();
 			}
 
-			if(callback instanceof String && window[callback]) {
-				window[callback]();
-			} else if(callback instanceof Function) {
+			if(callback instanceof Function) {
 				callback();
+			} else if(window[callback] instanceof Function) {
+				window[callback]();
 			}
 		} else {
 			requestAnimationFrame(fade);

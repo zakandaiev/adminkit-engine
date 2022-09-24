@@ -7,15 +7,8 @@ return [
 	'fields' => [
 		'name' => $name
 	],
-	'modify_fields' => function($data) {
-		if($data->form_data['action'] === 'add') {
-			$data->fields['items'] = '[{"name":"","url":"","children":[]}]';
-		}
-
-		return $data;
-	},
 	'execute_post' => function($data) {
-		Hook::run('menu_' . $data->form_data['action'], $data);
+		Form::execute($data->form_data['action'], 'Menu/Translation', $data->form_data['item_id'], true);
 	},
 	'submit' => function($data) {
 		if($data->form_data['action'] === 'add') {

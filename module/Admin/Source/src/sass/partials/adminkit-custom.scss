@@ -2176,10 +2176,12 @@ footer.footer {
 	&__icon {
 		flex-shrink: 0;
 		cursor: pointer;
+		&:not(:last-child) {
+			margin-right: 1em;
+		}
 	}
 	&__input {
 		flex-grow: 1;
-		margin: 0 1rem;
 		border: none;
     background: none;
     box-shadow: none;

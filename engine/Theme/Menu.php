@@ -17,6 +17,7 @@ class Menu {
 		} else {
 			$binding_key = 'name';
 		}
+
 		$binding = [$binding_key => $key];
 
 		$sql = "SELECT * FROM {menu} WHERE {$binding_key} = :{$binding_key}";
@@ -29,7 +30,7 @@ class Menu {
 			return $menu;
 		}
 
-		$menu->items = $menu->items ? @json_decode($menu->items) : [];
+		$menu->items = self::getMenuItems($menu->id);
 
 		return $menu;
 	}
@@ -44,10 +45,45 @@ class Menu {
 		$menus = new Statement($sql);
 
 		foreach($menus->execute()->fetchAll() as $menu) {
-			$menu->items = $menu->items ? @json_decode($menu->items) : [];
+			$menu->items = self::getMenuItems($menu->id);
 			self::$menu[] = $menu;
 		}
 
 		return self::$menu;
+	}
+
+	public static function getMenuItems($id) {
+		$binding = ['id' => $id, 'language' => site('language_current')];
+
+		$sql = "
+			SELECT
+				*
+			FROM
+				{menu_translation}
+			WHERE
+				menu_id = :id
+				AND language =
+					(CASE WHEN
+						(SELECT count(*) FROM {menu_translation} WHERE menu_id = :id AND language = :language) > 0
+					THEN
+						:language
+					WHEN
+						(SELECT count(*) FROM {menu_translation} WHERE menu_id = :id AND language = (SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')) > 0
+					THEN
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
+					ELSE
+						(SELECT language FROM {menu_translation} WHERE menu_id = :id AND items IS NOT NULL LIMIT 1)
+					END)
+		";
+
+		$items = new Statement($sql);
+
+		$items = $items->execute($binding)->fetch();
+
+		if(!$items) {
+			return [];
+		}
+
+		return json_decode($items->items) ?? [];
 	}
 }
