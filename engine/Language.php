@@ -15,8 +15,8 @@ class Language {
 		return Module::get('languages')[$language ?? self::current()] ?? null;
 	}
 
-	public static function has($language) {
-		return isset(Module::get('languages')[$language]);
+	public static function has($language, $module = null) {
+		return isset(Module::get('languages', $module)[$language]);
 	}
 
 	public static function list($module_name = null) {

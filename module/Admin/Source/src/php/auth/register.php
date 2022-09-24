@@ -19,7 +19,7 @@
 						<div class="card-body">
 							<?php Theme::widget('lang'); ?>
 							<div class="m-sm-4">
-								<form action="<?= Form::add('Auth/Register'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/profile">
+								<form action="<?= Form::add('Auth/Register'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/profile" data-focus>
 									<div class="mb-3">
 										<label class="form-label"><?= __('Name') ?></label>
 										<input class="form-control form-control-lg" type="text" name="name" placeholder="<?= __('Enter your name') ?>" required minlength="1" maxlength="200">

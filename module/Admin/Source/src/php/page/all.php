@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Pages');
+	Breadcrumb::add(__('Pages'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

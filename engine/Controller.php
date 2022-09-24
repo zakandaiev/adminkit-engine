@@ -17,6 +17,7 @@ abstract class Controller {
 
 	public function __construct() {
 		$this->module = Module::getAll();
+		$this->modules = Module::list();
 		$this->route = Router::$route;
 
 		$this->view = new View();

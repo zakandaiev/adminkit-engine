@@ -9,7 +9,6 @@ use Engine\Optimization;
 use Engine\Path;
 use Engine\Server;
 use Engine\Theme\Asset;
-use Engine\Theme\Breadcrumb;
 
 class Setting extends AdminController {
 	public function getSection() {
@@ -21,11 +20,6 @@ class Setting extends AdminController {
 		if(empty($data['settings'])) {
 			$this->view->error('404');
 		}
-
-		$this->page->title = __('Edit') . ' ' . __($section . ' settings');
-
-		Breadcrumb::add(__('Settings'), '/admin/setting/' . $section);
-		Breadcrumb::add(ucfirst($section));
 
 		$this->view->setData($data);
 		$this->view->render('setting/' . $section);

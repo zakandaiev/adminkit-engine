@@ -25,7 +25,7 @@
 							<?php else: ?>
 								<?php Theme::widget('lang'); ?>
 								<div class="m-sm-4">
-									<form action="<?= Form::add('Auth/Restore'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/reset-password?success">
+									<form action="<?= Form::add('Auth/Restore'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/reset-password?success" data-focus>
 										<div class="mb-3">
 											<label class="form-label"><?= __('Email') ?></label>
 											<input class="form-control form-control-lg" type="email" name="email" placeholder="<?= __('Enter your email') ?>" required minlength="6" maxlength="200">

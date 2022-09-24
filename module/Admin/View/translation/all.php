@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Translations');
+	Breadcrumb::add(__('Translations'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

@@ -2,19 +2,14 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Request;
 use Engine\Server;
 use Engine\Language;
-use Engine\Theme\Breadcrumb;
 
 class Page extends AdminController {
 	public function getAll() {
 		$pages = $this->model->getPages();
 
 		$data['pages'] = $pages;
-
-		$this->page->title = __('Pages');
-		Breadcrumb::set([__('Pages')]);
 
 		$this->view->setData($data);
 		$this->view->render('page/all');
@@ -27,9 +22,6 @@ class Page extends AdminController {
 
 		$data['pages'] = $pages;
 
-		$this->page->title = __('Pages');
-		Breadcrumb::set([__('Pages')]);
-
 		$this->view->setData($data);
 		$this->view->render('page/all');
 	}
@@ -38,12 +30,6 @@ class Page extends AdminController {
 		$data['authors'] = $this->model->getAuthors();
 		$data['categories'] = $this->model->getCategories();
 		$data['tags'] = $this->model->getTags();
-
-		$this->page->title = (Request::has('is_category')) ? __('Add category') : __('Add page');
-		Breadcrumb::set([
-			__('Pages') . '@/admin/page',
-			(Request::has('is_category')) ? __('Add category') : __('Add page')
-		]);
 
 		$this->view->setData($data);
 		$this->view->render('page/add');
@@ -81,12 +67,6 @@ class Page extends AdminController {
 		$data['tags'] = $this->model->getTags($is_translation ? $this->route['parameters']['language'] : null);
 
 		$data['page_edit']->custom_fieldsets = $this->model->getPageCustomFieldSets($data['page_edit']);
-
-		$this->page->title = __('Edit page');
-		Breadcrumb::set([
-			__('Pages') . '@/admin/page',
-			__('Edit')
-		]);
 
 		$this->view->setData($data);
 		$this->view->render('page/edit');

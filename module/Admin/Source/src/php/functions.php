@@ -20,7 +20,7 @@ Asset::js('js/sortable', 'defer');
 Asset::js('js/load-more', 'defer');
 Asset::js('js/custom-fields', 'defer', ['/admin/page/edit/$id', '/admin/page/edit/$id/translation/edit/$language']);
 Asset::js('js/menu', 'defer', ['/admin/menu', '/admin/menu/$id']);
-Asset::js('js/translations', 'defer', '/admin/translation/$language');
+Asset::js('js/translations', 'defer', '//admin/translation/$module/$language');
 Asset::js('js/main', 'defer');
 
 ############################# BREADCRUMBS #############################

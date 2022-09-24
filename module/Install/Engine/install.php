@@ -299,7 +299,7 @@ function installSEO($data) {
 							</h5>
 						</div>
 						<div class="card-body">
-							<form action="/install?step=<?= $step_next ?>" method="POST">
+							<form action="/install?step=<?= $step_next ?>" method="POST" data-focus>
 								<?php if($step == 'auth'): ?>
 									<div class="mb-3">
 										<label class="form-label">Login</label>

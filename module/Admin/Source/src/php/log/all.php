@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Logs');
+	Breadcrumb::add(__('Logs'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

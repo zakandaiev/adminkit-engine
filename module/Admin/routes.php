@@ -44,6 +44,7 @@ Module::route('get', '/admin/translation', 'Translation@getAll');
 Module::route('get', '/admin/translation/$module/add', 'Translation@getAdd');
 Module::route('get', '/admin/translation/$module/$language', 'Translation@getEdit');
 
+Module::route('post', '/admin/translation/$module/add', 'Translation@postAdd');
 Module::route('post', '/admin/translation/$module/$language', 'Translation@postEdit');
 
 ############################# USER #############################

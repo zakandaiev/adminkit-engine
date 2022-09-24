@@ -5,5 +5,5 @@ return [
 	'version' => '1.0.0',
 	'extends' => 'Admin',
 	'description' => 'Dummy module to manage Shop from Admin',
-	'is_enabled' => true
+	'is_enabled' => false
 ];

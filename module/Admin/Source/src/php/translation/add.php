@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Add translation');
+	Breadcrumb::add(__('Translations'), '/admin/translation');
+	Breadcrumb::add(__('Add'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">
@@ -15,7 +21,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?= Form::add('Translation/Translation'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/translation">
+						<form action="<?= site('permalink') ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/translation">
 							<div class="form-group mb-3">
 								<label class="form-label"><?= __('Language key') ?></label>
 								<input type="text" name="key" placeholder="<?= __('For example') ?>: en" class="form-control" minlength="2" maxlength="2" required>

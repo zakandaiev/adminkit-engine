@@ -2,16 +2,11 @@
 
 namespace Module\Admin\Controller;
 
-use Engine\Theme\Breadcrumb;
-
 class Group extends AdminController {
 	public function getAll() {
 		$groups = $this->model->getGroups();
 
 		$data['groups'] = $groups;
-
-		$this->page->title = __('Groups');
-		Breadcrumb::set([__('Groups')]);
 
 		$this->view->setData($data);
 		$this->view->render('group/all');
@@ -20,12 +15,6 @@ class Group extends AdminController {
 	public function getAdd() {
 		$data['routes'] = $this->model->getRoutes();
 		$data['users'] = $this->model->getUsers();
-
-		$this->page->title = __('Add group');
-		Breadcrumb::set([
-			__('Groups') . '@/admin/group',
-			__('Add')
-		]);
 
 		$this->view->setData($data);
 		$this->view->render('group/add');
@@ -45,12 +34,6 @@ class Group extends AdminController {
 
 		$data['group']->routes = $this->model->getGroupRoutesById($group_id);
 		$data['group']->users = $this->model->getGroupUsersById($group_id);
-
-		$this->page->title = __('Edit group');
-		Breadcrumb::set([
-			__('Groups') . '@/admin/group',
-			__('Edit')
-		]);
 
 		$this->view->setData($data);
 		$this->view->render('group/edit');

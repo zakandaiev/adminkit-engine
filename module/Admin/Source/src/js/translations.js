@@ -61,7 +61,7 @@ class Translation {
 	getFormData() {
 		let data = new FormData();
 
-		data.set('body', this.node.innerText);
+		data.set('content', this.node.innerText);
 		data.set(SETTING.csrf.key, SETTING.csrf.token);
 
 		return data;

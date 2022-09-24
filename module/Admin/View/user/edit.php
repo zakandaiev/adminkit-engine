@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit user');
+	Breadcrumb::add(__('Users'), '/admin/user');
+	Breadcrumb::add(__('Edit'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

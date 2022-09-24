@@ -52,10 +52,10 @@ Hook::register('notification_modify', function($type, $data) {
 
 ############################# TRANSLATION #############################
 Hook::register('translation_add', function($data) {
-	Log::write('Translation: ' . $data['fields']['key'] . '_' . $data['fields']['region'] . '_' . $data['fields']['name'] . ' added by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'translation');
+	Log::write('Translation: ' . $data['file'] . ' added for ' . $data['module'] . ' module by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'translation');
 });
 Hook::register('translation_edit', function($data) {
-	Log::write('Translation: ' . $data['fields']['key'] . '_' . $data['fields']['region'] . '_' . $data['fields']['name'] . ' edited by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'translation');
+	Log::write('Translation: ' . $data['file'] . ' edited for ' . $data['module'] . ' module by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'translation');
 });
 
 ############################# GROUP #############################

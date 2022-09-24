@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit optimization settings');
+	Breadcrumb::add(__('Settings'), '/admin/setting/' . $section);
+	Breadcrumb::add(__('Optimizations'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit site settings');
+	Breadcrumb::add(__('Settings'), '/admin/setting/' . $section);
+	Breadcrumb::add(__('Site'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

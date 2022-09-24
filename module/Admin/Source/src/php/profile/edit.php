@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit profile');
+	Breadcrumb::add(__('Profile'), '/admin/profile');
+	Breadcrumb::add(__('Edit'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Groups');
+	Breadcrumb::add(__('Groups'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

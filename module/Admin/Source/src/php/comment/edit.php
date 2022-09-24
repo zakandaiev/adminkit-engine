@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit comment');
+	Breadcrumb::add(__('Comments'), '/admin/comment');
+	Breadcrumb::add(__('Edit'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

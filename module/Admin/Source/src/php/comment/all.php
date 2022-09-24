@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Comments');
+	Breadcrumb::add(__('Comments'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

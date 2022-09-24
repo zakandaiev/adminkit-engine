@@ -22,10 +22,7 @@
 * Engine: cache tranlations
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
-* Dev: language-template
 * API: create API module
-* Admin: data-behavior selected value behavior features
-* Admin: localize quill editor
-* Admin: add data-focus (focus on 1st input) to Form class
+* Admin: localize settings, menu, quill editor
 * Public: add pagination & filter to Page model
-* Public: create dummy theme if no demo on install
+* NEW Admin: make translations like how in menu

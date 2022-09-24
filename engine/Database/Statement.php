@@ -131,7 +131,7 @@ class Statement {
 		$is_cached = false;
 
 		if(Module::get('name') === 'Public' && Setting::get('optimization')->cache_db == 'true') {
-			if(preg_match('/^[\s]*SELECT/mi', $this->sql)) {
+			if(preg_match('/^\s*SELECT/mi', $this->sql)) {
 				$is_cached = true;
 			}
 		}

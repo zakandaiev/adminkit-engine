@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Users');
+	Breadcrumb::add(__('Users'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

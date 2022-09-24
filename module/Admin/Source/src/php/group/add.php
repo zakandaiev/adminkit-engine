@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Add group');
+	Breadcrumb::add(__('Groups'), '/admin/group');
+	Breadcrumb::add(__('Add'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">
@@ -15,7 +21,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<form action="<?= Form::add('Group/Group'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/group">
+						<form action="<?= Form::add('Group/Group'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/group" data-focus>
 							<div class="mb-3">
 								<label class="form-label"><?= __('Name') ?></label>
 								<input type="text" name="name" placeholder="<?= __('Name') ?>" class="form-control" minlength="2" maxlength="200" required>
