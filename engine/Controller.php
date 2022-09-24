@@ -2,8 +2,6 @@
 
 namespace Engine;
 
-use Engine\Theme\Breadcrumb;
-
 abstract class Controller {
 	protected $module;
 	protected $route;
@@ -18,7 +16,8 @@ abstract class Controller {
 	protected $page;
 
 	public function __construct() {
-		$this->module = Module::getSelf();
+		$this->module = Module::getAll();
+		$this->modules = Module::list();
 		$this->route = Router::$route;
 
 		$this->view = new View();
@@ -29,15 +28,13 @@ abstract class Controller {
 		$this->user = User::get();
 
 		$this->page = new \stdClass();
-		$this->page->title = $this->route['page']->title ?? __('Admin');
-		$this->page->seo_description = $this->route['page']->seo_description ?? null;
-		$this->page->seo_keywords = $this->route['page']->seo_keywords ?? null;
-		$this->page->seo_image = $this->route['page']->seo_image ?? ($this->route['page']->image ??$this->setting->site->logo_public);
-		$this->page->no_index_no_follow = $this->route['page']->no_index_no_follow ?? false;
+		$this->page->title = Engine::NAME;
+		$this->page->seo_description = '';
+		$this->page->seo_keywords = '';
+		$this->page->seo_image = $this->setting->site->logo_public;
+		$this->page->no_index_no_follow = false;
 
 		$this->view->setData(['page' => $this->page]);
-
-		Breadcrumb::set($this->route['breadcrumbs']);
 	}
 
 	protected function loadModel($model_name, $module = null) {

@@ -20,7 +20,7 @@ Asset::js('js/sortable', 'defer');
 Asset::js('js/load-more', 'defer');
 Asset::js('js/custom-fields', 'defer', ['/admin/page/edit/$id', '/admin/page/edit/$id/translation/edit/$language']);
 Asset::js('js/menu', 'defer', ['/admin/menu', '/admin/menu/$id']);
-Asset::js('js/translations', 'defer', '/admin/translation/$language');
+Asset::js('js/translations', 'defer', '//admin/translation/$module/$language');
 Asset::js('js/main', 'defer');
 
 ############################# BREADCRUMBS #############################
@@ -320,22 +320,22 @@ function locale_script($folder) {
 	$url = '';
 
 	$path = $base . site('language_current') . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 
 	$path = $base . sprintf('%s_%s', site('language_current'), lang(site('language_current'), 'region')) . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 
 	$path = $base . sprintf('%s-%s', site('language_current'), strtolower(lang(site('language_current'), 'region'))) . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 
 	$path = $base . sprintf('%s_%s', site('language_current'), strtolower(lang(site('language_current'), 'region'))) . '.js';
-	if(file_exists($path)) {
+	if(is_file($path)) {
 		$url = str_replace(ROOT_DIR, Path::url(), $path);
 	}
 

@@ -1,3 +1,12 @@
+<?php
+	$page->title = __('Logs');
+	Breadcrumb::add(__('Logs'), '/admin/log');
+	$log_name = explode('/', $log->name);
+	foreach($log_name as $key => $name) {
+		Breadcrumb::add($name);
+	}
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">
@@ -10,15 +19,7 @@
 			<div class="container-fluid p-0">
 
 				<div class="mb-3">
-					<?php
-						$log_name = explode('/', $log->name);
-
-						foreach($log_name as $key => $name) {
-							Breadcrumb::add($name);
-						}
-
-						echo Breadcrumb::render();
-					?>
+					<?= Breadcrumb::render() ?>
 				</div>
 
 				<div class="card">

@@ -84,7 +84,7 @@ function svg($file, $is_asset = true) {
 	$file_name = str_ireplace('.svg', '', trim($file ?? '', '/'));
 	$path_to_svg = $dir . '/' . $file_name . '.svg';
 
-	if(!file_exists($path_to_svg)) {
+	if(!is_file($path_to_svg)) {
 		return '<!-- SVG not found: ' . $path_to_svg .' -->';
 	} else {
 		return file_get_contents($path_to_svg);
@@ -330,15 +330,15 @@ function __($key) {
 }
 
 function lang($lang, $key, $mixed = null) {
-	$value = null;
+	$value = '';
 
 	switch(strval($key)) {
 		case 'region': {
-			$value = Language::get($lang)['region'] ?? null;
+			$value = Language::get('region', $lang) ?? '';
 			break;
 		}
 		case 'name': {
-			$value = Language::get($lang)['name'] ?? null;
+			$value = Language::get('name', $lang) ?? '';
 			break;
 		}
 		case 'icon': {

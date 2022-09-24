@@ -5,7 +5,7 @@ namespace Engine;
 use Engine\Database\Database;
 
 class Engine {
-	const PHP_MIN = '7.0.0';
+	const PHP_MIN = '7.4.0';
 	const NAME = 'AdminKit Engine';
 	const VERSION = '1.0.0';
 	const AUTHOR = 'Zakandaiev';
@@ -26,6 +26,7 @@ class Engine {
 		class_alias('\\Engine\\Path', 'Path');
 		class_alias('\\Engine\\Request', 'Request');
 		class_alias('\\Engine\\Database\\Database', 'Database');
+		class_alias('\\Engine\\Database\\Filter', 'Filter');
 		class_alias('\\Engine\\Database\\Statement', 'Statement');
 		class_alias('\\Engine\\Setting', 'Setting');
 		class_alias('\\Engine\\Session', 'Session');
@@ -56,7 +57,6 @@ class Engine {
 		// Order matters
 		Session::initialize();
 		Request::initialize();
-		Language::initialize();
 		Database::initialize();
 		Setting::initialize();
 		User::initialize();

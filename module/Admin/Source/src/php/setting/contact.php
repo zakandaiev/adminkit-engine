@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit contact settings');
+	Breadcrumb::add(__('Settings'), '/admin/setting/' . $section);
+	Breadcrumb::add(__('Contacts'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

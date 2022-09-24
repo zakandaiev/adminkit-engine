@@ -7,6 +7,7 @@ class Form {
 
 		this.action = this.node.action;
 		this.method = this.node.method ? this.node.method : 'POST';
+		this.data_focus = this.node.getAttribute('data-focus') ?? '';
 		this.data_confirm = this.node.getAttribute('data-confirm');
 		this.data_reset = this.node.hasAttribute('data-reset') ? true : false;
 		this.data_class = this.node.getAttribute('data-class');
@@ -22,6 +23,8 @@ class Form {
 		if(this.loader) {
 			this.node.insertAdjacentHTML('beforeend', this.loader);
 		}
+
+		this.focusElement();
 
 		this.node.addEventListener('submit', event => {
 			event.preventDefault();
@@ -53,6 +56,25 @@ class Form {
 				this.enableForm();
 			});
 		});
+	}
+
+	focusElement() {
+		if(!this.node.hasAttribute('data-focus')) {
+			return false;
+		}
+
+		let focus_selector = '[name]';
+		if(this.data_focus.length > 0) {
+			focus_selector = '[name="' + this.data_focus + '"]';
+		}
+
+		const focus_element = this.node.querySelector(focus_selector);
+
+		if(focus_element) {
+			focus_element.focus();
+		}
+
+		return true;
 	}
 
 	confirmation() {

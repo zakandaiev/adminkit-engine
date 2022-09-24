@@ -9,7 +9,7 @@ use Engine\Server;
 
 class Install extends \Engine\Controller {
 	public function getInstallModule() {
-		$module = Module::getSelf($this->route['parameters']['name']);
+		$module = Module::getAll($this->route['parameters']['name']);
 
 		if(empty($module)) {
 			Module::setName('Admin');
@@ -26,7 +26,7 @@ class Install extends \Engine\Controller {
 	}
 
 	public function getUninstallModule() {
-		$module = Module::getSelf($this->route['parameters']['name']);
+		$module = Module::getAll($this->route['parameters']['name']);
 
 		if(empty($module)) {
 			Module::setName('Admin');

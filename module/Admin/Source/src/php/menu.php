@@ -1,3 +1,13 @@
+<?php
+	$page->title = __('Edit menu');
+	if($is_edit) {
+		Breadcrumb::add(__('Menu'), '/admin/menu');
+		Breadcrumb::add(__('Edit'));
+	} else {
+		Breadcrumb::add(__('Menu'));
+	}
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

@@ -1,3 +1,9 @@
+<?php
+	$page->title = (Request::has('is_category')) ? __('Add category') : __('Add page');
+	Breadcrumb::add(__('Pages'), '/admin/page');
+	Breadcrumb::add((Request::has('is_category')) ? __('Add category') : __('Add page'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">
@@ -13,7 +19,7 @@
 					<?= Breadcrumb::render() ?>
 				</div>
 
-				<form action="<?= Form::add('Page/Page'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/page">
+				<form action="<?= Form::add('Page/Page'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin/page" data-focus>
 					<div class="row">
 						<div class="col-12 col-md-8">
 							<div class="tab">

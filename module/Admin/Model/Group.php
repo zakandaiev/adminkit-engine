@@ -28,7 +28,7 @@ class Group {
 		$routes_grouped = [];
 
 		foreach(Module::get('routes') as $route) {
-			if($route['is_public']) continue;
+			if(isset($route['is_public']) && $route['is_public'] === true) continue;
 			$routes_grouped[$route['method']][] = $route['uri'];
 		}
 

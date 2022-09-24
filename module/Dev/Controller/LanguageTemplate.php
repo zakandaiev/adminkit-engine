@@ -2,74 +2,40 @@
 
 namespace Module\Dev\Controller;
 
-use Engine\Module;
 use Engine\Path;
-use Engine\Request;
-use Engine\Server;
 
 class LanguageTemplate extends \Engine\Controller {
-	private $engine_dir;
-	private $theme_dir;
-	private $modules_dir;
-	private $languages_dir;
-
-	private $template_path;
+	private $template = '';
+	private $translations = [];
 
 	public function __construct() {
 		parent::__construct();
-
-		$this->engine_dir = Path::file('engine');
-		$this->theme_dir = Path::file('theme');
-		$this->modules_dir = Path::file('module');
-		$this->languages_dir = Path::file('language');
-
-		$this->template_path = $this->languages_dir . '/lang@REGION@LangName.ini';
 	}
 
-	public function generate() {
-		$this->createTemplateFile();
+	public function generate($module = null) {
+		$module = $module ?? $this->module['name'];
 
-		$this->saveTemplateFile('Engine', $this->getMatches(glob_recursive($this->engine_dir . '/*.php')));
-		$this->saveTemplateFile('Theme', $this->getMatches(glob_recursive($this->theme_dir . '/*.php')));
-
-		foreach(Module::getAll() as $module) {
-			if(!$module['is_enabled']) continue;
-
-			$section = 'Module: ' . $module['name'];
-			$path = $this->modules_dir . '/' . $module['name'] . '/*.php';
-
-			$this->saveTemplateFile($section, $this->getMatches(glob_recursive($path)));
+		$engine_files = Path::file('engine') . '/*.php';
+		$module_files = Path::file('module') . '/' . $module . '/*.php';
+		if($module === 'Public') {
+			$theme_files = Path::file('theme') . '/*.php';
 		}
 
-		Server::answer(null, 'success', str_replace(ROOT_DIR, Request::$base, $this->template_path));
-	}
-
-	public function generateModule() {
-		$module = Module::getSelf($this->route['parameters']['name']);
-
-		if(empty($module)) {
-			Module::setName('Admin');
-			$this->view->error('404');
+		$this->getMatches(glob_recursive($engine_files));
+		$this->getMatches(glob_recursive($module_files));
+		if($module === 'Public') {
+			$this->getMatches(glob_recursive($theme_files));
 		}
 
-		$this->languages_dir = Path::file('module') . '/' . $module['name'] . '/Install/Language';
-		$this->template_path = $this->languages_dir . '/lang@REGION@LangName.ini';
+		$this->generateTemplate();
+		$this->formatTemplate();
 
-		$this->createTemplateFile();
-
-		$section = 'Module: ' . $module['name'];
-		$path = $this->modules_dir . '/' . $module['name'] . '/*.php';
-
-		$this->saveTemplateFile($section, $this->getMatches(glob_recursive($path)), true);
-
-		Server::answer(null, 'success', str_replace(ROOT_DIR, Request::$base, $this->template_path));
+		return $this->template;
 	}
 
 	private function getMatches($files) {
-		$translations = [];
-
 		if(empty($files)) {
-			return $translations;
+			return false;
 		}
 
 		foreach($files as $file) {
@@ -84,52 +50,55 @@ class LanguageTemplate extends \Engine\Controller {
 			foreach($matches[1] as $match) {
 				$key = str_replace("'", "", $match);
 
-				if(isset($translations[$key]) && in_array($file, $translations[$key])) {
+				if(isset($this->translations[$key]) && in_array($file, $this->translations[$key])) {
 					continue;
 				}
 
-				$translations[$key][] = $file;
+				$this->translations[$key][] = $file;
 			}
 		}
-
-		return $translations;
-	}
-
-	private function createTemplateFile() {
-		if(!file_exists($this->languages_dir)) {
-			mkdir($this->languages_dir, 0755, true);
-		}
-
-		if(is_file($this->template_path)) {
-			unlink($this->template_path);
-		}
-
-		file_put_contents($this->template_path, '');
 
 		return true;
 	}
 
-	private function saveTemplateFile($section, $translations, $force_no_section = false) {
-		if(empty($section) || empty($translations)) {
+	private function generateTemplate() {
+		if(empty($this->translations)) {
 			return false;
 		}
 
-		$output = '# BEGIN ' . $section . PHP_EOL . PHP_EOL;
-		if($force_no_section) $output = '';
+		ksort($this->translations, SORT_NATURAL | SORT_FLAG_CASE);
 
-		ksort($translations, SORT_NATURAL | SORT_FLAG_CASE);
-
-		foreach($translations as $key => $files) {
+		foreach($this->translations as $key => $files) {
 			foreach($files as $file) {
-				$output .= '; ' . str_replace(ROOT_DIR, '', $file) . PHP_EOL;
+				$this->template .= '; ' . str_replace(ROOT_DIR, '', $file) . PHP_EOL;
 			}
 
-			$output .= $key . ' = "' . $key . '"' . PHP_EOL . PHP_EOL;
+			$this->template .= $key . ' = "' . $key . '"' . PHP_EOL . PHP_EOL;
 		}
 
-		if(!$force_no_section) $output .= '# END ' . $section . PHP_EOL . PHP_EOL;
+		return true;
+	}
 
-		file_put_contents($this->template_path, $output, FILE_APPEND);
+	private function formatTemplate() {
+		if(empty($this->template)) {
+			return false;
+		}
+
+		$this->template = preg_replace('/;\s+\/engine\/functions\.php\s+\$key\s+\=\s+\"\$key\"\s+/mi', '', $this->template);
+
+		$database_replacement = '; /engine/Database/Statement.php' . PHP_EOL;
+		$database_replacement .= 'duplicate:setting.name = "This setting name is alreary exists"' . PHP_EOL;
+		$database_replacement .= 'duplicate:user.login = "This login is alreary taken"' . PHP_EOL;
+		$database_replacement .= 'duplicate:user.email = "This email is alreary taken"' . PHP_EOL;
+		$database_replacement .= 'duplicate:user.phone = "This phone is alreary taken"' . PHP_EOL;
+		$database_replacement .= 'duplicate:user.auth_token = "Unknown error. Try again"' . PHP_EOL;
+		$database_replacement .= 'duplicate:group.name = "This name is alreary exists"' . PHP_EOL;
+		$database_replacement .= 'duplicate:tag.language_name_url = "This tag is alreary exists"' . PHP_EOL;
+		$database_replacement .= 'duplicate:custom_field.page_id_language_name = "This custom field is alreary exists"' . PHP_EOL;
+		$database_replacement .= 'duplicate:menu.name = "This name is alreary exists"' . PHP_EOL;
+		$database_replacement .= 'duplicate:page.url = "This URL slug is alreary taken"' . PHP_EOL . PHP_EOL;
+
+		$this->template = preg_replace('/;\s+\/engine\/Database\/Statement\.php\s+\$error_message\s+=\s+\"\$error_message\"\s+/mi', $database_replacement, $this->template);
 
 		return true;
 	}

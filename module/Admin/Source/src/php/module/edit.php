@@ -1,3 +1,10 @@
+<?php
+	$page->title = __('Edit module');
+	Breadcrumb::add(__('Modules'), '/admin/module');
+	Breadcrumb::add(__('Edit'));
+	Breadcrumb::add($module['name']);
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

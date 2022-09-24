@@ -16,13 +16,15 @@ class Auth extends \Engine\Controller {
 		}
 	}
 
-	public function getLogin() {
+	public function getAuth() {
 		$this->checkAuth();
+		$this->page->title = __('Login');
 		$this->view->render('auth/login');
 	}
 
 	public function getUnAuth() {
 		User::unauthorize();
+		$this->page->title = __('Logout');
 		Server::redirect('/admin/login');
 	}
 
@@ -33,6 +35,7 @@ class Auth extends \Engine\Controller {
 			$this->view->error('404');
 		}
 
+		$this->page->title = __('Reset password');
 		$this->view->render('auth/reset-password');
 	}
 
@@ -43,6 +46,7 @@ class Auth extends \Engine\Controller {
 			$this->view->error('404');
 		}
 
+		$this->page->title = __('Register');
 		$this->view->render('auth/register');
 	}
 }

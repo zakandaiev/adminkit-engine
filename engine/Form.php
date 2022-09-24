@@ -30,7 +30,7 @@ class Form {
 
 			$token = Hash::token();
 
-			$query_params = ['module' => Module::$name, 'token' => $token, 'action' => $action, 'form_name' => $form_name];
+			$query_params = ['module' => Module::get('name'), 'token' => $token, 'action' => $action, 'form_name' => $form_name];
 
 			$query_append_field = '';
 			$query_append_binding = '';
@@ -285,7 +285,7 @@ class Form {
 		$form = Path::file('form') . '/' . $form_name . '.php';
 		$form_data = [];
 
-		if(file_exists($form)) {
+		if(is_file($form)) {
 			$form_data = include $form;
 		}
 

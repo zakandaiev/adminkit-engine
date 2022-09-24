@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'priority' => 1,
+	'priority' => 8,
 	'version' => '1.0.0',
 	'extends' => null,
 	'description' => 'Represents Public frontend interface',

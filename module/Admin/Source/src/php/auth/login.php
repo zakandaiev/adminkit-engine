@@ -19,7 +19,7 @@
 						<div class="card-body">
 							<?php Theme::widget('lang'); ?>
 							<div class="m-sm-4">
-								<form action="<?= Form::add('Auth/Login'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin">
+								<form action="<?= Form::add('Auth/Login'); ?>" method="POST" data-redirect="<?= site('url_language') ?>/admin" data-focus>
 									<div class="mb-3">
 										<label class="form-label"><?= __('Login or email') ?></label>
 										<input class="form-control form-control-lg" type="text" name="login" placeholder="<?= __('Enter your login or email') ?>" required minlength="2" maxlength="100">

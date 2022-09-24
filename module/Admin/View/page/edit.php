@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit pages');
+	Breadcrumb::add(__('Pages'), '/admin/page');
+	Breadcrumb::add(__('Edit'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

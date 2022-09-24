@@ -211,8 +211,8 @@ INSERT INTO `%prefix%_group_route` (`group_id`, `route`) VALUES
 (3, 'get@/admin/page/edit/$id/translation/add/$language'),
 (3, 'get@/admin/page/edit/$id/translation/edit/$language'),
 (3, 'get@/admin/translation'),
-(3, 'get@/admin/translation/$language'),
-(3, 'post@/admin/translation/$language'),
+(3, 'get@//admin/translation/$module/$language'),
+(3, 'post@//admin/translation/$module/$language'),
 (3, 'post@/upload');
 
 INSERT INTO `%prefix%_user_group` (`user_id`, `group_id`) VALUES

@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Profile');
+	Breadcrumb::add(__('Profile'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

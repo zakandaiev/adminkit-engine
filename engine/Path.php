@@ -4,7 +4,7 @@ namespace Engine;
 
 class Path {
 	public static function class($class_name, $module = null) {
-		$module = $module ?? trim(Module::$name ?? '');
+		$module = $module ?? trim(Module::get('name') ?? '');
 
 		switch(strtolower($class_name ?? '')) {
 			case 'controller':
@@ -19,15 +19,13 @@ class Path {
 	}
 
 	public static function file($section = null, $module = null) {
-		$module = $module ?? trim(Module::$name ?? '');
+		$module = $module ?? trim(Module::get('name') ?? '');
 
 		switch(strtolower($section ?? '')) {
 			case 'config':
 				return ROOT_DIR . '/config';
 			case 'engine':
 				return ROOT_DIR . '/engine';
-			case 'language':
-				return ROOT_DIR . '/language';
 			case 'log':
 				return ROOT_DIR . '/' . trim(LOG['folder'], '/');
 			case 'module':
@@ -53,6 +51,13 @@ class Path {
 				$path = ROOT_DIR . '/module/' . $module . '/View';
 				if($module === 'Public') {
 					$path = self::file('theme');
+				}
+				return $path;
+			}
+			case 'language': {
+				$path = ROOT_DIR . '/module/' . $module . '/Language';
+				if($module === 'Public') {
+					$path = self::file('theme') . '/Language';
 				}
 				return $path;
 			}
@@ -94,7 +99,7 @@ class Path {
 	public static function url($section = null, $module = null) {
 		$url_base = Request::$base;
 
-		$module = $module ?? trim(Module::$name ?? '');
+		$module = $module ?? trim(Module::get('name') ?? '');
 
 		switch(strtolower($section ?? '')) {
 			case 'upload':

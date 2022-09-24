@@ -15,7 +15,6 @@ class Asset {
 	];
 
 	private static $container = [];
-	private static $asset_url;
 	private static $optimization = [
 		'js' => [
 			'attributes' => null,
@@ -32,7 +31,7 @@ class Asset {
 
 		if(is_file($file_path)) {
 			self::$container[$extension][] = [
-				'module' => Module::$name,
+				'module' => Module::get('name'),
 				'file' => $file_name . '.' . $extension,
 				'attributes' => $attributes,
 				'routes' => $routes
@@ -67,7 +66,7 @@ class Asset {
 		}
 
 		$group_setting = @Setting::get('optimization')->{'group_' . $extension};
-		if(Module::$name === 'Public' && $group_setting != 'false' && !empty($group_setting)) {
+		if(Module::get('name') === 'Public' && $group_setting != 'false' && !empty($group_setting)) {
 			$assets = [
 				[
 					'file' => $extension . '/' . $group_setting . '.' . $extension,
@@ -95,8 +94,7 @@ class Asset {
 	}
 
 	public static function url($module = null) {
-		$module = $module ?? Module::get('extends');
-		return !empty(self::$asset_url) ? self::$asset_url : Path::url('asset', $module);
+		return Path::url('asset', $module ?? Module::get('extends'));
 	}
 
 	public static function get($extension) {

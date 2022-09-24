@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Edit group');
+	Breadcrumb::add(__('Groups'), '/admin/group');
+	Breadcrumb::add(__('Edit'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">

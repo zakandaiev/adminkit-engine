@@ -4,9 +4,8 @@ namespace Engine;
 
 class Module {
 	private static $module = [];
-	private static $module_name;
-
-	public static $name;
+	private static $name;
+	private static $is_hooks_loaded = false;
 
 	public static function initialize() {
 		self::loadModules();
@@ -15,14 +14,24 @@ class Module {
 	}
 
 	public static function get($key, $name = null) {
-		return self::$module[$name ?? self::$name][$key] ?? null;
+		$module_name = $name ?? self::$name;
+
+		if($key === 'languages' && empty($name)) {
+			$module_name = Module::get('extends') ?? $module_name;
+		}
+
+		return self::$module[$module_name][$key] ?? null;
 	}
 
-	public static function getSelf($name = null) {
+	public static function getAll($name = null) {
 		return self::$module[$name ?? self::$name] ?? null;
 	}
 
-	public static function getAll() {
+	public static function has($name) {
+		return isset(self::$module[$name]);
+	}
+
+	public static function list() {
 		return self::$module;
 	}
 
@@ -42,7 +51,7 @@ class Module {
 
 			$config_file = $module_path . '/' . $module . '/config.php';
 
-			if(file_exists($config_file)) {
+			if(is_file($config_file)) {
 				$config = require $config_file;
 			} else {
 				continue;
@@ -53,19 +62,21 @@ class Module {
 			}
 
 			$config['name'] = $module;
+			$config['languages'] = Language::getModuleLanguages($module);
+
 			$modules[] = $config;
 		}
 
 		usort($modules, function ($module1, $module2) {
 			if(isset($module1['priority']) && isset($module2['priority'])) {
 				return $module2['priority'] <=> $module1['priority'];
-			} else if(isset($module1['priority'])) {
-				return 1;
 			}
 			return 0;
 		});
 
 		foreach($modules as $module) {
+			self::$name = $module['name'];
+
 			self::$module[$module['name']] = $module;
 
 			if(!$module['is_enabled']) {
@@ -73,21 +84,60 @@ class Module {
 			}
 
 			$routes_file = $module_path . '/' . $module['name'] . '/routes.php';
+
+			if(is_file($routes_file)) {
+				require $routes_file;
+			}
+		}
+
+		usort($modules, function ($module1, $module2) {
+			if(isset($module1['priority']) && isset($module2['priority'])) {
+				return $module1['priority'] <=> $module2['priority'];
+			}
+			return 0;
+		});
+
+		self::$name = null;
+
+		return true;
+	}
+
+	public static function loadHooks() {
+		if(self::$is_hooks_loaded) {
+			return false;
+		}
+
+		self::$is_hooks_loaded = true;
+
+		$module_path = Path::file('module');
+
+		$modules = self::$module;
+
+		usort($modules, function ($module1, $module2) {
+			if(isset($module1['priority']) && isset($module2['priority'])) {
+				return $module1['priority'] <=> $module2['priority'];
+			}
+			return 0;
+		});
+
+		foreach($modules as $module) {
+			if(!$module['is_enabled']) {
+				continue;
+			}
+
+			self::$name = $module['name'];
+
 			$hooks_file = $module_path . '/' . $module['name'] . '/hooks.php';
 			if($module['name'] === 'Public') {
 				$hooks_file = Path::file('theme') . '/hooks.php';
 			}
 
-			self::$module_name = $module['name'];
-
-			if(file_exists($routes_file)) {
-				require $routes_file;
-			}
-
-			if(file_exists($hooks_file)) {
+			if(is_file($hooks_file)) {
 				require $hooks_file;
 			}
 		}
+
+		self::$name = null;
 
 		return true;
 	}
@@ -96,7 +146,7 @@ class Module {
 		$name = $module ?? self::$name;
 		$config_file = Path::file('module') . '/' . $name . '/config.php';
 
-		if(!file_exists($config_file)) {
+		if(!is_file($config_file)) {
 			return false;
 		}
 
@@ -157,47 +207,21 @@ class Module {
 			list($route_controller, $route_action) = explode('@', $controller, 2);
 
 			if(empty($route_controller) || empty($route_action)) {
-				throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$module_name));
+				throw new \Exception(sprintf('Invalid controller declaration for %s route in % module', $uri, self::$name));
 				return false;
 			}
 		}
 
-		$page = self::formatRouteData('page', @$options['page']);
-		$is_public = self::formatRouteData('is_public', @$options['is_public']);
-		$breadcrumbs = self::formatRouteData('breadcrumbs', @$options['breadcrumbs']);
-
-		self::$module[self::$module_name]['routes'][] = [
+		$route = array_merge([
 			'method' => $method,
 			'uri' => $uri,
 			'controller' => $route_controller,
-			'action' => $route_action,
-			'page' => $page,
-			'is_public' => $is_public,
-			'breadcrumbs' => $breadcrumbs
-		];
+			'action' => $route_action
+		], $options);
+
+		self::$module[self::$name]['routes'][] = $route;
 
 		return true;
-	}
-
-	private static function formatRouteData($type, $data = null) {
-		$formatted = $data;
-
-		switch(strtolower($type ?? '')) {
-			case 'page': {
-				$formatted = (!empty($data)) ? json_decode(json_encode($data)) : new \stdClass();
-				break;
-			}
-			case 'is_public': {
-				$formatted = is_bool($data) ? $data : false;
-				break;
-			}
-			case 'breadcrumbs': {
-				$formatted = (!empty($data)) ? json_decode(json_encode($data)) : [];
-				break;
-			}
-		}
-
-		return $formatted;
 	}
 
 	public static function install($name) {
@@ -212,28 +236,6 @@ class Module {
 
 		if(is_file($path_install)) {
 			require $path_install;
-		}
-
-		// LANGUAGE
-		$path_language = $path . '/Language';
-
-		foreach(scandir($path_language) as $language) {
-			if(in_array($language, ['.', '..'], true)) continue;
-
-			if(file_extension($language) !== 'ini') continue;
-
-			$content = file_get_contents($path_language . '/' . $language);
-
-			if(empty($content)) continue;
-
-			$main_language = Path::file('language') . '/' . $language;
-
-			$flags = LOCK_EX;
-			if(is_file($main_language)) $flags = LOCK_EX | FILE_APPEND;
-
-			$content = PHP_EOL . '# BEGIN Module: ' . $name . PHP_EOL . PHP_EOL . $content . PHP_EOL . '# END Module: ' . $name . PHP_EOL . PHP_EOL;
-
-			file_put_contents($main_language, $content, $flags);
 		}
 
 		Log::write('Module: ' . $name. ' installed by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');
@@ -251,21 +253,10 @@ class Module {
 		}
 
 		// UNINSTALL SCRIPT
-		$path_install = $path . '/uninstall.php';
+		$path_uninstall = $path . '/uninstall.php';
 
-		if(is_file($path_install)) {
-			require $path_install;
-		}
-
-		// LANGUAGE
-		$path_language = Path::file('language');
-
-		foreach(Language::getAll() as $language) {
-			$lp = $path_language . '/' . $language['file_name'];
-			$pattern = '/#[\s]+BEGIN[\s]+Module:[\s]+' . $name . '[\s\S]*#[\s]+END[\s]+Module:[\s]+' . $name . '/mi';
-			$content = file_get_contents($lp);
-			$content = preg_replace($pattern, '', $content);
-			file_put_contents($lp, $content, LOCK_EX);
+		if(is_file($path_uninstall)) {
+			require $path_uninstall;
 		}
 
 		Log::write('Module: ' . $name. ' uninstalled by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'module');

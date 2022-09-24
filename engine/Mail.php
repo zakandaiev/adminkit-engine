@@ -76,7 +76,7 @@ class Mail {
 
 		$path_mail = Path::file('mail') . '/' . $file_name . '.php';
 
-		if(!file_exists($path_mail)) {
+		if(!is_file($path_mail)) {
 			return [];
 		}
 

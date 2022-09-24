@@ -75,12 +75,12 @@ function install() {
 
 	$connection = new PDO($dsn, $data['db_user'], $data['db_pass'], $options);
 
-	$install_file = file_get_contents(ROOT_DIR . '/module/Install/SystemInstall/engine.sql');
+	$install_file = file_get_contents(ROOT_DIR . '/module/Install/Engine/engine.sql');
 	executeSQL($data, $connection, $install_file);
 
 	// DEMO DATA
 	if(isset($data['demo_data']) && $data['demo_data'] === 'on') {
-		$demo_file = file_get_contents(ROOT_DIR . '/module/Install/SystemInstall/demo/demo.sql');
+		$demo_file = file_get_contents(ROOT_DIR . '/module/Install/Engine/demo/demo.sql');
 		executeSQL($data, $connection, $demo_file);
 
 		if(file_exists(ROOT_DIR . '/upload/demo')) {
@@ -89,8 +89,8 @@ function install() {
 			mkdir(ROOT_DIR . '/upload/demo', 0755, true);
 		}
 
-		foreach(glob_recursive(ROOT_DIR . '/module/Install/SystemInstall/demo/theme/*.*') as $file) {
-			$dest_folder = str_replace('/module/Install/SystemInstall/demo', '', $file);
+		foreach(glob_recursive(ROOT_DIR . '/module/Install/Engine/demo/theme/*.*') as $file) {
+			$dest_folder = str_replace('/module/Install/Engine/demo', '', $file);
 			$dest_folder = str_replace('/' . file_name($file) . '.' . file_extension($file), '', $dest_folder);
 
 			if(!file_exists($dest_folder)) {
@@ -100,7 +100,7 @@ function install() {
 			copy($file, $dest_folder . '/' . file_name($file) . '.' . file_extension($file));
 		}
 
-		foreach(glob(ROOT_DIR . '/module/Install/SystemInstall/demo/upload/*.*') as $file) {
+		foreach(glob(ROOT_DIR . '/module/Install/Engine/demo/upload/*.*') as $file) {
 			copy($file, ROOT_DIR . '/upload/demo/' . file_name($file) . '.' . file_extension($file));
 		}
 	}
@@ -265,11 +265,10 @@ function installSEO($data) {
 	<link rel="stylesheet" href="/module/Admin/View/Asset/css/adminkit.css">
 	<link rel="stylesheet" href="/module/Admin/View/Asset/css/main.css">
 
-	<link rel="icon" href="/module/Admin/View/Asset/favicon.ico" sizes="any">
-	<link rel="icon" href="/module/Admin/View/Asset/favicon.svg" type="image/svg+xml">
+	<link rel="icon" type="image/x-icon" sizes="any" href="/module/Admin/View/Asset/favicon.ico">
+	<link rel="icon" type="image/png" href="/module/Admin/View/Asset/favicon.png">
+	<link rel="icon" type="image/svg+xml" href="/module/Admin/View/Asset/favicon.svg">
 	<link rel="apple-touch-icon" href="/module/Admin/View/Asset/favicon.png">
-
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -300,7 +299,7 @@ function installSEO($data) {
 							</h5>
 						</div>
 						<div class="card-body">
-							<form action="/install?step=<?= $step_next ?>" method="POST">
+							<form action="/install?step=<?= $step_next ?>" method="POST" data-focus>
 								<?php if($step == 'auth'): ?>
 									<div class="mb-3">
 										<label class="form-label">Login</label>

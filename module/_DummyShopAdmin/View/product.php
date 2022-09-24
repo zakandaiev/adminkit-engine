@@ -1,3 +1,9 @@
+<?php
+	$page->title = __('Products');
+	Breadcrumb::add(__('Shop'), '/admin/shop/setting');
+	Breadcrumb::add(__('Products'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">
