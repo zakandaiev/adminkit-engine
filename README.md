@@ -22,6 +22,7 @@
 * Engine: cache tranlations
 * Engine: add custom pages to Sitemap from Module level
 * Modules: refactor all SQL queries
+* Modules: translate all
 * API: create API module
 * Public: add pagination & filter to Page model
 

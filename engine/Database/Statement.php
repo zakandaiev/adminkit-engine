@@ -51,7 +51,7 @@ class Statement {
 		}
 
 		if(!empty($filter->order) && !$force_no_order) {
-			$order_pattern = '/(ORDER[\s]+BY[\s]+)([\w\s,=\-\'\'\`]+)$/mi';
+			$order_pattern = '/(ORDER[\s]+BY[\s]+)([\w\s\@\<\>\.\,\=\-\'\"\`]+)$/mi';
 
 			if(preg_match($order_pattern, $sql)) {
 				$sql = preg_replace($order_pattern, "ORDER BY {$filter->order}, $2", $sql);
@@ -79,6 +79,8 @@ class Statement {
 		if(!$this->is_paginating) {
 			return false;
 		}
+
+		$this->sql = preg_replace('/(LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', '', $this->sql);
 
 		if(!isset($this->pagination_total)) {
 			$total = "SELECT COUNT(*) FROM ({$this->sql}) as total";

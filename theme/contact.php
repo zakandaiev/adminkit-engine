@@ -29,7 +29,7 @@
 							$address = site('address');
 						?>
 						<?php foreach($phones as $phone): ?>
-							<li><i class="fa fa-phone"></i> <a href="tel:<?= $phone->url ?>"><?= $phone->name ?></a></li>
+							<li><i class="fa fa-phone"></i> <a href="tel:<?= tel($phone->url) ?>"><?= $phone->name ?></a></li>
 						<?php endforeach; ?>
 						<?php if(!empty($email)): ?>
 							<li><i class="fa fa-envelope"></i> <a href="mailto:<?= $email ?>"><?=$email ?></a></li>

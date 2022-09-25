@@ -2,7 +2,7 @@
 
 <div id="post-header" class="page-header">
 	<?php if(!empty($page->image)): ?>
-		<div class="page-header-bg" style='background-image: url("/<?= $page->image ?>")' data-stellar-background-ratio="0.5"></div>
+		<div class="page-header-bg" style='background-image: url("<?= site('url') ?>/<?= $page->image ?>")' data-stellar-background-ratio="0.5"></div>
 	<?php endif; ?>
 	<div class="container">
 		<div class="row">

@@ -48,7 +48,7 @@ class Page extends \Engine\Model {
 		return $pages;
 	}
 
-	public function getPagesByCategory($id) {
+	public function getPagesInCategory($id) {
 		$sql = '
 			SELECT
 				t_page.*, t_page_translation.*,

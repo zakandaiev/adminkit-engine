@@ -30,7 +30,7 @@ class Menu {
 			return $menu;
 		}
 
-		$menu->items = self::getMenuItems($menu->id);
+		$menu->items = self::getItems($menu->id);
 
 		return $menu;
 	}
@@ -45,15 +45,15 @@ class Menu {
 		$menus = new Statement($sql);
 
 		foreach($menus->execute()->fetchAll() as $menu) {
-			$menu->items = self::getMenuItems($menu->id);
+			$menu->items = self::getItems($menu->id);
 			self::$menu[] = $menu;
 		}
 
 		return self::$menu;
 	}
 
-	public static function getMenuItems($id) {
-		$binding = ['id' => $id, 'language' => site('language_current')];
+	public static function getItems($id, $language = null) {
+		$binding = ['id' => $id, 'language' => $language ?? site('language_current')];
 
 		$sql = "
 			SELECT

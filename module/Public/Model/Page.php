@@ -5,7 +5,7 @@ namespace Module\Public\Model;
 use Engine\Database\Statement;
 
 class Page extends \Engine\Model {
-	public function updateViewCounter($page_id) {
+	public function updateViewsCounter($page_id) {
 		$sql = 'UPDATE {page} SET views = views + 1 WHERE id = :page_id';
 
 		$statement = new Statement($sql);
@@ -254,13 +254,15 @@ class Page extends \Engine\Model {
 		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
 	}
 
-	public function getPagesInCategory($category_id, $options = [], $language = null) {
+	public function getPagesInCategory($category_id, $options = []) {
 		$options = [
-			'fields' => $options['fields'] ?? '*',
+			'fields' => $options['fields'] ?? 't_page.*, t_page_translation.*',
 			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 't_page.date_publish DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
+			'order' => $options['order'] ?? 't_page.date_publish DESC',
+			'limit' => $options['limit'] ?? false,
 			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
+			'language' => $options['language'] ?? site('language_current'),
+			'filter' => $options['filter'] ?? false
 		];
 
 		$sql = "
@@ -299,7 +301,15 @@ class Page extends \Engine\Model {
 
 		$pages = new Statement($sql);
 
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
+		if($options['filter']) {
+			$pages->filter($options['filter']);
+		}
+
+		if(!$options['limit']) {
+			$pages->paginate();
+		}
+
+		return $pages->execute(['language' => $options['language']])->fetchAll();
 	}
 
 	public function getPagePrevNext($page_id, $language = null) {

@@ -24,7 +24,16 @@ return [
 		return $data;
 	},
 	'execute_post' => function($data) {
-		if($data->count === 0) {
+		$sql = "SELECT count(*) FROM {menu_translation} WHERE menu_id = :id AND language = :language";
+
+		$items_language_count = new Statement($sql);
+
+		$items_language_count = $items_language_count->execute([
+			'id' => $data->form_data['item_id'],
+			'language' => $data->fields['language']
+		])->fetchColumn();
+
+		if($items_language_count === 0) {
 			Form::execute('add', 'Menu/Items', $data->form_data['item_id'], true);
 		}
 

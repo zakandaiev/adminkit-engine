@@ -2,7 +2,7 @@
 
 <div class="page-header">
 	<?php if(!empty($tag->image)): ?>
-		<div class="page-header-bg" style='background-image: url("/<?= $tag->image ?>")' data-stellar-background-ratio="0.5"></div>
+		<div class="page-header-bg" style='background-image: url("<?= site('url') ?>/<?= $tag->image ?>")' data-stellar-background-ratio="0.5"></div>
 	<?php endif; ?>
 	<div class="container">
 		<div class="row">
@@ -35,7 +35,7 @@
 				<?php endif; ?>
 
 				<div class="section-row loadmore text-center">
-					<a href="#" class="primary-button"><?= __('Load More') ?></a>
+					<?php Theme::pagination(); ?>
 				</div>
 			</div>
 

@@ -60,7 +60,7 @@
 											<li class="mb-1"><i data-feather="map-pin" class="feather-sm me-1"></i> <?= $contacts->address ?></li>
 										<?php endif; ?>
 										<?php if(isset($contacts->phone)): ?>
-											<li class="mb-1"><i data-feather="phone" class="feather-sm me-1"></i> <a href="tel:<?= $contacts->phone ?>"><?= $contacts->phone ?></a></li>
+											<li class="mb-1"><i data-feather="phone" class="feather-sm me-1"></i> <a href="tel:<?= tel($contacts->phone) ?>"><?= $contacts->phone ?></a></li>
 										<?php endif; ?>
 										<?php if(isset($contacts->socials)): ?>
 											<?php foreach($contacts->socials as $social): ?>

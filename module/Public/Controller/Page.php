@@ -41,7 +41,7 @@ class Page extends Controller {
 		$data['page']->tags = $this->model->getPageTags($data['page']->id);
 		$data['page']->custom_fields = $this->model->getPageCustomFields($data['page']->id);
 
-		$this->model->updateViewCounter($data['page']->id);
+		$this->model->updateViewsCounter($data['page']->id);
 
 		$this->view->setData($data);
 		$this->view->render($page_template);

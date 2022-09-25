@@ -45,7 +45,7 @@
 				<?php endif; ?>
 
 				<div class="section-row loadmore text-center">
-					<a href="#" class="primary-button"><?= __('Load More') ?></a>
+					<?php Theme::pagination(); ?>
 				</div>
 			</div>
 

@@ -32,7 +32,7 @@ document.addEventListener('focusout', event => {
 });
 
 function editMenuItems() {
-	const menuItems = JSON.stringify(formatMenuItems(getMenuItems(mainMenu)));
+	const menuItems = JSON.stringify(formatMenuItems(getItems(mainMenu)));
 
 	const spinner_body = document.querySelector('.spinner-action');
 	spinner_body.classList.add('spinner-action_active');
@@ -58,7 +58,7 @@ function editMenuItems() {
 	});
 }
 
-function getMenuItems(menu) {
+function getItems(menu) {
 	let menuItems = [];
 
 	menu.querySelectorAll('.menu-list').forEach(item => {
