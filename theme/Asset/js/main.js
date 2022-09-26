@@ -39,4 +39,19 @@
 	$.stellar({
 		responsive: true
 	});
+
+	// Comment reply
+	$('[data-coment-reply]').on('click', function (event) {
+		event.preventDefault();
+
+		if ($(this).attr('data-coment-reply-active')) {
+			$(this).text($(this).attr('data-coment-reply-active'));
+			$(this).removeAttr('data-coment-reply-active');
+			$('[name="parent"]').val('');
+		} else {
+			$(this).attr('data-coment-reply-active', $(this).text());
+			$('[name="parent"]').val($(this).attr('data-coment-reply'));
+			$(this).text('Cancel reply');
+		}
+	});
 })(jQuery);

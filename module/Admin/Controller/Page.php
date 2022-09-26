@@ -18,7 +18,7 @@ class Page extends AdminController {
 	public function getCategory() {
 		$category_id = $this->route['parameters']['id'];
 
-		$pages = $this->model->getPagesInCategory($category_id);
+		$pages = $this->model->getPagesByCategory($category_id);
 
 		$data['pages'] = $pages;
 

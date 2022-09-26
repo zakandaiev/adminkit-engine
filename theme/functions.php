@@ -3,11 +3,13 @@
 Asset::css('css/bootstrap.min');
 Asset::css('css/font-awesome.min');
 Asset::css('css/style');
+Asset::css('css/form');
 
 Asset::js('js/jquery.min', 'defer');
 Asset::js('js/bootstrap.min', 'defer');
 Asset::js('js/jquery.stellar.min', 'defer');
 Asset::js('js/main', 'defer');
+Asset::js('js/form', 'defer');
 
 Asset::optimization('js', 'defer');
 
@@ -140,7 +142,7 @@ function comments($comments) {
 		$output .= '<span class="time">' . date_when($item['date_created']) . '</span>';
 		$output .= '</div>';
 		$output .= '<p>' . html($item['message']) . '</p>';
-		$output .= '<a href="#" class="reply">' . __('Reply') . '</a>';
+		$output .= '<button type="button" data-coment-reply="' . $item['id'] . '" class="reply">' . __('Reply') . '</button>';
 
 		if(!empty($item['children'])) {
 			$output .= comments($item['children']);

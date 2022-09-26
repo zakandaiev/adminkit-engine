@@ -120,6 +120,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_comment` (
 	`message` TEXT NOT NULL,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`date_edited` DATETIME on update CURRENT_TIMESTAMP DEFAULT NULL,
+	`ip` VARCHAR(32) DEFAULT NULL,
 	`is_approved` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -168,13 +169,24 @@ CREATE TABLE IF NOT EXISTS `%prefix%_notification` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE IF NOT EXISTS `%prefix%_contact` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT DEFAULT NULL,
+	`email` VARCHAR(200) NOT NULL,
+	`subject` VARCHAR(100) DEFAULT NULL,
+	`message` TEXT NOT NULL,
+	`ip` VARCHAR(32) DEFAULT NULL,
+	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
 ('main', 'time_zone', 'Europe/Kiev'),
 ('main', 'language', 'en'),
 ('main', 'socials_allowed', '["Telegram","Facebook","Instagram"]'),
 ('main', 'enable_registration', 'true'),
 ('main', 'enable_password_restore', 'true'),
-('main', 'moderate_comments', 'true'),
+('main', 'moderate_comments', 'false'),
 ('site', 'name', '%site_name%'),
 ('site', 'description', NULL),
 ('site', 'logo_admin', NULL),

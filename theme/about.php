@@ -19,11 +19,11 @@
 			<div class="col-md-5">
 				<div class="section-row">
 					<div class="section-title">
-						<h2 class="title"><?= __('OUR STORY') ?></h2>
+						<h2 class="title"><?= @$page->custom_fields->story_title ?></h2>
 					</div>
-					<?= @$page->custom_fields->story ?>
+					<?= @$page->custom_fields->story_text ?>
 					<blockquote class="blockquote">
-						<p><?= @$page->custom_fields->quote ?></p>
+						<p><?= @$page->custom_fields->quote_text ?></p>
 						<footer class="blockquote-footer"><?= @$page->custom_fields->quote_author ?></footer>
 					</blockquote>
 				</div>
@@ -31,9 +31,9 @@
 			<div class="col-md-7">
 				<div class="section-row">
 					<div class="section-title">
-						<h2 class="title"><?= __('OUR VISION') ?></h2>
+						<h2 class="title"><?= @$page->custom_fields->vision_title ?></h2>
 					</div>
-					<?= @$page->custom_fields->vision ?>
+					<?= @$page->custom_fields->vision_text ?>
 				</div>
 			</div>
 		</div>

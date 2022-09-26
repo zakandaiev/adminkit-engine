@@ -111,7 +111,22 @@ class Page extends \Engine\Model {
 	}
 
 	public function getPageCommentsCount($page_id) {
-		$sql = 'SELECT count(*) as count FROM {comment} WHERE page_id = :page_id';
+		$sql = "
+			SELECT
+				count(*)
+			FROM
+				{comment}
+			WHERE
+				page_id = :page_id
+				AND
+					(CASE WHEN
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'moderate_comments') = 'true'
+					THEN
+						is_approved IS true
+					ELSE
+						1 = 1
+					END)
+		";
 
 		$count = new Statement($sql);
 
@@ -119,9 +134,11 @@ class Page extends \Engine\Model {
 	}
 
 	public function getPageComments($page_id) {
-		$sql = '
+		$sql = "
 			SELECT
-				t_comment.*, t_user.name as author_name, t_user.avatar as author_avatar
+				t_comment.*,
+				t_user.name as author_name,
+				t_user.avatar as author_avatar
 			FROM
 				{comment} t_comment
 			LEFT JOIN
@@ -130,8 +147,15 @@ class Page extends \Engine\Model {
 				t_user.id = t_comment.author
 			WHERE
 				t_comment.page_id = :page_id
-				AND t_comment.is_approved IS true
-		';
+				AND
+					(CASE WHEN
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'moderate_comments') = 'true'
+					THEN
+						t_comment.is_approved IS true
+					ELSE
+						1 = 1
+					END)
+		";
 
 		$statement = new Statement($sql);
 
@@ -159,37 +183,6 @@ class Page extends \Engine\Model {
 		return $comments_formatted;
 	}
 
-	public function getLastComments($options = []) {
-		$options = [
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 'date_created DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
-
-		$sql = "
-			SELECT
-				author,
-				date_created,
-				(SELECT coalesce(name,login) FROM {user} WHERE id = t_comment.author) as author_name,
-				(SELECT title FROM {page_translation} WHERE page_id = t_comment.page_id AND language = :language) as post_title,
-				(SELECT url FROM {page} WHERE id = t_comment.page_id) as post_url
-			FROM
-				{comment} t_comment
-			WHERE
-				is_approved IS true
-				{$options['where']}
-			ORDER BY
-				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
-		";
-
-		$comments = new Statement($sql);
-
-		return $comments->execute(['language' => $language ?? site('language_current')])->fetchAll();
-	}
-
 	public function getPageCustomFields($page_id, $language = null) {
 		$sql = '
 			SELECT
@@ -210,106 +203,6 @@ class Page extends \Engine\Model {
 		}
 
 		return $fields;
-	}
-
-	public function getPages($options = [], $language = null) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 'date_publish DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
-
-		$sql = "
-			SELECT
-				{$options['fields']},
-				(SELECT name FROM {user} WHERE id=t_page.author) as author_name
-			FROM
-				{page} t_page
-			INNER JOIN
-				{page_translation} t_page_translation
-			ON
-				t_page.id = t_page_translation.page_id
-			WHERE
-				t_page_translation.language =
-					(CASE WHEN
-						(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
-					THEN
-						:language
-					ELSE
-						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
-					END)
-				AND date_publish <= NOW()
-				AND is_enabled IS true
-				{$options['where']}
-			ORDER BY
-				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
-		";
-
-		$pages = new Statement($sql);
-
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
-	}
-
-	public function getPagesInCategory($category_id, $options = []) {
-		$options = [
-			'fields' => $options['fields'] ?? 't_page.*, t_page_translation.*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => $options['order'] ?? 't_page.date_publish DESC',
-			'limit' => $options['limit'] ?? false,
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-			'language' => $options['language'] ?? site('language_current'),
-			'filter' => $options['filter'] ?? false
-		];
-
-		$sql = "
-			SELECT
-				{$options['fields']},
-				(SELECT name FROM {user} WHERE id=t_page.author) as author_name
-			FROM
-				{page} t_page
-			INNER JOIN
-				{page_category} t_page_category
-			ON
-				t_page.id = t_page_category.page_id
-			INNER JOIN
-				{page_translation} t_page_translation
-			ON
-				t_page.id = t_page_translation.page_id
-			WHERE
-				t_page_category.category_id IN ($category_id)
-				AND t_page_translation.language =
-					(CASE WHEN
-						(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
-					THEN
-						:language
-					ELSE
-						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
-					END)
-				AND t_page.date_publish <= NOW()
-				AND t_page.is_enabled IS true
-				AND t_page.is_category IS false
-				{$options['where']}
-			ORDER BY
-				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
-		";
-
-		$pages = new Statement($sql);
-
-		if($options['filter']) {
-			$pages->filter($options['filter']);
-		}
-
-		if(!$options['limit']) {
-			$pages->paginate();
-		}
-
-		return $pages->execute(['language' => $options['language']])->fetchAll();
 	}
 
 	public function getPagePrevNext($page_id, $language = null) {
@@ -397,14 +290,35 @@ class Page extends \Engine\Model {
 		return $author->execute(['user_id' => $user_id])->fetch();
 	}
 
-	public function getPagesByAuthor($user_id, $options = []) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 'date_publish DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+	public function getLastComments($options = []) {
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 'date_created DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
+
+		$sql = "
+			SELECT
+				author,
+				date_created,
+				(SELECT coalesce(name,login) FROM {user} WHERE id = t_comment.author) as author_name,
+				(SELECT title FROM {page_translation} WHERE page_id = t_comment.page_id AND language = :language) as post_title,
+				(SELECT url FROM {page} WHERE id = t_comment.page_id) as post_url
+			FROM
+				{comment} t_comment
+			WHERE
+				is_approved IS true
+				{$options['where']}
+			ORDER BY
+				{$options['order']}
+		";
+
+		return $this->getPreparedRows($sql, $options);
+	}
+
+	public function getPages($options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 't_page.date_publish DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
 
 		$sql = "
 			SELECT
@@ -417,31 +331,110 @@ class Page extends \Engine\Model {
 			ON
 				t_page.id = t_page_translation.page_id
 			WHERE
-				t_page.author = :user_id
+				t_page_translation.language =
+					(CASE WHEN
+						(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
+					THEN
+						:language
+					ELSE
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
+					END)
+				AND date_publish <= NOW()
+				AND is_enabled IS true
+				{$options['where']}
+			ORDER BY
+				{$options['order']}
+		";
+
+		return $this->getPreparedRows($sql, $options);
+	}
+
+	public function getPagesByCategory($category_id, $options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 't_page.date_publish DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
+
+		$sql = "
+			SELECT
+				{$options['fields']},
+				(SELECT name FROM {user} WHERE id=t_page.author) as author_name
+			FROM
+				{page} t_page
+			INNER JOIN
+				{page_category} t_page_category
+			ON
+				t_page.id = t_page_category.page_id
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			WHERE
+				t_page_category.category_id IN ($category_id)
+				AND t_page_translation.language =
+					(CASE WHEN
+						(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
+					THEN
+						:language
+					ELSE
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
+					END)
+				AND t_page.date_publish <= NOW()
+				AND t_page.is_enabled IS true
+				AND t_page.is_category IS false
+				{$options['where']}
+			ORDER BY
+				{$options['order']}
+		";
+
+		return $this->getPreparedRows($sql, $options);
+	}
+
+	public function getPagesByAuthor($author_id, $options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 't_page.date_publish DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
+		$options['author_id'] = $author_id;
+
+		$sql = "
+			SELECT
+				{$options['fields']},
+				(SELECT name FROM {user} WHERE id = t_page.author) as author_name
+			FROM
+				{page} t_page
+			INNER JOIN
+				{page_translation} t_page_translation
+			ON
+				t_page.id = t_page_translation.page_id
+			WHERE
+				t_page.author = :author_id
 				AND t_page.date_publish <= NOW()
 				AND t_page.is_enabled IS true
 				AND t_page.is_category IS false
 				AND t_page.is_static IS false
+				AND t_page_translation.language =
+					(CASE WHEN
+						(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
+					THEN
+						:language
+					ELSE
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
+					END)
 				{$options['where']}
 			ORDER BY
 				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
 		";
 
-		$pages = new Statement($sql);
-
-		return $pages->execute(['user_id' => $user_id])->fetchAll();
+		return $this->getPreparedRows($sql, $options);
 	}
 
-	public function getRelatedPages($page, $options = [], $language = null) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 'date_publish DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+	public function getRelatedPages($page, $options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 't_page.date_publish DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
+		$options['page_id'] = $page->id;
 
 		$page_tags = [];
 
@@ -450,7 +443,7 @@ class Page extends \Engine\Model {
 		}
 
 		if(!empty($page_tags)) {
-			$options['where'] .= ' AND id IN (SELECT page_id FROM {page_tag} WHERE tag_id IN (' . implode(',', $page_tags) . ') AND page_id <> ' . $page->id . ')';
+			$options['where'] .= ' AND id IN (SELECT page_id FROM {page_tag} WHERE tag_id IN (' . implode(',', $page_tags) . ') AND page_id <> :page_id)';
 		} else {
 			$page_categories = [];
 
@@ -459,7 +452,7 @@ class Page extends \Engine\Model {
 			}
 
 			if(!empty($page_categories)) {
-				$options['where'] .= ' AND id IN (SELECT page_id FROM {page_category} WHERE category_id IN (' . implode(',', $page_categories) . ') AND page_id <> ' . $page->id . ')';
+				$options['where'] .= ' AND id IN (SELECT page_id FROM {page_category} WHERE category_id IN (' . implode(',', $page_categories) . ') AND page_id <> :page_id)';
 			}
 		}
 
@@ -489,23 +482,16 @@ class Page extends \Engine\Model {
 				{$options['where']}
 			ORDER BY
 				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
 		";
 
-		$pages = new Statement($sql);
-
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
+		return $this->getPreparedRows($sql, $options);
 	}
 
-	public function getMVP($options = [], $language = null) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? ', ' . $options['order'] : '',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+	public function getMVP($options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 'views DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
 
 		$sql = "
 			SELECT
@@ -532,24 +518,17 @@ class Page extends \Engine\Model {
 				AND is_static IS false
 				{$options['where']}
 			ORDER BY
-				views DESC {$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
+				{$options['order']}
 		";
 
-		$pages = new Statement($sql);
-
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
+		return $this->getPreparedRows($sql, $options);
 	}
 
-	public function getMCP($options = [], $language = null) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? ', ' . $options['order'] : '',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+	public function getMCP($options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 'count_comments DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
 
 		$sql = "
 			SELECT
@@ -577,24 +556,17 @@ class Page extends \Engine\Model {
 				AND is_static IS false
 				{$options['where']}
 			ORDER BY
-				count_comments DESC {$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
+				{$options['order']}
 		";
 
-		$pages = new Statement($sql);
-
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
+		return $this->getPreparedRows($sql, $options);
 	}
 
-	public function getCategories($options = [], $language = null) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 'count_pages DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+	public function getCategories($options = []) {
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 'count_pages DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
 
 		$sql = "
 			SELECT
@@ -622,23 +594,16 @@ class Page extends \Engine\Model {
 				{$options['where']}
 			ORDER BY
 				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
 		";
 
-		$pages = new Statement($sql);
-
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
+		return $this->getPreparedRows($sql, $options);
 	}
 
-	public function getTags($options = [], $language = null) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? ', ' . $options['order'] : '',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+	public function getTags($options = []) {
+		$options['fields'] = $options['fields'] ?? 't_tag.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 'count_pages DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
 
 		$sql = "
 			SELECT
@@ -651,14 +616,10 @@ class Page extends \Engine\Model {
 				AND is_enabled IS true
 				{$options['where']}
 			ORDER BY
-				count_pages DESC {$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
+				{$options['order']}
 		";
 
-		$pages = new Statement($sql);
-
-		return $pages->execute(['language' => $language ?? site('language_current')])->fetchAll();
+		return $this->getPreparedRows($sql, $options);
 	}
 
 	public function getTagByUrl($url, $language = null) {
@@ -679,13 +640,10 @@ class Page extends \Engine\Model {
 	}
 
 	public function getPagesByTag($tag_id, $options = []) {
-		$options = [
-			'fields' => $options['fields'] ?? '*',
-			'where' => isset($options['where']) ? 'AND ' . $options['where'] : '',
-			'order' => isset($options['order']) ? $options['order'] : 't_page.date_publish DESC',
-			'limit' => $options['limit'] ?? site('pagination_limit'),
-			'offset' => isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '',
-		];
+		$options['fields'] = $options['fields'] ?? 't_page.*, t_page_translation.*';
+		$options['where'] = isset($options['where']) ? 'AND ' . $options['where'] : '';
+		$options['order'] = $options['order'] ?? 't_page.date_publish DESC';
+		$options['language'] = $options['language'] ?? site('language_current');
 
 		$sql = "
 			SELECT
@@ -707,15 +665,66 @@ class Page extends \Engine\Model {
 				AND t_page.is_enabled IS true
 				AND t_page.is_category IS false
 				AND is_static IS false
+				AND t_page_translation.language =
+					(CASE WHEN
+						(SELECT count(*) FROM {page_translation} WHERE page_id = t_page.id AND language = :language) > 0
+					THEN
+						:language
+					ELSE
+						(SELECT value FROM {setting} WHERE section = 'main' AND name = 'language')
+					END)
 				{$options['where']}
 			ORDER BY
 				{$options['order']}
-			LIMIT {$options['limit']}
-			{$options['offset']}
 		";
+
+		return $this->getPreparedRows($sql, $options);
+	}
+
+	private function getPreparedRows($sql, $options = []) {
+		$options['limit'] = $options['limit'] ?? false;
+		$options['offset'] = $options['offset'] ?? false;
+		$options['filter'] = $options['filter'] ?? false;
+		$options['paginate'] = $options['paginate'] ?? false;
+		$options['debug'] = $options['debug'] ?? false;
+
+		if($options['limit']) {
+			$sql .= " LIMIT {$options['limit']}";
+		}
+
+		if($options['offset']) {
+			$sql .= " OFFSET {$options['offset']}";
+		}
 
 		$pages = new Statement($sql);
 
-		return $pages->execute()->fetchAll();
+		if($options['filter']) {
+			$pages->filter($options['filter']);
+		}
+
+		if($options['paginate']) {
+			$pages->paginate();
+		}
+
+		unset(
+			$options['limit'],
+			$options['offset'],
+			$options['filter'],
+			$options['paginate'],
+			$options['fields'],
+			$options['where'],
+			$options['order']
+		);
+
+		if($options['debug']) {
+			unset($options['debug']);
+			debug($options);
+			debug($sql);
+			return [];
+		} else {
+			unset($options['debug']);
+		}
+
+		return $pages->execute($options)->fetchAll();
 	}
 }

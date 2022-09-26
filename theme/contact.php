@@ -19,7 +19,7 @@
 			<div class="col-md-8">
 				<div class="section-row">
 					<div class="section-title">
-						<h2 class="title"><?= __('Contact Information') ?></h2>
+						<h2 class="title"><?= __('Contact information') ?></h2>
 					</div>
 					<?= $page->content ?>
 					<ul class="contact">
@@ -44,23 +44,24 @@
 					<div class="section-title">
 						<h2 class="title"><?= __('Mail us') ?></h2>
 					</div>
-					<form>
+					<form action="<?= Form::add('Contact') ?>" method="POST" data-message="<?= __('Your message has been sent') ?>" data-reset>
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<input class="input" type="email" name="email" placeholder="<?= __('Email') ?>">
+									<input class="input" type="email" name="email" minlength="2" maxlength="200" placeholder="<?= __('Email') ?>" <?php if(User::get()->authorized): ?> value="<?= User::get()->email ?>" <?php endif; ?> required>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<input class="input" type="text" name="subject" placeholder="<?= __('Subject') ?>">
+									<input class="input" type="text" name="subject" minlength="2" maxlength="64" placeholder="<?= __('Subject') ?>">
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<textarea class="input" name="message" placeholder="<?= __('Message') ?>"></textarea>
+									<textarea class="input" name="message" minlength="2" maxlength="500" placeholder="<?= __('Message') ?>" required></textarea>
 								</div>
-								<button class="primary-button"><?= __('Submit') ?></button>
+								<input type="hidden" name="<?= COOKIE_KEY['csrf'] ?>" value="<?= Request::$csrf ?>">
+								<button type="submit" class="primary-button"><?= __('Submit') ?></button>
 							</div>
 						</div>
 					</form>

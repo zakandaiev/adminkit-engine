@@ -46,7 +46,7 @@ class DataAction {
 					this.successDeleteNodes();
 					SETTING.toast(data.status, this.data_message ?? data.message);
 				} else {
-					SETTING.toast(data.status, this.data_message ? this.data_message : data.message);
+					SETTING.toast(data.status, data.message ?? this.data_message);
 				}
 			})
 			.catch(error => {

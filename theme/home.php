@@ -40,7 +40,7 @@
 				<?php endif; ?>
 
 				<?php
-					$lifestyle_posts = $model->getPagesInCategory(4, ['where' => 'image IS NOT null', 'limit' => 3]);
+					$lifestyle_posts = $model->getPagesByCategory(4, ['where' => 'image IS NOT null', 'limit' => 3]);
 				?>
 				<?php if(!empty($lifestyle_posts)): ?>
 					<div class="row">
@@ -54,7 +54,7 @@
 				<?php endif; ?>
 
 				<?php
-					$fashion_travel_posts = $model->getPagesInCategory('5,7', ['where' => 'image IS NOT null', 'limit' => 3]);
+					$fashion_travel_posts = $model->getPagesByCategory('5,7', ['where' => 'image IS NOT null', 'limit' => 3]);
 				?>
 				<?php if(!empty($fashion_travel_posts)): ?>
 					<div class="row">
@@ -68,7 +68,7 @@
 				<?php endif; ?>
 
 				<?php
-					$technology_posts = $model->getPagesInCategory(6, ['where' => 'image IS NOT null', 'limit' => 3]);
+					$technology_posts = $model->getPagesByCategory(6, ['where' => 'image IS NOT null', 'limit' => 3]);
 				?>
 				<?php if(!empty($technology_posts)): ?>
 					<div class="row">

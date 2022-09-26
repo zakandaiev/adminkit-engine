@@ -18,7 +18,7 @@
 		<div class="row">
 			<div class="col-md-8">
 				<?php
-					$category_pages = $model->getPagesInCategory($page->id);
+					$category_pages = $model->getPagesByCategory($page->id, ['paginate' => true]);
 				?>
 				<?php if(!empty($category_pages)): ?>
 					<?= getPosts($category_pages, ['type' => 1, 'limit' => 1]) ?>

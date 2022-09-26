@@ -48,7 +48,7 @@ class Page extends \Engine\Model {
 		return $pages;
 	}
 
-	public function getPagesInCategory($id) {
+	public function getPagesByCategory($id) {
 		$sql = '
 			SELECT
 				t_page.*, t_page_translation.*,
@@ -244,6 +244,7 @@ class Page extends \Engine\Model {
 			if(!is_object($page) && is_numeric($page)) {
 				$page = $this->getPage($page);
 			}
+
 			if(!isset($page->categories)) {
 				$page->categories = $this->getPageCategories($page->id);
 			}

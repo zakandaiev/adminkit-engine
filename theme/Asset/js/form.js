@@ -1,9 +1,6 @@
 class Form {
-	constructor(node, options = {}) {
+	constructor(node) {
 		this.node = node;
-		this.options = options;
-
-		this.loader = options.loader ? options.loader : null;
 
 		this.action = this.node.action;
 		this.method = this.node.method ? this.node.method : 'POST';
@@ -44,13 +41,13 @@ class Form {
 				if(data.status === 'success') {
 					this.successRedirect(data);
 					this.successResetForm();
-					SETTING.toast(data.status, this.data_message ?? data.message);
+					toast(data.status, this.data_message ?? data.message);
 				} else {
-					SETTING.toast(data.status, data.message ?? this.data_message);
+					toast(data.status, data.message ?? this.data_message);
 				}
 			})
 			.catch(error => {
-				SETTING.toast('error', error);
+				toast('error', error);
 			})
 			.finally(() => {
 				this.enableForm();
@@ -89,14 +86,6 @@ class Form {
 
 	getFormData() {
 		let data = new FormData(this.node);
-
-		if(this.options.data) {
-			this.options.data.forEach(field => {
-				if(field.key) {
-					data.set(field.key, field.value ? field.value : null);
-				}
-			});
-		}
 
 		return data;
 	}
@@ -153,10 +142,55 @@ class Form {
 }
 
 document.querySelectorAll('form').forEach(element => {
-	new Form(element, {
-		loader: SETTING.loader,
-		data: [
-			{key: SETTING.csrf.key, value: SETTING.csrf.token}
-		]
-	});
+	new Form(element);
 });
+
+function toast(type, text, duration) {
+	if(!text || !text.length) {
+		return false;
+	}
+
+	let container = document.querySelector('.toasts');
+	if(!container) {
+		container = document.createElement('div');
+		container.classList.add('toasts');
+		document.body.appendChild(container);
+	}
+
+	let toast = document.createElement('div');
+	toast.classList.add('toasts__item');
+	if(type) {
+		toast.classList.add(type);
+	}
+
+	let toast_icon = document.createElement('i');
+	toast_icon.classList.add('toasts__icon');
+	if(type) {
+		toast_icon.classList.add(type);
+	}
+
+	let toast_text = document.createElement('span');
+	toast_text.classList.add('toasts__text');
+	toast_text.textContent = text;
+
+	toast.appendChild(toast_icon);
+	toast.appendChild(toast_text);
+
+	container.appendChild(toast);
+
+	toast.addEventListener('click', () => toast_remove(container, toast));
+
+	setTimeout(() => toast_remove(container, toast), duration ? duration : 5000);
+
+	function toast_remove(container, toast) {
+		toast.classList.add('disappear');
+		setTimeout(() => {
+			toast.remove();
+			if(container && container.childElementCount <= 0) {
+				container.remove();
+			}
+		}, 500);
+	}
+
+	return true;
+}
