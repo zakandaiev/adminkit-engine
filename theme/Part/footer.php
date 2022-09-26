@@ -64,7 +64,7 @@
 			</div>
 			<div class="col-md-6 col-md-pull-6">
 				<div class="footer-copyright">
-					<?= date('Y') ?> &copy; <?= __('Made by') ?> <a href="https://colorlib.com" target="_blank">Colorlib</a>
+					<?= date('Y') ?> &copy; Made by <a href="https://colorlib.com" target="_blank">Colorlib</a>
 				</div>
 			</div>
 		</div>

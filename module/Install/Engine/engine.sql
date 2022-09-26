@@ -176,6 +176,7 @@ CREATE TABLE IF NOT EXISTS `%prefix%_contact` (
 	`subject` VARCHAR(100) DEFAULT NULL,
 	`message` TEXT NOT NULL,
 	`ip` VARCHAR(32) DEFAULT NULL,
+	`is_read` BOOLEAN NOT NULL DEFAULT FALSE,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -218,6 +219,7 @@ INSERT INTO `%prefix%_group` (`name`, `access_all`) VALUES
 
 INSERT INTO `%prefix%_group_route` (`group_id`, `route`) VALUES
 (3, 'delete@/upload'),
+(3, 'get@/admin/contact'),
 (3, 'get@/admin/comment'),
 (3, 'get@/admin/comment/edit/$id'),
 (3, 'get@/admin/menu'),
@@ -279,7 +281,7 @@ FOR EACH ROW
 	DELETE FROM `%prefix%_page_category` t_pc WHERE t_pc.page_id=OLD.id OR t_pc.category_id=OLD.id;
 
 CREATE TRIGGER
-	`clear_page_comment`
+	`clear_comment_add`
 AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW

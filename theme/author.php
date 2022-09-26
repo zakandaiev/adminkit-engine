@@ -8,7 +8,7 @@
 			<div class="col-md-offset-1 col-md-10 text-center">
 				<div class="author">
 					<?php if(!empty($author->avatar)): ?>
-						<img class="author-img center-block" src="<?= site('url') ?>/<?= $author->avatar ?>" alt="">
+						<img class="author-img center-block" src="<?= site('url') ?>/<?= placeholder_avatar($author->avatar) ?>" alt="<?= $author->name ?>">
 					<?php endif; ?>
 					<h1 class="text-uppercase"><?= $author->name ?></h1>
 					<p class="lead"><?= $author->about ?></p>

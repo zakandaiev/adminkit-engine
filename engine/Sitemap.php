@@ -6,7 +6,7 @@ use Engine\Database\Statement;
 
 class Sitemap {
 	public static function update($custom_pages = [], $is_only_custom_pages = false) {
-		$pages = $custom_pages;
+		$pages = [];
 
 		if(!$is_only_custom_pages) {
 			$sql = '
@@ -26,6 +26,8 @@ class Sitemap {
 			$db_pages = $db_pages->execute()->fetchAll();
 			$pages = array_merge($db_pages, $pages);
 		}
+
+		$pages = array_merge($pages, $custom_pages);
 
 		$path = ROOT_DIR . '/sitemap.xml';
 		$sitemap = self::format($pages);

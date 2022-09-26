@@ -60,7 +60,7 @@ function notification_icon($type) {
 function getNotificationHTML($notification, $user) {
 	$icon = notification_icon($notification->type);
 	$when = date_when($notification->date_created);
-	$user_name = (User::get()->id == $notification->user_id) ? __('You') : $user->name . ' (@' . $user->login . ')';
+	$user_name = (User::get()->id == $notification->user_id) ? __('You') : $user->nicename;
 	$user_avatar = placeholder_avatar($user->avatar);
 	$action_name = '';
 	$action_body = '';
@@ -120,14 +120,14 @@ function getNotificationHTML($notification, $user) {
 
 			break;
 		}
-		case 'page_comment': {
+		case 'comment_add': {
 			$author = User::get($data->author);
-			$user_name = $author->nicename;
+			$user_name = (User::get()->id == $author->id) ? __('You') : $author->nicename;
 			$user_avatar = placeholder_avatar($author->avatar);
 
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
-			$action_name = sprintf(__('leaved comment on %s'), $page_title);
+			$action_name = sprintf(__('leaved comment on your %s'), $page_title);
 
 			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . html($data->message) . '</div>';
 
@@ -135,12 +135,23 @@ function getNotificationHTML($notification, $user) {
 		}
 		case 'comment_reply': {
 			$author = User::get($data->author);
-			$user_name = $author->nicename;
+			$user_name = (User::get()->id == $author->id) ? __('You') : $author->nicename;
 			$user_avatar = placeholder_avatar($author->avatar);
+
+			$reply_author = __('your');
+			if($author->id == $data->parent_author) {
+				if(User::get()->id == $data->parent_author) {
+					$reply_author = __('your own');
+				} else {
+					$reply_author = __('his own');
+				}
+			} else if(User::get()->id !== $data->parent_author) {
+				$reply_author = User::get($data->parent_author)->nicename;
+			}
 
 			$page_title = '<a href="' . site('url_language') . '/' . $data->url . '" target="_blank"><strong>' . $data->title . '</strong></a>';
 
-			$action_name = sprintf(__('replied to your comment on %s'), $page_title);
+			$action_name = sprintf(__('replied to <b>%s</b> comment on %s'), $reply_author, $page_title);
 
 			$action_body = '<div class="border text-sm text-muted p-2 mt-1">' . html($data->message) . '</div>';
 

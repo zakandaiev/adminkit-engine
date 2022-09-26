@@ -190,7 +190,7 @@
 										</div>
 										<div class="form-check form-switch mb-3">
 											<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" <?php if($page_edit->allow_comment): ?>checked<?php endif; ?>>
-											<label class="form-check-label" for="allow_comment"><?= __('Allow comment') ?></label>
+											<label class="form-check-label" for="allow_comment"><?= __('Allow commenting') ?></label>
 										</div>
 										<div class="form-check form-switch mb-3">
 											<input class="form-check-input" type="checkbox" id="hide_comments" name="hide_comments" <?php if($page_edit->hide_comments): ?>checked<?php endif; ?>>

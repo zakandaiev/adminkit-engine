@@ -2402,3 +2402,7 @@ footer.footer {
 .ql-snow .ql-tooltip input[type=text]:focus {
 	outline: none;
 }
+
+[data-copy] {
+	cursor: pointer;
+}

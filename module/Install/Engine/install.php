@@ -236,6 +236,7 @@ function installSEO($data) {
 	// ROBOTS
 	$robots_txt = 'User-agent: *' . PHP_EOL;
 	$robots_txt .= 'Disallow: /404' . PHP_EOL;
+	$robots_txt .= 'Disallow: /admin' . PHP_EOL;
 	$robots_txt .= 'Disallow: /admin/' . PHP_EOL . PHP_EOL;
 	$robots_txt .= 'Sitemap: ' . $site_url . '/sitemap.xml';
 	file_put_contents(ROOT_DIR . '/robots.txt', $robots_txt, LOCK_EX);

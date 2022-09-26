@@ -41,6 +41,6 @@ return [
 		return $data;
 	},
 	'execute_post' => function($data) {
-		Hook::run('contact_' . $data->form_data['action'], $data);
+		Hook::run('comment_' . $data->form_data['action'], $data);
 	}
 ];

@@ -39,7 +39,7 @@ class Meta {
 		$page_title = $page->title . ' &#8212; ' . site('name');
 
 		if(Module::get('name') === 'Admin' || Module::get('extends') === 'Admin') {
-			$page_title = $page->title . ' &lsaquo; ' . __('Admin') . ' &#8212; ' . site('name');
+			$page_title = $page->title . ' &lsaquo; ' . __('Admin panel') . ' &#8212; ' . site('name');
 		}
 
 		return $page_title;

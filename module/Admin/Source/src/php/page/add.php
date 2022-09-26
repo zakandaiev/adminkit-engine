@@ -134,7 +134,7 @@
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="allow_comment" name="allow_comment" checked>
-										<label class="form-check-label" for="allow_comment"><?= __('Allow comment') ?></label>
+										<label class="form-check-label" for="allow_comment"><?= __('Allow commenting') ?></label>
 									</div>
 									<div class="form-check form-switch mb-3">
 										<input class="form-check-input" type="checkbox" id="hide_comments" name="hide_comments">

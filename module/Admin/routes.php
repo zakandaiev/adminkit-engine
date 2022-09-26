@@ -23,6 +23,9 @@ Module::route('get', '/admin/profile/$id', 'Profile@getProfile');
 Module::route('post', '/admin/profile/notification', 'Profile@postNotification');
 Module::route('post', '/admin/profile/$id/notification', 'Profile@postNotification');
 
+############################# CONTACT #############################
+Module::route('get', '/admin/contact', 'Contact@getAll');
+
 ############################# PAGE #############################
 Module::route('get', '/admin/page', 'Page@getAll');
 Module::route('get', '/admin/page/category/$id', 'Page@getCategory');

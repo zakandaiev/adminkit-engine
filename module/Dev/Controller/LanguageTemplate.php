@@ -98,6 +98,20 @@ class LanguageTemplate extends \Engine\Controller {
 		$database_replacement .= 'duplicate:menu.name = "This name is alreary exists"' . PHP_EOL;
 		$database_replacement .= 'duplicate:page.url = "This URL slug is alreary taken"' . PHP_EOL . PHP_EOL;
 
+		$database_replacement .= '; /engine/functions.php' . PHP_EOL;
+		$database_replacement .= 'day_nominative = "day"' . PHP_EOL;
+		$database_replacement .= 'day_plural = "days"' . PHP_EOL;
+		$database_replacement .= 'day_singular = "day"' . PHP_EOL;
+		$database_replacement .= 'hour_nominative = "hour"' . PHP_EOL;
+		$database_replacement .= 'hour_plural = "hours"' . PHP_EOL;
+		$database_replacement .= 'hour_singular = "hour"' . PHP_EOL;
+		$database_replacement .= 'minute_nominative = "minute"' . PHP_EOL;
+		$database_replacement .= 'minute_plural = "minutes"' . PHP_EOL;
+		$database_replacement .= 'minute_singular = "minute"' . PHP_EOL;
+		$database_replacement .= 'month_nominative = "month"' . PHP_EOL;
+		$database_replacement .= 'month_plural = "months"' . PHP_EOL;
+		$database_replacement .= 'month_singular = "day"' . PHP_EOL . PHP_EOL;
+
 		$this->template = preg_replace('/;\s+\/engine\/Database\/Statement\.php\s+\$error_message\s+=\s+\"\$error_message\"\s+/mi', $database_replacement, $this->template);
 
 		return true;

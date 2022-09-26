@@ -1,6 +1,7 @@
 console.log('%cMade by Zakandaiev', 'background:#222e3c;color:#fff;padding:10px;font-weight:bold;');
 
 // UTILS
+@@include("util/data-copy.js")
 @@include("util/fade-out.js")
 @@include("util/smooth-scroll.js")
 @@include("util/responsive-table.js")

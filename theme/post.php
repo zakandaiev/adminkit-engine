@@ -90,7 +90,7 @@
 						<div class="author media">
 							<div class="media-left">
 								<a href="<?= site('url_language') ?>/author/<?= $author->id ?>">
-									<img class="author-img media-object" src="<?= site('url') ?>/<?= $author->avatar ?>" alt="">
+									<img class="author-img media-object" src="<?= site('url') ?>/<?= placeholder_avatar($author->avatar) ?>" alt="<?= $page->author_name ?>">
 								</a>
 							</div>
 							<div class="media-body">

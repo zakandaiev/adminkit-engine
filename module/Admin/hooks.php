@@ -82,6 +82,29 @@ Hook::register('user_delete', function($data) {
 
 ############################# COMMENT #############################
 Hook::register('comment_add', function($data) {
+	$page = \Module\Admin\Model\Page::getInstance()->getPage($data->fields['page_id']);
+	$parent = null;
+	$notification_type = 'comment_add';
+	if(!empty($data->fields['parent'])) {
+		$notification_type = 'comment_reply';
+		$parent = \Module\Admin\Model\Comment::getInstance()->getCommentById($data->fields['parent']);
+	}
+
+	$comment_data = new \stdClass();
+	$comment_data->author = $data->fields['author'];
+	$comment_data->message = $data->fields['message'];
+	$comment_data->url = $page->url;
+	$comment_data->title = $page->title;
+	$comment_data->parent_author = $parent->author ?? null;
+
+	Notification::create($notification_type, $comment_data->author, $comment_data);
+
+	if($comment_data->author !== $page->author) {
+		Notification::create($notification_type, $page->author, $comment_data);
+	} else if($comment_data->author !== $parent->author) {
+		Notification::create($notification_type, $page->author, $comment_data);
+	}
+
 	Log::write('Comment ID: ' . $data->form_data['item_id'] . ' added by user ID: ' . User::get()->id . ' from IP: ' . Request::$ip, 'comment');
 });
 Hook::register('comment_edit', function($data) {
@@ -176,6 +199,7 @@ Hook::register('user_change_contacts', function($data) {
 });
 
 ############################# RUN #############################
+// NOTIFICATIONS
 Hook::run('notification_add', 'user_register', [
 		'name' => __('Registration'),
 		'icon' => 'user-plus',
@@ -236,21 +260,22 @@ Hook::run('notification_add', 'page_add_category', [
 		'type' => 'web'
 	]
 );
-Hook::run('notification_add', 'page_comment', [
-		'name' => __('Page comment'),
+Hook::run('notification_add', 'comment_add', [
+		'name' => __('New comment'),
 		'icon' => 'message-square',
 		'color' => 'primary',
 		'type' => 'web'
 	]
 );
 Hook::run('notification_add', 'comment_reply', [
-		'name' => __('Comment reply'),
+		'name' => __('New comment reply'),
 		'icon' => 'corner-down-right',
 		'color' => 'primary',
 		'type' => 'web'
 	]
 );
 
+// SIDEBAR
 Hook::run('admin_sidebar_append', [
 	'icon' => 'home',
 	'name' => __('Dashboard'),
@@ -272,6 +297,20 @@ Hook::run('admin_sidebar_append', [
 	'name' => __('Logout'),
 	'route' => '/admin/logout',
 	'is_public' => true
+]);
+Hook::run('admin_sidebar_append', [
+	'name' => __('Interaction'),
+	'is_divider' => true,
+	'route' => '/admin/contact'
+]);
+Hook::run('admin_sidebar_append', [
+	'icon' => 'message-circle',
+	'badge' => function() {
+		$count = \Module\Admin\Model\Contact::getInstance()->countUnreadContacts();
+		return $count > 0 ? $count : null;
+	},
+	'name' => __('Messages'),
+	'route' => '/admin/contact'
 ]);
 Hook::run('admin_sidebar_append', [
 	'name' => __('Content'),
