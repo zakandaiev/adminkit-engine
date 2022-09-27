@@ -12,7 +12,7 @@ class Cache {
 		$path = Path::file('cache');
 
 		if(!file_exists($path)) {
-			mkdir($path, 0660, true);
+			mkdir($path, 0755, true);
 		}
 
 		$key = md5($key);

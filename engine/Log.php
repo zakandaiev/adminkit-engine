@@ -17,7 +17,7 @@ class Log {
 		}
 
 		if(!file_exists($path)) {
-			mkdir($path, 0660, true);
+			mkdir($path, 0755, true);
 		}
 
 		$path .= '/' . date(LOG['file_mask']) . '.' . LOG['extension'];
