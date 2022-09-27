@@ -106,7 +106,7 @@ class Language {
 			return false;
 		}
 
-		self::$translation = array_merge(self::$translation, $content_lang);
+		self::$translation = array_merge($content_lang, self::$translation);
 
 		return true;
 	}

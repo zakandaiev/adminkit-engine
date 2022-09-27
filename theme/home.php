@@ -60,7 +60,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="section-title">
-								<h2 class="title"><?= __('Fashion & Travel') ?></h2>
+								<h2 class="title"><?= __('Fashion and Travel') ?></h2>
 							</div>
 						</div>
 						<?= getPosts($fashion_travel_posts, ['type' => 3, 'wrap' => 'col-md-4']) ?>
