@@ -18,6 +18,6 @@
 5. Create & enjoy ;)
 
 ## ToDo:
-* Engine: Statement class - use regex to create more optimized query for counting total rows for Pagination
-* Modules: refactor all SQL queries
-* API: create API module
+* Install: MariaDB could not create triggers
+* Engine: refactor all classes
+* Models: refactor all SQL queries
