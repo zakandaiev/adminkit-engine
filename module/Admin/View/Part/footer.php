@@ -15,7 +15,7 @@
 		toast(status, message, duration);
 	};
 	SETTING.foreignForm = {
-		required_message: '<?= __('% is required') ?>'
+		required_message: '<?= addslashes(__('% is required')) ?>'
 	};
 </script>
 

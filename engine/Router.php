@@ -40,6 +40,12 @@ class Router {
 				self::$route[$key] = $value;
 			}
 
+			$language = Request::$uri_parts[0];
+
+			if(Language::has($language)) {
+				Language::setCurrent($language);
+			}
+
 			Module::loadHooks();
 			Module::setName($module);
 
@@ -70,7 +76,6 @@ class Router {
 		$uri_parts = Request::$uri_parts;
 
 		if(Language::has($uri_parts[0])) {
-			Language::setCurrent($uri_parts[0]);
 			array_shift($uri_parts);
 
 			if($route === '/' && count($uri_parts) === 0) {
