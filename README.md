@@ -11,13 +11,12 @@
 * MySQL 5.6+ or MariaDB 10.3+
 
 ## Installation
-1. Download latest release
-2. Extract archive content to your web server
-3. Install dependencies with `composer upgrade` command
-4. Open the site and fill out the installation form
-5. Create & enjoy ;)
+1. Download/clone this repository to your web server
+2. Install dependencies with `composer upgrade` command
+3. Open the site and fill out the installation form
+4. Create & enjoy ;)
 
-## ToDo:
+## ToDo
 * Install: MariaDB could not create triggers
 * Engine: refactor all classes
 * Models: refactor all SQL queries

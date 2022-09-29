@@ -132,20 +132,73 @@ class Meta {
 		return $favicon;
 	}
 
+	private static function alt_languages() {
+		$languages = site('languages');
+
+		$output = '<link rel="alternate" href="' . site('url') . '" hreflang="x-default">';
+
+		foreach($languages as $language) {
+			if(site('language_current') !== $language['key']) {
+				$output .= '<link rel="alternate" href="' . site('url') . '/' . $language['key'] . '" hreflang="' . $language['key'] . '">';
+			}
+		}
+
+		return $output;
+	}
+
+	private static function meta_og($page) {
+		$page->name = site('name');
+		$page->locale = self::locale();
+		$page->permalink = site('permalink');
+		$page->title = self::title($page);
+		$page->seo_description = self::seo_description($page);
+		$page->seo_keywords = self::seo_keywords($page);
+		$page->seo_image = site('url') . '/' . self::seo_image($page);
+
+		return '
+			<meta property="og:type" content="website">
+			<meta property="og:site_name" content="' . $page->name . '">
+			<meta property="og:locale" content="' . $page->locale . '">
+			<meta property="og:url" content="' . $page->permalink . '">
+			<meta property="og:title" content="' . $page->title . '">
+			<meta property="og:description" content="' . $page->seo_description . '">
+			<meta property="og:keywords" content="' . $page->seo_keywords . '">
+			<meta property="og:image" content="' . $page->seo_image . '">
+		';
+	}
+
+	private static function meta_twitter($page) {
+		$page->permalink = site('permalink');
+		$page->title = self::title($page);
+		$page->seo_description = self::seo_description($page);
+		$page->seo_image = site('url') . '/' . self::seo_image($page);
+
+		return '
+			<meta property="twitter:card" content="summary">
+			<meta property="twitter:url" content="' . $page->permalink . '">
+			<meta property="twitter:title" content="' . $page->title . '">
+			<meta property="twitter:description" content="' . $page->seo_description . '">
+			<meta property="twitter:image" content="' . $page->seo_image . '">
+		';
+	}
+
 	public static function all($page_obj) {
 		$page = clone $page_obj;
 
-		$page->permalink = site('permalink');
-		$page->charset = site('charset');
-
-		$page->author = self::author();
-		$page->locale = self::locale();
-
 		$page->title = self::title($page);
-		$page->seo_image = site('url') . '/' . self::seo_image($page);
+		$page->charset = site('charset');
+		$page->author = self::author();
+
 		$page->seo_description = self::seo_description($page);
 		$page->seo_keywords = self::seo_keywords($page);
+		$page->seo_image = site('url') . '/' . self::seo_image($page);
 
+		$page->meta_og = self::meta_og($page);
+		$page->meta_twitter = self::meta_twitter($page);
+
+		$page->permalink = site('permalink');
+
+		$page->alt_languages = self::alt_languages();
 		$page->favicon = self::favicon();
 		$page->setting = self::setting();
 		$page->analytics_gtag = self::analytics_gtag();
@@ -162,24 +215,14 @@ class Meta {
 			<meta name="description" content="' . $page->seo_description . '">
 			<meta name="keywords" content="' . $page->seo_keywords . '">
 
-			<meta property="og:type" content="website">
-			<meta property="og:locale" content="' . $page->locale . '">
-			<meta property="og:url" content="' . $page->permalink . '">
-			<meta property="og:title" content="' . $page->title . '">
-			<meta property="og:description" content="' . $page->seo_description . '">
-			<meta property="og:keywords" content="' . $page->seo_keywords . '">
-			<meta property="og:image" content="' . $page->seo_image . '">
-
-			<meta property="twitter:card" content="summary">
-			<meta property="twitter:url" content="' . $page->permalink . '">
-			<meta property="twitter:title" content="' . $page->title . '">
-			<meta property="twitter:description" content="' . $page->seo_description . '">
-			<meta property="twitter:image" content="' . $page->seo_image . '">
+			' . $page->meta_og . '
+			' . $page->meta_twitter . '
 
 			<link rel="canonical" href="' . $page->permalink . '">
 
 			<link rel="image_src" href="' . $page->seo_image . '">
 
+			' . $page->alt_languages . '
 			' . $page->favicon . '
 			' . $page->setting . '
 			' . $page->analytics_gtag . '

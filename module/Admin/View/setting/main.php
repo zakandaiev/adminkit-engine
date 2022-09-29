@@ -33,7 +33,7 @@
 									<div class="mb-3">
 										<label class="form-label"><?= __('Language') ?></label>
 										<select name="language" data-placeholder="<?= __('Language') ?>">
-											<?php foreach(Language::list() as $language): ?>
+											<?php foreach(site('languages') as $language): ?>
 												<?php
 													$selected_language = '';
 

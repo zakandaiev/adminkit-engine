@@ -21,7 +21,7 @@ if($pagination->current_page > 1) {
 	$num = $pagination->current_page - 1;
 	$prev = '
 		<li class="page-item">
-			<a href="' . $url . $num . '" class="page-link">' . __('Previous') . '</a>
+			<a rel="prev" href="' . $url . $num . '" class="page-link">' . __('Previous') . '</a>
 		</li>
 	';
 }
@@ -30,7 +30,7 @@ if($pagination->current_page < $pagination->total_pages) {
 	$num = $pagination->current_page + 1;
 	$next = '
 		<li class="page-item">
-			<a href="' . $url . $num . '" class="page-link">' . __('Next') . '</a>
+			<a rel="next" href="' . $url . $num . '" class="page-link">' . __('Next') . '</a>
 		</li>
 	';
 }

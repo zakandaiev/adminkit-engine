@@ -1,7 +1,7 @@
 <?php
 
 $uri = site('uri_cut_language');
-$languages = Language::list();
+$languages = site('languages');
 
 ?>
 

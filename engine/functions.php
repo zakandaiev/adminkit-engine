@@ -411,6 +411,10 @@ function site($key) {
 
 			break;
 		}
+		case 'languages': {
+			$value = Language::list();
+			break;
+		}
 		case 'permalink': {
 			$value = trim(strtok(Request::$url ?? '', '?'), '/');
 			break;
