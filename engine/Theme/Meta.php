@@ -146,7 +146,9 @@ class Meta {
 		return $output;
 	}
 
-	private static function meta_og($page) {
+	private static function meta_og($page_obj) {
+		$page = clone $page_obj;
+
 		$page->name = site('name');
 		$page->locale = self::locale();
 		$page->permalink = site('permalink');
@@ -167,7 +169,9 @@ class Meta {
 		';
 	}
 
-	private static function meta_twitter($page) {
+	private static function meta_twitter($page_obj) {
+		$page = clone $page_obj;
+
 		$page->permalink = site('permalink');
 		$page->title = self::title($page);
 		$page->seo_description = self::seo_description($page);
