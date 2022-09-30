@@ -101,7 +101,7 @@ Hook::register('comment_add', function($data) {
 
 	if($comment_data->author !== $page->author) {
 		Notification::create($notification_type, $page->author, $comment_data);
-	} else if($comment_data->author !== $parent->author) {
+	} else if($comment_data->author !== $comment_data->parent_author) {
 		Notification::create($notification_type, $page->author, $comment_data);
 	}
 

@@ -278,60 +278,60 @@ CREATE TRIGGER
 AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW
-	DELETE FROM `%prefix%_page_category` t_pc WHERE t_pc.page_id=OLD.id OR t_pc.category_id=OLD.id;
+	DELETE FROM `%prefix%_page_category` WHERE page_id = OLD.id OR category_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_comment_add`
 AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW
-	DELETE FROM `%prefix%_comment` t_c WHERE t_c.page_id=OLD.id;
+	DELETE FROM `%prefix%_comment` WHERE page_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_page_translation`
 AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW
-	DELETE FROM `%prefix%_page_translation` t_pt WHERE t_pt.page_id=OLD.id;
+	DELETE FROM `%prefix%_page_translation` WHERE page_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_page_tag_by_page_delete`
 AFTER DELETE ON
 	`%prefix%_page`
 FOR EACH ROW
-  DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.page_id=OLD.id;
+  DELETE FROM `%prefix%_page_tag` WHERE page_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_page_tag_by_tag_delete`
 AFTER DELETE ON
 	`%prefix%_tag`
 FOR EACH ROW
-  DELETE FROM `%prefix%_page_tag` t_pt WHERE t_pt.tag_id=OLD.id;
+  DELETE FROM `%prefix%_page_tag` WHERE tag_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_menu_translation`
 AFTER DELETE ON
 	`%prefix%_menu`
 FOR EACH ROW
-	DELETE FROM `%prefix%_menu_translation` t_mt WHERE t_mt.menu_id=OLD.id;
+	DELETE FROM `%prefix%_menu_translation` WHERE menu_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_group_route_by_group_delete`
 AFTER DELETE ON
 	`%prefix%_group`
 FOR EACH ROW
-  DELETE FROM `%prefix%_group_route` t_gr WHERE t_gr.group_id=OLD.id;
+  DELETE FROM `%prefix%_group_route` WHERE group_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_user_group_by_group_delete`
 AFTER DELETE ON
 	`%prefix%_group`
 FOR EACH ROW
-  DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.group_id=OLD.id;
+  DELETE FROM `%prefix%_user_group` WHERE group_id = OLD.id;
 
 CREATE TRIGGER
 	`clear_user_group_by_user_delete`
 AFTER DELETE ON
 	`%prefix%_user`
 FOR EACH ROW
-  DELETE FROM `%prefix%_user_group` t_ug WHERE t_ug.user_id=OLD.id;
+  DELETE FROM `%prefix%_user_group` WHERE user_id = OLD.id;

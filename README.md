@@ -17,6 +17,5 @@
 4. Create & enjoy ;)
 
 ## ToDo
-* Install: MariaDB could not create triggers
 * Engine: refactor all classes
 * Models: refactor all SQL queries
