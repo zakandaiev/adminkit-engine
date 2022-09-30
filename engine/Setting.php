@@ -10,8 +10,6 @@ class Setting {
 	public static function initialize() {
 		self::$setting = self::load();
 
-		date_default_timezone_set(self::$setting->main->time_zone);
-
 		return true;
 	}
 

@@ -98,7 +98,7 @@
 								<?php if(!empty($author_socials)): ?>
 									<ul class="author-social">
 										<?php foreach($author_socials as $social): ?>
-											<li><a href="<?= url(html($social->link)) ?>" target="_blank"><i class="fa fa-<?= $social->type ?>"></i></a></li>
+											<li><a href="<?= html($social->link) ?>" target="_blank"><i class="fa fa-<?= $social->type ?>"></i></a></li>
 										<?php endforeach; ?>
 									</ul>
 								<?php endif; ?>

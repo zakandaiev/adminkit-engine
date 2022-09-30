@@ -1,7 +1,30 @@
 <?php if(count($page->comments) > 0 && !$page->hide_comments): ?>
 	<div class="section-row">
 		<div class="section-title">
-			<h3 class="title"><?= $page->comments_count ?> <?= __('Comments') ?></h3>
+			<h3 class="title">
+				<?= $page->comments_count ?>
+				<?php
+					switch(numerical_noun_form($page->comments_count)) {
+						case 'n': {
+							$comments_title = __('comments_nominative');
+							break;
+						}
+						case 'p': {
+							$comments_title = __('comments_plural');
+							break;
+						}
+						case 's': {
+							$comments_title = __('comments_singular');
+							break;
+						}
+						default: {
+							$comments_title = __('comments_plural');
+							break;
+						}
+					}
+				?>
+				 <?= $comments_title ?>
+			</h3>
 		</div>
 		<div class="post-comments">
 			<?= comments($page->comments); ?>

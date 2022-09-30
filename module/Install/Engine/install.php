@@ -68,7 +68,6 @@ function install() {
 	$dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', $data['db_host'], $data['db_name'], $data['db_charset']);
 
 	$options = [
-		PDO::ATTR_PERSISTENT => true,
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 		PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $data['db_charset']
 	];
@@ -151,6 +150,10 @@ function installConfig($data) {
 	// CONFIG START
 	$config  = "<?php" . PHP_EOL . PHP_EOL;
 
+	// TIME ZONE
+	$config  .= '$time_zone = \'Europe/Kiev\';' . PHP_EOL . PHP_EOL;
+	$config  .= 'date_default_timezone_set($time_zone);' . PHP_EOL . PHP_EOL;
+
 	// DATABASE
 	$config .= "define('DATABASE', [" . PHP_EOL;
 	$config .= "\t'host' => '{$data['db_host']}'," . PHP_EOL;
@@ -160,9 +163,8 @@ function installConfig($data) {
 	$config .= "\t'charset' => '{$data['db_charset']}'," . PHP_EOL;
 	$config .= "\t'prefix' => '{$data['db_prefix']}'," . PHP_EOL;
 	$config .= "\t'options' => [" . PHP_EOL;
-	$config .= "\t\tPDO::ATTR_PERSISTENT => true," . PHP_EOL;
-	$config .= "\t\tPDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION," . PHP_EOL;
-	$config .= "\t\tPDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES {$data['db_charset']}'" . PHP_EOL;
+	$config .= "\t\t\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION," . PHP_EOL;
+	$config .= "\t\t\PDO::MYSQL_ATTR_INIT_COMMAND => \"SET NAMES {$data['db_charset']}, time_zone = '{\$time_zone}'\"" . PHP_EOL;
 	$config .= "\t]" . PHP_EOL;
 	$config .= "]);" . PHP_EOL;
 	$config .= PHP_EOL;
@@ -319,7 +321,6 @@ function installSEO($data) {
 										$dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', $_POST['db_host'], $_POST['db_name'], $_POST['db_charset']);
 
 										$options = [
-											PDO::ATTR_PERSISTENT => true,
 											PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 											PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $_POST['db_charset']
 										];

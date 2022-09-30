@@ -1,10 +1,6 @@
 <?php
 
 ############################# MAIN #############################
-$time_zone = [
-	'required' => true,
-	'required_message' => __('Time zone is required')
-];
 $language = [
 	'required' => true,
 	'required_message' => __('Language is required')

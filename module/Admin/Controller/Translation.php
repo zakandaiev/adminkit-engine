@@ -97,7 +97,7 @@ class Translation extends AdminController {
 		$data['module'] = $module;
 		$data['language'] = $language;
 
-		$data['content'] = file_get_contents(Path::file('language') . '/' . $this->module['languages'][$language]['file_name']);
+		$data['content'] = file_get_contents(Path::file('language', $module) . '/' . Language::list($module)[$language]['file_name']);
 
 		if(empty(trim($data['content'] ?? ''))) {
 			$data['content'] = '; Silence is golden';
@@ -115,10 +115,10 @@ class Translation extends AdminController {
 			$this->view->error('404');
 		}
 
-		$translation_file = $this->module['languages'][$language]['file_name'];
+		$translation_file = Language::list($module)[$language]['file_name'];
 		$translation_content = '';
 
-		$path = Path::file('language') . '/' . $translation_file;
+		$path = Path::file('language', $module) . '/' . $translation_file;
 
 		$translation_content = file_get_contents($path);
 

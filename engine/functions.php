@@ -193,53 +193,6 @@ function date_left($date) {
 	return __('A few seconds');
 }
 
-############################# TIMEZONE #############################
-function get_time_zones() {
-	$regions = array(
-		'Africa' => DateTimeZone::AFRICA,
-		'America' => DateTimeZone::AMERICA,
-		'Antarctica' => DateTimeZone::ANTARCTICA,
-		'Asia' => DateTimeZone::ASIA,
-		'Atlantic' => DateTimeZone::ATLANTIC,
-		'Europe' => DateTimeZone::EUROPE,
-		'Indian' => DateTimeZone::INDIAN,
-		'Pacific' => DateTimeZone::PACIFIC
-	);
-
-	$timezones = array();
-
-	foreach($regions as $name => $mask) {
-		$zones = DateTimeZone::listIdentifiers($mask);
-
-		foreach($zones as $timezone) {
-			$time = new DateTime('now', new DateTimeZone($timezone));
-
-			$timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i');
-		}
-	}
-
-	return $timezones;
-}
-
-function print_time_zones($selected = '') {
-	foreach(get_time_zones() as $region => $list) {
-
-		echo '<optgroup label="' . $region . '">';
-
-		foreach($list as $timezone => $name) {
-			$selected_status = '';
-
-			if($timezone === $selected) {
-				$selected_status = 'selected';
-			}
-
-			echo '<option value="' . $timezone . '" ' . $selected_status . '>' . $name . '</option>';
-		}
-
-		echo '</optgroup>';
-	}
-}
-
 ############################# TEXT #############################
 function html($text = ''){
 	return htmlspecialchars($text ?? '');
@@ -450,6 +403,34 @@ function is_route_active($route) {
 		if($route === $uri) {
 			return true;
 		}
+	}
+
+	return false;
+}
+
+
+function numerical_noun_form($number) {
+	// return 'n' - nominative (комментарий)
+	// return 'p' - plural (комментариев)
+	// return 's' - singular (комментария)
+
+	$number = intval($number);
+
+	if($number > 10 && (($number % 100) / 10) == 1) {
+		return 'p';
+	}
+
+	switch($number % 10) {
+		case 1: return 'n';
+		case 2: case 3: case 4: return 's';
+	}
+
+	return 'p';
+}
+
+function is_num_in_range($number, $min, $max) {
+	if($number >= $min && $number < $max) {
+		return true;
 	}
 
 	return false;

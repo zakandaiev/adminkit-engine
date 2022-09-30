@@ -174,7 +174,7 @@ class Statement {
 	}
 
 	public function fetchColumn(int $column = 0) {
-		return $this->fetchCache(__FUNCTION__, $column);
+		return intval($this->fetchCache(__FUNCTION__, $column));
 	}
 
 	public function insertId() {

@@ -182,7 +182,6 @@ CREATE TABLE IF NOT EXISTS `%prefix%_contact` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `%prefix%_setting` (`section`, `name`, `value`) VALUES
-('main', 'time_zone', 'Europe/Kiev'),
 ('main', 'language', 'en'),
 ('main', 'socials_allowed', '["Telegram","Facebook","Instagram"]'),
 ('main', 'enable_registration', 'true'),

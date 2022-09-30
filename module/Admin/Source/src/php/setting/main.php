@@ -25,14 +25,8 @@
 							<div class="card-body">
 								<form method="POST">
 									<div class="mb-3">
-										<label class="form-label"><?= __('Time zone') ?></label>
-										<select name="time_zone">
-											<?php print_time_zones($settings->time_zone); ?>
-										</select>
-									</div>
-									<div class="mb-3">
-										<label class="form-label"><?= __('Language') ?></label>
-										<select name="language" data-placeholder="<?= __('Language') ?>">
+										<label class="form-label"><?= __('Default language') ?></label>
+										<select name="language" data-placeholder="<?= __('Default language') ?>">
 											<?php foreach(site('languages') as $language): ?>
 												<?php
 													$selected_language = '';
