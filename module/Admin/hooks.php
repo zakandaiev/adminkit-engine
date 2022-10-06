@@ -293,12 +293,6 @@ Hook::run('admin_sidebar_append', [
 	'is_public' => true
 ]);
 Hook::run('admin_sidebar_append', [
-	'icon' => 'log-out',
-	'name' => __('Logout'),
-	'route' => '/admin/logout',
-	'is_public' => true
-]);
-Hook::run('admin_sidebar_append', [
 	'name' => __('Interaction'),
 	'is_divider' => true,
 	'route' => '/admin/contact'
