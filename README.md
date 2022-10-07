@@ -18,4 +18,5 @@
 
 ## ToDo
 * Engine: refactor all classes
+* Engine: refactor Statement->getCaptureFromSQL()
 * Models: refactor all SQL queries

@@ -51,7 +51,7 @@ class Statement {
 		}
 
 		if(!empty($filter->order) && !$force_no_order) {
-			$order_pattern = '/(ORDER[\s]+BY[\s]+)([\w\s\@\<\>\.\,\=\-\'\"\`]+)$/mi';
+			$order_pattern = '/(ORDER\s+BY[\s]+)([\w\s\@\<\>\.\,\=\-\'\"\`]+)$/mi';
 
 			if(preg_match($order_pattern, $sql)) {
 				$sql = preg_replace($order_pattern, "ORDER BY {$filter->order}, $2", $sql);
@@ -80,10 +80,57 @@ class Statement {
 			return false;
 		}
 
-		$this->sql = preg_replace('/(LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', '', $this->sql);
+		function getCaptureFromSQL($sql) {
+			$capture = null;
+
+			$sqlToArray = str_split($sql);
+
+			$leftBracketCount = 0;
+			$rightBracketCount = 0;
+			$fromPosition = false;
+
+			$sqlToArrayLength = count($sqlToArray);
+
+			for($i = 0; $i < $sqlToArrayLength; $i++) {
+				if($sqlToArray[$i] == '(') {
+					$leftBracketCount += 1;
+				}
+
+				if($sqlToArray[$i] == ')') {
+					$rightBracketCount += 1;
+				}
+
+				if($sqlToArray[$i] == 'f' || $sqlToArray[$i] == 'F') {
+					$checkString = $sqlToArray[$i] . $sqlToArray[$i + 1] . $sqlToArray[$i + 2] . $sqlToArray[$i + 3];
+
+					if($checkString == 'from' || $checkString == 'FROM') {
+						$fromPosition = $i;
+
+						if($leftBracketCount == $rightBracketCount) {
+							$capture = mb_substr($sql, $fromPosition + 4);
+
+							break;
+						}
+					}
+				}
+			}
+
+			return $capture;
+		}
+
+		// $time_start = hrtime(true);
+
+		$this->sql = preg_replace('/(ORDER\s+BY|LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', '', $this->sql);
 
 		if(!isset($this->pagination_total)) {
-			$total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
+			// $total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
+			$total = "SELECT COUNT(*) FROM " . getCaptureFromSQL($this->sql);
+
+			// $time_end = hrtime(true);
+			// $time_result = $time_end - $time_start;
+			// $time_result /= 1e+6; // convert ns to ms
+			// echo "Execution time: $time_result ms";
+			// exit;
 
 			$total = new Statement($total);
 
