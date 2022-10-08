@@ -4,12 +4,16 @@
 	</div>
 </div>
 <div class="form-group mb-3">
+	<label class="form-label"><?= __('Title') ?></label>
+	<input class="form-control" type="text" name="story_title" placeholder="<?= __('Title') ?>">
+</div>
+<div class="form-group mb-3">
 	<label class="form-label"><?= __('Story') ?></label>
-	<textarea class="form-control wysiwyg" name="story" placeholder="<?= __('Story') ?>..."></textarea>
+	<textarea class="form-control wysiwyg" name="story_text" placeholder="<?= __('Story') ?>..."></textarea>
 </div>
 <div class="form-group mb-3">
 	<label class="form-label"><?= __('Quote') ?></label>
-	<textarea class="form-control" name="quote" placeholder="<?= __('Quote') ?>"></textarea>
+	<textarea class="form-control" name="quote_text" placeholder="<?= __('Quote') ?>"></textarea>
 </div>
 <div class="form-group mb-3">
 	<label class="form-label"><?= __('Quote author') ?></label>
@@ -21,6 +25,10 @@
 	</div>
 </div>
 <div class="form-group mb-3">
+	<label class="form-label"><?= __('Title') ?></label>
+	<input class="form-control" type="text" name="vision_title" placeholder="<?= __('Title') ?>">
+</div>
+<div class="form-group mb-3">
 	<label class="form-label"><?= __('Vision') ?></label>
-	<textarea class="form-control wysiwyg" name="vision" placeholder="<?= __('Vision') ?>..."></textarea>
+	<textarea class="form-control wysiwyg" name="vision_text" placeholder="<?= __('Vision') ?>..."></textarea>
 </div>
