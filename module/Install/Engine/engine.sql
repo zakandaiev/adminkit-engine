@@ -138,9 +138,9 @@ CREATE TABLE `%prefix%_custom_field` (
 CREATE TABLE IF NOT EXISTS `%prefix%_form` (
 	`token` VARCHAR(200) NOT NULL,
 	`module` varchar(200) NOT NULL,
-	`action` enum('add','edit','delete') NOT NULL,
+	`action` VARCHAR(32) NOT NULL,
 	`form_name` varchar(200) NOT NULL,
-	`item_id` INT DEFAULT NULL,
+	`item_id` VARCHAR(200) DEFAULT NULL,
 	`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY  (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

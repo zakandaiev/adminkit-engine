@@ -1,3 +1,7 @@
+<?php
+	$page->title = __('Page not found');
+?>
+
 <?php Theme::header(); ?>
 
 <main class="d-flex w-100 h-100">

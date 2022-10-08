@@ -18,5 +18,6 @@
 
 ## ToDo
 * Engine: refactor all classes
-* Engine: refactor Statement->getCaptureFromSQL()
-* Models: refactor all SQL queries
+* Engine: refactor all SQL queries
+* Engine: refactor Statement->cutSelectionPartFromSQL()
+* Admin: refactor data-behavior

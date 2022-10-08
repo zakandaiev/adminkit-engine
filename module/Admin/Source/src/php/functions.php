@@ -264,29 +264,6 @@ function format_log($body) {
 }
 
 ############################# HELPERS #############################
-function filter_link($key, $value, $text) {
-	$link = site('permalink') . '?' . $key . '=' . urlencode($value);
-
-	foreach(Request::$get as $get_key => $get_value) {
-		if($get_key === $key) continue;
-		$link .= '&' . $get_key . '=' . urlencode($get_value);
-	}
-
-	return '<a href="' . $link . '">' . $text . '</a>';
-}
-
-function sort_link($key, $text) {
-	$sort = (Request::get($key) === 'desc') ? 'asc' : 'desc';
-
-	$link = site('permalink') . '?' . $key . '=' . $sort;
-
-	if(Request::has('back')) {
-		$link .= '&back=' . urlencode(Request::get('back'));
-	}
-
-	return '<a href="' . $link . '">' . $text . '</a>';
-}
-
 function icon_boolean($value = null) {
 	$icon = 'x';
 

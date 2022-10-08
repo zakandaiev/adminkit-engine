@@ -46,15 +46,20 @@ function checkRouteAccess($route) {
 
 		<ul class="sidebar-nav">
 			<?php foreach($GLOBALS['admin_sidebar'] as $item): ?>
-				<?php if(!@$item['is_public'] && !checkRouteAccess(@$item['route'])) continue; ?>
+				<?php
+					if(!@$item['is_public'] && !checkRouteAccess(@$item['route'])) {
+						continue;
+					}
+					$target_id = preg_replace('/\s+/', '-', strtolower($item['name'] ?? ''));
+				?>
 				<?php if(isset($item['is_divider']) && $item['is_divider']): ?>
 					<li class="sidebar-header"><?= $item['name'] ?></li>
 				<?php elseif(is_array($item['route'])): ?>
 					<li class="sidebar-item <?php if(is_route_active($item['route'])): ?>active<?php endif; ?>">
-						<a data-bs-target="#<?= strtolower($item['name'] ?? '') ?>" data-bs-toggle="collapse" class="sidebar-link collapsed">
+						<a data-bs-target="#<?= $target_id ?>" data-bs-toggle="collapse" class="sidebar-link collapsed">
 							<i class="align-middle" data-feather="<?= $item['icon'] ?>"></i> <span class="align-middle"><?= $item['name'] ?></span>
 						</a>
-						<ul id="<?= strtolower($item['name'] ?? '') ?>" class="sidebar-dropdown list-unstyled collapse <?php if(is_route_active($item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
+						<ul id="<?= $target_id ?>" class="sidebar-dropdown list-unstyled collapse <?php if(is_route_active($item['route'])): ?>show<?php endif; ?>" data-bs-parent="#sidebar">
 							<?php foreach($item['route'] as $key => $value): ?>
 								<li class="sidebar-item <?php if(is_route_active($value)): ?>active<?php endif; ?>"><a class="sidebar-link" href="<?= site('url_language') . $value ?>"><?= $key ?></a></li>
 							<?php endforeach; ?>

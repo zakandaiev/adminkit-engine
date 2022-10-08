@@ -9,26 +9,22 @@ class View {
 	private static $data = [];
 
 	public function render($template, $is_required = true) {
-		$extends = Module::get('extends');
-		if($extends) {
-			$extends_origin = Module::get('name');
-			Module::setName($extends);
-			Template::load('functions', false, $extends);
-			Module::setName($extends_origin);
+		$module_name = Module::get('name');
+		$module_extends = Module::get('extends');
+
+		if($module_extends) {
+			Module::setName($module_extends);
+			Template::load('functions', false, $module_extends);
+			Module::setName($module_name);
 		}
 
 		Template::load('functions', false);
 
-		Template::load($template, $is_required);
+		Template::load($template, $is_required, $module_name);
 	}
 
 	public function error($code) {
 		http_response_code($code);
-
-		$data = $this->getData();
-		$data['page']->title = __('Page not found');
-
-		$this->setData($data);
 
 		$this->render('Error/' . $code);
 

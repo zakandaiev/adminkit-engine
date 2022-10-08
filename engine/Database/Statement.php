@@ -80,34 +80,34 @@ class Statement {
 			return false;
 		}
 
-		function getCaptureFromSQL($sql) {
-			$capture = null;
+		function cutSelectionPartFromSQL($sql) {
+			$output = '';
 
-			$sqlToArray = str_split($sql);
+			$sql_to_array = str_split($sql);
 
-			$leftBracketCount = 0;
-			$rightBracketCount = 0;
-			$fromPosition = false;
+			$left_bracket_count = 0;
+			$right_bracket_count = 0;
+			$from_position = false;
 
-			$sqlToArrayLength = count($sqlToArray);
+			$sql_to_array_length = count($sql_to_array);
 
-			for($i = 0; $i < $sqlToArrayLength; $i++) {
-				if($sqlToArray[$i] == '(') {
-					$leftBracketCount += 1;
+			for($i = 0; $i < $sql_to_array_length; $i++) {
+				if($sql_to_array[$i] == '(') {
+					$left_bracket_count += 1;
 				}
 
-				if($sqlToArray[$i] == ')') {
-					$rightBracketCount += 1;
+				if($sql_to_array[$i] == ')') {
+					$right_bracket_count += 1;
 				}
 
-				if($sqlToArray[$i] == 'f' || $sqlToArray[$i] == 'F') {
-					$checkString = $sqlToArray[$i] . $sqlToArray[$i + 1] . $sqlToArray[$i + 2] . $sqlToArray[$i + 3];
+				if($sql_to_array[$i] == 'f' || $sql_to_array[$i] == 'F') {
+					$checkString = $sql_to_array[$i] . $sql_to_array[$i + 1] . $sql_to_array[$i + 2] . $sql_to_array[$i + 3];
 
 					if($checkString == 'from' || $checkString == 'FROM') {
-						$fromPosition = $i;
+						$from_position = $i;
 
-						if($leftBracketCount == $rightBracketCount) {
-							$capture = mb_substr($sql, $fromPosition + 4);
+						if($left_bracket_count == $right_bracket_count) {
+							$output = mb_substr($sql, $from_position + 4);
 
 							break;
 						}
@@ -115,7 +115,7 @@ class Statement {
 				}
 			}
 
-			return $capture;
+			return $output;
 		}
 
 		// $time_start = hrtime(true);
@@ -124,7 +124,7 @@ class Statement {
 
 		if(!isset($this->pagination_total)) {
 			// $total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
-			$total = "SELECT COUNT(*) FROM " . getCaptureFromSQL($this->sql);
+			$total = "SELECT COUNT(*) FROM " . cutSelectionPartFromSQL($this->sql);
 
 			// $time_end = hrtime(true);
 			// $time_result = $time_end - $time_start;

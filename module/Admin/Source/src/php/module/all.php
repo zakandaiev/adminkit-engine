@@ -1,3 +1,8 @@
+<?php
+	$page->title = __('Modules');
+	Breadcrumb::add(__('Modules'));
+?>
+
 <?php Theme::header(); ?>
 
 <div class="wrapper">
