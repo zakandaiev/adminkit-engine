@@ -118,11 +118,11 @@ class Statement {
 			return $output;
 		}
 
-		// $time_start = hrtime(true);
-
-		$this->sql = preg_replace('/(ORDER\s+BY|LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', '', $this->sql);
+		$this->sql = preg_replace('/(LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', '', $this->sql);
 
 		if(!isset($this->pagination_total)) {
+			$time_start = hrtime(true);
+
 			// $total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
 			$total = "SELECT COUNT(*) FROM " . cutSelectionPartFromSQL($this->sql);
 
