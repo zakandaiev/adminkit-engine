@@ -62,14 +62,14 @@ class Theme {
 		$file = self::PART_DIR . '/' . $file;
 
 		View::setData($data);
-		Template::load($file, true, Module::get('extends'));
+		Template::load($file, true);
 	}
 
 	public static function block($name, $data = []) {
 		$file = self::PART_DIR . '/' . $name;
 
 		View::setData($data);
-		Template::load($file, true, Module::get('extends'));
+		Template::load($file, true);
 	}
 
 	public static function path($module = null) {

@@ -50,7 +50,8 @@ function checkRouteAccess($route) {
 					if(!@$item['is_public'] && !checkRouteAccess(@$item['route'])) {
 						continue;
 					}
-					$target_id = preg_replace('/\s+/', '-', strtolower($item['name'] ?? ''));
+					$target_id = preg_replace('/[^a-z]+/', '-', strtolower($item['name'] ?? ''));
+					$target_id = 'sidebar-' . trim($target_id, '-') . '-' . Hash::token(4);
 				?>
 				<?php if(isset($item['is_divider']) && $item['is_divider']): ?>
 					<li class="sidebar-header"><?= $item['name'] ?></li>

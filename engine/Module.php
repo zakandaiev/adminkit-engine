@@ -63,6 +63,7 @@ class Module {
 
 			$config['name'] = $module;
 			$config['languages'] = Language::getModuleLanguages($module);
+			$config['routes'] = [];
 
 			$modules[] = $config;
 		}

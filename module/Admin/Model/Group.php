@@ -26,10 +26,14 @@ class Group {
 
 	public function getRoutes() {
 		$routes_grouped = [];
+		$modules = Module::list();
 
-		foreach(Module::get('routes') as $route) {
-			if(isset($route['is_public']) && $route['is_public'] === true) continue;
-			$routes_grouped[$route['method']][] = $route['uri'];
+		foreach($modules as $module) {
+			if(!$module['is_enabled']) continue;
+			foreach($module['routes'] as $route) {
+				if(isset($route['is_public']) && $route['is_public'] === true) continue;
+				$routes_grouped[$route['method']][] = $route['uri'];
+			}
 		}
 
 		ksort($routes_grouped, SORT_NATURAL | SORT_FLAG_CASE);
