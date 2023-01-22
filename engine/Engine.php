@@ -9,7 +9,7 @@ class Engine {
 	const NAME = 'AdminKit Engine';
 	const VERSION = '1.0.0';
 	const AUTHOR = 'Zakandaiev';
-	const AUTHOR_URL = 'https://zakandaiev.pp.ua';
+	const AUTHOR_URL = 'https://zakandaiev.com';
 
 	private static $time_start;
 
