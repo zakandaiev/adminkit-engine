@@ -28,7 +28,7 @@
 		<div class="row">
 			<div class="col-md-8">
 				<?php
-					$author_pages = $model->getPagesByAuthor($author->id, ['paginate' => true]);
+					$author_pages = $page_model->getPagesByAuthor($author->id, ['paginate' => true]);
 				?>
 				<?php if(!empty($author_pages)): ?>
 					<?= getPosts($author_pages, ['type' => 1, 'limit' => 1]) ?>

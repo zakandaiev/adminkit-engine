@@ -1,5 +1,5 @@
 <?php
-	$w_popular_posts = $model->getMVP(['where' => 'image IS NOT null', 'limit' => 5]);
+	$w_popular_posts = $page_model->getMVP(['where' => 'image IS NOT null', 'limit' => 5]);
 ?>
 <?php if(!empty($w_popular_posts)): ?>
 	<div class="aside-widget">

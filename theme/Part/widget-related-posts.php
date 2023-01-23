@@ -1,5 +1,5 @@
 <?php
-	$w_related_posts = $model->getRelatedPages($page, ['where' => 'image IS NOT null', 'limit' => 3]);
+	$w_related_posts = $page_model->getRelatedPages($page, ['where' => 'image IS NOT null', 'limit' => 3]);
 ?>
 <?php if(!empty($w_related_posts)): ?>
 	<div class="section-row">

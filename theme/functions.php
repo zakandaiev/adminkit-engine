@@ -23,7 +23,7 @@ function getPosts($posts, $options) {
 
 	$posts_with_categories = [];
 	foreach($posts as $post) {
-		$post->categories = Model::getInstance()->getPageCategories($post->id);
+		$post->categories = PageModel::getInstance()->getPageCategories($post->id);
 		$posts_with_categories[] = $post;
 	}
 

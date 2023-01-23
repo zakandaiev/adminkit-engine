@@ -1,5 +1,5 @@
 <?php
-	$w_categories = $model->getCategories(['limit' => 5]);
+	$w_categories = $page_model->getCategories(['limit' => 5]);
 ?>
 <?php if(!empty($w_categories)): ?>
 	<div class="aside-widget">

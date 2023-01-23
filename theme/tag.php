@@ -18,7 +18,7 @@
 		<div class="row">
 			<div class="col-md-8">
 				<?php
-					$tag_pages = $model->getPagesByTag($tag->id, ['paginate' => true]);
+					$tag_pages = $page_model->getPagesByTag($tag->id, ['paginate' => true]);
 				?>
 				<?php if(!empty($tag_pages)): ?>
 					<?= getPosts($tag_pages, ['type' => 1, 'limit' => 1]) ?>

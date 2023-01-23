@@ -97,6 +97,12 @@ class Theme {
 	}
 
 	private static function detectNameFile($name, $function) {
-		return empty(trim($name)) ? $function : sprintf(self::PART_MASK[$function], $name);
+		if(empty($name)) {
+			return $function;
+		} else if($name[0] === '/') {
+			return sprintf(str_replace('-', '', self::PART_MASK[$function]), $name);
+		} else {
+			return sprintf(self::PART_MASK[$function], $name);
+		}
 	}
 }

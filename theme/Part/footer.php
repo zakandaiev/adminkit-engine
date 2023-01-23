@@ -11,7 +11,7 @@
 				</div>
 			</div>
 			<?php
-				$fw_categories = $model->getCategories();
+				$fw_categories = $page_model->getCategories();
 			?>
 			<?php if(!empty($fw_categories)): ?>
 				<div class="col-md-3">
@@ -28,7 +28,7 @@
 				</div>
 			<?php endif; ?>
 			<?php
-				$fw_tags = $model->getTags();
+				$fw_tags = $page_model->getTags();
 			?>
 			<?php if(!empty($fw_tags)): ?>
 				<div class="col-md-3">

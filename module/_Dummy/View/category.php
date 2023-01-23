@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <main>
-	content
+	Required template for category page view
 </main>
 
 <?php Theme::footer(); ?>

@@ -55,7 +55,7 @@
 				<?php endif; ?>
 
 				<?php
-					$prev_next = $model->getPagePrevNext($page->id);
+					$prev_next = $page_model->getPagePrevNext($page->id);
 				?>
 				<?php if(!empty($prev_next->prev) || !empty($prev_next->next)): ?>
 					<div class="section-row">
@@ -79,7 +79,7 @@
 				<?php endif; ?>
 
 				<?php
-					$author = $model->getAuthor($page->author);
+					$author = $page_model->getAuthor($page->author);
 					$author_socials = json_decode($author->socials) ?? [];
 				?>
 				<?php if(!empty($page->author_name) && !empty($author->about)): ?>

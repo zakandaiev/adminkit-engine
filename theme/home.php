@@ -1,7 +1,7 @@
 <?php Theme::header(); ?>
 
 <?php
-	$mvp = $model->getMVP(['where' => 'image IS NOT null', 'limit' => 3]);
+	$mvp = $page_model->getMVP(['where' => 'image IS NOT null', 'limit' => 3]);
 ?>
 <?php if(!empty($mvp)): ?>
 	<div class="section">
@@ -26,7 +26,7 @@
 		<div class="row">
 			<div class="col-md-8">
 				<?php
-					$recent_posts = $model->getPages(['where' => 'is_category IS false AND is_static IS false AND image IS NOT null', 'limit' => 4]);
+					$recent_posts = $page_model->getPages(['where' => 'is_category IS false AND is_static IS false AND image IS NOT null', 'limit' => 4]);
 				?>
 				<?php if(!empty($recent_posts)): ?>
 					<div class="row">
@@ -40,7 +40,7 @@
 				<?php endif; ?>
 
 				<?php
-					$lifestyle_posts = $model->getPagesByCategory(4, ['where' => 'image IS NOT null', 'limit' => 3]);
+					$lifestyle_posts = $page_model->getPagesByCategory(4, ['where' => 'image IS NOT null', 'limit' => 3]);
 				?>
 				<?php if(!empty($lifestyle_posts)): ?>
 					<div class="row">
@@ -54,7 +54,7 @@
 				<?php endif; ?>
 
 				<?php
-					$fashion_travel_posts = $model->getPagesByCategory('5,7', ['where' => 'image IS NOT null', 'limit' => 3]);
+					$fashion_travel_posts = $page_model->getPagesByCategory('5,7', ['where' => 'image IS NOT null', 'limit' => 3]);
 				?>
 				<?php if(!empty($fashion_travel_posts)): ?>
 					<div class="row">
@@ -68,7 +68,7 @@
 				<?php endif; ?>
 
 				<?php
-					$technology_posts = $model->getPagesByCategory(6, ['where' => 'image IS NOT null', 'limit' => 3]);
+					$technology_posts = $page_model->getPagesByCategory(6, ['where' => 'image IS NOT null', 'limit' => 3]);
 				?>
 				<?php if(!empty($technology_posts)): ?>
 					<div class="row">

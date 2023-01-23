@@ -20,4 +20,6 @@
 * Engine: refactor all classes
 * Engine: refactor all SQL queries
 * Engine: refactor Statement->cutSelectionPartFromSQL()
+* Engine: auto detect user's language with setting control
 * Admin: refactor data-behavior
+* Admin + Public: replace all files named with menu/widget-*.php to folder-like widget/*.php

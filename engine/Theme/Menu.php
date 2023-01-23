@@ -8,6 +8,8 @@ class Menu {
 	private static $menu = [];
 
 	public static function get($key) {
+		$key = trim($key, '/');
+
 		if(isset(self::$menu[$key])) {
 			return self::$menu[$key];
 		}

@@ -22,7 +22,7 @@ function debug($obj) {
 }
 
 function debug_trace($level = null) {
-	return $level ? debug_backtrace()[$level] : debug_backtrace();
+	debug($level ? (isset(debug_backtrace()[$level]) ? debug_backtrace()[$level] : debug_backtrace()) : debug_backtrace());
 }
 
 ############################# FILE #############################
