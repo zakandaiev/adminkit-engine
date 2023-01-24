@@ -46,7 +46,7 @@ class Meta {
 	}
 
 	private static function seo_image($page) {
-		return $page->seo_image ?? site('logo_public');
+		return $page->seo_image ?? $page->image ?? site('logo_public');
 	}
 
 	private static function seo_description($page) {
@@ -62,7 +62,14 @@ class Meta {
 	}
 
 	private static function locale() {
-		return site('language_current') . '_' . lang(site('language_current'), 'region');
+		$locale = site('language_current');
+		$region = lang(site('language_current'), 'region');
+
+		if($region) {
+			$locale .= '_' . $region;
+		}
+
+		return $locale;
 	}
 
 	private static function setting() {
@@ -195,7 +202,7 @@ class Meta {
 
 		$page->seo_description = self::seo_description($page);
 		$page->seo_keywords = self::seo_keywords($page);
-		$page->seo_image = site('url') . '/' . self::seo_image($page);
+		$page->seo_image = self::seo_image($page);
 
 		$page->meta_og = self::meta_og($page);
 		$page->meta_twitter = self::meta_twitter($page);
@@ -224,7 +231,7 @@ class Meta {
 
 			<link rel="canonical" href="' . $page->permalink . '">
 
-			<link rel="image_src" href="' . $page->seo_image . '">
+			<link rel="image_src" href="' . site('url') . '/' . $page->seo_image . '">
 
 			' . $page->alt_languages . '
 			' . $page->favicon . '
