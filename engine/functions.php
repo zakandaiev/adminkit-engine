@@ -450,6 +450,14 @@ function numerical_noun_form($number) {
 	return 'p';
 }
 
+function translator_noun_form($number, $prefix) {
+	switch(numerical_noun_form($number)) {
+		case 'n': return __("{$prefix}_nominative");
+		case 'p': return __("{$prefix}_plural");
+		case 's': return __("{$prefix}_singular");
+	}
+}
+
 function is_num_in_range($number, $min, $max) {
 	if($number >= $min && $number < $max) {
 		return true;

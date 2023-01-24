@@ -3,26 +3,7 @@
 		<div class="section-title">
 			<h3 class="title">
 				<?= $page->comments_count ?>
-				<?php
-					switch(numerical_noun_form($page->comments_count)) {
-						case 'n': {
-							$comments_title = __('comments_nominative');
-							break;
-						}
-						case 'p': {
-							$comments_title = __('comments_plural');
-							break;
-						}
-						case 's': {
-							$comments_title = __('comments_singular');
-							break;
-						}
-						default: {
-							$comments_title = __('comments_plural');
-							break;
-						}
-					}
-				?>
+				<?= translator_noun_form($page->comments_count, 'comments') ?>
 				 <?= $comments_title ?>
 			</h3>
 		</div>
