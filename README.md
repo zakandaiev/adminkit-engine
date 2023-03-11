@@ -21,5 +21,16 @@
 * Engine: refactor all SQL queries
 * Engine: refactor Statement->cutSelectionPartFromSQL()
 * Engine: auto detect user's language with setting control
+* Engine: cache queries fails with pagination
+* Engine: 404 add page->title
+* Admin: tranlation update
+* Admin: tranlation if public include Public + theme folders
+* Admin: change favicons to branded
 * Admin: refactor data-behavior
+* Admin: fix data-copy from awesomecs + update gist
+* Admin: add uploads selection in forms
+* Admin: quill add margin-bottom to every <p>
+* Admin: translation add prefix_ from functions
 * Admin + Public: replace all files named with menu/widget-*.php to folder-like widget/*.php
+* Public: add login & logout routes + form
+* Public: add login.php to templates

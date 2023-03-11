@@ -24,10 +24,11 @@ class Pagination {
 		return self::$instance;
 	}
 
-	public function __construct($total_rows, $uri_key = null) {
-		$this->uri_key = $uri_key ?? PAGINATION['uri_key'];
+	public function __construct($total_rows, $options = []) {
+		$this->uri_key = $options['uri_key'] ?? PAGINATION['uri_key'];
 		$this->uri = $this->handleUri();
-		$this->limit = intval(Setting::get('site')->pagination_limit);
+		$this->limit = $options['limit'] ?? Setting::get('site')->pagination_limit;
+		$this->limit = intval($this->limit);
 		$this->total_rows = intval($total_rows);
 		$this->total_pages = $this->countPages();
 		$this->current_page = $this->currentPage();

@@ -7,19 +7,23 @@ use \PDOException;
 
 use Engine\Cache;
 use Engine\Module;
+use Engine\Request;
 use Engine\Server;
 use Engine\Setting;
 use Engine\Theme\Pagination;
 
 class Statement {
 	private $sql;
+	private $debug;
 	private $prefix;
 	private $statement;
 	private $binding = [];
 	private $is_paginating = false;
-	private $pagination_total;
+	private $pagination = [];
 
-	public function __construct(string $sql) {
+	public function __construct($sql, $debug = false) {
+		$this->debug = $debug;
+
 		$this->prefix = DATABASE['prefix'];
 
 		$replacement = '$1';
@@ -51,10 +55,10 @@ class Statement {
 		}
 
 		if(!empty($filter->order) && !$force_no_order) {
-			$order_pattern = '/(ORDER\s+BY[\s]+)([\w\s\@\<\>\.\,\=\-\'\"\`]+)$/mi';
+			$order_pattern = '/\s+(ORDER\s+BY[\s]+)([\w\s\@\<\>\.\,\=\-\'\"\`]+)$/mi';
 
 			if(preg_match($order_pattern, $sql)) {
-				$sql = preg_replace($order_pattern, "ORDER BY {$filter->order}, $2", $sql);
+				$sql = preg_replace($order_pattern, " ORDER BY {$filter->order}, $2", $sql);
 			} else {
 				$sql .= " ORDER BY {$filter->order}";
 			}
@@ -65,9 +69,13 @@ class Statement {
 		return $this;
 	}
 
-	public function paginate($total = null) {
+	public function paginate($total = null, $options = []) {
 		if(isset($total)) {
-			$this->pagination_total = $total;
+			$this->pagination['total'] = $total;
+		}
+
+		foreach($options as $key => $option) {
+			$this->pagination[$key] = $option;
 		}
 
 		$this->is_paginating = true;
@@ -80,64 +88,26 @@ class Statement {
 			return false;
 		}
 
-		function cutSelectionPartFromSQL($sql) {
-			$output = '';
+		$this->sql = preg_replace('/\s+(LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', ' ', $this->sql);
 
-			$sql_to_array = str_split($sql);
+		if(!isset($this->pagination['total'])) {
+			// $total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
+			$total_sql = "SELECT COUNT(*) FROM " . $this->cutSelectionPartFromSQL($this->sql);
 
-			$left_bracket_count = 0;
-			$right_bracket_count = 0;
-			$from_position = false;
+			$total_binding = [];
 
-			$sql_to_array_length = count($sql_to_array);
-
-			for($i = 0; $i < $sql_to_array_length; $i++) {
-				if($sql_to_array[$i] == '(') {
-					$left_bracket_count += 1;
-				}
-
-				if($sql_to_array[$i] == ')') {
-					$right_bracket_count += 1;
-				}
-
-				if($sql_to_array[$i] == 'f' || $sql_to_array[$i] == 'F') {
-					$checkString = $sql_to_array[$i] . $sql_to_array[$i + 1] . $sql_to_array[$i + 2] . $sql_to_array[$i + 3];
-
-					if($checkString == 'from' || $checkString == 'FROM') {
-						$from_position = $i;
-
-						if($left_bracket_count == $right_bracket_count) {
-							$output = mb_substr($sql, $from_position + 4);
-
-							break;
-						}
-					}
+			foreach($this->binding as $key => $value) {
+				if(str_contains($total_sql, ':' . $key)) {
+					$total_binding[$key] = $value;
 				}
 			}
 
-			return $output;
+			$total = new Statement($total_sql);
+
+			$this->pagination['total'] = $total->execute($total_binding)->fetchColumn();
 		}
 
-		$this->sql = preg_replace('/(LIMIT|OFFSET)[\w\s\@\<\>\.\,\=\-\'\"\`]+$/mi', '', $this->sql);
-
-		if(!isset($this->pagination_total)) {
-			$time_start = hrtime(true);
-
-			// $total = "SELECT COUNT(*) FROM ({$this->sql}) as total";
-			$total = "SELECT COUNT(*) FROM " . cutSelectionPartFromSQL($this->sql);
-
-			// $time_end = hrtime(true);
-			// $time_result = $time_end - $time_start;
-			// $time_result /= 1e+6; // convert ns to ms
-			// echo "Execution time: $time_result ms";
-			// exit;
-
-			$total = new Statement($total);
-
-			$this->pagination_total = $total->execute($this->binding)->fetchColumn();
-		}
-
-		$pagination = new Pagination($this->pagination_total);
+		$pagination = new Pagination($this->pagination['total'], $this->pagination);
 
 		$this->sql = rtrim($this->sql, ';') . ' LIMIT :limit OFFSET :offset';
 
@@ -147,13 +117,63 @@ class Statement {
 		return true;
 	}
 
+	private function cutSelectionPartFromSQL($sql) {
+		$output = '';
+
+		$sql_to_array = str_split($sql);
+
+		$left_bracket_count = 0;
+		$right_bracket_count = 0;
+		$from_position = false;
+
+		$sql_to_array_length = count($sql_to_array);
+
+		for($i = 0; $i < $sql_to_array_length; $i++) {
+			if($sql_to_array[$i] == '(') {
+				$left_bracket_count += 1;
+			}
+
+			if($sql_to_array[$i] == ')') {
+				$right_bracket_count += 1;
+			}
+
+			if($sql_to_array[$i] == 'f' || $sql_to_array[$i] == 'F') {
+				$checkString = $sql_to_array[$i] . $sql_to_array[$i + 1] . $sql_to_array[$i + 2] . $sql_to_array[$i + 3];
+
+				if($checkString == 'from' || $checkString == 'FROM') {
+					$from_position = $i;
+
+					if($left_bracket_count == $right_bracket_count) {
+						$output = mb_substr($sql, $from_position + 4);
+
+						break;
+					}
+				}
+			}
+		}
+
+		return $output;
+	}
+
 	public function execute($params = []) {
 		if($this->isCached()) {
 			$this->addBinding($params);
+
+			if($this->debug) {
+				debug($this->binding);
+				debug(trim($this->sql ?? ''));
+			}
+
 			return $this;
 		}
 
 		$this->addBinding($params);
+
+		if($this->debug) {
+			debug($this->binding);
+			debug(trim($this->sql ?? ''));
+		}
+
 		$this->initializePagination();
 		$this->prepare();
 		$this->bind();
@@ -168,9 +188,13 @@ class Statement {
 				$error_message = 'duplicate:' . $error_message;
 			}
 
-			$debug_sql = DEBUG['is_enabled'] ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql ?? ''))] : null;
-
-			Server::answer($debug_sql, 'error', __($error_message), '409');
+			if(Request::$method === 'get') {
+				debug(__($error_message));
+				if(DEBUG['is_enabled']) debug($this->sql);
+			} else {
+				$debug_sql = DEBUG['is_enabled'] ? ['query' => preg_replace('/(\v|\s)+/', ' ', trim($this->sql ?? ''))] : null;
+				Server::answer($debug_sql, 'error', __($error_message), '409');
+			}
 		}
 
 		return $this;

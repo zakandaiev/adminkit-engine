@@ -131,7 +131,7 @@ class Meta {
 				break;
 			}
 			case 'svg': {
-				$favicon = '<link rel="icon" type="image/svg+xml"" href="' . site('url') . '/' . site('icon') . '">';
+				$favicon = '<link rel="icon" type="image/svg+xml" href="' . site('url') . '/' . site('icon') . '">';
 				break;
 			}
 		}
@@ -221,7 +221,7 @@ class Meta {
 			<meta charset="' . $page->charset . '">
 			<meta name="author" content="' . $page->author . '">
 			<meta http-equiv="X-UA-Compatible" content="IE=edge">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
 			<meta name="description" content="' . $page->seo_description . '">
 			<meta name="keywords" content="' . $page->seo_keywords . '">

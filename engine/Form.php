@@ -243,16 +243,19 @@ class Form {
 	}
 
 	private static function tokenExistsAndActive($action, $form_name = '', $item_id = '') {
-		$query_defining = 'action = :action AND form_name = :form_name AND item_id = :item_id';
-		$query_params = ['action' => $action, 'form_name' => $form_name, 'item_id' => $item_id];
+		$query_defining = 'module = :module AND action = :action AND form_name = :form_name';
+		$query_params = ['module' => Module::get('name'), 'action' => $action, 'form_name' => $form_name];
 
-		if($action === 'add') {
-			$query_defining = 'action = :action AND form_name = :form_name';
-			$query_params = ['action' => $action, 'form_name' => $form_name];
+		if($action !== 'add') {
+			$query_defining .= ' AND item_id = :item_id';
+			$query_params['item_id'] = $item_id;
 		}
 
 		$sql = '
-			SELECT token FROM {form}
+			SELECT
+				token
+			FROM
+				{form}
 			WHERE
 				' . $query_defining . '
 				AND date_created > DATE_SUB(NOW(), INTERVAL ' . LIFETIME['form'] . ' SECOND)
@@ -552,7 +555,9 @@ class Form {
 			return json_encode($output_array);
 		}
 
-		if(!is_array($files) && $files[0] === "[") {
+		if(is_array($files)) {
+			$files_array = $files;
+		} else if($files[0] === "[") {
 			$files_array = json_decode($files);
 		} else {
 			$files_array = array($files);

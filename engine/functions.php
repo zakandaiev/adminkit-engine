@@ -331,7 +331,8 @@ function site($key) {
 			break;
 		}
 		case 'charset': {
-			$value = DATABASE['charset'];
+			$value = preg_replace('/([a-z]+)-?/i', '$1-', DATABASE['charset'] ?? '');
+			$value = rtrim($value, '-');
 			break;
 		}
 		case 'language_current': {
